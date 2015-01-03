@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
+    <color name="red">#FF0000</color>
+    <color name="dialog_out_bg">#99000000</color>
+    <color name="view_seperator_bg">#e2e2e6</color>
+    <color name="login_sign_in_with">#ff5700</color>
+    <color name="dialog_button_text_color">#007aff</color>
+    <color name="dialog_forgot_password_bg">#e8e8e8</color>
+
+    <!-- Sign up -->
+    <color name="here_link">#2e66d9</color>
+
+    <!-- Group color -->
+    <color name="text_button_bg_sign_in">#016686</color>
+    <color name="text_button_bg_select_race">#FF0000</color>
+    <color name="text_button_bg_5k">#1bbfb6</color>
+    <color name="text_button_bg_10k">#ff7e00</color>
+    <color name="text_button_bg_15k">#8acd4f</color>
+    <color name="text_button_bg_half_mar">#399bd1</color>
+    <color name="text_button_bg_full_mar">#934fcd</color>
+    <color name="text_button_bg_add_race">#ffba00</color>
+    <color name="text_button_bg_my_shoes">#ff0071</color>
+    <color name="people_you_may_know_color">#ff747b</color>
+
+    <!-- Setting -->
+    <color name="setting_about_text_color">#1d4fdf</color>
+    <color name="setting_about_content_bg">#e4decb</color>
+    <color name="setting_about_title">#8acd4f</color>
+
+    <!-- Races -->
+    <color name="empty_text_color">#454545</color>
+
+    <!-- Menu -->
+    <color name="menu_bg">#383838</color>
+
+    <!-- Profile -->
+    <color name="profile_image_bg">#dcdcdc</color>
+
+</resources>

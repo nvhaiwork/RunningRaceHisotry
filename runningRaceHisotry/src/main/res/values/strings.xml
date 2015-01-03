@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Setting -->
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="crash_toast_text">Application crashed. Please send bug report by email.</string>
+    <string name="fb_app_id">1538088099761144</string>
+    <string name="parse_app_id">NwlYVoWku2ilb9hNMOmN0xyBC07JwbMLHeciWPWu</string>
+    <string name="parse_client_key">iyUOGQF8Mg1KeddWfGQzeroSqlX2i4MVX9rVA1pX</string>
+    <string name="contact_email">joshua@runningracehistory.com</string>
+    <string name="contact_subject">Report</string>
+    <string name="contact_body">Please report any bugs or inconvenience here</string>
+    <string name="app_name">Personal Running Race Hisotry</string>
+    <string name="share_app_menu">Please use personal running race history app. https://play.google.com/store/apps/details?id=com.runningracehisotry</string>
+
+    <!-- Time picker dialog -->
+    <string name="time_set">Set time</string>
+    <string name="cancel">Cancel</string>
+    <string name="time">Time : </string>
+
+    <!-- Dialog -->
+    <string name="dialog_sign_up">Sign up</string>
+    <string name="dialog_sign_in">Sign in</string>
+    <string name="dialog_fill_information">Please fill information.</string>
+    <string name="dialog_logout_title">Sign out</string>
+    <string name="dialog_logout_message">Are you sure want to sign out?</string>
+    <string name="dialog_confirm_password_does_not_match">Password doesn\'t match.</string>
+    <string name="dialog_add_shoe_tile">Add Shoe</string>
+    <string name="dialog_add_race_tile">Add Race</string>
+    <string name="dialog_add_shoe_fill_all_fields">Please input mandatory information.</string>
+    <string name="dialog_race_tile">Race</string>
+    <string name="dialog_shoe_tile">Shoe</string>
+    <string name="dialog_race_no_image_message">There is no image for this race.</string>
+    <string name="dialog_confirm_delete_race">Are you sure to delete this race?</string>
+    <string name="dialog_confirm_delete_shoe">Are you sure to delete this shoe?</string>
+    <string name="dialog_contact_us_fails_title">Failure</string>
+    <string name="dialog_contact_us_fails_message">Email composition failure. Please try again.</string>
+    <string name="dialog_facebook_login_fail">"Uh oh. The user cancelled the Facebook login."</string>
+    <string name="dialog_user_title">User</string>
+    <string name="dialog_user_message">Do you want to add this user in your group?</string>
+
+    <!-- Dialog forgot password -->
+    <string name="dialog_forgot_pass_title">Reset Password</string>
+    <string name="dialog_forgot_pass_message">Please input your email address.</string>
+    <string name="dialog_login_email_fails">Username and password are incorrect. Please try again.</string>
+    <string name="dialog_reset_password_title">Reset Password</string>
+    <string name="dialog_reset_password_message">The email for password reset was sent to your email.</string>
+
+    <!-- Dialog choose iamges -->
+    <string name="dialog_choose_image_take_picture">Take Photo</string>
+    <string name="dialog_choose_image_from_gallery">Select from Gallery</string>
+
+    <!-- Dialog share -->
+    <string name="dialog_share_facebook">Facebook</string>
+    <string name="dialog_share_twitter">Twitter</string>
+
+    <!-- Dialog profile -->
+    <string name="dialog_profile_title">Profile</string>
+    <string name="dialog_profile_input_username">Please input your username.</string>
+    <string name="dialog_profile_old_password_incorrect">Your old password is incorrect.</string>
+    <string name="dialog_profile_new_password_not_set">You should set new password.</string>
+    <string name="dialog_profile_new_password_not_match">New password doesn\'t match.</string>
+    <string name="dialog_profile_update_successfully">Successfully Updated your profile.</string>
+    <string name="dialog_profile_username_used">The username is already used.</string>
+    <string name="dialog_profile_update_fails">Fails to update your profile.</string>
+
+    <!-- Common text -->
+    <string name="back">Back</string>
+    <string name="done">Done</string>
+    <string name="add">Add</string>
+
+    <!-- Login screen -->
+    <string name="login_sign_in_with">OR SIGN IN WITH</string>
+
+    <!-- Sign in -->
+    <string name="create_account">Create Account</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="email">Email</string>
+    <string name="email_address">Email address</string>
+    <string name="username">User Name</string>
+    <string name="username_hint">User name</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_in_register">If you have no account, then please click</string>
+    <string name="sign_in_forgot_password">If you forgot password, then please click</string>
+
+    <!-- Select race -->
+    <string name="select_race_welcome_back">Welcome back, %s</string>
+    <string name="select_race_user_history">%s\'s History</string>
+
+    <!-- Races detail -->
+    <string name="races_detail_no_item">Sort by</string>
+    <string name="races_detail_sort_by">Sort by</string>
+    <string name="races_detail_sort_date">Date</string>
+    <string name="races_detail_sort_time">Time</string>
+    <string name="races_detail_please_add_race">Please add race in History View by clicking \"Add Race\"</string>
+
+    <!-- Add race -->
+    <string name="add_race_title">ADD A RACE</string>
+    <string name="add_race_name">RACE NAME</string>
+    <string name="add_race_date">RACE DATE</string>
+    <string name="add_race_event_type">EVENT TYPE</string>
+    <string name="add_race_website">WEBSITE</string>
+    <string name="add_race_state">STATE</string>
+    <string name="add_race_city">CITY</string>
+    <string name="add_race_finish_time">OFFICAL RACE FINISHER TIME</string>
+    <string name="add_race_my_shoes">MY SHOES</string>
+    <string name="add_race_require">Required</string>
+    <string name="add_race_type_5k">5K (3.1MI)</string>
+    <string name="add_race_type_10k">10K (6.2MI)</string>
+    <string name="add_race_type_15k">15K (9.3MI)</string>
+    <string name="add_race_type_half_mar">Half Marathon</string>
+    <string name="add_race_type_full_mar">Full Marathon</string>
+
+    <!-- Add shoe -->
+    <string name="add_shoe_title">ADD A SHOE</string>
+    <string name="add_shoe_brand">SHOE BRAND</string>
+    <string name="add_shoe_model">SHOE MODEL</string>
+    <string name="add_shoe_add_mile_on_shoe">Add Miles on Shoe</string>
+    <string name="add_shoe_miles_on_shoe">Miles on Shoe</string>
+    <string name="add_shoe_miles_distance_history">Miles History</string>
+
+    <!-- Menu -->
+    <string name="menu_your_history">Your History</string>
+    <string name="menu_runner_you_may_know">Runners You May Know</string>
+    <string name="menu_your_community">Your Community/Group</string>
+    <string name="menu_profile_update">Profile Update</string>
+    <string name="menu_contact_us">Contact Us</string>
+    <string name="menu_share_fb">Share on Facebook</string>
+    <string name="menu_share_twitter">Share on Twitter</string>
+    <string name="menu_running_website">RunningRaceHistory.com</string>
+    <string name="menu_sign_out">Sign out</string>
+
+    <!-- Profile -->
+    <string name="profile_add_photo">Add Photo</string>
+    <string name="profile_name">Name</string>
+    <string name="profile_old_password">Old Password</string>
+    <string name="profile_new_password">New Password</string>
+    <string name="profile_confirm_password">Confirm Password</string>
+
+    <!-- Setting screen -->
+    <string name="setting_about">About</string>
+    <string name="setting_sounds">Sounds</string>
+    <string name="setting_link_fb">Link Facebook</string>
+    <string name="setting_about_title">ABOUT</string>
+    <string name="setting_about_content">American developers, The Wenger’s, live in the Northern suburbs of Chicago, 
+        with their two daughters, Ashley and Jamie. Joshua graduated from Boston University, with a Bachelor of Science in Hospitality, 
+        and has over 19 years of management working in the food service industry. He is currently employed by Aramark as the Director of Food services in a school district, 
+        on the North Shore of Chicago. Robyn works in the Compliance Department for CVS/Caremark and has recently gone back to college, where she is studying Communications. 
+        \n\nJoshua and Robyn have been athletic all their lives and have instilled this into their two girls. They both love running; 
+        between half marathons and full marathons they can\'t get enough! Their love for running inspired them to create this app that will help people keep all their race history in once central location.</string>
+
+</resources>

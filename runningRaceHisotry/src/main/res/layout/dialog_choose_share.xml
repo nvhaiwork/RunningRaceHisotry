@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:background="@color/dialog_out_bg"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:id="@+id/info_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:paddingTop="10dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_alert_bg"
+            android:orientation="vertical"
+            android:paddingBottom="2dp"
+            android:paddingTop="2dp" >
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/dialog_share_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/dialog_share_facebook"
+                android:textColor="@color/dialog_button_text_color"
+                android:textSize="@dimen/dialog_chooser_item_text" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/view_seperator_bg" />
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/dialog_share_twitter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/dialog_share_twitter"
+                android:textColor="@color/dialog_button_text_color"
+                android:textSize="@dimen/dialog_chooser_item_text" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

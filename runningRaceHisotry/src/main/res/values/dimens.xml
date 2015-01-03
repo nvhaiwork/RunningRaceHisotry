@@ -1,0 +1,64 @@
+<resources>
+
+    <!-- Action bar -->
+    <dimen name="action_bar_text_size">16sp</dimen>
+
+    <!-- Login -->
+    <dimen name="login_sign_in_with">16sp</dimen>
+
+    <!-- Sign In -->
+    <dimen name="text_button_size">18sp</dimen>
+    <dimen name="sign_in_text">16sp</dimen>
+
+    <!-- Select race -->
+    <dimen name="select_race_item_margin_top">-7dp</dimen>
+
+    <!-- Races detail -->
+    <dimen name="races_detail_sort_by_text">15sp</dimen>
+    <dimen name="races_detail_sort_item_text">13sp</dimen>
+    <dimen name="races_detail_group_header">20sp</dimen>
+    <dimen name="races_detail_item_name">13sp</dimen>
+    <dimen name="races_detail_item_time">15sp</dimen>
+    <dimen name="races_detail_item_miles">38sp</dimen>
+    <dimen name="race_item_delete">100dp</dimen>
+    <dimen name="races_empty_text">24sp</dimen>
+
+    <!-- Add race -->
+    <dimen name="add_race_item_margin_top">7dp</dimen>
+    <dimen name="add_race_item_padding">5dp</dimen>
+    <dimen name="add_race_item_text_size">18sp</dimen>
+    <dimen name="add_race_title_text_size">22sp</dimen>
+
+    <!-- My shoes -->
+    <dimen name="my_shoes_item_img">65dp</dimen>
+    <dimen name="my_shoes_item_title">17sp</dimen>
+    <dimen name="my_shoes_item_text">15sp</dimen>
+
+    <!-- Add shoe -->
+    <dimen name="add_shoe_image">100dp</dimen>
+    <dimen name="add_shoe_distance_hist_item">13sp</dimen>
+
+    <!-- Setting screen -->
+    <dimen name="setting_about">17sp</dimen>
+    <dimen name="setting_about_text">17sp</dimen>
+    <dimen name="setting_about_title">36sp</dimen>
+
+    <!-- Common -->
+    <dimen name="image_round_conner">14dip</dimen>
+
+    <!-- Dialog -->
+    <dimen name="dialog_button_text">18sp</dimen>
+    <dimen name="dialog_chooser_item_text">18sp</dimen>
+
+    <!-- Menu -->
+    <dimen name="menu_title_text">24sp</dimen>
+    <dimen name="menu_item_text">16sp</dimen>
+
+    <!-- User list -->
+    <dimen name="user_item_img">40dp</dimen>
+    <dimen name="user_item_text">17sp</dimen>
+
+    <!-- Profile -->
+    <dimen name="profile_text_size">16sp</dimen>
+
+</resources>

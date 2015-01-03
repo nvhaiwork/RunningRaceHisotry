@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical" >
+
+    <RelativeLayout
+        android:id="@+id/races_detail_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@color/red"
+        android:paddingBottom="3dp"
+        android:paddingTop="3dp" >
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/races_detail_race_date_fake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:text="@string/ok"
+            android:textSize="@dimen/races_detail_item_name"
+            android:visibility="invisible" />
+
+        <com.runningracehisotry.views.ColunaTextView
+            android:id="@+id/races_detail_race_mile_fake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/races_detail_race_date_fake"
+            android:layout_marginBottom="-10dp"
+            android:layout_marginTop="-5dp"
+            android:text="@string/ok"
+            android:textSize="@dimen/races_detail_item_miles"
+            android:visibility="invisible" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/races_detail_race_mile_fake"
+            android:gravity="center_vertical"
+            android:text="@string/ok"
+            android:textSize="@dimen/races_detail_item_name"
+            android:visibility="invisible" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:layout_width="@dimen/race_item_delete"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="@string/delete"
+            android:textColor="@color/white"
+            android:textSize="@dimen/races_detail_item_time" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/race_detail_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="3dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="3dp" >
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/races_detail_race_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/races_detail_item_name" />
+
+        <RelativeLayout
+            android:id="@+id/races_detail_race_name_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/races_detail_race_date"
+            android:layout_marginBottom="-10dp"
+            android:layout_marginTop="-5dp"
+            android:layout_toLeftOf="@+id/races_detail_race_imgs"
+            android:layout_toStartOf="@+id/races_detail_race_imgs" >
+
+            <com.runningracehisotry.views.ColunaTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="@dimen/races_detail_item_miles"
+                android:visibility="visible" />
+
+            <com.runningracehisotry.views.AutoFitTextView
+                android:id="@+id/races_detail_race_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textSize="@dimen/races_detail_item_miles" />
+        </RelativeLayout>
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/races_detail_race_mile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/races_detail_race_name_layout"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/races_detail_item_name" />
+
+        <com.runningracehisotry.views.CustomImageButton
+            android:id="@+id/races_detail_race_imgs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="0dp"
+            android:layout_toLeftOf="@+id/races_detail_race_time"
+            android:layout_toStartOf="@+id/races_detail_race_time"
+            android:adjustViewBounds="false"
+            android:contentDescription="@null" />
+
+        <com.runningracehisotry.views.CustomImageButton
+            android:id="@+id/races_detail_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:adjustViewBounds="false"
+            android:contentDescription="@null" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/races_detail_race_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/races_detail_item_time" />
+    </RelativeLayout>
+
+</RelativeLayout>
