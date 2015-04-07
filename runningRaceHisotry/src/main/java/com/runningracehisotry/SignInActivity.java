@@ -15,8 +15,12 @@ import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
+import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceApi;
+import com.runningracehisotry.webservice.ServiceConstants;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -30,6 +34,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * @author nvhaiwork
  *
@@ -40,12 +47,16 @@ public class SignInActivity extends BaseActivity {
 	private CustomLoadingDialog mLoadingDialog;
 	private LinearLayout mRegisLayout, mOptionLayout;
 	private EditText mUsernameEdt, mPasswordEdt, mConfirmEdt, mEmailEdt;
+    private String logTag = "SignInActivity";
+    private ServiceApi sv;
+    private String usernameStr;
+    private String passwordStr;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.runningracehisotry.BaseActivity#addContent()
-	 */
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.runningracehisotry.BaseActivity#addContent()
+     */
 	@Override
 	protected int addContent() {
 		// TODO Auto-generated method stub
@@ -78,6 +89,8 @@ public class SignInActivity extends BaseActivity {
 		mBotRightBtnTxt.setVisibility(View.VISIBLE);
 		mRegisBtn.setOnClickListener(this);
 		mForgotBtn.setOnClickListener(this);
+
+        sv = new ServiceApi(callBackEvent);
 	}
 
 	/*
@@ -113,24 +126,22 @@ public class SignInActivity extends BaseActivity {
 	 * */
 	private void doLoginOrSignup() {
 
-		final String usernameStr = mUsernameEdt.getText().toString();
-		final String passwordStr = mPasswordEdt.getText().toString();
+		usernameStr = mUsernameEdt.getText().toString();
+		passwordStr = mPasswordEdt.getText().toString();
+        // Register
 		if (mRegisLayout.getVisibility() == View.VISIBLE) {
-
 			String passwordConfirmStr = mConfirmEdt.getText().toString();
 			String emailStr = mEmailEdt.getText().toString();
 			if (usernameStr.equals("") || passwordStr.equals("")
 					|| passwordConfirmStr.equals("") || emailStr.equals("")) {
-
 				Utilities.showAlertMessage(SignInActivity.this,
 						getString(R.string.dialog_fill_information),
 						getString(R.string.dialog_sign_up));
 			} else {
-
 				if (passwordConfirmStr.equals(passwordStr)) {
-
 					mLoadingDialog = CustomLoadingDialog.show(
 							SignInActivity.this, "", "", false, false);
+                    // Call api Register
 					final ParseUser user = new ParseUser();
 					user.setUsername(usernameStr);
 					user.setPassword(passwordStr);
@@ -162,66 +173,25 @@ public class SignInActivity extends BaseActivity {
 						}
 					});
 				} else {
-
-					Utilities
-							.showAlertMessage(
-									SignInActivity.this,
-									getString(R.string.dialog_confirm_password_does_not_match),
-									getString(R.string.dialog_sign_up));
+					Utilities.showAlertMessage(
+                            SignInActivity.this,
+                            getString(R.string.dialog_confirm_password_does_not_match),
+                            getString(R.string.dialog_sign_up));
 				}
-
 			}
-		} else {
-
+		}
+        // Login
+        else {
 			if (usernameStr.equals("") || passwordStr.equals("")) {
-
 				Utilities.showAlertMessage(SignInActivity.this,
 						getString(R.string.dialog_fill_information),
 						getString(R.string.dialog_sign_in));
 			} else {
-
-				mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this,
-						"", "", false, false);
-				ParseUser.logInInBackground(usernameStr, passwordStr,
-						new LogInCallback() {
-
-							@Override
-							public void done(final ParseUser user,
-									ParseException error) {
-								// TODO Auto-generated method stub
-
-								if (user != null) {
-
-									user.fetchInBackground(new GetCallback<ParseObject>() {
-
-										@Override
-										public void done(ParseObject object,
-												ParseException ex) {
-											// TODO Auto-generated method stub
-
-											mUser = user;
-											mHistory = object
-													.getList(Constants.DATA);
-											mShoes = object
-													.getList(Constants.SHOES);
-											mFriends = object
-													.getList(Constants.FRIENDS);
-											finishLoginOrSignup(usernameStr,
-													passwordStr);
-										}
-									});
-								} else {
-
-									Utilities
-											.showAlertMessage(
-													SignInActivity.this,
-													getString(R.string.dialog_login_email_fails),
-													"");
-									mLoadingDialog.dismiss();
-								}
-							}
-						});
-
+                try {
+                    sv.Login(usernameStr, passwordStr);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 			}
 		}
 	}
@@ -283,22 +253,73 @@ public class SignInActivity extends BaseActivity {
 	}
 
 	/**
-	 * Finsih user login/signup process
+	 * Finish user login/sign-up process
 	 * */
 	private void finishLoginOrSignup(String username, String password) {
-
-		CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME,
-				username);
-		CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD,
-				password);
-		Intent selectRaceIntent = new Intent(SignInActivity.this,
-				SelectRaceActivity.class);
-		selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-				| Intent.FLAG_ACTIVITY_NEW_TASK);
-		selectRaceIntent
-				.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+		CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME, username);
+		CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD, password);
+		Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
+		selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+		selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
 		mLoadingDialog.dismiss();
 		startActivity(selectRaceIntent);
 		finish();
 	}
+
+    private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
+        @Override
+        public void Wsdl2CodeStartedRequest() {
+            mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this,"", "", false, false);
+        }
+
+        @Override
+        public void Wsdl2CodeFinished(String methodName, Object Data) {
+            LogUtil.i(logTag, Data.toString());
+            if (methodName.equals(ServiceConstants.METHOD_LOGIN)) {
+                try {
+                    JSONObject jsonObjectReceive = new JSONObject(Data.toString());
+                    boolean result = jsonObjectReceive.getBoolean("result");
+                    // Login success
+                    if (result) {
+                        LogUtil.d(logTag, "Login success!!!");
+                        finishLoginOrSignup(usernameStr, passwordStr);
+                        // Get data of login user
+                        /*mUser = user;
+                        mHistory = object.getList(Constants.DATA);
+                        mShoes = object.getList(Constants.SHOES);
+                        mFriends = object.getList(Constants.FRIENDS);*/
+                    }
+                    // Login fail
+                    else {
+                        LogUtil.d(logTag, "Login fail!!!");
+                        // Show dialog notify login fail
+                        Utilities.showAlertMessage(
+                                SignInActivity.this,
+                                getString(R.string.dialog_login_email_fails),
+                                "");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Utilities.showAlertMessage(
+                            SignInActivity.this,
+                            getString(R.string.dialog_login_email_fails),
+                            "");
+                } finally {
+                    if (mLoadingDialog.isShowing()) {
+                        mLoadingDialog.dismiss();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void Wsdl2CodeFinishedWithException(Exception ex) {
+
+        }
+
+        @Override
+        public void Wsdl2CodeEndedRequest() {
+
+        }
+    };
 }
