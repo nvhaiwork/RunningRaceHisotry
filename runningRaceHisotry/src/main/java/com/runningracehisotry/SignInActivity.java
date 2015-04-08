@@ -6,8 +6,8 @@ package com.runningracehisotry;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.parse.GetCallback;
-import com.parse.LogInCallback;
+/*import com.parse.GetCallback;
+import com.parse.LogInCallback;*/
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -281,7 +281,7 @@ public class SignInActivity extends BaseActivity {
                     boolean result = jsonObjectReceive.getBoolean("result");
                     // Login success
                     if (result) {
-                        LogUtil.d(logTag, "Login success!!!");
+                        LogUtil.d(logTag, "Login success has data!!!");
                         finishLoginOrSignup(usernameStr, passwordStr);
                         // Get data of login user
                         /*mUser = user;
