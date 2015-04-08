@@ -12,6 +12,7 @@ import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParseTwitterUtils;
+import com.runningracehisotry.models.User;
 
 import android.app.Application;
 
@@ -24,6 +25,8 @@ import android.app.Application;
 		ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL,
 		ReportField.CUSTOM_DATA, ReportField.STACK_TRACE, ReportField.LOGCAT }, mode = ReportingInteractionMode.TOAST, resToastText = R.string.crash_toast_text)
 public class RunningRaceApplication extends Application {
+    private User currentUser;
+    private static RunningRaceApplication mInstance;
 
 	/*
 	 * (non-Javadoc)
@@ -42,5 +45,19 @@ public class RunningRaceApplication extends Application {
 		ParseTwitterUtils.initialize("5jjxXbxvr2p0DzHlUEADCDI0Z",
 				"Pt9xNAShOGjKi8XnjSUUJ4P2w0H9oxDXHBCpQEknoVMnWUK6Bq");
 		ParseInstallation.getCurrentInstallation().saveInBackground();
+
+        mInstance = this;
 	}
+    public static RunningRaceApplication getInstance() {
+        return mInstance;
+    }
+
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 }

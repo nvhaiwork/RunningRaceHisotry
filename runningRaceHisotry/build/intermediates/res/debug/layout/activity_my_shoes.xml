@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <com.runningracehisotry.views.CustomImageButton
+        android:id="@+id/races_detail_title_dummy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:adjustViewBounds="false"
+        android:background="@drawable/ic_races_detail_title_dummy"
+        android:contentDescription="@null"
+        android:visibility="invisible" />
+
+    <ListView
+        android:id="@+id/my_shoes_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/layout_buttons_bottom"
+        android:layout_below="@+id/races_detail_title_dummy" >
+    </ListView>
+
+    <com.runningracehisotry.views.CustomImageButton
+        android:id="@+id/races_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:adjustViewBounds="false"
+        android:background="@drawable/ic_my_shoes_title"
+        android:contentDescription="@null" />
+
+    <include
+        android:id="@+id/layout_buttons_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_buttons_bottom" />
+
+</RelativeLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/activity_my_shoes.xml -->

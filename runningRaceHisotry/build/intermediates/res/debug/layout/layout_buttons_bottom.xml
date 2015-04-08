@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:id="@+id/bottom_button_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/bottom_button_left_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="8dp"
+            android:text="@string/back"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_button_size"
+            android:visibility="gone" />
+
+        <com.runningracehisotry.views.CustomImageButton
+            android:id="@+id/bottom_button_left_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@null"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="3dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="end" >
+
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/bottom_button_right_img"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@null"
+                android:paddingBottom="3dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="3dp"
+                android:src="@drawable/ic_setting"
+                android:visibility="gone" />
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/bottom_button_right_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="8dp"
+                android:text="@string/done"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_button_size"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:id="@+id/bottom_button_center_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="8dp"
+        android:text="@string/done"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_button_size"
+        android:visibility="gone" />
+
+</RelativeLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/layout_buttons_bottom.xml -->

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="5dp" >
+
+    <LinearLayout
+        android:id="@+id/user_item_img_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/user_circle_image_border"
+        android:padding="1dp" >
+
+        <com.runningracehisotry.views.CircleImageView
+            android:id="@+id/user_item_img"
+            android:layout_width="@dimen/user_item_img"
+            android:layout_height="@dimen/user_item_img"
+            android:src="@drawable/ic_user_img" />
+    </LinearLayout>
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:id="@+id/user_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/user_item_img_layout"
+        android:layout_toRightOf="@+id/user_item_img_layout"
+        android:textColor="@color/black"
+        android:textSize="@dimen/user_item_text" />
+
+</RelativeLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/layout_user_item.xml -->

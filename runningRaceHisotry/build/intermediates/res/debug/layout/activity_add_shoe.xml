@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_activity_background" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/layout_buttons_bottom"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/add_shoe_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="10dp"
+            android:text="@string/add_shoe_title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/add_race_title_text_size" />
+
+        <com.runningracehisotry.views.SquareImageView
+            android:id="@+id/add_shoe_image"
+            android:layout_width="@dimen/add_shoe_image"
+            android:layout_height="@dimen/add_shoe_image"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/add_shoe_brand"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
+            android:contentDescription="@null"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_photo_of_shoe" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/add_shoe_brand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_title"
+            android:layout_toLeftOf="@+id/add_shoe_image"
+            android:layout_toStartOf="@+id/add_shoe_image"
+            android:paddingEnd="7dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="7dp"
+            android:paddingStart="0dp"
+            android:text="@string/add_shoe_brand"
+            android:textSize="@dimen/add_race_item_text_size" />
+
+        <EditText
+            android:id="@+id/add_shoe_brand_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_brand"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/add_shoe_image"
+            android:layout_toStartOf="@+id/add_shoe_image"
+            android:background="@drawable/dialog_alert_bg"
+            android:hint="@string/add_race_require"
+            android:inputType="textPersonName"
+            android:padding="@dimen/add_race_item_padding"
+            android:textSize="@dimen/add_race_item_text_size" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/add_shoe_model"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_brand_edt"
+            android:layout_marginTop="@dimen/add_race_item_margin_top"
+            android:layout_toLeftOf="@+id/add_shoe_image"
+            android:layout_toStartOf="@+id/add_shoe_image"
+            android:paddingEnd="7dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="7dp"
+            android:paddingStart="0dp"
+            android:text="@string/add_shoe_model"
+            android:textSize="@dimen/add_race_item_text_size" />
+
+        <EditText
+            android:id="@+id/add_shoe_model_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_model"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/add_shoe_image"
+            android:layout_toStartOf="@+id/add_shoe_image"
+            android:background="@drawable/dialog_alert_bg"
+            android:hint="@string/add_race_require"
+            android:inputType="textPersonName"
+            android:padding="@dimen/add_race_item_padding"
+            android:singleLine="true"
+            android:textSize="@dimen/add_race_item_text_size" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/add_shoe_miles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_model_edt"
+            android:layout_marginTop="@dimen/add_race_item_margin_top"
+            android:layout_toLeftOf="@+id/add_shoe_image"
+            android:layout_toStartOf="@+id/add_shoe_image"
+            android:paddingEnd="7dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="7dp"
+            android:paddingStart="0dp"
+            android:text="@string/add_shoe_add_mile_on_shoe"
+            android:textSize="@dimen/add_race_item_text_size" />
+
+        <LinearLayout
+            android:id="@+id/add_shoe_miles_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_miles"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/add_shoe_image"
+            android:layout_toStartOf="@+id/add_shoe_image"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/add_shoe_add_miles_edt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/dialog_alert_bg"
+                android:inputType="number"
+                android:padding="@dimen/add_race_item_padding"
+                android:singleLine="true"
+                android:textSize="@dimen/add_race_item_text_size" />
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/add_show_add_miles_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:text="@string/add"
+                android:textSize="@dimen/add_race_item_text_size" />
+        </LinearLayout>
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/add_shoe_miles_on_shoe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_miles_layout"
+            android:layout_marginTop="@dimen/add_race_item_margin_top"
+            android:text="@string/add_shoe_miles_on_shoe"
+            android:textSize="@dimen/add_race_item_text_size" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/add_shoe_miles_on_shoe_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_miles_on_shoe"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/add_shoe_image"
+            android:layout_toStartOf="@+id/add_shoe_image"
+            android:background="@drawable/dialog_alert_bg"
+            android:clickable="false"
+            android:padding="@dimen/add_race_item_padding"
+            android:textSize="@dimen/add_race_item_text_size" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/add_shoe_miles_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/add_shoe_miles_on_shoe_edt"
+            android:layout_marginTop="@dimen/add_race_item_margin_top"
+            android:text="@string/add_shoe_miles_distance_history"
+            android:textSize="@dimen/add_race_item_text_size" />
+
+        <ListView
+            android:id="@+id/add_shoe_distance_history_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/add_shoe_miles_history"
+            android:background="@drawable/dialog_alert_bg"
+            android:cacheColorHint="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+        </ListView>
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/layout_buttons_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_buttons_bottom" />
+
+</RelativeLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/activity_add_shoe.xml -->

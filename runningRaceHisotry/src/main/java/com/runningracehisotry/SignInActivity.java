@@ -8,12 +8,14 @@ import java.util.HashMap;
 
 /*import com.parse.GetCallback;
 import com.parse.LogInCallback;*/
+import com.google.gson.Gson;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
@@ -258,13 +260,18 @@ public class SignInActivity extends BaseActivity {
 	private void finishLoginOrSignup(String username, String password) {
 		CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME, username);
 		CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD, password);
-		Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
-		selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-		selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+        getCurrentUserData();
 		mLoadingDialog.dismiss();
-		startActivity(selectRaceIntent);
-		finish();
+
 	}
+
+    private void getCurrentUserData() {
+        try {
+            sv.getUserProfile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
@@ -308,6 +315,40 @@ public class SignInActivity extends BaseActivity {
                     if (mLoadingDialog.isShowing()) {
                         mLoadingDialog.dismiss();
                     }
+                }
+            } else if (methodName.equals(ServiceConstants.METHOD_GET_USER_PROFILE)) {
+                Gson gson = new Gson();
+                User user = gson.fromJson(Data.toString(), User.class);
+                if(user != null) {
+                    RunningRaceApplication.getInstance().setCurrentUser(user);
+
+                    Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
+                    selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+                    startActivity(selectRaceIntent);
+                    finish();
+                } else {
+
+                    // TODO bua
+                    user = new User();
+                    user.setId("12");
+                    user.setName("nhanthevu");
+                    user.setFull_name("nhanthevu");
+                    user.setEmail("vuthenhan@nhan.com");
+                    user.setType("1");
+                    user.setProfile_image("/images/person.jpg");
+                    user.setCreated_at("2015-03-30 05:50:05");
+                    user.setUpdated_at("2015-03-30 05:50:05");
+                    user.setAndroid_token("");
+                    user.setIos_token("");
+
+                    RunningRaceApplication.getInstance().setCurrentUser(user);
+
+                    Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
+                    selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+                    startActivity(selectRaceIntent);
+                    finish();
                 }
             }
         }

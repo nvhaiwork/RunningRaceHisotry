@@ -163,7 +163,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		// TODO Auto-generated method stub
 		super.onResume();
 
-		mCurrentClassName = this.getClass().getSimpleName();
+		mCurrentClassName = this.getLocalClassName();
 		uiHelper.onResume();
 	}
 

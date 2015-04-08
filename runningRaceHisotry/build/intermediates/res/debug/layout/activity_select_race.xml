@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_activity_background" />
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:id="@+id/selecet_race_welcome_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="7dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/login_sign_in_with" />
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:id="@+id/selecet_race_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/selecet_race_welcome_back"
+        android:background="@color/text_button_bg_select_race"
+        android:gravity="center"
+        android:padding="7dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/login_sign_in_with"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/selecet_race_title"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" >
+
+            <ImageView
+                android:id="@+id/select_race_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:contentDescription="@null"
+                android:paddingEnd="0dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="0dp"
+                android:paddingStart="20dp"
+                android:src="@drawable/ic_select_text" />
+
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/select_race_5k"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@null"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_select_race_5k" />
+
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/select_race_10k"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/select_race_5k"
+                android:layout_marginTop="@dimen/select_race_item_margin_top"
+                android:contentDescription="@null"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_select_race_10k" />
+
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/select_race_15k"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/select_race_10k"
+                android:layout_marginTop="@dimen/select_race_item_margin_top"
+                android:contentDescription="@null"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_select_race_15k" />
+
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/select_race_half_marathon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/select_race_15k"
+                android:layout_marginTop="@dimen/select_race_item_margin_top"
+                android:contentDescription="@null"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_select_race_half_marathon" />
+
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/select_race_full_marathon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/select_race_half_marathon"
+                android:layout_marginTop="@dimen/select_race_item_margin_top"
+                android:contentDescription="@null"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_select_race_full_marathon" />
+
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/select_race_add_race"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/select_race_full_marathon"
+                android:layout_marginTop="@dimen/select_race_item_margin_top"
+                android:contentDescription="@null"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_select_race_add_race" />
+
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/select_race_my_shoes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/select_race_add_race"
+                android:layout_marginTop="@dimen/select_race_item_margin_top"
+                android:contentDescription="@null"
+                android:scaleType="fitEnd"
+                android:src="@drawable/ic_select_race_my_shoes" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/select_race_add_race_success"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dialog_out_bg"
+        android:visibility="gone" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="100dp"
+            android:adjustViewBounds="false"
+            android:contentDescription="@null"
+            android:src="@drawable/img_add_race_success" />
+    </LinearLayout>
+
+</RelativeLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/activity_select_race.xml -->

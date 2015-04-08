@@ -6,6 +6,7 @@ package com.runningracehisotry;
 import java.util.ArrayList;
 import com.parse.ParseUser;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 
 import android.content.Context;
@@ -90,8 +91,9 @@ public class SelectRaceActivity extends BaseActivity {
 			String userHis = String.format(
 					getString(R.string.select_race_user_history), username);
 			mTitleTxt.setText(userHis);
-		} else if (mUser != null) {
-			String username = (String) mUser.get(Constants.FULLNAME);
+		} else if (RunningRaceApplication.getInstance().getCurrentUser() != null) {
+            User user = RunningRaceApplication.getInstance().getCurrentUser();
+			String username = user.getFull_name();
 			String welcomStr = String.format(
 					getString(R.string.select_race_welcome_back), username);
 			String userHis = String.format(

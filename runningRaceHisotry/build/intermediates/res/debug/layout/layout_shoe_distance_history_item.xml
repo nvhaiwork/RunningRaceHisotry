@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:id="@+id/shoe_distance_history_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="7dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/add_shoe_distance_hist_item" />
+
+</LinearLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/layout_shoe_distance_history_item.xml -->

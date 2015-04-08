@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\libs\acra-4.5.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="44a5eb946e0d83eed4a0128d877ca1fd8168b83a">
+        <dex dex="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\build\intermediates\pre-dexed\debug\acra-4.5.0-b0ad20c49b1a80aa6f127f78da9cc03fd01b2a69.jar" />
+    </item>
+    <item
+        jar="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\build\intermediates\exploded-aar\RunningRaceHisotry\facebookSDK\unspecified\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="920a8a4e4179bcbdfe2e058ec94b4f3a6cd102ce">
+        <dex dex="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\build\intermediates\pre-dexed\debug\classes-bd72a540598d6b83a7ab19115531c83627b39c53.jar" />
+    </item>
+    <item
+        jar="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\libs\library_sliding.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="63dbfeae0257267f922b2e730c3434b4500c94f6">
+        <dex dex="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\build\intermediates\pre-dexed\debug\library_sliding-4a1adec5a05eccba401de1eb94a3b534127b4662.jar" />
+    </item>
+    <item
+        jar="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\libs\Parse-1.4.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="8daf146aea8cd5245bb90f802f2cd4b8dd855eca">
+        <dex dex="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\build\intermediates\pre-dexed\debug\Parse-1.4.3-9f7cfca396453501321c2e8b2cf04cceb7ac4a82.jar" />
+    </item>
+    <item
+        jar="C:\Users\manh\AppData\Local\Android\sdk1\extras\android\m2repository\com\android\support\support-v4\18.0.0\support-v4-18.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
+        <dex dex="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\build\intermediates\pre-dexed\debug\support-v4-18.0.0-cb1cd0dfd93197506cdbc96fefce1267eeaabe44.jar" />
+    </item>
+    <item
+        jar="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\libs\universal-image-loader-1.9.2-SNAPSHOT-with-sources.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e33324b770223932d467e4ec39639b0c15f3b94e">
+        <dex dex="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\build\intermediates\pre-dexed\debug\universal-image-loader-1.9.2-SNAPSHOT-with-sources-e5db7e72377369208d6938bff9d7afbda76ea0c8.jar" />
+    </item>
+    <item
+        jar="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\libs\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="D:\Workspace\Project\New Project\New folder\RunningRaceHisotry\runningRaceHisotry\build\intermediates\pre-dexed\debug\gson-2.3.1-cdf62303b7801d0f7434db958c9a244db800e054.jar" />
+    </item>
+
+</items>

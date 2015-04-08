@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/layout_activity_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/layout_buttons_bottom"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:padding="15dp" >
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sign_in_text" />
+
+        <EditText
+            android:id="@+id/sign_in_username_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_alert_bg"
+            android:hint="@string/username_hint"
+            android:inputType="textPersonName"
+            android:padding="@dimen/add_race_item_padding"
+            android:textSize="@dimen/sign_in_text" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/password"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sign_in_text" />
+
+        <EditText
+            android:id="@+id/sign_in_password_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_alert_bg"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:padding="@dimen/add_race_item_padding"
+            android:textSize="@dimen/sign_in_text" />
+
+        <LinearLayout
+            android:id="@+id/sign_in_register_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/confirm_password"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sign_in_text" />
+
+            <EditText
+                android:id="@+id/sign_in_confirm_password_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dialog_alert_bg"
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword"
+                android:padding="@dimen/add_race_item_padding"
+                android:textSize="@dimen/sign_in_text" />
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/email_address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sign_in_text" />
+
+            <EditText
+                android:id="@+id/sign_in_email_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dialog_alert_bg"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/add_race_item_padding"
+                android:textSize="@dimen/sign_in_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sign_in_option_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="2dp" >
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/sign_in_regis_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="@string/create_account"
+                android:textColor="@color/here_link"
+                android:textSize="@dimen/sign_in_text" />
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/sign_in_forgot_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="@string/forgot_password"
+                android:textColor="@color/here_link"
+                android:textSize="@dimen/sign_in_text" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/layout_buttons_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_buttons_bottom" />
+
+</RelativeLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/activity_signin.xml -->

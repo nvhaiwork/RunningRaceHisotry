@@ -1,0 +1,10 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval" >
+
+    <solid android:color="#ffffff" />
+
+    <stroke
+        android:width="1dip"
+        android:color="@color/people_you_may_know_color" />
+
+</shape><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/drawable/user_circle_image_border.xml -->

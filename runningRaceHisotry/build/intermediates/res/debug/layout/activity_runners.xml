@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/people_you_may_know_color"
+        android:padding="7dp"
+        android:text="@string/menu_runner_you_may_know"
+        android:textColor="@color/white"
+        android:textSize="@dimen/login_sign_in_with" />
+
+    <ListView
+        android:id="@+id/runners_you_may_know_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/activity_runners.xml -->

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <com.runningracehisotry.views.CustomImageButton
+        android:id="@+id/ic_action_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:padding="5dp"
+        android:src="@drawable/ic_action_menu"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/ic_action_menu"
+        android:layout_toLeftOf="@+id/ic_action_setting"
+        android:layout_toRightOf="@+id/ic_action_menu"
+        android:layout_toStartOf="@+id/ic_action_setting"
+        android:adjustViewBounds="false"
+        android:contentDescription="@null"
+        android:src="@drawable/img_navigation_bar" />
+
+    <com.runningracehisotry.views.CustomImageButton
+        android:id="@+id/ic_action_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:padding="5dp"
+        android:src="@drawable/ic_action_settings"
+        android:visibility="invisible" />
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:id="@+id/ic_action_save"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/save"
+        android:textColor="@color/black"
+        android:textSize="@dimen/action_bar_text_size"
+        android:visibility="invisible" />
+
+</RelativeLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/layout_header.xml -->

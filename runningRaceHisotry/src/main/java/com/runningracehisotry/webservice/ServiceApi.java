@@ -9,11 +9,13 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -223,9 +225,11 @@ public class ServiceApi {
             HttpConnectionParams.setConnectionTimeout(timeoutParams, timeOut);
             HttpConnectionParams.setSoTimeout(timeoutParams, timeOut);
             HttpClient httpClient = new DefaultHttpClient(timeoutParams);
-            HttpResponse response = httpClient.execute(httpGet);
 
-            return EntityUtils.toString(response.getEntity());
+            ResponseHandler<String> res=new BasicResponseHandler();
+            String response = httpClient.execute(httpGet, res);
+
+            return response;
         } catch (IOException e) {
             eventHandler.Wsdl2CodeFinishedWithException(e);
             e.printStackTrace();

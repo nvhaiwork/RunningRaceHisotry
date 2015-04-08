@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dialog_out_bg" >
+
+    <ImageView
+        android:id="@+id/setting_medal_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_setting_medal_top" />
+
+    <RelativeLayout
+        android:id="@+id/setting_medal_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setting_medal_top"
+        android:layout_centerHorizontal="true" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_setting_medal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <com.runningracehisotry.views.CustomFontTextView
+                    android:id="@+id/setting_sound_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/setting_sounds"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/setting_about" />
+
+                <CheckBox
+                    android:id="@+id/setting_sound_rb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:button="@drawable/setting_cb_bg" />
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/setting_sound_seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:max="100" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal" >
+
+                <com.runningracehisotry.views.CustomFontTextView
+                    android:id="@+id/setting_link_fb_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/setting_link_fb"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/setting_about" />
+
+                <CheckBox
+                    android:id="@+id/setting_link_fb_rb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:button="@drawable/setting_cb_bg" />
+            </LinearLayout>
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/setting_about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/setting_about_text_color"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp"
+                android:text="@string/setting_about"
+                android:textColor="@color/white"
+                android:textSize="@dimen/setting_about"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/setting_about_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/img_about_bg"
+        android:visibility="gone" >
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/setting_about_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:padding="5dp"
+            android:text="@string/setting_about_title"
+            android:textColor="@color/setting_about_title"
+            android:textSize="@dimen/setting_about_title"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/setting_about_title"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/about_content_bg"
+            android:padding="5dp"
+            android:scrollbarStyle="outsideOverlay" >
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_about_content"
+                android:textSize="@dimen/setting_about_text" />
+        </ScrollView>
+    </RelativeLayout>
+
+</RelativeLayout><!-- From: file:/D:/Workspace/Project/New%20Project/New%20folder/RunningRaceHisotry/runningRaceHisotry/src/main/res/layout/dialog_setting.xml -->
