@@ -11,6 +11,7 @@ public class ServiceConstants {
     public static final String METHOD_GET_USER_PROFILE = "getUserProfile";
     public static final String METHOD_UPDATE_USER_PROFILE = "updateUserProfile";
     public static final String METHOD_GET_ALL_RUNNERS = "getAllRunners";
+    public static final String METHOD_FORGOT_PASSWORD = "forgotPassword";
 
     // Shoes method
     public static final String METHOD_ADD_SHOES = "addShoes";

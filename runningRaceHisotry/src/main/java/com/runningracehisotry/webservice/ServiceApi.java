@@ -24,6 +24,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import com.runningracehisotry.utilities.LogUtil;
@@ -41,7 +42,7 @@ public class ServiceApi {
     private static final String API_GET_USER_PROFILE = "/user/getUserProfile";
     private static final String API_UPDATE_USER_PROFILE = "/user/";
     private static final String API_GET_ALL_RUNNERS = "/user";
-
+    private static final String API_FORGOT_PASSWORD = "/user/forgotPassword";
     // Shoes API
     private static final String API_ADD_SHOES = "/shoes";
     private static final String API_GET_ALL_SHOES_WITH_RELATE_OBJ = "/shoes";
@@ -184,17 +185,17 @@ public class ServiceApi {
 
     /**
      * getUserProfile return profile of current user.
-     *
+     * edit by NTQ
      * @throws Exception
      */
-    public void getUserProfile() throws Exception {
+    public void getUserProfile(String name, String password) throws Exception {
         if (this.eventHandler == null) {
             throw new Exception("Async Methods Requires IWsdl2CodeEvents");
         }
-        getUserProfileAsync();
+        getUserProfileAsync(name, password);
     }
 
-    private void getUserProfileAsync() {
+    private void getUserProfileAsync(final String name, final String password) {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected void onPreExecute() {
@@ -203,7 +204,7 @@ public class ServiceApi {
 
             @Override
             protected String doInBackground(Void... voids) {
-                return callApiGetUserProfile();
+                return callApiGetUserProfile(name, password);
             }
 
             @Override
@@ -216,9 +217,11 @@ public class ServiceApi {
         }.execute();
     }
 
-    private String callApiGetUserProfile() {
+    private String callApiGetUserProfile(String name, String password) {
         try {
             HttpGet httpGet = new HttpGet(SERVICE_URL + API_GET_USER_PROFILE);
+            String token = name + ":" + password;
+            httpGet.setHeader("Authorization", "Basic "+ Base64.encodeToString(token.getBytes(), Base64.NO_WRAP));
             LogUtil.i("WebService", "getUserProfile URI : " + httpGet.getURI());
 
             HttpParams timeoutParams = new BasicHttpParams();
@@ -1000,6 +1003,76 @@ public class ServiceApi {
             HttpConnectionParams.setSoTimeout(timeoutParams, timeOut);
             HttpClient httpClient = new DefaultHttpClient(timeoutParams);
             HttpResponse response = httpClient.execute(httpDelete);
+
+            return EntityUtils.toString(response.getEntity());
+        } catch (IOException e) {
+            eventHandler.Wsdl2CodeFinishedWithException(e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // API 19 to 28
+    // API 27
+
+    /**
+     * author: NTQ
+     * forgot Password
+     * @param name
+     * @param password
+     * @param email
+     * @throws Exception
+     */
+    public void forgotPassword(String name, String password, String email) throws Exception {
+        if (this.eventHandler == null) {
+            throw new Exception("Async Methods Requires IWsdl2CodeEvents callForgotPassword");
+        }
+        forgotPasswordAsync(name, password, email);
+    }
+
+    /**
+     * author: NTQ
+     * Asyntask forgotPAssword
+     * @param name
+     * @param password
+     * @param email
+     */
+    private void forgotPasswordAsync(final String name, final String password, final String email) {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected void onPreExecute() {
+                eventHandler.Wsdl2CodeStartedRequest();
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                return callForgotPassword(name, password, email);
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                eventHandler.Wsdl2CodeEndedRequest();
+                if (result != null) {
+                    eventHandler.Wsdl2CodeFinished(ServiceConstants.METHOD_REGISTER, result);
+                }
+            }
+        }.execute();
+    }
+
+    private String callForgotPassword(String name, String password, String email) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("email", email));
+
+        try {
+            HttpPost httpPost = new HttpPost(SERVICE_URL + API_FORGOT_PASSWORD);
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+            LogUtil.i(logTag, "callForgotPassword URI : " + httpPost.getURI());
+
+            HttpParams timeoutParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(timeoutParams, timeOut);
+            HttpConnectionParams.setSoTimeout(timeoutParams, timeOut);
+            HttpClient httpClient = new DefaultHttpClient(timeoutParams);
+            HttpResponse response = httpClient.execute(httpPost);
 
             return EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
