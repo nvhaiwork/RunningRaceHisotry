@@ -34,28 +34,28 @@ public class ServiceApi {
     private int timeOut = 60000;
     private String logTag = "ServiceApi";
 
-    private static final String SERVICE_URL = "http://prr.zodinet.com";
+    public static final String SERVICE_URL = "http://prr.zodinet.com";
 
     // User API
-    private static final String API_REGISTER = "/user/register";
-    private static final String API_LOGIN = "/user/login";
-    private static final String API_GET_USER_PROFILE = "/user/getUserProfile";
-    private static final String API_UPDATE_USER_PROFILE = "/user/";
-    private static final String API_GET_ALL_RUNNERS = "/user";
-    private static final String API_FORGOT_PASSWORD = "/user/forgotPassword";
+    public static final String API_REGISTER = "/user/register";
+    public static final String API_LOGIN = "/user/login";
+    public static final String API_GET_USER_PROFILE = "/user/getUserProfile";
+    public static final String API_UPDATE_USER_PROFILE = "/user/";
+    public static final String API_GET_ALL_RUNNERS = "/user";
+    public static final String API_FORGOT_PASSWORD = "/user/forgotPassword";
     // Shoes API
-    private static final String API_ADD_SHOES = "/shoes";
-    private static final String API_GET_ALL_SHOES_WITH_RELATE_OBJ = "/shoes";
-    private static final String API_GET_ALL_SHOES = "/shoes/getAllShoes";
-    private static final String API_UPDATE_SHOES = "/shoes/";
-    private static final String API_DELETE_SHOES_BY_ID = "/shoes/";
-    private static final String API_GET_SHOES_BY_ID = "/shoes/";
+    public static final String API_ADD_SHOES = "/shoes";
+    public static final String API_GET_ALL_SHOES_WITH_RELATE_OBJ = "/shoes";
+    public static final String API_GET_ALL_SHOES = "/shoes/getAllShoes";
+    public static final String API_UPDATE_SHOES = "/shoes/";
+    public static final String API_DELETE_SHOES_BY_ID = "/shoes/";
+    public static final String API_GET_SHOES_BY_ID = "/shoes/";
 
     // Race API
-    private static final String API_GET_RACE_BY_ID = "/race/";
-    private static final String API_ADD_RACE = "/race";
-    private static final String API_UPDATE_RACE = "/race/";
-    private static final String API_DELETE_RACE_BY_ID = "/race/";
+    public static final String API_GET_RACE_BY_ID = "/race/";
+    public static final String API_ADD_RACE = "/race";
+    public static final String API_UPDATE_RACE = "/race/";
+    public static final String API_DELETE_RACE_BY_ID = "/race/";
 
     public ServiceApi(IWsdl2CodeEvents eventHandler) {
         this.eventHandler = eventHandler;

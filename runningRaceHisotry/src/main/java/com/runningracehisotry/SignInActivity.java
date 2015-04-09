@@ -23,6 +23,7 @@ import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.GetUserProfileRequest;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -266,11 +267,9 @@ public class SignInActivity extends BaseActivity {
 	}
 
     private void getCurrentUserData() {
-        try {
-            sv.getUserProfile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        GetUserProfileRequest request = new GetUserProfileRequest();
+        request.setListener(callBackEvent);
+        new Thread(request).start();
     }
 
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
@@ -320,28 +319,6 @@ public class SignInActivity extends BaseActivity {
                 Gson gson = new Gson();
                 User user = gson.fromJson(Data.toString(), User.class);
                 if(user != null) {
-                    RunningRaceApplication.getInstance().setCurrentUser(user);
-
-                    Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
-                    selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
-                    startActivity(selectRaceIntent);
-                    finish();
-                } else {
-
-                    // TODO bua
-                    user = new User();
-                    user.setId("12");
-                    user.setName("nhanthevu");
-                    user.setFull_name("nhanthevu");
-                    user.setEmail("vuthenhan@nhan.com");
-                    user.setType("1");
-                    user.setProfile_image("/images/person.jpg");
-                    user.setCreated_at("2015-03-30 05:50:05");
-                    user.setUpdated_at("2015-03-30 05:50:05");
-                    user.setAndroid_token("");
-                    user.setIos_token("");
-
                     RunningRaceApplication.getInstance().setCurrentUser(user);
 
                     Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
