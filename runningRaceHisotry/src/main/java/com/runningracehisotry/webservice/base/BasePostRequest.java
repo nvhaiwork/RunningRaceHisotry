@@ -3,6 +3,8 @@ package com.runningracehisotry.webservice.base;
 
 import android.util.Base64;
 
+import com.runningracehisotry.webservice.ServiceApi;
+
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ public abstract class BasePostRequest extends BaseRequest{
 	public BasePostRequest(String url) {
 		super(url);
 		mHttpPost = new HttpPost();
-        if(!RequestUtil.lOGIN_REQUEST.equals(getRequestName())) {
+        if(!ServiceApi.API_LOGIN.equals(getRequestName())) {
             mHttpPost.setHeader("Authorization", "Basic "+ Base64.encodeToString("nhanthevu:123456".getBytes(), Base64.NO_WRAP));
         }
 	}
