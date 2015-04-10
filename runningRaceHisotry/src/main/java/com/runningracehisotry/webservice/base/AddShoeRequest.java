@@ -3,12 +3,15 @@ package com.runningracehisotry.webservice.base;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 
+import org.apache.http.message.BasicNameValuePair;
+
 /**
  * Created by manh on 04/09/15.
  */
 public class AddShoeRequest extends BasePostRequest {
 
-    public AddShoeRequest(String brand, String imageUrl,String milesHistories, String model) {
+    public AddShoeRequest(String brand, String imageUrl, String milesHistories,
+                          String model) {
         super(ServiceApi.SERVICE_URL + ServiceApi.API_ADD_SHOES);
         setPostParam("brand", brand);
         setPostParam("image_url", imageUrl);
