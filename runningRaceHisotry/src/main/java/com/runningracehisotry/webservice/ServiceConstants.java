@@ -32,8 +32,8 @@ public class ServiceConstants {
 
     //quynt3 declare
     public static final String METHOD_GET_FRIEND_RUNNER = "getFriendRunners";
-    public static final String METHOD_GET_ALL_GROUP = "/group";
-    public static final String METHOD_GET_GROUP_OF_USER = "groupMember/getByGroupId";
-    public static final String METHOD_GET_ABOUT_US = "/content/getContent?name=AboutUs";
-    public static final String METHOD_GET_LIKE_OF_RACE = "/like/getByRaceId";
+    public static final String METHOD_GET_ALL_GROUP = "group";
+    public static final String METHOD_GET_GROUP_OF_USER = "getByGroupId";
+    public static final String METHOD_GET_ABOUT_US = "getContent";
+    public static final String METHOD_GET_LIKE_OF_RACE = "likeGetByRaceId";
 }
