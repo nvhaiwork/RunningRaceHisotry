@@ -27,9 +27,13 @@ public class ServiceConstants {
     public static final String METHOD_ADD_RACE = "addRace";
     public static final String METHOD_UPDATE_RACE = "updateRace";
     public static final String METHOD_DELETE_RACE_BY_ID = "deleteRaceById";
-
+    public static final String METHOD_GET_RACES_BY_TYPE = "getRacesByType";
 
 
     //quynt3 declare
     public static final String METHOD_GET_FRIEND_RUNNER = "getFriendRunners";
+    public static final String METHOD_GET_ALL_GROUP = "/group";
+    public static final String METHOD_GET_GROUP_OF_USER = "groupMember/getByGroupId";
+    public static final String METHOD_GET_ABOUT_US = "/content/getContent?name=AboutUs";
+    public static final String METHOD_GET_LIKE_OF_RACE = "/like/getByRaceId";
 }

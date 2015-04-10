@@ -57,9 +57,15 @@ public class ServiceApi {
     public static final String API_ADD_RACE = "/race";
     public static final String API_UPDATE_RACE = "/race/";
     public static final String API_DELETE_RACE_BY_ID = "/race/";
-
+    public static final String API_GET_RACES_BY_TYPE = "/race/getRacesByType";
     //quynt3 declare
     public static final String API_GET_FRIEND_RUNNER = "/user/friendRunner";
+
+    // GROUP API
+    public static final String API_GET_ALL_GROUP = "/group";
+    public static final String API_GET_GROUP_OF_USER = "groupMember/getByGroupId";
+    public static final String API_GET_ABOUT_US = "/content/getContent?name=AboutUs";
+    public static final String API_GET_LIKE_OF_RACE = "/like/getByRaceId";
 
     public ServiceApi(IWsdl2CodeEvents eventHandler) {
         this.eventHandler = eventHandler;
