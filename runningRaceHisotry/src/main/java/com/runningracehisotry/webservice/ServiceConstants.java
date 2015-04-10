@@ -13,6 +13,7 @@ public class ServiceConstants {
     public static final String METHOD_GET_ALL_RUNNERS = "getAllRunners";
     public static final String METHOD_FORGOT_PASSWORD = "forgotPassword";
 
+
     // Shoes method
     public static final String METHOD_ADD_SHOES = "addShoes";
     public static final String METHOD_GET_ALL_SHOES_WITH_RELATE_OBJ = "getAllShoesWithRelateObj";
@@ -26,4 +27,9 @@ public class ServiceConstants {
     public static final String METHOD_ADD_RACE = "addRace";
     public static final String METHOD_UPDATE_RACE = "updateRace";
     public static final String METHOD_DELETE_RACE_BY_ID = "deleteRaceById";
+
+
+
+    //quynt3 declare
+    public static final String METHOD_GET_FRIEND_RUNNER = "getFriendRunners";
 }
