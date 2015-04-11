@@ -1,15 +1,27 @@
 package com.runningracehisotry.adapters;
 
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.runningracehisotry.models.Shoe;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * create by NTQ
  */
-public class MyShoesAdapter extends BaseAdapter {
+public class NewMyShoeAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<Shoe> lstShoes;
     //constructor function
-    public ContactAdapter(Context context, List<Shoe> list) {
+    public NewMyShoeAdapter(Context context, List<Shoe> list) {
         this.mContext = context;
         this.lstShoes = new ArrayList<Shoe>(list);
     }
@@ -35,10 +47,15 @@ public class MyShoesAdapter extends BaseAdapter {
         return 0;
     }
 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return null;
+    }
+
     static class ContactItemViewHolder {
-        private ImageView shoeAvatar, imgUnRead;//imgStatus,
-        private TextView contactUsername;//, txtStatus;//, txtNumber;
-        //private int positionItem;
+        ImageView image;
+        TextView name, type, detail;
+        RelativeLayout itemLayout, delete;
 
     }
 

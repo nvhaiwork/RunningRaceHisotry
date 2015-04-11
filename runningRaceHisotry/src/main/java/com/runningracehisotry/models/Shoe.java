@@ -11,5 +11,7 @@ public class Shoe{
     private String totalMiles;
     private String userId;
 
-    public
+    public Shoe(){
+
+    }
 }
