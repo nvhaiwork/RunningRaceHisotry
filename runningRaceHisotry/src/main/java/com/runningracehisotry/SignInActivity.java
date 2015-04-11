@@ -262,7 +262,7 @@ public class SignInActivity extends BaseActivity {
 		CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME, username);
 		CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD, password);
         getCurrentUserData();
-		mLoadingDialog.dismiss();
+		//mLoadingDialog.dismiss();
 
 	}
 
@@ -275,7 +275,12 @@ public class SignInActivity extends BaseActivity {
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
         public void Wsdl2CodeStartedRequest() {
-            mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this,"", "", false, false);
+           /* runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
+                }
+            });*/
         }
 
         @Override
@@ -288,7 +293,17 @@ public class SignInActivity extends BaseActivity {
                     // Login success
                     if (result) {
                         LogUtil.d(logTag, "Login success has data!!!");
-                        finishLoginOrSignup(usernameStr, passwordStr);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    finishLoginOrSignup(usernameStr, passwordStr);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
                         // Get data of login user
                         /*mUser = user;
                         mHistory = object.getList(Constants.DATA);
@@ -311,9 +326,9 @@ public class SignInActivity extends BaseActivity {
                             getString(R.string.dialog_login_email_fails),
                             "");
                 } finally {
-                    if (mLoadingDialog.isShowing()) {
+                    /*if (mLoadingDialog.isShowing()) {
                         mLoadingDialog.dismiss();
-                    }
+                    }*/
                 }
             } else if (methodName.equals(ServiceConstants.METHOD_GET_USER_PROFILE)) {
                 Gson gson = new Gson();

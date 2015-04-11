@@ -48,7 +48,7 @@ abstract class BaseRequest implements Runnable, Comparable<BaseRequest> {
 		if (mListener != null) {
 			if(response != null) {
                 mListener.Wsdl2CodeFinished(getRequestName(), response);
-				
+                Log.d("BaseRequest", "call complete");
 			}
 		}
 	}

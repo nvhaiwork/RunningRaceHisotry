@@ -5,9 +5,15 @@ import com.parse.ParseObject;
 import com.runningracehisotry.adapters.MyShoesAdapter;
 import com.runningracehisotry.adapters.MyShoesAdapter.OnShoeItemClickListenner;
 import com.runningracehisotry.adapters.MyShoesAdapter.OnShoeItemDelete;
+import com.runningracehisotry.adapters.NewMyShoeAdapter;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.LogUtil;
+import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
+import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.GetAllShoesRelatedObjectRequest;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -15,14 +21,98 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyShoesActivity extends BaseActivity implements
 		OnShoeItemClickListenner, OnShoeItemDelete {
 
 	private ListView mShoeList;
 	private boolean isSelectShoe;
 	private MyShoesAdapter mShoesAdapter;
+    private CustomLoadingDialog mLoadingDialog;
 
-	@Override
+    private String logTag = "MyShoesActivity";
+
+
+    private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
+        @Override
+        public void Wsdl2CodeStartedRequest() {
+            //mLoadingDialog = CustomLoadingDialog.show(MyShoesActivity.this,"", "", false, false);
+        }
+
+        @Override
+        public void Wsdl2CodeFinished(String methodName, final Object data) {
+
+            if (methodName.equals(ServiceConstants.METHOD_GET_ALL_SHOES_WITH_RELATE_OBJ)) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                processGotListShoe(data);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes", "");
+                            } finally {
+                    /*if (mLoadingDialog.isShowing()) {
+                        mLoadingDialog.dismiss();
+                    }*/
+                            }
+                        }
+                    });
+
+
+            }
+            /*if (mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }*/
+        }
+
+        @Override
+        public void Wsdl2CodeFinishedWithException(Exception ex) {
+
+            if (mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }
+        }
+
+        @Override
+        public void Wsdl2CodeEndedRequest() {
+
+        }
+    };
+
+    private void processGotListShoe(Object data) throws JSONException {
+        JSONArray arr= new JSONArray(data.toString());
+        //JSONObject jsonObjectReceive = new JSONObject(data.toString());
+        LogUtil.d(logTag, "Response: " + data.toString());
+        int len = arr.length();
+        List<Shoe> lst = new ArrayList<Shoe>();
+        if(len > 0){
+            Shoe shoe = null;
+            for (int i = 0; i< len; i++){
+                JSONObject obj = arr.getJSONObject(i);
+                LogUtil.d(logTag,"Response Obj: " + i + " toString: " + obj.toString());
+                int shoeId = obj.getInt("id");
+                int userId = obj.getInt("user_id");
+                String model = obj.getString("model");
+                String brand = obj.getString("brand");
+                String imageUrl = obj.getString("image_url");
+                float miles = (float) obj.getDouble("miles_on_shoes");
+                shoe = new Shoe(shoeId,brand, model,imageUrl,miles,userId);
+                lst.add(shoe);
+            }
+        }
+        NewMyShoeAdapter adapter = new NewMyShoeAdapter(this, lst);
+        mShoeList.setAdapter(adapter);
+    }
+
+    @Override
 	protected int addContent() {
 		// TODO Auto-generated method stub
 		return R.layout.activity_my_shoes;
@@ -49,10 +139,17 @@ public class MyShoesActivity extends BaseActivity implements
 		}
 
 		mShoeList.setOnItemClickListener(this);
-		new FetchShoesAsycn().execute();
+		//new FetchShoesAsycn().execute();
+        loadListShoesOfCurrentUser();
 	}
 
-	@Override
+    private void loadListShoesOfCurrentUser() {
+        GetAllShoesRelatedObjectRequest request = new GetAllShoesRelatedObjectRequest();
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
+
+    @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -134,7 +231,7 @@ public class MyShoesActivity extends BaseActivity implements
 		}
 	}
 
-	private class FetchShoesAsycn extends AsyncTask<Void, Void, Boolean> {
+	/*private class FetchShoesAsycn extends AsyncTask<Void, Void, Boolean> {
 
 		private Dialog loadingDialog;
 
@@ -184,6 +281,6 @@ public class MyShoesActivity extends BaseActivity implements
 
 			loadingDialog.dismiss();
 		}
-	}
+	}*/
 
 }
