@@ -3,8 +3,8 @@ package com.runningracehisotry;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.runningracehisotry.adapters.MyShoesAdapter;
-import com.runningracehisotry.adapters.MyShoesAdapter.OnShoeItemClickListenner;
-import com.runningracehisotry.adapters.MyShoesAdapter.OnShoeItemDelete;
+import com.runningracehisotry.adapters.NewMyShoeAdapter.OnShoeItemClickListener;
+import com.runningracehisotry.adapters.NewMyShoeAdapter.OnShoeItemDelete;
 import com.runningracehisotry.adapters.NewMyShoeAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Shoe;
@@ -29,11 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyShoesActivity extends BaseActivity implements
-		OnShoeItemClickListenner, OnShoeItemDelete {
+		OnShoeItemClickListener, OnShoeItemDelete {
 
 	private ListView mShoeList;
 	private boolean isSelectShoe;
-	private MyShoesAdapter mShoesAdapter;
+	private NewMyShoeAdapter mShoesAdapter;
     private CustomLoadingDialog mLoadingDialog;
 
     private String logTag = "MyShoesActivity";
@@ -108,8 +108,10 @@ public class MyShoesActivity extends BaseActivity implements
                 lst.add(shoe);
             }
         }
-        NewMyShoeAdapter adapter = new NewMyShoeAdapter(this, lst);
-        mShoeList.setAdapter(adapter);
+        mShoesAdapter = new NewMyShoeAdapter(this, lst, isSelectShoe);
+        mShoesAdapter.setShoeItemClick(MyShoesActivity.this);
+        mShoesAdapter.setShoeItemDelete(MyShoesActivity.this);
+        mShoeList.setAdapter(mShoesAdapter);
     }
 
     @Override
@@ -138,7 +140,7 @@ public class MyShoesActivity extends BaseActivity implements
 			mBotRightBtnTxt.setText(getString(R.string.add));
 		}
 
-		mShoeList.setOnItemClickListener(this);
+		//mShoeList.setOnItemClickListener(this);
 		//new FetchShoesAsycn().execute();
         loadListShoesOfCurrentUser();
 	}
@@ -199,12 +201,12 @@ public class MyShoesActivity extends BaseActivity implements
 	}
 
 	@Override
-	public void onShoeItemDelete(ParseObject shoe) {
+	public void onShoeItemDelete(Shoe shoe) {
 		// TODO Auto-generated method stub
 
 		if (mShoes != null) {
-
-			try {
+            LogUtil.d("onShoeItemDelete","Process delete shoe");
+			/*try {
 
 				shoe.delete();
 				mShoes.remove(shoe);
@@ -214,7 +216,7 @@ public class MyShoesActivity extends BaseActivity implements
 			} catch (ParseException e) {
 
 				LogUtil.e("onShoeItemDelete", e.getMessage());
-			}
+			}*/
 		}
 	}
 
