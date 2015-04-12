@@ -3,6 +3,8 @@ package com.runningracehisotry.webservice.base;
 
 import android.util.Base64;
 
+import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.webservice.ServiceApi;
 
 import java.net.URI;
@@ -24,7 +26,7 @@ import org.apache.http.util.EntityUtils;
  */
 public abstract class BasePostRequest extends BaseRequest{
 
-	private HttpPost mHttpPost;
+	protected HttpPost mHttpPost;
 	private boolean mIsParamAdded;
     private List<NameValuePair> params = new ArrayList<NameValuePair>();
 	
@@ -34,7 +36,13 @@ public abstract class BasePostRequest extends BaseRequest{
 		super(url);
 		mHttpPost = new HttpPost();
         if(!ServiceApi.API_LOGIN.equals(getRequestName())) {
-            mHttpPost.setHeader("Authorization", "Basic "+ Base64.encodeToString("nhanthevu:123456".getBytes(), Base64.NO_WRAP));
+            String userName = CustomSharedPreferences.getPreferences(Constants.PREF_USERNAME, "");
+            String password = CustomSharedPreferences.getPreferences(Constants.PREF_PASSWORD, "");
+            if(userName.length() * password.length() > 0) {
+                String s = String.format("%s:%s", userName, password);
+                mHttpPost.setHeader("Authorization", "Basic "+ Base64.encodeToString(s.getBytes(), Base64.NO_WRAP));
+            }
+
         }
 	}
 

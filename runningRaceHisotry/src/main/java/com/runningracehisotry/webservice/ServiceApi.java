@@ -43,6 +43,7 @@ public class ServiceApi {
     public static final String API_UPDATE_USER_PROFILE = "/user/";
     public static final String API_GET_ALL_RUNNERS = "/user";
     public static final String API_FORGOT_PASSWORD = "/user/forgotPassword";
+    public static final String API_UPLOAD_IMAGE = "/upload";
 
     // Shoes API
     public static final String API_ADD_SHOES = "/shoes";
