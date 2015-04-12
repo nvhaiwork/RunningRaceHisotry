@@ -37,4 +37,6 @@ public class ServiceConstants {
     public static final String METHOD_GET_GROUP_OF_USER = "getByGroupId";
     public static final String METHOD_GET_ABOUT_US = "getContent";
     public static final String METHOD_GET_LIKE_OF_RACE = "likeGetByRaceId";
+    public static final String METHOD_ADD_GROUP = "addGroup";
+    public static final String METHOD_ADD_GROUP_MEMBER = "addGroupMember";
 }

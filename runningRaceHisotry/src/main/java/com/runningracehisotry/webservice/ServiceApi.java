@@ -68,6 +68,9 @@ public class ServiceApi {
     public static final String API_GET_ABOUT_US = "/content/getContent?name=AboutUs";
     public static final String API_GET_LIKE_OF_RACE = "/like/getByRaceId";
 
+    public static final String API_ADD_GROUP = "/group";
+    public static final String API_ADD_GROUP_MEMBER = "/groupMember";
+
     public ServiceApi(IWsdl2CodeEvents eventHandler) {
         this.eventHandler = eventHandler;
     }
