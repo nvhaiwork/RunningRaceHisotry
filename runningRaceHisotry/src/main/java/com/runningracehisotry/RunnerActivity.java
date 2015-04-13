@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -192,19 +193,23 @@ public class RunnerActivity extends BaseActivity {
         LogUtil.d(mCurrentClassName, "Response processGotListRunner: " + data.toString());
         int len = arr.length();
         mRunners = new ArrayList<Runner>();
-        if(len > 0){
-            Runner runner = null;
-            for (int i = 0; i< len; i++){
-                JSONObject obj = arr.getJSONObject(i);
-                LogUtil.d(mCurrentClassName,"Response Obj: " + i + " toString: " + obj.toString());
-                int runnerId = obj.getInt("id");
-                String name = obj.getString("full_name");
-                String imageUrl = obj.getString("profile_image");
+//        if(len > 0){
+//            Runner runner = null;
+//            for (int i = 0; i< len; i++){
+//                JSONObject obj = arr.getJSONObject(i);
+//                LogUtil.d(mCurrentClassName,"Response Obj: " + i + " toString: " + obj.toString());
+//                int runnerId = obj.getInt("id");
+//                String name = obj.getString("full_name");
+//                String imageUrl = obj.getString("profile_image");
+//
+//                runner = new Runner(runnerId,name + " |" + imageUrl,imageUrl);
+//                mRunners.add(runner);
+//            }
+//        }
 
-                runner = new Runner(runnerId,name + " |" + imageUrl,imageUrl);
-                mRunners.add(runner);
-            }
-        }
+        Gson  gson = new Gson();
+        mRunners = gson.fromJson(data.toString(), List.class);
+
         mRunnersAdapter = new NewRunnerAdapter(RunnerActivity.this, mRunners,
                 mImageLoader);
         mListView.setAdapter(mRunnersAdapter);
@@ -270,7 +275,7 @@ public class RunnerActivity extends BaseActivity {
 
             Runner user = (Runner) adapterView.getAdapter().getItem(
                     position);
-            LogUtil.d(mCurrentClassName,"Add runner id: " + user.getRunnerId());
+            LogUtil.d(mCurrentClassName,"Add runner id: " + user.getId());
             doAddFriend(user);
         }
     }
@@ -322,7 +327,7 @@ public class RunnerActivity extends BaseActivity {
         AddGroupRequest request = new AddGroupRequest();
         request.setListener(callBackEvent);
         new Thread(request).start();
-        friendId = user.getRunnerId();
+        friendId = user.getId();
 
 
         mRunners.remove(user);

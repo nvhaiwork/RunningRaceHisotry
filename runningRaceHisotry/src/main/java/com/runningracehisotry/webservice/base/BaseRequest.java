@@ -47,7 +47,13 @@ abstract class BaseRequest implements Runnable, Comparable<BaseRequest> {
 		closeClient();
 		if (mListener != null) {
 			if(response != null) {
-                mListener.Wsdl2CodeFinished(getRequestName(), response);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListener.Wsdl2CodeFinished(getRequestName(), response);
+                    }
+                });
+
                 Log.d("BaseRequest", "call complete");
 			}
 		}

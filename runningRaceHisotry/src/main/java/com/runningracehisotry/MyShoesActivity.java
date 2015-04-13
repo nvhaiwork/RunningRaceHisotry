@@ -1,5 +1,6 @@
 package com.runningracehisotry;
 
+import com.google.gson.Gson;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.runningracehisotry.adapters.MyShoesAdapter;
@@ -93,21 +94,25 @@ public class MyShoesActivity extends BaseActivity implements
         LogUtil.d(logTag, "Response: " + data.toString());
         int len = arr.length();
         List<Shoe> lst = new ArrayList<Shoe>();
-        if(len > 0){
-            Shoe shoe = null;
-            for (int i = 0; i< len; i++){
-                JSONObject obj = arr.getJSONObject(i);
-                LogUtil.d(logTag,"Response Obj: " + i + " toString: " + obj.toString());
-                int shoeId = obj.getInt("id");
-                int userId = obj.getInt("user_id");
-                String model = obj.getString("model");
-                String brand = obj.getString("brand");
-                String imageUrl = obj.getString("image_url");
-                float miles = (float) obj.getDouble("miles_on_shoes");
-                shoe = new Shoe(shoeId,brand, model,imageUrl,miles,userId);
-                lst.add(shoe);
-            }
-        }
+//        if(len > 0){
+//            Shoe shoe = null;
+//            for (int i = 0; i< len; i++){
+//                JSONObject obj = arr.getJSONObject(i);
+//                LogUtil.d(logTag,"Response Obj: " + i + " toString: " + obj.toString());
+//                int shoeId = obj.getInt("id");
+//                int userId = obj.getInt("user_id");
+//                String model = obj.getString("model");
+//                String brand = obj.getString("brand");
+//                String imageUrl = obj.getString("image_url");
+//                float miles = (float) obj.getDouble("miles_on_shoes");
+//                shoe = new Shoe(shoeId,brand, model,imageUrl,miles,userId);
+//                lst.add(shoe);
+//            }
+//        }
+
+        Gson gson = new Gson();
+        lst = gson.fromJson(data.toString(), List.class);
+
         mShoesAdapter = new NewMyShoeAdapter(this, lst, isSelectShoe);
         mShoesAdapter.setShoeItemClick(MyShoesActivity.this);
         mShoesAdapter.setShoeItemDelete(MyShoesActivity.this);

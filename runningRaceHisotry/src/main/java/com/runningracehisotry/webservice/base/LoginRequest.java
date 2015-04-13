@@ -8,7 +8,7 @@ import com.runningracehisotry.webservice.ServiceConstants;
  */
 public class LoginRequest extends BasePostRequest {
 
-    public LoginRequest(String name, String password, String email) {
+    public LoginRequest(String name, String password) {
         super(ServiceApi.SERVICE_URL + ServiceApi.API_LOGIN);
         setPostParam("name", name);
         setPostParam("password", password);

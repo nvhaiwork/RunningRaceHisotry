@@ -90,7 +90,7 @@ public class NewRunnerAdapter extends BaseAdapter {
             holder = (ViewHolder) converView.getTag();
         }
 
-        holder.text.setText(user.getUsername());
+        holder.text.setText(user.getName());
 
         // Image
         /*if (user.containsKey(Constants.PICTURE)) {

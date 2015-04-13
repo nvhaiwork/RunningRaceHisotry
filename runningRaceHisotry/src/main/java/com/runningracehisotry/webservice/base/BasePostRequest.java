@@ -70,9 +70,9 @@ public abstract class BasePostRequest extends BaseRequest{
 
     public void setPostParam(String name, String value) {
         if (mIsParamAdded) {
-            params.add(new BasicNameValuePair("name", value));
+            params.add(new BasicNameValuePair(name, value));
         } else {
-            params.add(new BasicNameValuePair("name", value));
+            params.add(new BasicNameValuePair(name, value));
             mIsParamAdded = true;
         }
     }

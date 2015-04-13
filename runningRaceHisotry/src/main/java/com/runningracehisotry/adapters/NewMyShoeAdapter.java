@@ -91,7 +91,7 @@ public class NewMyShoeAdapter extends BaseAdapter {
     // get Item Id
     @Override
     public long getItemId(int position) {
-        return lstShoes.get(position).getShoeId();
+        return lstShoes.get(position).getId();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class NewMyShoeAdapter extends BaseAdapter {
         holder.image.setImageResource(R.drawable.ic_shoe);
         holder.name.setText(shoe.getModel());
         holder.type.setText(shoe.getBrand());
-        float distanceF = shoe.getTotalMiles();
+        float distanceF = shoe.getMilesOnShoes();
         holder.detail.setText(String.format("%.2f miles (%.2f km)", distanceF, distanceF / 0.62137119));
 
         if (mIsSelectShoe) {

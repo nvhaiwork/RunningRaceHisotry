@@ -1,34 +1,49 @@
 package com.runningracehisotry.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 /**
  * create by NTQ
  */
 public class Shoe{
-    private int shoeId;
+    @SerializedName("id")
+    private int id;
+
+    @SerializedName("brand")
     private String brand;
+
+    @SerializedName("model")
     private String model;
+
+    @SerializedName("image_url")
     private String imageUrl;
-    private float totalMiles;
+
+    @SerializedName("miles_on_shoes")
+    private float milesOnShoes;
+
+    @SerializedName("user_id")
     private int userId;
 
-    public Shoe(){
+    @SerializedName("created_at")
+    private String createdAt;
+
+    @SerializedName("updated_at")
+    private String updatedAt;
+
+    @SerializedName("races")
+    private List<Race> races;
+
+    @SerializedName("miles_shoes_histories")
+    private List<History> milesShoesHistories;
+
+    public int getId() {
+        return id;
     }
 
-    public Shoe(int shoeId, String brand, String model, String imageUrl, float totalMiles, int userId){
-        this.setShoeId(shoeId);
-        this.setBrand(brand);
-        this.setModel(model);
-        this.setImageUrl(imageUrl);
-        this.setTotalMiles(totalMiles);
-        this.setUserId(userId);
-    }
-
-    public int getShoeId() {
-        return shoeId;
-    }
-
-    public void setShoeId(int shoeId) {
-        this.shoeId = shoeId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getBrand() {
@@ -55,12 +70,12 @@ public class Shoe{
         this.imageUrl = imageUrl;
     }
 
-    public float getTotalMiles() {
-        return totalMiles;
+    public float getMilesOnShoes() {
+        return milesOnShoes;
     }
 
-    public void setTotalMiles(float totalMiles) {
-        this.totalMiles = totalMiles;
+    public void setMilesOnShoes(float milesOnShoes) {
+        this.milesOnShoes = milesOnShoes;
     }
 
     public int getUserId() {
@@ -69,5 +84,37 @@ public class Shoe{
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<Race> getRaces() {
+        return races;
+    }
+
+    public void setRaces(List<Race> races) {
+        this.races = races;
+    }
+
+    public List<History> getMilesShoesHistories() {
+        return milesShoesHistories;
+    }
+
+    public void setMilesShoesHistories(List<History> milesShoesHistories) {
+        this.milesShoesHistories = milesShoesHistories;
     }
 }
