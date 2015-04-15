@@ -1,6 +1,7 @@
 package com.runningracehisotry;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.runningracehisotry.adapters.MyShoesAdapter;
@@ -8,17 +9,20 @@ import com.runningracehisotry.adapters.NewMyShoeAdapter.OnShoeItemClickListener;
 import com.runningracehisotry.adapters.NewMyShoeAdapter.OnShoeItemDelete;
 import com.runningracehisotry.adapters.NewMyShoeAdapter;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.History;
 import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.DeleteShoeRequest;
 import com.runningracehisotry.webservice.base.GetAllShoesRelatedObjectRequest;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -26,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +43,7 @@ public class MyShoesActivity extends BaseActivity implements
     private CustomLoadingDialog mLoadingDialog;
 
     private String logTag = "MyShoesActivity";
-
+    private int shoeIdDelete;
 
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
@@ -69,6 +74,21 @@ public class MyShoesActivity extends BaseActivity implements
 
 
             }
+            else if (methodName.equals(ServiceConstants.METHOD_DELETE_SHOES_BY_ID)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            processDeleteShoe(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes", "");
+                        } finally {
+
+                        }
+                    }
+                });
+            }
             /*if (mLoadingDialog.isShowing()) {
                 mLoadingDialog.dismiss();
             }*/
@@ -88,30 +108,52 @@ public class MyShoesActivity extends BaseActivity implements
         }
     };
 
+    private void processDeleteShoe(Object data) throws JSONException{
+        //mShoes.remove(shoe);
+        JSONObject obj = new JSONObject(data.toString());
+        String result = obj.getString("result");
+        LogUtil.d(logTag, "Response delete: " + result);
+        if(shoeIdDelete !=0){
+            //delete shoe
+            boolean resultDel = mShoesAdapter.removeShoe(shoeIdDelete);
+            LogUtil.d(logTag, "Remove from LIST delete: " + resultDel);
+            //notify change
+            mShoesAdapter.notifyDataSetChanged();
+            shoeIdDelete = 0;
+        }
+
+    }
+
     private void processGotListShoe(Object data) throws JSONException {
         JSONArray arr= new JSONArray(data.toString());
         //JSONObject jsonObjectReceive = new JSONObject(data.toString());
         LogUtil.d(logTag, "Response: " + data.toString());
         int len = arr.length();
         List<Shoe> lst = new ArrayList<Shoe>();
-//        if(len > 0){
-//            Shoe shoe = null;
-//            for (int i = 0; i< len; i++){
-//                JSONObject obj = arr.getJSONObject(i);
-//                LogUtil.d(logTag,"Response Obj: " + i + " toString: " + obj.toString());
-//                int shoeId = obj.getInt("id");
-//                int userId = obj.getInt("user_id");
-//                String model = obj.getString("model");
-//                String brand = obj.getString("brand");
-//                String imageUrl = obj.getString("image_url");
-//                float miles = (float) obj.getDouble("miles_on_shoes");
-//                shoe = new Shoe(shoeId,brand, model,imageUrl,miles,userId);
-//                lst.add(shoe);
-//            }
-//        }
-
-        Gson gson = new Gson();
-        lst = gson.fromJson(data.toString(), List.class);
+        /*if(len > 0){
+            Shoe shoe = null;
+            for (int i = 0; i< len; i++){
+                JSONObject obj = arr.getJSONObject(i);
+                LogUtil.d(logTag,"Response Obj: " + i + " toString: " + obj.toString());
+                int shoeId = obj.getInt("id");
+                int userId = obj.getInt("user_id");
+                String model = obj.getString("model");
+                String brand = obj.getString("brand");
+                String imageUrl = obj.getString("image_url");
+                float miles = (float) obj.getDouble("miles_on_shoes");
+                shoe = new Shoe(shoeId,brand, model,imageUrl,miles,userId);
+                lst.add(shoe);
+            }
+        }*/
+        Type listType = new TypeToken<List<Shoe>>(){}.getType();
+		Gson gson = new Gson();
+        lst = gson.fromJson(data.toString(), listType);
+        //lst = gson.fromJson(data.toString(), List.class);
+        for(Shoe shoe: lst){
+            Log.d(mCurrentClassName, "Shoe id|size|size: " + shoe.getId()
+                    +"|"+shoe.getMilesShoesHistories().size()
+                    +"|"+shoe.getRaces().size());
+        }
 
         mShoesAdapter = new NewMyShoeAdapter(this, lst, isSelectShoe);
         mShoesAdapter.setShoeItemClick(MyShoesActivity.this);
@@ -145,6 +187,10 @@ public class MyShoesActivity extends BaseActivity implements
 			mBotRightBtnTxt.setText(getString(R.string.add));
 		}
 
+        mShoesAdapter = new NewMyShoeAdapter(MyShoesActivity.this, new ArrayList<Shoe>(), isSelectShoe);
+        mShoeList.setAdapter(mShoesAdapter);
+        mShoesAdapter.setShoeItemClick(MyShoesActivity.this);
+        mShoesAdapter.setShoeItemDelete(MyShoesActivity.this);
 		//mShoeList.setOnItemClickListener(this);
 		//new FetchShoesAsycn().execute();
         loadListShoesOfCurrentUser();
@@ -163,8 +209,14 @@ public class MyShoesActivity extends BaseActivity implements
 		if (resultCode == RESULT_OK) {
 
 			if (requestCode == Constants.REQUETS_CODE_ADD_SHOE) {
+                if(data.getAction().equalsIgnoreCase("addShoeCallBack")){
+                    //loadListShoesOfCurrentUser();
+                }
+                else if(data.getAction().equalsIgnoreCase("updateShoeCallBack")){
 
-				mShoesAdapter.notifyDataSetChanged();
+                }
+                loadListShoesOfCurrentUser();
+				//mShoesAdapter.notifyDataSetChanged();
 			}
 		}
 	}
@@ -209,8 +261,13 @@ public class MyShoesActivity extends BaseActivity implements
 	public void onShoeItemDelete(Shoe shoe) {
 		// TODO Auto-generated method stub
 
-		if (mShoes != null) {
-            LogUtil.d("onShoeItemDelete","Process delete shoe");
+		if (shoe != null) {
+            LogUtil.d("onShoeItemDelete","Process delete shoe id: " + shoe.getId());
+            //call SHoe delete
+            DeleteShoeRequest request = new DeleteShoeRequest(String.valueOf(shoe.getId()));
+            request.setListener(callBackEvent);
+            new Thread(request).start();
+            shoeIdDelete = shoe.getId();
 			/*try {
 
 				shoe.delete();
@@ -233,6 +290,10 @@ public class MyShoesActivity extends BaseActivity implements
 			Intent addShoeIntent = new Intent(MyShoesActivity.this,
 					AddShoeActivity.class);
 			addShoeIntent.putExtra(Constants.INTENT_ADD_SHOE, position);
+            Shoe shoe = mShoesAdapter.getLstShoes().get(position);
+            String shoeJson = Utilities.toJson(shoe);
+            LogUtil.d(mCurrentClassName, "shoe update: " + shoeJson);
+            addShoeIntent.putExtra(Constants.INTENT_UPDATE_SHOE, shoeJson);
 			startActivityForResult(addShoeIntent,
 					Constants.REQUETS_CODE_ADD_SHOE);
 		}

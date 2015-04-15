@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -14,6 +15,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.runningracehisotry.R;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.views.CustomAlertDialog;
 import com.runningracehisotry.views.CustomAlertDialog.OnNegativeButtonClick;
 
@@ -368,4 +370,37 @@ public class Utilities {
 		} catch (Exception e) {
 		}
 	}
+
+    // Gson util
+    public static String toJson(Object obj){
+        Gson gson = new Gson();
+        // convert java object to JSON format,
+        // and returned as JSON formatted string
+        String json = null;
+
+        try {
+            json = gson.toJson(obj);
+
+        } catch (Exception e) {
+            LogUtil.d("UTILITY", "error toJSon");
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    public static Shoe fromJson(String json){
+        Gson gson = new Gson();
+        // convert java object to JSON format,
+        // and returned as JSON formatted string
+        Shoe shoe = null;
+
+        try {
+            shoe = gson.fromJson(json, Shoe.class);
+
+        } catch (Exception e) {
+            LogUtil.d("UTILITY", "error fromJSon");
+            e.printStackTrace();
+        }
+        return shoe;
+    }
 }

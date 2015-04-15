@@ -64,9 +64,10 @@ public class Constants {
 	public static final String INTENT_ADD_RACE = "intent_add_race";
 	public static final String INTENT_SELECT_SHOE_FOR_RACE = "intent_select_shoe_for_race";
 	public static final String INTENT_SELECT_RACE_FROM_FRIENDS = "intent_select_race_from_friends";
-
+    public static final String INTENT_UPDATE_SHOE = "intent_update_shoe";
 	// Preferences
 	// com.runningracehisotry
+    public static final String PREF_USER_ID = "com.runningracehisotry.userId";
 	public static final String PREF_USERNAME = "com.runningracehisotry.username";
 	public static final String PREF_PASSWORD = "com.runningracehisotry.password";
 	public static final String PREF_SETTING_SOUND = "com.runningracehisotry.setting.sound";

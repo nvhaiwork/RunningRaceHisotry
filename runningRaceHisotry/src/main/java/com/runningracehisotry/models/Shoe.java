@@ -38,6 +38,15 @@ public class Shoe{
     @SerializedName("miles_shoes_histories")
     private List<History> milesShoesHistories;
 
+    public Shoe(int shoeId, String brand, String model, String imageUrl, float miles, int userId) {
+        this.id = shoeId;
+        this.brand = brand;
+        this.model = model;
+        this.imageUrl = imageUrl;
+        this.milesOnShoes = miles;
+        this.userId = userId;
+    }
+
     public int getId() {
         return id;
     }

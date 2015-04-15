@@ -11,9 +11,16 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.runningracehisotry.adapters.ShoeDistanceHistoryAdapter;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Shoe;
+import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
+import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.AddShoeRequest;
+import com.runningracehisotry.webservice.base.DeleteShoeRequest;
+import com.runningracehisotry.webservice.base.UpdateShoeRequest;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -27,6 +34,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AddShoeActivity extends BaseActivity {
 	private ParseObject mShoe;
 	private ImageView mShoeImage;
@@ -34,6 +44,9 @@ public class AddShoeActivity extends BaseActivity {
 	private TextView mAddMilesBtn, mMilesTxt;
 	private EditText mShoeBrandEdt, mShoeModelEdt, mAddMilesEdt;
 
+    private int shoeIdUpdate;
+    private int shoeIdAdd;
+    private float lastMileOfShoe;
 	@Override
 	protected int addContent() {
 		// TODO Auto-generated method stub
@@ -90,34 +103,22 @@ public class AddShoeActivity extends BaseActivity {
 		mShoeImage.setTag(null);
 		int selectedShoePosition = getIntent().getIntExtra(
 				Constants.INTENT_ADD_SHOE, -1);
-		if (selectedShoePosition >= 0) {
-
-			mShoe = mShoes.get(selectedShoePosition);
-			if (mShoe != null) {
-
-				// Data
-				mMilesTxt.setText(String.format("%.2f",
-						(float) mShoe.getDouble(Constants.DISTANCE)));
-				mShoeBrandEdt.setText(mShoe.getString(Constants.BRAND));
-				mShoeModelEdt.setText(mShoe.getString(Constants.MODEL));
-				if (mShoe.containsKey(Constants.IMAGE)) {
-					ParseObject image = mShoe.getParseObject(Constants.IMAGE);
-					Utilities.displayParseImage(
-							image,
-							mShoeImage,
-							getResources().getDimensionPixelSize(
-									R.dimen.image_round_conner));
-				}
-
-				if (mShoe.containsKey(Constants.HISTORY)) {
-
-					List<HashMap<String, Object>> distHistories = mShoe
-							.getList(Constants.HISTORY);
-					ShoeDistanceHistoryAdapter adapter = new ShoeDistanceHistoryAdapter(
-							AddShoeActivity.this, distHistories);
-					mShoeDistanceListview.setAdapter(adapter);
-				}
-			}
+        shoeIdUpdate = 0;
+        if (selectedShoePosition >= 0) {
+            String shoeJson = getIntent().getStringExtra(Constants.INTENT_UPDATE_SHOE);
+            LogUtil.d(mCurrentClassName, "receive shoe update: " + shoeJson);
+            if(shoeJson != null){
+                Shoe shoe = Utilities.fromJson(shoeJson);
+                if(shoe != null){
+                    LogUtil.d(mCurrentClassName, "receive shoe !null, update shoeId = " + shoe.getId());
+                    shoeIdUpdate = shoe.getId();
+                    lastMileOfShoe = shoe.getMilesOnShoes();
+                    // Data
+                    mMilesTxt.setText(String.format("%.2f", (float) shoe.getMilesOnShoes()));
+                    mShoeBrandEdt.setText(shoe.getBrand());
+                    mShoeModelEdt.setText(shoe.getModel());
+                }
+            }
 		}
 
 		mShoeImage.setOnClickListener(this);
@@ -160,8 +161,25 @@ public class AddShoeActivity extends BaseActivity {
 						getString(R.string.dialog_add_shoe_fill_all_fields),
 						getString(R.string.dialog_add_shoe_tile));
 			} else {
-
-				new SaveShoeAsync().execute();
+                float newMile = 0;
+                newMile = Float.parseFloat(mMilesTxt.getText().toString());
+                float addMile =  newMile - lastMileOfShoe;
+                if(shoeIdUpdate > 0){
+                    //call update
+                    if(addMile > 0){
+                        String param = String.format("%.2f", addMile);
+                        callUpdateShoe(param);
+                    }
+                }
+                else{
+                    //process Add Shoe
+                    if(addMile > 0){
+                        String param = String.format("%.2f", addMile);
+                        callAddShoe(param);
+                    }
+                }
+                //process add or update
+				//new SaveShoeAsync().execute();
 			}
 			break;
 		case R.id.add_shoe_image:
@@ -173,7 +191,127 @@ public class AddShoeActivity extends BaseActivity {
 		}
 	}
 
-	private class SaveShoeAsync extends AsyncTask<Void, Void, Void> {
+
+    private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
+        @Override
+        public void Wsdl2CodeStartedRequest() {
+            //mLoadingDialog = CustomLoadingDialog.show(MyShoesActivity.this,"", "", false, false);
+        }
+
+        @Override
+        public void Wsdl2CodeFinished(String methodName, final Object data) {
+
+            if (methodName.equals(ServiceConstants.METHOD_ADD_SHOES)) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            processAfterAddShoe(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Utilities.showAlertMessage(AddShoeActivity.this, "Error Parse when get list shoes", "");
+                        } finally {
+                        }
+                    }
+                });
+
+
+            }
+            else if (methodName.equals(ServiceConstants.METHOD_UPDATE_SHOES)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            processAfterUpdateShoe(data);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Utilities.showAlertMessage(AddShoeActivity.this, "Error Parse when get list shoes", "");
+                        } finally {
+                        }
+                    }
+                });
+            }
+            /*if (mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }*/
+        }
+
+        @Override
+        public void Wsdl2CodeFinishedWithException(Exception ex) {
+
+            /*if (mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }*/
+        }
+
+        @Override
+        public void Wsdl2CodeEndedRequest() {
+
+        }
+    };
+    private void callAddShoe(String miles) {
+        String brand = mShoeBrandEdt.getText().toString();
+        String model = mShoeModelEdt.getText().toString();
+        String imageUrl = "picture/shoe.png";
+        String param = "1";
+        //String param = String.format("%.0f", addMile);
+
+        LogUtil.d(mCurrentClassName, "Request Add Shoe: " + brand+"|"+imageUrl +"|"+param+"|"+model);
+        AddShoeRequest request = new AddShoeRequest(brand, imageUrl, param, model);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
+    private void processAfterAddShoe(Object data ) throws  JSONException{
+        JSONObject obj = new JSONObject(data.toString());
+        String result = obj.getString("result");
+        LogUtil.d(mCurrentClassName, "Response Add Shoe: " + result);
+        if(result.equalsIgnoreCase("true")){
+            Intent resultIntent = new Intent("addShoeCallBack");
+
+            setResult(RESULT_OK, resultIntent);
+            //dialog.dismiss();
+            finish();
+        }
+        else{
+            LogUtil.d(mCurrentClassName, "Response Add Shoe Failed ");
+        }
+
+    }
+
+    private void callUpdateShoe(String miles) {
+
+        String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
+        String brand = mShoeBrandEdt.getText().toString();
+        String model = mShoeModelEdt.getText().toString();
+        String imageUrl = "picture/shoe.png";
+        String mileOnShoe = "0";
+        LogUtil.d(mCurrentClassName, "Request UPdate Shoe: " + brand+"|"+shoeIdUpdate+"|"+imageUrl +"|"
+                +miles+"|"+mileOnShoe+"|"+model+"|"+userId);
+
+        UpdateShoeRequest request = new UpdateShoeRequest(brand, String.valueOf(shoeIdUpdate),
+                imageUrl, miles, mileOnShoe, model, userId);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
+    private void processAfterUpdateShoe(Object data) throws  JSONException{
+        JSONObject obj = new JSONObject(data.toString());
+        String result = obj.getString("result");
+        LogUtil.d(mCurrentClassName, "Response UPdate Shoe: " + result);
+        if(result.equalsIgnoreCase("true")){
+            Intent resultIntent = new Intent("updateShoeCallBack");
+
+            setResult(RESULT_OK, resultIntent);
+
+            //dialog.dismiss();
+            finish();
+        }
+        else{
+            LogUtil.d(mCurrentClassName, "Response UPdate Shoe Failed ");
+        }
+    }
+
+	/*private class SaveShoeAsync extends AsyncTask<Void, Void, Void> {
 
 		private Dialog dialog;
 
@@ -285,5 +423,5 @@ public class AddShoeActivity extends BaseActivity {
 			dialog.dismiss();
 			finish();
 		}
-	}
+	}*/
 }

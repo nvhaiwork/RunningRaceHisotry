@@ -339,7 +339,7 @@ public class SignInActivity extends BaseActivity {
                 User user = gson.fromJson(Data.toString(), User.class);
                 if(user != null) {
                     RunningRaceApplication.getInstance().setCurrentUser(user);
-
+                    CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, user.getId());
                     Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
                     selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);

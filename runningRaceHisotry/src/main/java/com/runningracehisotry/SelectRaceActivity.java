@@ -104,8 +104,7 @@ public class SelectRaceActivity extends BaseActivity {
 
 			CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME, "");
 			CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD, "");
-			Intent loginIntent = new Intent(SelectRaceActivity.this,
-					LoginChoiceScreen.class);
+			Intent loginIntent = new Intent(SelectRaceActivity.this,LoginChoiceScreen.class);
 			startActivity(loginIntent);
 			finish();
 		}

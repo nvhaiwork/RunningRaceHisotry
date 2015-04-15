@@ -16,6 +16,7 @@ import com.runningracehisotry.BaseActivity;
 import com.runningracehisotry.R;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Shoe;
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.views.CustomAlertDialog;
 
 import java.util.ArrayList;
@@ -42,6 +43,30 @@ public class NewMyShoeAdapter extends BaseAdapter {
     private OnShoeItemDelete mShoeItemDelete;
     private OnShoeItemClickListener mShoeItemClick;
 
+    public List<Shoe> getLstShoes() {
+        return lstShoes;
+    }
+
+    public boolean removeShoe(int shoeId){
+        boolean result = false;
+        if(lstShoes != null && lstShoes.size()>0){
+            int len =  lstShoes.size();
+            for(int i = 0; i < len; i++){
+                if(lstShoes.get(i).getId() == shoeId){
+                    LogUtil.d("NewShoeAdapter", "remove shoe ID " + shoeId + "DONE");
+                    lstShoes.remove(i);
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    public void setLstShoes(List<Shoe> lstShoes) {
+        this.lstShoes = lstShoes;
+    }
+
     public interface OnShoeItemClickListener {
 
         public void onShoeItemClick(int position);
@@ -66,7 +91,7 @@ public class NewMyShoeAdapter extends BaseAdapter {
     //constructor function
     public NewMyShoeAdapter(Context context, List<Shoe> list, boolean isSelectShoe) {
         this.mContext = context;
-        this.lstShoes = new ArrayList<Shoe>(list);
+        this.setLstShoes(new ArrayList<Shoe>(list));
         this.mIsSelectShoe = isSelectShoe;
         this.mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -75,8 +100,8 @@ public class NewMyShoeAdapter extends BaseAdapter {
     //get total object
     @Override
     public int getCount() {
-        if (lstShoes != null) {
-            return this.lstShoes.size();
+        if (getLstShoes() != null) {
+            return this.getLstShoes().size();
         } else {
             return 0;
         }
@@ -85,13 +110,13 @@ public class NewMyShoeAdapter extends BaseAdapter {
     //get item base-on position
     @Override
     public Shoe getItem(int position) {
-        return lstShoes.get(position);
+        return getLstShoes().get(position);
     }
 
     // get Item Id
     @Override
     public long getItemId(int position) {
-        return lstShoes.get(position).getId();
+        return getLstShoes().get(position).getId();
     }
 
     @Override

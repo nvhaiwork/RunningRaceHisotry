@@ -1,5 +1,6 @@
 package com.runningracehisotry;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -206,9 +208,9 @@ public class RunnerActivity extends BaseActivity {
 //                mRunners.add(runner);
 //            }
 //        }
-
+        Type listType = new TypeToken<List<Runner>>(){}.getType();
         Gson  gson = new Gson();
-        mRunners = gson.fromJson(data.toString(), List.class);
+        mRunners = gson.fromJson(data.toString(), listType);
 
         mRunnersAdapter = new NewRunnerAdapter(RunnerActivity.this, mRunners,
                 mImageLoader);
