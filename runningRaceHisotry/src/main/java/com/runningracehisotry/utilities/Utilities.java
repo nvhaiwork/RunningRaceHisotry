@@ -15,6 +15,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.runningracehisotry.R;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.History;
 import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.views.CustomAlertDialog;
 import com.runningracehisotry.views.CustomAlertDialog.OnNegativeButtonClick;
@@ -83,8 +84,7 @@ public class Utilities {
 	 * 
 	 * @param imageView
 	 *            Image view to display
-	 * @param file
-	 *            Image
+	 * @param roundImage
 	 * */
 	public static void displayParseImage(ParseObject parseObject,
 			final ImageView imageView, final int roundImage) {
@@ -402,5 +402,20 @@ public class Utilities {
             e.printStackTrace();
         }
         return shoe;
+    }
+
+    public static String getDisplayedHistoryOfShoe(History history){
+        String temp = history.getCreatedAt().substring(0,10);
+        LogUtil.d("UTILITY", "temp date: " + temp);
+        String []split = temp.split("-");
+        StringBuilder str = new StringBuilder(split[2]);
+        str.append("/");
+        str.append(split[1]);
+        str.append("/");
+        str.append(split[0]);
+        str.append(": you added ");
+        str.append(history.getMiles());
+        str.append(" miles");
+        return str.toString();
     }
 }

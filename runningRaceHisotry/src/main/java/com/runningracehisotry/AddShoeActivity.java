@@ -9,8 +9,10 @@ import java.util.List;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.runningracehisotry.adapters.NewShoeDistanceHistoryAdapter;
 import com.runningracehisotry.adapters.ShoeDistanceHistoryAdapter;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.History;
 import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
@@ -117,6 +119,16 @@ public class AddShoeActivity extends BaseActivity {
                     mMilesTxt.setText(String.format("%.2f", (float) shoe.getMilesOnShoes()));
                     mShoeBrandEdt.setText(shoe.getBrand());
                     mShoeModelEdt.setText(shoe.getModel());
+                    List<History> history = shoe.getMilesShoesHistories();
+                    if(history != null && history.size()>0){
+                        for(History his : history){
+                            LogUtil.d(mCurrentClassName, "Shoe update infor: " + his.getCreatedAt()
+                                    +": you added " + his.getMiles() + " miles");
+                        }
+                        NewShoeDistanceHistoryAdapter adapter = new NewShoeDistanceHistoryAdapter(this,history);
+                        mShoeDistanceListview.setAdapter(adapter);
+                    }
+
                 }
             }
 		}
@@ -162,21 +174,30 @@ public class AddShoeActivity extends BaseActivity {
 						getString(R.string.dialog_add_shoe_tile));
 			} else {
                 float newMile = 0;
-                newMile = Float.parseFloat(mMilesTxt.getText().toString());
+                if(!mMilesTxt.getText().toString().isEmpty()) {
+                    newMile = Float.parseFloat(mMilesTxt.getText().toString());
+                }
                 float addMile =  newMile - lastMileOfShoe;
                 if(shoeIdUpdate > 0){
                     //call update
-                    if(addMile > 0){
+                    if(addMile > 0){//has new info to update
                         String param = String.format("%.2f", addMile);
                         callUpdateShoe(param);
+                    }
+                    else{
+                        //back to shoe list
+                        Intent resultIntent = new Intent("updateShoeCallBack");
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
                     }
                 }
                 else{
                     //process Add Shoe
-                    if(addMile > 0){
-                        String param = String.format("%.2f", addMile);
-                        callAddShoe(param);
-                    }
+                    //if(addMile > 0){
+                    //not check when add
+                    String param = String.format("%.2f", addMile);
+                    callAddShoe(param);
+                    //}
                 }
                 //process add or update
 				//new SaveShoeAsync().execute();
@@ -300,10 +321,7 @@ public class AddShoeActivity extends BaseActivity {
         LogUtil.d(mCurrentClassName, "Response UPdate Shoe: " + result);
         if(result.equalsIgnoreCase("true")){
             Intent resultIntent = new Intent("updateShoeCallBack");
-
             setResult(RESULT_OK, resultIntent);
-
-            //dialog.dismiss();
             finish();
         }
         else{
