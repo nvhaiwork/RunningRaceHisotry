@@ -75,7 +75,7 @@
 
     <!-- Login screen -->
     <string name="login_sign_in_with">OR SIGN IN WITH</string>
-
+    <string name="sign_in_register_failed">Create new account failed!</string>
     <!-- Sign in -->
     <string name="create_account">Create Account</string>
     <string name="forgot_password">Forgot Password</string>
