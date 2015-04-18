@@ -103,4 +103,6 @@ public class Constants {
 	public static final String PERSON = "PERSON";
 	public static final String KIND = "Kind";
 	public static final String PICTURE = "Picture";
+    //log tag
+    public static final String LOG_TAG = "MOVEAPI";
 }

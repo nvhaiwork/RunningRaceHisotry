@@ -6,6 +6,7 @@ package com.runningracehisotry;
 import java.util.ArrayList;
 import com.parse.ParseUser;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 
@@ -83,11 +84,13 @@ public class SelectRaceActivity extends BaseActivity {
 		// Display user welcome
 		if (mFriendRace != -1) {
 
-			ParseUser user = mFriends.get(mFriendRace);
+			/*ParseUser user = mFriends.get(mFriendRace);*/
+            Friend friend = null;
 			mShoesBtn.setVisibility(View.GONE);
 			mWelcomeTxt.setVisibility(View.GONE);
 			mAddRaceBtn.setVisibility(View.GONE);
-			String username = (String) user.get(Constants.FULLNAME);
+			//String username = (String) friend.getFull_name();
+			String username = "Friend";
 			String userHis = String.format(
 					getString(R.string.select_race_user_history), username);
 			mTitleTxt.setText(userHis);
