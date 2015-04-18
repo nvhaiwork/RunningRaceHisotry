@@ -34,6 +34,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -330,6 +331,8 @@ public class SignInActivity extends BaseActivity {
                             public void run() {
                                 try {
                                     finishLoginOrSignup(usernameStr, passwordStr);
+                                    CustomSharedPreferences.getPreferences(Constants.PREF_USERNAME, usernameStr);
+                                    CustomSharedPreferences.getPreferences(Constants.PREF_PASSWORD, passwordStr);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -367,8 +370,10 @@ public class SignInActivity extends BaseActivity {
                 Gson gson = new Gson();
                 User user = gson.fromJson(Data.toString(), User.class);
                 if(user != null) {
+                    Log.d("QuyNT3", "get profile:" + Data.toString());
                     RunningRaceApplication.getInstance().setCurrentUser(user);
                     CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, user.getId());
+                    CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, Data.toString());
                     Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
                     selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);

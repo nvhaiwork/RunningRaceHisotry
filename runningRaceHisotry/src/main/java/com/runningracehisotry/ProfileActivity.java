@@ -3,6 +3,7 @@ package com.runningracehisotry;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -10,10 +11,15 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
+import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.GetUserProfileRequest;
+import com.runningracehisotry.webservice.base.UpdateUserProfileRequest;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -21,9 +27,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ProfileActivity extends BaseActivity {
 
@@ -56,7 +66,8 @@ public class ProfileActivity extends BaseActivity {
 				.cacheOnDisc(true).considerExifParams(true)
 				.bitmapConfig(Bitmap.Config.ARGB_8888).build();
 
-		mNameEdt.setText(mUser.getUsername());
+        fillUserProfile();
+		/*mNameEdt.setText(mUser.getUsername());
 
 		// User image
 		if (mUser.containsKey(Constants.PICTURE)) {
@@ -72,10 +83,19 @@ public class ProfileActivity extends BaseActivity {
 		if (mUser.containsKey(Constants.KIND)) {
 
 			isSocialUser = true;
-		}
+		}*/
+
 	}
 
-	@Override
+    private void fillUserProfile() {
+        String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
+        Gson gson = new Gson();
+        User user = gson.fromJson(userStr, User.class);
+        Log.d("QuyNT3", "Stored profile:" + userStr +"|" + (user != null));
+        mNameEdt.setText(user.getFull_name());
+    }
+
+    @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -164,7 +184,9 @@ public class ProfileActivity extends BaseActivity {
 				}
 
 				// Save process
-				new UpdateProfileAsyncTask().execute();
+				//new UpdateProfileAsyncTask().execute();
+                Log.d("QuyNT3", "udpate profile API 28: ");
+                callUpdateProfile();
 			}
 
 			break;
@@ -173,13 +195,126 @@ public class ProfileActivity extends BaseActivity {
 		}
 	}
 
-	@Override
+    /**
+     * only update full NAme and password, not SNS account PUT method
+     */
+    private void callUpdateProfile() {
+        String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
+        Gson gson = new Gson();
+        User user = gson.fromJson(userStr, User.class);
+        Log.d("QuyNT3", "Stored profile:" + userStr +"|" + (user != null));
+        //mNameEdt.setText(user.getName());
+        String id = user.getId();
+        String oldPassword = mOldPassEdt.getText().toString();
+        String newPassword = mNewPassEdt.getText().toString();
+        String confirmPassword = mConfirmPassEdt.getText().toString();
+        String fullName = mNameEdt.getText().toString();
+        String profileImage = user.getProfile_image();
+        UpdateUserProfileRequest request = new UpdateUserProfileRequest(id, fullName, profileImage,
+                oldPassword, newPassword, confirmPassword);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
+
+    @Override
 	public void onBackPressed() {
 
 		backToHome();
 	}
 
-	private class UpdateProfileAsyncTask extends AsyncTask<Void, Void, Integer> {
+    private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
+        @Override
+        public void Wsdl2CodeStartedRequest() {
+           /* runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
+                }
+            });*/
+        }
+
+        @Override
+        public void Wsdl2CodeFinished(String methodName, Object data) {
+            LogUtil.i("Running", data.toString());
+            if (methodName.equals(ServiceConstants.METHOD_UPDATE_USER_PROFILE)) {
+                try {
+                    JSONObject jsonObjectReceive = new JSONObject(data.toString());
+                    boolean result = jsonObjectReceive.getBoolean("result");
+                    // Login success
+                    if (result) {
+                        LogUtil.d("Running", "Update profile ok!: " + data.toString());
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    //update preferences and application variable
+                                    Utilities.showAlertMessage(
+                                            ProfileActivity.this,
+                                            getString(R.string.dialog_profile_update_successfully),
+                                            "");
+                                    updateStoredInformation();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+
+                    }
+                    // Login fail
+                    else {
+                        LogUtil.d("Running", "Update profile fail!!!");
+                        // Show dialog notify login fail
+                        Utilities.showAlertMessage(
+                                ProfileActivity.this,
+                                getString(R.string.dialog_profile_update_fails),
+                                "");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Utilities.showAlertMessage(
+                            ProfileActivity.this,
+                            getString(R.string.dialog_profile_update_fails),
+                            "");
+                } finally {
+                    /*if (mLoadingDialog.isShowing()) {
+                        mLoadingDialog.dismiss();
+                    }*/
+                }
+            }
+
+        }
+
+        @Override
+        public void Wsdl2CodeFinishedWithException(Exception ex) {
+
+        }
+
+        @Override
+        public void Wsdl2CodeEndedRequest() {
+
+        }
+    };
+
+    private void updateStoredInformation() {
+        String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
+        Gson gson = new Gson();
+        User user = gson.fromJson(userStr, User.class);
+        String confirmPassword = mConfirmPassEdt.getText().toString();
+        CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD, confirmPassword);
+        String fullName = mNameEdt.getText().toString();
+        user.setFull_name(fullName);
+        RunningRaceApplication.getInstance().setCurrentUser(user);
+        String userJson = gson.toJson(user);
+        CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, userJson);
+        LogUtil.d("Running","update vars done: "
+            + "newPAssword: " + CustomSharedPreferences.getPreferences(Constants.PREF_PASSWORD,"")
+            + "userJson app and Preference: " + userJson);
+    }
+
+
+
+	/*private class UpdateProfileAsyncTask extends AsyncTask<Void, Void, Integer> {
 
 		Dialog dialog;
 
@@ -295,5 +430,5 @@ public class ProfileActivity extends BaseActivity {
 						getString(R.string.dialog_profile_title));
 			}
 		}
-	}
+	}*/
 }

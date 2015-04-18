@@ -67,6 +67,7 @@ public class Constants {
     public static final String INTENT_UPDATE_SHOE = "intent_update_shoe";
 	// Preferences
 	// com.runningracehisotry
+    public static final String PREF_USER_LOGGED_OBJECT = "com.runningracehisotry.userFullInfor";
     public static final String PREF_USER_ID = "com.runningracehisotry.userId";
 	public static final String PREF_USERNAME = "com.runningracehisotry.username";
 	public static final String PREF_PASSWORD = "com.runningracehisotry.password";
