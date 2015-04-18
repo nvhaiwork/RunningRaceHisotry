@@ -229,13 +229,25 @@ public class MyShoesActivity extends BaseActivity implements
 		case R.id.bottom_button_right_text:
 
 			if (isSelectShoe) {
-
+                Log.e(Constants.LOG_TAG, "selected for race");
 				int selected = mShoesAdapter.getSelectedPosition();
 				if (selected >= 0) {
-
+                    Log.e(Constants.LOG_TAG, "selected: " + selected);
 					Intent addShoeIntent = new Intent();
 					addShoeIntent.putExtra(
 							Constants.INTENT_SELECT_SHOE_FOR_RACE, selected);
+                    String shoeJson = "";
+                    try{
+                        Gson gson = new Gson();
+                        shoeJson = gson.toJson(mShoesAdapter.getItem(selected));
+                    }
+                    catch(Exception ex){
+                        ex.printStackTrace();
+                    }
+                    addShoeIntent.putExtra(
+                            Constants.INTENT_SELECT_SHOE_ID_FOR_RACE, shoeJson);
+                    LogUtil.d(Constants.LOG_TAG, "Shoe selected: " + selected + "|"
+                            + shoeJson);
 					setResult(RESULT_OK, addShoeIntent);
 				} else {
 

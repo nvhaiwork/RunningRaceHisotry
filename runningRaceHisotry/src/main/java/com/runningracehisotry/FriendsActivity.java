@@ -103,6 +103,7 @@ public class FriendsActivity extends BaseActivity {
             lstGroup = gson.fromJson(json, listType);
             if(lstGroup.size() > 0){
                 totalFriends = lstGroup.size() - 1;
+                LogUtil.d(Constants.LOG_TAG, "processGetGroupOfUser total: " + (totalFriends + 1));
                 for(Group group : lstGroup){
                     getFriendOfUser(group.getGroupId());
                 }

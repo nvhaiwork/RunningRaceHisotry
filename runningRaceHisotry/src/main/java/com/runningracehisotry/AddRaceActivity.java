@@ -7,17 +7,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.Gson;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.views.MyTimePickerDialog;
 import com.runningracehisotry.views.MyTimePickerDialog.OnTimeSetListener;
 import com.runningracehisotry.views.TimePicker;
+import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.AddRaceRequest;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -39,9 +44,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
-	private ParseObject mShoe;
+	//private ParseObject mShoe;
 	private SimpleDateFormat mDf;
 	private static HashMap<String, Object> mRace;
 	private EditText mRaceNameEdt, mRaceWebsiteEdt, mRaceCityEdt,
@@ -80,7 +88,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 		mBidImg = (ImageView) findViewById(R.id.add_race_photo_of_bib);
 		mMedalImg = (ImageView) findViewById(R.id.add_race_photo_of_medal);
 		mPersonImg = (ImageView) findViewById(R.id.add_race_photo_of_person);
-		if (mRace != null) {
+		/*if (mRace != null) {
 
 			int finishTime = (Integer) mRace.get(Constants.FINISHTIME);
 			String finishTimeStr = String.format("%02d:%02d:%02d",
@@ -129,12 +137,13 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 			mRaceStateEdt.setText((String) mRace.get(Constants.STATE));
 			mRaceNameEdt.setText((String) mRace.get(Constants.RACENAME));
 			mRaceWebsiteEdt.setText((String) mRace.get(Constants.WEBSITE));
-		}
+		}*/
 
 		mShoeTxt.setOnClickListener(this);
 		mBidImg.setOnClickListener(this);
 		mMedalImg.setOnClickListener(this);
 		mPersonImg.setOnClickListener(this);
+        
 		mRaceTypeTxt.setOnClickListener(this);
 		mRaceDateTxt.setOnClickListener(this);
 		mRaceFinishTimeTxt.setOnClickListener(this);
@@ -150,9 +159,18 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
 				int selected = data.getIntExtra(
 						Constants.INTENT_SELECT_SHOE_FOR_RACE, -1);
-				mShoe = mShoes.get(selected);
-				mShoeTxt.setText(String.format("%s (%s)",
-						mShoe.get(Constants.BRAND), mShoe.get(Constants.MODEL)));
+				String json = data.getStringExtra(Constants.INTENT_SELECT_SHOE_ID_FOR_RACE);
+                Shoe shoeForRace = null;
+                try{
+                    Gson gson = new Gson();
+                    shoeForRace = gson.fromJson(json, Shoe.class);
+                }
+                catch(Exception ex){
+                    ex.printStackTrace();
+                }
+                mShoeTxt.setText(String.format("%s (%s)",
+                        shoeForRace.getBrand(), shoeForRace.getModel()));
+                mShoeTxt.setTag(new Integer(shoeForRace.getId()));
 			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_BID) {
 
 				Uri imageUri = data.getData();
@@ -354,14 +372,17 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 						getString(R.string.dialog_add_shoe_fill_all_fields),
 						getString(R.string.dialog_add_race_tile));
 			} else {
-
-				new AddRaceAsync().execute();
+                //call add Race
+				//new AddRaceAsync().execute();
+                callAddRace();
 			}
 			break;
 		}
 	}
 
-	/**
+
+
+    /**
 	 * Show event type chooser
 	 * */
 	private void showEventTypeChooser() {
@@ -457,7 +478,121 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 		}
 	}
 
-	private class LoadRaceImageAsync extends AsyncTask<Void, Void, Void> {
+
+    private void callAddRace() {
+        String bibUrl ="/bib.png";
+        String city = mRaceCityEdt.getText().toString();
+        String eventType = String.valueOf((Integer) mRaceTypeTxt.getTag());
+        String finisherDateTime = String.valueOf((Integer) mRaceFinishTimeTxt.getTag());
+
+        String medalUrl = "/medal.png";
+        String raceName = mRaceNameEdt.getText().toString();
+        String personUrl = "/person.png";
+        long time = 0;
+        String raceDate = mRaceDateTxt.getText().toString();
+        try {
+            time = mDf.parse(mRaceDateTxt.getText().toString()).getTime();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        String shoesId = String.valueOf((Integer) mShoeTxt.getTag());
+        String state = mRaceStateEdt.getText().toString();
+        String website = mRaceWebsiteEdt.getText().toString();
+
+        LogUtil.d(Constants.LOG_TAG, "Shoe infor to add: "
+                + "bibURl: " + bibUrl + "|"
+                + "city: " + city + "|"
+                + "finisherDateTime: " + finisherDateTime + "|"
+                + "medalUrl: " + medalUrl + "|"
+                + "raceName: " + raceName + "|"
+                + "personUrl: " + personUrl + "|"
+                + "raceDate: " + raceDate + "|"
+                + "shoesId: " + shoesId + "|"
+                + "state: " + state + "|"
+                + "website: " + website + "|"
+                + "time: " + time
+                );
+        AddRaceRequest request = new AddRaceRequest(bibUrl,city,eventType,finisherDateTime,medalUrl,raceName,personUrl,raceDate,shoesId,state,website);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
+    private void processAddRace(String data) throws JSONException{
+        JSONObject obj = new JSONObject(data.toString());
+        String result = obj.getString("result");
+        LogUtil.d(mCurrentClassName, "Response Add Race: " + result);
+        if(result.equalsIgnoreCase("true")){
+            Intent resultIntent = new Intent("addRaceCallBack");
+            setResult(RESULT_OK, resultIntent);
+            //dialog.dismiss();
+            finish();
+        }
+        else{
+            LogUtil.d(mCurrentClassName, "Response Add Shoe Failed ");
+            Intent resultIntent = new Intent("addRaceCallBack");
+            setResult(RESULT_OK, resultIntent);
+            //dialog.dismiss();
+            finish();
+        }
+    }
+    private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
+        @Override
+        public void Wsdl2CodeStartedRequest() {
+           /* runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
+                }
+            });*/
+        }
+
+        @Override
+        public void Wsdl2CodeFinished(String methodName,final Object data) {
+            LogUtil.i(Constants.LOG_TAG, data.toString());
+            if (methodName.equals(ServiceConstants.METHOD_ADD_RACE)) {
+
+                    // added race success
+                    runOnUiThread(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          try {
+                                              processAddRace(data.toString());
+                                          } catch (Exception e) {
+
+                                          } finally {
+                                          }
+                                      }
+                                  });
+
+
+            }
+            else if (methodName.equals(ServiceConstants.METHOD_UPDATE_RACE)) {
+                try {
+                    // Login success
+                    //processGetFriendGroupOfUser(data.toString());
+                } catch (Exception e) {
+
+                } finally {
+                }
+
+            }
+
+
+        }
+
+        @Override
+        public void Wsdl2CodeFinishedWithException(Exception ex) {
+
+        }
+
+        @Override
+        public void Wsdl2CodeEndedRequest() {
+
+        }
+    };
+
+
+
+	/*private class LoadRaceImageAsync extends AsyncTask<Void, Void, Void> {
 
 		private Dialog dialog;
 		private Bitmap medalBmp, bibBmp, personBmp;
@@ -735,5 +870,5 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 			dialog.dismiss();
 			finish();
 		}
-	}
+	}*/
 }

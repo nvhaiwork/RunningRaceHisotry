@@ -63,6 +63,7 @@ public class Constants {
 	public static final String INTENT_ADD_SHOE = "intent_add_shoe";
 	public static final String INTENT_ADD_RACE = "intent_add_race";
 	public static final String INTENT_SELECT_SHOE_FOR_RACE = "intent_select_shoe_for_race";
+    public static final String INTENT_SELECT_SHOE_ID_FOR_RACE = "intent_select_shoe_id_for_race";
 	public static final String INTENT_SELECT_RACE_FROM_FRIENDS = "intent_select_race_from_friends";
     public static final String INTENT_UPDATE_SHOE = "intent_update_shoe";
 	// Preferences
