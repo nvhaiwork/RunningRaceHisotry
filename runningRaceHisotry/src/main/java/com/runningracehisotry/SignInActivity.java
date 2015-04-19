@@ -24,6 +24,7 @@ import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetUserProfileRequest;
+import com.runningracehisotry.webservice.base.LoginRequest;
 import com.runningracehisotry.webservice.base.UploadImageRequest;
 
 import android.app.Dialog;

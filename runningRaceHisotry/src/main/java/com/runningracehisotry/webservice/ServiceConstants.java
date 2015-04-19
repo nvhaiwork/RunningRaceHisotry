@@ -7,6 +7,7 @@ public class ServiceConstants {
 
     // User method
     public static final String METHOD_REGISTER = "Register";
+    public static final String METHOD_OAUTH_REGISTER = "Register";
     public static final String METHOD_LOGIN = "Login";
     public static final String METHOD_GET_USER_PROFILE = "getUserProfile";
     public static final String METHOD_UPDATE_USER_PROFILE = "updateUserProfile";

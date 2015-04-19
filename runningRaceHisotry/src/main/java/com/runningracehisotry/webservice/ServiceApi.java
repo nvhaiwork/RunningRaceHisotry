@@ -38,6 +38,7 @@ public class ServiceApi {
 
     // User API
     public static final String API_REGISTER = "/user/register";
+    public static final String API_OAUTH_REGISTER = "/oauth/register";
     public static final String API_LOGIN = "/user/login";
     public static final String API_GET_USER_PROFILE = "/user/getUserProfile";
     public static final String API_UPDATE_USER_PROFILE = "/user/";

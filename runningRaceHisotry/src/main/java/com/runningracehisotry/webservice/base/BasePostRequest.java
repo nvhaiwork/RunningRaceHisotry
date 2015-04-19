@@ -35,7 +35,9 @@ public abstract class BasePostRequest extends BaseRequest{
 	public BasePostRequest(String url) {
 		super(url);
 		mHttpPost = new HttpPost();
-        if(!ServiceApi.API_LOGIN.equals(getRequestName())) {
+        if(!ServiceApi.API_LOGIN.equals(getRequestName())
+                && !ServiceApi.API_OAUTH_REGISTER.equals(getRequestName())
+                && !ServiceApi.API_REGISTER.equals(getRequestName())) {
             String userName = CustomSharedPreferences.getPreferences(Constants.PREF_USERNAME, "");
             String password = CustomSharedPreferences.getPreferences(Constants.PREF_PASSWORD, "");
             if(userName.length() * password.length() > 0) {
