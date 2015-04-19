@@ -484,7 +484,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
         String city = mRaceCityEdt.getText().toString();
         String eventType = String.valueOf((Integer) mRaceTypeTxt.getTag());
         String finisherDateTime = String.valueOf((Integer) mRaceFinishTimeTxt.getTag());
-
+        String finisherDateTimeStr = mRaceFinishTimeTxt.getText().toString();
         String medalUrl = "/medal.png";
         String raceName = mRaceNameEdt.getText().toString();
         String personUrl = "/person.png";

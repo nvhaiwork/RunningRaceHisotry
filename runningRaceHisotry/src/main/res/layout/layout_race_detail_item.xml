@@ -79,6 +79,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:gravity="center_vertical"
+            android:text="race date"
             android:textSize="@dimen/races_detail_item_name" />
 
         <RelativeLayout
@@ -110,6 +111,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
+                android:text="race name"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:textSize="@dimen/races_detail_item_miles" />
@@ -117,6 +119,7 @@
 
         <com.runningracehisotry.views.CustomFontTextView
             android:id="@+id/races_detail_race_mile"
+            android:text="race miles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -124,6 +127,40 @@
             android:layout_below="@+id/races_detail_race_name_layout"
             android:gravity="center_vertical"
             android:textSize="@dimen/races_detail_item_name" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/races_detail_race_coverage"
+            android:text="coverage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+
+            android:layout_toLeftOf="@+id/races_detail_share"
+            android:layout_toStartOf="@+id/races_detail_share"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/races_detail_item_name" />
+
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/races_detail_race_like_total"
+            android:text="total like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/races_detail_race_like"
+            android:layout_toStartOf="@+id/races_detail_race_like"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/races_detail_item_name" />
+        <com.runningracehisotry.views.CustomImageButton
+            android:id="@+id/races_detail_race_like"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_launcher"
+    android:layout_alignParentBottom="true"
+            android:adjustViewBounds="false"
+            android:contentDescription="@null" />
 
         <com.runningracehisotry.views.CustomImageButton
             android:id="@+id/races_detail_race_imgs"
@@ -146,6 +183,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="end"
+            android:src="@drawable/ic_launcher"
             android:adjustViewBounds="false"
             android:contentDescription="@null" />
 
@@ -157,7 +195,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
-            android:textSize="@dimen/races_detail_item_time" />
+            android:textSize="@dimen/races_detail_item_time"
+            android:text="sấ" />
     </RelativeLayout>
 
 </RelativeLayout>

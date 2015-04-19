@@ -2,6 +2,9 @@ package com.runningracehisotry.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * create by NTQ
  */
@@ -53,6 +56,21 @@ public class Race {
 
     @SerializedName("updated_at")
     private String updatedAt;
+
+    @SerializedName("race_miles")
+    private String raceMiles;
+
+    @SerializedName("race_km")
+    private String raceKm;
+
+    @SerializedName("time_ago")
+    private String timeAgo;
+
+    @SerializedName("shoes")
+    private Shoe shoe = new Shoe();;
+
+    @SerializedName("likes")
+    private List<Like> likes = new ArrayList<Like>();
 
     public int getId() {
         return id;
@@ -180,5 +198,45 @@ public class Race {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getRaceMiles() {
+        return raceMiles;
+    }
+
+    public void setRaceMiles(String raceMiles) {
+        this.raceMiles = raceMiles;
+    }
+
+    public String getRaceKm() {
+        return raceKm;
+    }
+
+    public void setRaceKm(String raceKm) {
+        this.raceKm = raceKm;
+    }
+
+    public String getTimeAgo() {
+        return timeAgo;
+    }
+
+    public void setTimeAgo(String timeAgo) {
+        this.timeAgo = timeAgo;
+    }
+
+    public Shoe getShoe() {
+        return shoe;
+    }
+
+    public void setShoe(Shoe shoe) {
+        this.shoe = shoe;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
     }
 }

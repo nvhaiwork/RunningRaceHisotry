@@ -96,7 +96,8 @@
                 android:paddingRight="7dp"
                 android:paddingStart="0dp"
                 android:text="@string/add_race_name"
-                android:textSize="@dimen/add_race_item_text_size" />
+                android:textSize="@dimen/add_race_item_text_size"
+                android:editable="false" />
 
             <EditText
                 android:id="@+id/add_race_name_edt"
