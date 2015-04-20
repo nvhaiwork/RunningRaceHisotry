@@ -8,6 +8,22 @@ import com.runningracehisotry.webservice.ServiceConstants;
  */
 public class GetRaceByTypeRequest extends BaseGetRequest{
 
+    public GetRaceByTypeRequest(String date, int typeId, int userId) {
+        super(ServiceApi.SERVICE_URL + ServiceApi.API_GET_RACES_BY_TYPE);
+        this.setParam("sort", date);
+        this.setParam("type", typeId);
+        this.setParam("user_id", userId);
+
+    }
+
+    public GetRaceByTypeRequest(String date, String typeId, String userId) {
+        super(ServiceApi.SERVICE_URL + ServiceApi.API_GET_RACES_BY_TYPE);
+        this.setParam("sort", date);
+        this.setParam("type", typeId);
+        this.setParam("user_id", userId);
+
+    }
+
     public GetRaceByTypeRequest(String date, int typeId) {
         super(ServiceApi.SERVICE_URL + ServiceApi.API_GET_RACES_BY_TYPE);
         //this.setParam("sort", "date");

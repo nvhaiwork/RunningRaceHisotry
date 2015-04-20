@@ -8,13 +8,14 @@ import com.runningracehisotry.webservice.ServiceConstants;
  */
 public class UpdateUserProfileRequest extends BasePutRequest {
 
-    public UpdateUserProfileRequest(String email, String fullName, String id, String name, String profileImage) {
+    public UpdateUserProfileRequest(String id, String fullName, String profileImage,
+                                    String oldPassword, String password, String confirmPassword) {
         super(ServiceApi.SERVICE_URL + ServiceApi.API_UPDATE_USER_PROFILE + id);
-        setPostParam("email", email);
         setPostParam("full_name", fullName);
-        setPostParam("id", id);
-        setPostParam("name", name);
         setPostParam("profile_image", profileImage);
+        setPostParam("oldPassword", oldPassword);
+        setPostParam("password", password);
+        setPostParam("confirmPassword", confirmPassword);
     }
 
     @Override

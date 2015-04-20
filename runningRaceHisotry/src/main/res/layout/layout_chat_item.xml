@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:padding="5dp" >
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/chat_item_img"
+        android:layout_centerVertical="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/chat_item_text"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/iv_avatar_me"
+        android:layout_toRightOf="@+id/iv_avatar_friend"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:gravity="center_vertical"
+/>
+
+    <com.runningracehisotry.views.CircleImageView
+        android:id="@+id/iv_avatar_me"
+        android:layout_alignParentRight="true"
+        android:layout_width="@dimen/chat_item_img"
+        android:layout_height="@dimen/chat_item_img"
+        android:src="@drawable/ic_user_img"
+        android:layout_alignParentTop="true" />
+
+    <com.runningracehisotry.views.CircleImageView
+        android:id="@+id/iv_avatar_friend"
+        android:layout_alignParentLeft="true"
+        android:layout_width="@dimen/chat_item_img"
+        android:layout_height="@dimen/chat_item_img"
+        android:src="@drawable/ic_user_img"
+        android:layout_alignParentTop="true" />
+
+</RelativeLayout>

@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.google.gson.Gson;
 import com.parse.GetCallback;
@@ -417,5 +419,24 @@ public class Utilities {
         str.append(history.getMiles());
         str.append(" miles");
         return str.toString();
+    }
+    public static boolean isValidEmail(String email){
+        //boolean result = false;
+        if(email == null || email.isEmpty()){
+            return false;
+        }
+        else{
+            String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+            CharSequence inputStr = email;
+
+            Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(inputStr);
+            if (matcher.matches()) {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 }

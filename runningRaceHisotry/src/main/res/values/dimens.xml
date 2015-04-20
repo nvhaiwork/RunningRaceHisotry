@@ -58,6 +58,10 @@
     <dimen name="user_item_img">40dp</dimen>
     <dimen name="user_item_text">17sp</dimen>
 
+    <!-- chat list -->
+    <dimen name="chat_item_img">30dp</dimen>
+    <dimen name="chat_item_text">15sp</dimen>
+
     <!-- Profile -->
     <dimen name="profile_text_size">16sp</dimen>
 

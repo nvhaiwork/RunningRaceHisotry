@@ -262,9 +262,9 @@ public class RunnerActivity extends BaseActivity {
     @Override
     protected void onPause() {
         // TODO Auto-generated method stub
-		/*super.onPause();
-		mUser.put(Constants.FRIENDS, mFriends);
-		mUser.saveInBackground();*/
+		super.onPause();
+//		mUser.put(Constants.FRIENDS, mFriends);
+//		mUser.saveInBackground();
     }
 
     @Override

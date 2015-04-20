@@ -37,6 +37,9 @@
         <activity android:name="com.runningracehisotry.RunnerActivity" />
         <activity android:name="com.runningracehisotry.FriendsActivity" />
         <activity android:name="com.runningracehisotry.ProfileActivity" />
+        <activity android:name="com.runningracehisotry.ChatFriendActivity" />
+        <activity android:name="com.runningracehisotry.ChatActivity"
+            android:configChanges="keyboard|keyboardHidden"/>
 
         <!-- Face book -->
         <activity

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/people_you_may_know_color"
+        android:padding="7dp"
+        android:text="@string/menu_your_community"
+        android:textColor="@color/white"
+        android:textSize="@dimen/login_sign_in_with"
+        android:id="@+id/tv_des" />
+
+    <ListView
+        android:id="@+id/lv_message"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/tv_des"
+        android:divider="@android:color/transparent"
+
+        android:isScrollContainer="false"/>
+
+    <RelativeLayout
+        android:id="@+id/comment_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/com_facebook_picker_search_bar_background"
+        android:padding="2dp" >
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="Send"
+            android:background="@android:color/transparent"
+            android:textColor="@color/com_facebook_blue"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/et_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:ems="10"
+            android:layout_toLeftOf="@+id/btn_send"
+            android:layout_toStartOf="@+id/btn_send">
+
+            <requestFocus />
+        </EditText>
+    </RelativeLayout>
+
+
+</RelativeLayout>

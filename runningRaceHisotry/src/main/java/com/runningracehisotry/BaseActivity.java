@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
+import com.google.gson.Gson;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -374,7 +375,15 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 					getString(R.string.menu_contact_us))) {
 
 				Utilities.contactUs(BaseActivity.this);
-			}
+			}  else if (menu.getDislayText().equals(
+                    getString(R.string.menu_chat))) {
+
+                Intent chatIntent = new Intent(BaseActivity.this,
+                        ChatFriendActivity.class);
+                chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(chatIntent);
+            }
 
 			mMenu.toggle();
 			return;
@@ -497,6 +506,11 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		List<MenuModel> menus = new ArrayList<MenuModel>();
 		MenuModel menu = null;
 
+        // Chat
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_chat));
+        menus.add(menu);
+
 		// Your history
 		menu = new MenuModel();
 		menu.setDislayText(getString(R.string.menu_your_history));
@@ -613,5 +627,10 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		aboutBtn.setOnClickListener(this);
 		dialog.show();
 	}
+
+    protected String serializeObject(Object object) {
+        Gson gson = new Gson();
+        return gson.toJson(object);
+    }
 
 }

@@ -20,6 +20,6 @@ public class GetGroupMemberRequest extends BaseGetRequest{
 
     @Override
     protected String getRequestName() {
-        return ServiceConstants.METHOD_GET_ALL_GROUP;
+        return ServiceConstants.METHOD_GET_GROUP_OF_USER;
     }
 }

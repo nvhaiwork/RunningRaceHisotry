@@ -65,7 +65,7 @@ public class ServiceApi {
 
     // GROUP API
     public static final String API_GET_ALL_GROUP = "/group";
-    public static final String API_GET_GROUP_OF_USER = "groupMember/getByGroupId";
+    public static final String API_GET_GROUP_OF_USER = "/groupMember/getByGroupId";
     public static final String API_GET_ABOUT_US = "/content/getContent?name=AboutUs";
     public static final String API_GET_LIKE_OF_RACE = "/like/getByRaceId";
 

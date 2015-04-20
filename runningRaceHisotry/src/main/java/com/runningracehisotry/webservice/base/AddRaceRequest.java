@@ -17,7 +17,7 @@ public class AddRaceRequest extends BasePostRequest {
         setPostParam("event_type", eventType);
         setPostParam("finisher_date_time", finisherDateTime);
         setPostParam("medal_url", medalUrl);
-        setPostParam("race_name", raceName);
+        setPostParam("name", raceName);
         setPostParam("person_url", personUrl);
         setPostParam("race_date", raceDate);
         setPostParam("shoes_id", shoesId);

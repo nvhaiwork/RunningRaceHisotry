@@ -47,6 +47,10 @@ public class Shoe{
         this.userId = userId;
     }
 
+    public Shoe() {
+
+    }
+
     public int getId() {
         return id;
     }

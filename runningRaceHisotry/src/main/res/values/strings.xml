@@ -75,7 +75,7 @@
 
     <!-- Login screen -->
     <string name="login_sign_in_with">OR SIGN IN WITH</string>
-
+    <string name="sign_in_register_failed">Create new account failed!</string>
     <!-- Sign in -->
     <string name="create_account">Create Account</string>
     <string name="forgot_password">Forgot Password</string>
@@ -125,6 +125,7 @@
     <string name="add_shoe_miles_distance_history">Miles History</string>
 
     <!-- Menu -->
+    <string name="menu_chat">Chat</string>
     <string name="menu_your_history">Your History</string>
     <string name="menu_runner_you_may_know">Runners You May Know</string>
     <string name="menu_your_community">Your Community/Group</string>
