@@ -130,9 +130,11 @@ public class ChatFriendActivity extends BaseActivity {
             LogUtil.d(Constants.LOG_TAG, "Friend return: " + fr.getFriend().getFull_name()
                     + "|" + fr.getFriend().getProfile_image());
             LogUtil.d(Constants.LOG_TAG, "return|total: " + returnedFriends +"|"+ totalFriends);
-            if(returnedFriends<totalFriends){
+
+            lstFriend.add(fr);
+
+            if(returnedFriends < totalFriends){
                 returnedFriends++;
-                lstFriend.add(fr);
                 LogUtil.d(Constants.LOG_TAG, "return < add " + returnedFriends +"|"+ totalFriends);
             }
             else{

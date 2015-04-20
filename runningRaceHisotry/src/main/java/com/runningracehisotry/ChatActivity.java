@@ -94,9 +94,6 @@ public class ChatActivity extends BaseActivity {
         Message newMessage = new Message(RunningRaceApplication.getInstance().getCurrentUser().getId(), message);
         mChatItemAdaper.addMessage(newMessage);
 
-        Message newMessage2 = new Message(currentFriend.getId(), "advaasdjfhkas");
-        mChatItemAdaper.addMessage(newMessage2);
-
         etMessage.setText("");
         lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
     }
