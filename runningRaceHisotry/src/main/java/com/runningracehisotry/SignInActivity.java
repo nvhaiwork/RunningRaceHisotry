@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.runningracehisotry;
 
@@ -23,8 +23,10 @@ import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.ForgotPasswordRequest;
 import com.runningracehisotry.webservice.base.GetUserProfileRequest;
 import com.runningracehisotry.webservice.base.LoginRequest;
+import com.runningracehisotry.webservice.base.RegisterRequest;
 import com.runningracehisotry.webservice.base.UploadImageRequest;
 
 import android.app.Dialog;
@@ -33,6 +35,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -73,7 +76,7 @@ public class SignInActivity extends BaseActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.runningracehisotry.BaseActivity#initView()
 	 */
 	@Override
@@ -103,7 +106,7 @@ public class SignInActivity extends BaseActivity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.runningracehisotry.BaseActivity#onClick(android.view.View)
 	 */
 	@Override
@@ -147,10 +150,11 @@ public class SignInActivity extends BaseActivity {
 						getString(R.string.dialog_sign_up));
 			} else {
 				if (passwordConfirmStr.equals(passwordStr)) {
-					mLoadingDialog = CustomLoadingDialog.show(
-							SignInActivity.this, "", "", false, false);
+                    callRegisterAccount(usernameStr, passwordConfirmStr, emailStr);
+					/*mLoadingDialog = CustomLoadingDialog.show(
+							SignInActivity.this, "", "", false, false);*/
                     // Call api Register
-					final ParseUser user = new ParseUser();
+					/*final ParseUser user = new ParseUser();
 					user.setUsername(usernameStr);
 					user.setPassword(passwordStr);
 					user.setEmail(emailStr);
@@ -176,10 +180,10 @@ public class SignInActivity extends BaseActivity {
 								Utilities.showAlertMessage(SignInActivity.this,
 										error.getMessage(),
 										getString(R.string.dialog_sign_up));
-								mLoadingDialog.dismiss();
+								///mLoadingDialog.dismiss();
 							}
 						}
-					});
+					});*/
 				} else {
 					Utilities.showAlertMessage(
                             SignInActivity.this,
@@ -204,6 +208,11 @@ public class SignInActivity extends BaseActivity {
 		}
 	}
 
+    private void callRegisterAccount(String name, String password, String email){
+        RegisterRequest request = new RegisterRequest(name, password, email);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
 	/**
 	 * Show dialog allows user input email address to reset password
 	 * */
@@ -233,10 +242,22 @@ public class SignInActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 
 				if (!emailEdt.getText().toString().equals("")) {
+                    String email = emailEdt.getText().toString();
+                    if(Utilities.isValidEmail(email)){
+                        callSendMailForgotPassword(email);
+                    }
+                    else{
+                        Utilities
+                                .showAlertMessage(
+                                        SignInActivity.this,
+                                        getString(R.string.dialog_forgot_pass_message),
+                                        getString(R.string.dialog_forgot_pass_title));
+                        dialog.dismiss();
+                    }
+					/*final Dialog loadingDialog = CustomLoadingDialog.show(
+							SignInActivity.this, "", "", false, false);*/
 
-					final Dialog loadingDialog = CustomLoadingDialog.show(
-							SignInActivity.this, "", "", false, false);
-					ParseUser.requestPasswordResetInBackground(emailEdt
+					/*ParseUser.requestPasswordResetInBackground(emailEdt
 							.getText().toString(),
 							new RequestPasswordResetCallback() {
 
@@ -252,7 +273,7 @@ public class SignInActivity extends BaseActivity {
 													getString(R.string.dialog_forgot_pass_title));
 									dialog.dismiss();
 								}
-							});
+							});*/
 				}
 			}
 		});
@@ -260,12 +281,19 @@ public class SignInActivity extends BaseActivity {
 		dialog.show();
 	}
 
-	/**
+    private void callSendMailForgotPassword(String email) {
+        ForgotPasswordRequest request = new ForgotPasswordRequest(email);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
+
+    /**
 	 * Finish user login/sign-up process
 	 * */
 	private void finishLoginOrSignup(String username, String password) {
 		CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME, username);
 		CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD, password);
+        RunningRaceApplication.getInstance().setSocialLogin(false);
         getCurrentUserData();
 		//mLoadingDialog.dismiss();
 
@@ -276,6 +304,8 @@ public class SignInActivity extends BaseActivity {
         request.setListener(callBackEvent);
         new Thread(request).start();
     }
+
+
 
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
@@ -303,6 +333,8 @@ public class SignInActivity extends BaseActivity {
                             public void run() {
                                 try {
                                     finishLoginOrSignup(usernameStr, passwordStr);
+                                    CustomSharedPreferences.getPreferences(Constants.PREF_USERNAME, usernameStr);
+                                    CustomSharedPreferences.getPreferences(Constants.PREF_PASSWORD, passwordStr);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -335,18 +367,87 @@ public class SignInActivity extends BaseActivity {
                         mLoadingDialog.dismiss();
                     }*/
                 }
-            } else if (methodName.equals(ServiceConstants.METHOD_GET_USER_PROFILE)) {
+            }
+            else if (methodName.equals(ServiceConstants.METHOD_GET_USER_PROFILE)) {
                 Gson gson = new Gson();
                 User user = gson.fromJson(Data.toString(), User.class);
                 if(user != null) {
+                    Log.d("QuyNT3", "get profile:" + Data.toString());
                     RunningRaceApplication.getInstance().setCurrentUser(user);
                     CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, user.getId());
+                    CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, Data.toString());
                     Intent selectRaceIntent = new Intent(SignInActivity.this, SelectRaceActivity.class);
                     selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
                     startActivity(selectRaceIntent);
                     finish();
                 }
+            }
+            else if (methodName.equals(ServiceConstants.METHOD_FORGOT_PASSWORD)) {
+                try {
+                    JSONObject jsonObjectReceive = new JSONObject(Data.toString());
+                    boolean result = jsonObjectReceive.getBoolean("result");
+                    if (result) {
+                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              Utilities.showAlertMessage(
+                                                      SignInActivity.this,
+                                                      getString(R.string.dialog_reset_password_message),
+                                                      getString(R.string.dialog_forgot_pass_title));
+
+                                          }
+                                      });
+
+                    }
+                    else{
+                        runOnUiThread(new Runnable() {
+                                          @Override
+                                          public void run() {
+                                              Utilities.showAlertMessage(
+                                                      SignInActivity.this,
+                                                      getString(R.string.dialog_forgot_pass_message),
+                                                      getString(R.string.dialog_forgot_pass_title));
+                                          }
+                                      });
+
+                        //dialog.dismiss();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            else if (methodName.equals(ServiceConstants.METHOD_REGISTER)) {
+                try {
+                    JSONObject jsonObjectReceive = new JSONObject(Data.toString());
+                    boolean result = jsonObjectReceive.getBoolean("result");
+                    if (result) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                finishLoginOrSignup(usernameStr,passwordStr);
+
+                            }
+                        });
+
+                    }
+                    else{
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Utilities.showAlertMessage(SignInActivity.this,
+                                        getResources().getString(R.string.sign_in_register_failed),
+                                        getString(R.string.dialog_sign_up));
+                            }
+                        });
+
+                        //dialog.dismiss();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
 

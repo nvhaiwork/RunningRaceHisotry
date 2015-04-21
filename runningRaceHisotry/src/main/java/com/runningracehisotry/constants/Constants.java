@@ -72,6 +72,7 @@ public class Constants {
     public static final String PREF_USER_LOGGED_OBJECT = "com.runningracehisotry.userFullInfor";
     public static final String PREF_USER_ID = "com.runningracehisotry.userId";
 	public static final String PREF_USERNAME = "com.runningracehisotry.username";
+    public static final String PREF_FB_ID = "com.runningracehisotry.id.fb";
 	public static final String PREF_PASSWORD = "com.runningracehisotry.password";
 	public static final String PREF_SETTING_SOUND = "com.runningracehisotry.setting.sound";
 	public static final String PREF_SETTING_SOUND_LEVEL = "com.runningracehisotry.setting.sound.level";

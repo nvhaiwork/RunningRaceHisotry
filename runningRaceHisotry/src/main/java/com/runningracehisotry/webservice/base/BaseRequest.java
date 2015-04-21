@@ -10,12 +10,6 @@ import android.util.Log;
 
 import org.apache.http.client.methods.HttpRequestBase;
 
-/**
- * Base class for a request to Howl server.
- * 
- * @author tiennt7
- * 
- */
 abstract class BaseRequest implements Runnable, Comparable<BaseRequest> {
 	private AndroidHttpClient mHttpClient;
 	private String mAddress;

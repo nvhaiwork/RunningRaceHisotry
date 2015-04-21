@@ -3,6 +3,9 @@ package com.runningracehisotry.webservice.base;
 
 import android.util.Base64;
 
+import com.runningracehisotry.RunningRaceApplication;
+import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.webservice.ServiceApi;
 
 import org.apache.http.HttpResponse;
@@ -34,8 +37,21 @@ public abstract class BaseDeleteRequest extends BaseRequest{
 	public BaseDeleteRequest(String url) {
 		super(url);
 		mHttpDelete = new HttpDelete();
-        if(!ServiceApi.API_LOGIN.equals(getRequestName())) {
-            mHttpDelete.setHeader("Authorization", "Basic " + Base64.encodeToString("nhanthevu:123456".getBytes(), Base64.NO_WRAP));
+        if(ServiceApi.API_LOGIN.equals(getRequestName())
+                && !ServiceApi.API_OAUTH_REGISTER.equals(getRequestName())
+                && !ServiceApi.API_REGISTER.equals(getRequestName())) {
+            String userName = CustomSharedPreferences.getPreferences(Constants.PREF_USERNAME, "");
+            String password = CustomSharedPreferences.getPreferences(Constants.PREF_PASSWORD, "");
+            String fbID = CustomSharedPreferences.getPreferences(Constants.PREF_FB_ID, "");
+
+            if(!RunningRaceApplication.getInstance().isSocialLogin()) {
+                String s = String.format("%s:%s", fbID, "123456");
+                mHttpDelete.setHeader("Authorization", "Basic "+ Base64.encodeToString(s.getBytes(), Base64.NO_WRAP));
+            } else if(userName.length() * password.length() > 0) {
+                String s = String.format("%s:%s", userName, password);
+                mHttpDelete.setHeader("Authorization", "Basic "+ Base64.encodeToString(s.getBytes(), Base64.NO_WRAP));
+            }
+
         }
 	}
 
