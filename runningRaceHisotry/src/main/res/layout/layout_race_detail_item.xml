@@ -129,11 +129,13 @@
             android:textSize="@dimen/races_detail_item_name" />
 
         <com.runningracehisotry.views.CustomFontTextView
-            android:id="@+id/races_detail_race_coverage"
+            android:id="@+id/races_detail_race_average"
             android:text="coverage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+
+            android:layout_marginBottom="3dp"
 
             android:layout_toLeftOf="@+id/races_detail_share"
             android:layout_toStartOf="@+id/races_detail_share"
@@ -144,6 +146,8 @@
         <com.runningracehisotry.views.CustomFontTextView
             android:id="@+id/races_detail_race_like_total"
             android:text="total like"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -157,7 +161,7 @@
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/unlike"
     android:layout_alignParentBottom="true"
             android:adjustViewBounds="false"
             android:contentDescription="@null" />
@@ -171,6 +175,8 @@
             android:layout_marginLeft="0dp"
             android:layout_marginRight="20dp"
             android:layout_marginStart="0dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_toLeftOf="@+id/races_detail_race_time"
             android:layout_toStartOf="@+id/races_detail_race_time"
             android:adjustViewBounds="false"
@@ -183,7 +189,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_gravity="end"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/ic_race_share_5k"
             android:adjustViewBounds="false"
             android:contentDescription="@null" />
 
