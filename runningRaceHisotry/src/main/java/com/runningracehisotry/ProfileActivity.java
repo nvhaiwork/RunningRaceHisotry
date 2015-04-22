@@ -17,8 +17,10 @@ import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetUserProfileRequest;
+import com.runningracehisotry.webservice.base.UpdateUserAvatarRequest;
 import com.runningracehisotry.webservice.base.UpdateUserProfileRequest;
 import com.runningracehisotry.webservice.base.UploadImageRequest;
 
@@ -42,7 +44,7 @@ public class ProfileActivity extends BaseActivity {
 	private boolean isSocialUser, isImageChanged;
 	private EditText mOldPassEdt, mNewPassEdt, mConfirmPassEdt, mNameEdt;
     private Uri imageUriUpload;
-
+    private String newAvatarUrl;
 	@Override
 	protected int addContent() {
 		// TODO Auto-generated method stub
@@ -93,8 +95,11 @@ public class ProfileActivity extends BaseActivity {
         String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
-        Log.d("QuyNT3", "Stored profile:" + userStr +"|" + (user != null));
+        Log.d("QuyNT3", "Stored profile initial:" + userStr +"|" + (ServiceApi.SERVICE_URL + user.getProfile_image()));
         mNameEdt.setText(user.getFull_name());
+        if(user.getProfile_image() != null && !user.getProfile_image().isEmpty()){
+            mImageLoader.displayImage(ServiceApi.SERVICE_URL + user.getProfile_image(), mProfileImg, mOptions);
+        }
     }
 
 	@Override
@@ -247,7 +252,7 @@ public class ProfileActivity extends BaseActivity {
         }
 
         @Override
-        public void Wsdl2CodeFinished(String methodName, Object data) {
+        public void Wsdl2CodeFinished(String methodName, final Object data) {
             LogUtil.i("Running", data.toString());
             if (methodName.equals(ServiceConstants.METHOD_UPDATE_USER_PROFILE)) {
                 try {
@@ -296,13 +301,62 @@ public class ProfileActivity extends BaseActivity {
                 }
             }
             else if (methodName.equals(ServiceConstants.METHOD_UPLOAD_IMAGE)) {
-                try {
-                    LogUtil.d(Constants.LOG_TAG, "upload response: " + data.toString());
-                    JSONObject jsonObjectReceive = new JSONObject(data.toString());
-                    String result = jsonObjectReceive.getString("name");
-                } catch (Exception e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            LogUtil.d(Constants.LOG_TAG, "upload response: " + data.toString());
+                            JSONObject jsonObjectReceive = new JSONObject(data.toString());
+                            String result = jsonObjectReceive.getString("name");
+                            if(result != null && !result.isEmpty()){
+                                callUpdateInfoProfile(result);
+                                newAvatarUrl = result;
+                            }
+                        } catch (Exception e) {
 
-                }
+                        }
+                    }
+                    });
+
+            }
+
+            else if (methodName.equals(ServiceConstants.METHOD_UPDATE_USER_AVATAR)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            LogUtil.d(Constants.LOG_TAG, "update Infor after upload response: " + data.toString());
+                            JSONObject jsonObjectReceive = new JSONObject(data.toString());
+                            String result = jsonObjectReceive.getString("result");
+                            // Login success
+                            if(result != null && result.equalsIgnoreCase("true")){
+                                String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
+                                Gson gson = new Gson();
+                                User user = gson.fromJson(userStr, User.class);
+                                user.setProfile_image(newAvatarUrl);
+                                RunningRaceApplication.getInstance().setCurrentUser(user);
+                                String userJson = gson.toJson(user);
+                                CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, userJson);
+                                LogUtil.d("Running", "update vars done after upload: " + (ServiceApi.SERVICE_URL + newAvatarUrl)
+                                        + "userJson app and Preference: " + userJson);
+                                mImageLoader.displayImage(ServiceApi.SERVICE_URL + newAvatarUrl, mProfileImg, mOptions);
+                            }
+                            else{
+                                Utilities.showAlertMessage(
+                                        ProfileActivity.this,
+                                        getString(R.string.dialog_profile_update_fails),
+                                        "");
+                            }
+                        } catch (Exception e) {
+                            Utilities.showAlertMessage(
+                                    ProfileActivity.this,
+                                    getString(R.string.dialog_profile_update_fails),
+                                    "");
+
+                        }
+                    }
+                });
+
             }
 
         }
@@ -317,6 +371,20 @@ public class ProfileActivity extends BaseActivity {
 
         }
     };
+
+    private void callUpdateInfoProfile(String result) {
+        String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
+        Gson gson = new Gson();
+        User user = gson.fromJson(userStr, User.class);
+        String id = user.getId();
+        String email = user.getEmail();
+        String fullName = user.getFull_name();
+        String name = user.getName();
+
+        UpdateUserAvatarRequest request = new UpdateUserAvatarRequest(id, email, fullName, name, result);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
 
     private void updateStoredInformation() {
         String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");

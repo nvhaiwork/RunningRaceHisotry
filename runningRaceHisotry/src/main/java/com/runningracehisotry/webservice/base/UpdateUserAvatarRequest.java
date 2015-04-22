@@ -6,7 +6,7 @@ import com.runningracehisotry.webservice.ServiceConstants;
 /**
  * Created by QuyNguyen on 4/22/2015.
  */
-public class UpdateUserAvatarRequest extends BasePostRequest {
+public class UpdateUserAvatarRequest extends BasePutRequest {
 
     public UpdateUserAvatarRequest(String id, String email, String fullName, String name, String avatarUrl) {
         super(ServiceApi.SERVICE_URL + ServiceApi.API_UPDATE_USER_PROFILE + id);
