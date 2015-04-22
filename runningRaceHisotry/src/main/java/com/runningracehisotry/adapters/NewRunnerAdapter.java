@@ -17,6 +17,7 @@ import com.runningracehisotry.R;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Runner;
 import com.runningracehisotry.utilities.Utilities;
+import com.runningracehisotry.webservice.ServiceApi;
 
 import java.util.List;
 
@@ -91,6 +92,7 @@ public class NewRunnerAdapter extends BaseAdapter {
         }
 
         holder.text.setText(user.getName());
+        mImageLoader.displayImage(ServiceApi.SERVICE_URL + user.getProfileImage(), holder.image, mOptions);
 
         // Image
         /*if (user.containsKey(Constants.PICTURE)) {

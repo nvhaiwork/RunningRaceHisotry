@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.runningracehisotry.R;
 import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Runner;
+import com.runningracehisotry.webservice.ServiceApi;
 
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class FriendAdapter  extends BaseAdapter {
         }
 
         holder.text.setText(friendGroup.getFriend().getFull_name());
-
+        mImageLoader.displayImage(ServiceApi.SERVICE_URL + friendGroup.getFriend().getProfile_image(), holder.image, mOptions);
         // Image
         /*if (user.containsKey(Constants.PICTURE)) {
 
