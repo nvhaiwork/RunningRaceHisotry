@@ -69,7 +69,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
     private final String logTag = "LoginChoiceScreen";
     private Twitter twitter;
     private RequestToken requestToken;
-    private String fbID;
+    private String fbID, fullName, email, avatar;
 
     public LoginChoiceScreen() {
     }
@@ -372,15 +372,16 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                                 if (user != null) {
                                     Log.d("FACEBOOK", "user != null");
                                     String id = user.getId();
-                                    String email = user.getProperty("email").toString();
-                                    String fullName = user.getUsername();
-                                    String avatar = "http://graph.facebook.com/"+ id+ "/picture?type=large";
+                                    email = user.getProperty("email").toString();
 
                                     if (email == null || email.length() < 0) {
                                         Toast.makeText(LoginChoiceScreen.this, "login fail", Toast.LENGTH_LONG);
                                         return;
                                     } else {
                                         fbID = id;
+                                        fullName = user.getName();
+                                        avatar = "http://graph.facebook.com/"+ id+ "/picture?type=large";
+
                                         RegisterFacebookRequest request = new RegisterFacebookRequest(id, fullName, avatar);
                                         request.setListener(LoginChoiceScreen.this);
                                         new Thread(request).start();
@@ -491,6 +492,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
     private void getCurrentUserData() {
         GetUserProfileRequest request = new GetUserProfileRequest();
+        RunningRaceApplication.getInstance().setSocialLogin(true);
         request.setListener(this);
         new Thread(request).start();
     }
@@ -510,9 +512,26 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
     }
 
     private void handleResponseRegister(Object data) {
-        LoginRequest request = new LoginRequest(fbID, "kki");
-        request.setListener(this);
-        new Thread(request).start();
+        CustomSharedPreferences.setPreferences(Constants.PREF_FB_ID, fbID);
+        getCurrentUserData();
+//        User newUser = new User();
+//        newUser.setId(fbID);
+//        newUser.setEmail(email);
+//        newUser.setFull_name(fullName);
+//        newUser.setName(fullName);
+//        newUser.setProfile_image(avatar);
+//        newUser.setType("fb:" + fbID);
+//
+//        RunningRaceApplication.getInstance().setCurrentUser(newUser);
+//
+//        Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
+//        selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+//
+//        mLoadingDialog.dismiss();
+//        startActivity(selectRaceIntent);
+//        finish();
+
     }
 
     private void handlerResponseLogin(Object data) {

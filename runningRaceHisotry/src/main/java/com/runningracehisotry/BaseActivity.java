@@ -432,52 +432,77 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
 		final Dialog dialog = CustomLoadingDialog.show(BaseActivity.this, "",
 				"", false, false);
-		if (mShoes != null) {
+//		if (mShoes != null) {
+//
+//			mUser.put(Constants.SHOES, mShoes);
+//		}
+//
+//		if (mHistory != null) {
+//
+//			mUser.put(Constants.DATA, mHistory);
+//		}
+//
+//		if (mFriends != null) {
+//
+//			mUser.put(Constants.FRIENDS, mFriends);
+//		}
 
-			mUser.put(Constants.SHOES, mShoes);
-		}
+//		mUser.saveInBackground(new SaveCallback() {
+//
+//			@Override
+//			public void done(ParseException arg0) {
+//				// TODO Auto-generated method stub
+//
+//				CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME,
+//						"");
+//				CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD,
+//						"");
+//
+//				// Setting
+//				CustomSharedPreferences.setPreferences(
+//						Constants.PREF_SETTING_SOUND, false);
+//				CustomSharedPreferences.setPreferences(
+//						Constants.PREF_SETTING_LINK_FACEBOOK, false);
+//				CustomSharedPreferences.setPreferences(
+//						Constants.PREF_SETTING_SOUND_LEVEL, 0);
+//				Intent loginChoiceIntent = new Intent(BaseActivity.this,
+//						LoginChoiceScreen.class);
+//				loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+//						| Intent.FLAG_ACTIVITY_NEW_TASK);
+//				startActivity(loginChoiceIntent);
+//				mShoes = null;
+//				mHistory = null;
+//				mFriends = null;
+//				AddRaceActivity.setRace(null);
+//				dialog.dismiss();
+//				finish();
+//			}
+//		});
+        CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME,
+                "");
+        CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD,
+                "");
 
-		if (mHistory != null) {
+        // Setting
+        CustomSharedPreferences.setPreferences(
+                Constants.PREF_SETTING_SOUND, false);
+        CustomSharedPreferences.setPreferences(
+                Constants.PREF_SETTING_LINK_FACEBOOK, false);
+        CustomSharedPreferences.setPreferences(
+                Constants.PREF_SETTING_SOUND_LEVEL, 0);
+        Intent loginChoiceIntent = new Intent(BaseActivity.this,
+                LoginChoiceScreen.class);
+        loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
+        RunningRaceApplication.getInstance().setCurrentUser(null);
+        startActivity(loginChoiceIntent);
+        mShoes = null;
+        mHistory = null;
+        mFriends = null;
+        AddRaceActivity.setRace(null);
+        dialog.dismiss();
+        finish();
 
-			mUser.put(Constants.DATA, mHistory);
-		}
-
-		if (mFriends != null) {
-
-			mUser.put(Constants.FRIENDS, mFriends);
-		}
-
-		mUser.saveInBackground(new SaveCallback() {
-
-			@Override
-			public void done(ParseException arg0) {
-				// TODO Auto-generated method stub
-
-				CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME,
-						"");
-				CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD,
-						"");
-
-				// Setting
-				CustomSharedPreferences.setPreferences(
-						Constants.PREF_SETTING_SOUND, false);
-				CustomSharedPreferences.setPreferences(
-						Constants.PREF_SETTING_LINK_FACEBOOK, false);
-				CustomSharedPreferences.setPreferences(
-						Constants.PREF_SETTING_SOUND_LEVEL, 0);
-				Intent loginChoiceIntent = new Intent(BaseActivity.this,
-						LoginChoiceScreen.class);
-				loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-						| Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(loginChoiceIntent);
-				mShoes = null;
-				mHistory = null;
-				mFriends = null;
-				AddRaceActivity.setRace(null);
-				dialog.dismiss();
-				finish();
-			}
-		});
 	}
 
 	/**

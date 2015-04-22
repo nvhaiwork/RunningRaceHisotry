@@ -26,6 +26,7 @@ import android.app.Application;
 		ReportField.CUSTOM_DATA, ReportField.STACK_TRACE, ReportField.LOGCAT }, mode = ReportingInteractionMode.TOAST, resToastText = R.string.crash_toast_text)
 public class RunningRaceApplication extends Application {
     private User currentUser;
+    private boolean isSocialLogin;
     private static RunningRaceApplication mInstance;
 
 	/*
@@ -59,5 +60,13 @@ public class RunningRaceApplication extends Application {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public boolean isSocialLogin() {
+        return isSocialLogin;
+    }
+
+    public void setSocialLogin(boolean isSocialLogin) {
+        this.isSocialLogin = isSocialLogin;
     }
 }
