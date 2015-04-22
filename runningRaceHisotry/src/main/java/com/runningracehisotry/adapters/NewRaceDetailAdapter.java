@@ -16,6 +16,7 @@ import com.runningracehisotry.R;
 import com.runningracehisotry.RacesDetailActivity;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Race;
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomAlertDialog;
 
@@ -161,7 +162,9 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
         holder.likeButton.setImageResource(mLikeButton);
         holder.time.setCompoundDrawablesWithIntrinsicBounds(mTimeImageId, 0, 0,
                 0);
-
+        //Picasso.with(mContext).load("http://cachtrimun.org/wp-content/uploads/Tac-dung-tri-mun-dieu-ky-tu-tao-bien.jpg").into(holder.images);
+        holder.average.setText("Average Pace: " + race.getAveragePace());
+        holder.likeTotal.setText(race.getLikes().size() + " people like this");
         // Set data
         //long finishTime = (Integer) race.get(Constants.FINISHTIME) * 1000;
         /*long finishTime = (Integer) race.get(Constants.FINISHTIME) * 1000;
@@ -178,8 +181,10 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
 
             //raceType = (Integer) (race.get(Constants.EVENTTYPE));
             raceType = race.getEvenType();
+            LogUtil.d(Constants.LOG_TAG, " race type: " + raceType);
         } catch (Exception ex) {
-
+            LogUtil.d(Constants.LOG_TAG, "rerror whenget race type");
+                    ex.printStackTrace();
             //raceType = Integer.valueOf((String) race.get(Constants.EVENTTYPE));
         }
 

@@ -7,17 +7,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import com.google.gson.Gson;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Race;
+import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.views.MyTimePickerDialog;
 import com.runningracehisotry.views.MyTimePickerDialog.OnTimeSetListener;
 import com.runningracehisotry.views.TimePicker;
+import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.AddRaceRequest;
+import com.runningracehisotry.webservice.base.UpdateRaceRequest;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -39,48 +46,53 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
-	private ParseObject mShoe;
-	private SimpleDateFormat mDf;
-	private static HashMap<String, Object> mRace;
-	private EditText mRaceNameEdt, mRaceWebsiteEdt, mRaceCityEdt,
-			mRaceStateEdt;
-	private TextView mShoeTxt, mRaceDateTxt, mRaceTypeTxt, mRaceFinishTimeTxt;
-	private ImageView mBidImg, mPersonImg, mMedalImg;
+    //private ParseObject mShoe;
+    private SimpleDateFormat mDf;
+    private static HashMap<String, Object> mRace;
+    private static Race mRaceUpdate;
+    private EditText mRaceNameEdt, mRaceWebsiteEdt, mRaceCityEdt,
+            mRaceStateEdt;
+    private TextView mShoeTxt, mRaceDateTxt, mRaceTypeTxt, mRaceFinishTimeTxt;
+    private ImageView mBidImg, mPersonImg, mMedalImg;
 
-	@Override
-	protected int addContent() {
-		// TODO Auto-generated method stub
-		return R.layout.activity_add_race;
-	}
+    @Override
+    protected int addContent() {
+        // TODO Auto-generated method stub
+        return R.layout.activity_add_race;
+    }
 
-	@Override
-	protected void initView() {
-		// TODO Auto-generated method stub
-		super.initView();
-		ImageView backgroundImg = (ImageView) findViewById(R.id.background_img);
-		backgroundImg.setImageResource(R.drawable.img_add_race_bg);
+    @Override
+    protected void initView() {
+        // TODO Auto-generated method stub
+        super.initView();
+        ImageView backgroundImg = (ImageView) findViewById(R.id.background_img);
+        backgroundImg.setImageResource(R.drawable.img_add_race_bg);
 
-		mDf = new SimpleDateFormat("dd-MM-yyyy");
-		mBotLeftBtnTxt.setVisibility(View.VISIBLE);
-		mBotRightBtnTxt.setVisibility(View.VISIBLE);
-		mBottomBtnLayout.setBackgroundColor(getResources().getColor(
-				R.color.text_button_bg_add_race));
-		mShoeTxt = (TextView) findViewById(R.id.add_race_my_shoes_txt);
-		mRaceDateTxt = (TextView) findViewById(R.id.add_race_date_txt);
-		mRaceNameEdt = (EditText) findViewById(R.id.add_race_name_edt);
-		mRaceCityEdt = (EditText) findViewById(R.id.add_race_city_edt);
-		mRaceStateEdt = (EditText) findViewById(R.id.add_race_state_edt);
-		mRaceTypeTxt = (TextView) findViewById(R.id.add_race_event_type_txt);
-		mRaceWebsiteEdt = (EditText) findViewById(R.id.add_race_website_edt);
-		mRaceFinishTimeTxt = (TextView) findViewById(R.id.add_race_finish_time_txt);
+        mDf = new SimpleDateFormat("dd-MM-yyyy");
+        mBotLeftBtnTxt.setVisibility(View.VISIBLE);
+        mBotRightBtnTxt.setVisibility(View.VISIBLE);
+        mBottomBtnLayout.setBackgroundColor(getResources().getColor(
+                R.color.text_button_bg_add_race));
+        mShoeTxt = (TextView) findViewById(R.id.add_race_my_shoes_txt);
+        mRaceDateTxt = (TextView) findViewById(R.id.add_race_date_txt);
+        mRaceNameEdt = (EditText) findViewById(R.id.add_race_name_edt);
+        mRaceCityEdt = (EditText) findViewById(R.id.add_race_city_edt);
+        mRaceStateEdt = (EditText) findViewById(R.id.add_race_state_edt);
+        mRaceTypeTxt = (TextView) findViewById(R.id.add_race_event_type_txt);
+        mRaceWebsiteEdt = (EditText) findViewById(R.id.add_race_website_edt);
+        mRaceFinishTimeTxt = (TextView) findViewById(R.id.add_race_finish_time_txt);
 
-		// Image
-		mBidImg = (ImageView) findViewById(R.id.add_race_photo_of_bib);
-		mMedalImg = (ImageView) findViewById(R.id.add_race_photo_of_medal);
-		mPersonImg = (ImageView) findViewById(R.id.add_race_photo_of_person);
-		if (mRace != null) {
+        // Image
+        mBidImg = (ImageView) findViewById(R.id.add_race_photo_of_bib);
+        mMedalImg = (ImageView) findViewById(R.id.add_race_photo_of_medal);
+        mPersonImg = (ImageView) findViewById(R.id.add_race_photo_of_person);
+        fillRaceUpdate();
+		/*if (mRace != null) {
 
 			int finishTime = (Integer) mRace.get(Constants.FINISHTIME);
 			String finishTimeStr = String.format("%02d:%02d:%02d",
@@ -129,335 +141,554 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 			mRaceStateEdt.setText((String) mRace.get(Constants.STATE));
 			mRaceNameEdt.setText((String) mRace.get(Constants.RACENAME));
 			mRaceWebsiteEdt.setText((String) mRace.get(Constants.WEBSITE));
-		}
+		}*/
 
-		mShoeTxt.setOnClickListener(this);
-		mBidImg.setOnClickListener(this);
-		mMedalImg.setOnClickListener(this);
-		mPersonImg.setOnClickListener(this);
-		mRaceTypeTxt.setOnClickListener(this);
-		mRaceDateTxt.setOnClickListener(this);
-		mRaceFinishTimeTxt.setOnClickListener(this);
-	}
+        mShoeTxt.setOnClickListener(this);
+        mBidImg.setOnClickListener(this);
+        mMedalImg.setOnClickListener(this);
+        mPersonImg.setOnClickListener(this);
+        mRaceTypeTxt.setOnClickListener(this);
+        mRaceDateTxt.setOnClickListener(this);
+        mRaceFinishTimeTxt.setOnClickListener(this);
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
+    private void fillRaceUpdate() {
+        if (mRaceUpdate != null) {
+            int finishTime = 0;
+            String finish = "00:00:00";
+            try {
+                String[] time = mRaceUpdate.getFinisherTime().split(":");
+                int hour = Integer.parseInt(time[0]);
+                int minute = Integer.parseInt(time[1]);
+                int seconds = Integer.parseInt(time[2]);
+                int finishedSeconds = ((hour * 60 * 60) + (minute * 60) + seconds);
+                mRaceFinishTimeTxt.setText(mRaceUpdate.getFinisherTime());
+                mRaceFinishTimeTxt.setTag(finishedSeconds);
+                //String finishTimeStr = String.format("%02d:%02d:%02d",
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
-			if (requestCode == Constants.REQUETS_CODE_ADD_SHOE) {
+            int raceType = (Integer) mRaceUpdate.getEvenType();
+            String rareTypeStr = getRaceTypeText(raceType);
+            mRaceTypeTxt.setTag(raceType);
+            mRaceTypeTxt.setText(rareTypeStr);
 
-				int selected = data.getIntExtra(
-						Constants.INTENT_SELECT_SHOE_FOR_RACE, -1);
-				mShoe = mShoes.get(selected);
-				mShoeTxt.setText(String.format("%s (%s)",
-						mShoe.get(Constants.BRAND), mShoe.get(Constants.MODEL)));
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_BID) {
 
-				Uri imageUri = data.getData();
-				Utilities.startCropImage(AddRaceActivity.this,
-						Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID,
-						imageUri);
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_MEDAL) {
+            String raceDate = "2015-04-30";
+            try {
+                String date = mRaceUpdate.getRaceDate().substring(0, 10);
+                String[] dateSplit = date.split("-");
+                raceDate = dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            mRaceDateTxt.setText(raceDate);
+            mRaceCityEdt.setText(mRaceUpdate.getCity());
+            mRaceStateEdt.setText(mRaceUpdate.getState());
+            mRaceNameEdt.setText(mRaceUpdate.getName());
+            mRaceWebsiteEdt.setText(mRaceUpdate.getWebsite());
 
-				Uri imageUri = data.getData();
-				Utilities.startCropImage(AddRaceActivity.this,
-						Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL,
-						imageUri);
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_PERSON) {
+            Integer shoeId = mRaceUpdate.getShoeID();
+            mShoeTxt.setTag(shoeId);
+            Shoe shoeRace = mRaceUpdate.getShoe();
+            mShoeTxt.setText(String.format("%s (%s)", shoeRace.getBrand(), shoeRace.getModel()));
+        }
 
-				Uri imageUri = data.getData();
-				Utilities.startCropImage(AddRaceActivity.this,
-						Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON,
-						imageUri);
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_BID) {
+    }
 
-				Uri imageUri = Utilities.createImage();
-				Utilities.startCropImage(AddRaceActivity.this,
-						Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID,
-						imageUri);
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_MEDAL) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
 
-				Uri imageUri = Utilities.createImage();
-				Utilities.startCropImage(AddRaceActivity.this,
-						Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL,
-						imageUri);
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_PERSON) {
+            if (requestCode == Constants.REQUETS_CODE_ADD_SHOE) {
 
-				Uri imageUri = Utilities.createImage();
-				Utilities.startCropImage(AddRaceActivity.this,
-						Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON,
-						imageUri);
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID) {
+                int selected = data.getIntExtra(
+                        Constants.INTENT_SELECT_SHOE_FOR_RACE, -1);
+                String json = data.getStringExtra(Constants.INTENT_SELECT_SHOE_ID_FOR_RACE);
+                Shoe shoeForRace = null;
+                try {
+                    Gson gson = new Gson();
+                    shoeForRace = gson.fromJson(json, Shoe.class);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                mShoeTxt.setText(String.format("%s (%s)",
+                        shoeForRace.getBrand(), shoeForRace.getModel()));
+                mShoeTxt.setTag(new Integer(shoeForRace.getId()));
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_BID) {
 
-				Bundle extras = data.getExtras();
-				Bitmap imgBmp = extras.getParcelable("data");
-				mBidImg.setImageBitmap(Utilities.getRoundedCornerBitmap(
-						imgBmp,
-						getResources().getDimensionPixelSize(
-								R.dimen.image_round_conner)));
-				mBidImg.setTag(imgBmp);
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL) {
+                Uri imageUri = data.getData();
+                Utilities.startCropImage(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID,
+                        imageUri);
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_MEDAL) {
 
-				Bundle extras = data.getExtras();
-				Bitmap imgBmp = extras.getParcelable("data");
-				mMedalImg.setImageBitmap(Utilities.getRoundedCornerBitmap(
-						imgBmp,
-						getResources().getDimensionPixelSize(
-								R.dimen.image_round_conner)));
-				mMedalImg.setTag(imgBmp);
-			} else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON) {
+                Uri imageUri = data.getData();
+                Utilities.startCropImage(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL,
+                        imageUri);
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_PERSON) {
 
-				Bundle extras = data.getExtras();
-				Bitmap imgBmp = extras.getParcelable("data");
-				mPersonImg.setImageBitmap(Utilities.getRoundedCornerBitmap(
-						imgBmp,
-						getResources().getDimensionPixelSize(
-								R.dimen.image_round_conner)));
-				mPersonImg.setTag(imgBmp);
-			}
-		}
-	}
+                Uri imageUri = data.getData();
+                Utilities.startCropImage(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON,
+                        imageUri);
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_BID) {
 
-	public static void setRace(HashMap<String, Object> race) {
+                Uri imageUri = Utilities.createImage();
+                Utilities.startCropImage(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID,
+                        imageUri);
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_MEDAL) {
 
-		mRace = race;
-	}
+                Uri imageUri = Utilities.createImage();
+                Utilities.startCropImage(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL,
+                        imageUri);
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_PERSON) {
 
-	@Override
-	public void onTimeSet(TimePicker view, int hourOfDay, int minute,
-			int seconds) {
-		// TODO Auto-generated method stub
+                Uri imageUri = Utilities.createImage();
+                Utilities.startCropImage(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON,
+                        imageUri);
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID) {
 
-		mRaceFinishTimeTxt.setText(String.format("%02d:%02d:%02d", hourOfDay,
-				minute, seconds));
-		int finishedSeconds = ((hourOfDay * 60 * 60) + (minute * 60) + seconds);
-		mRaceFinishTimeTxt.setTag(finishedSeconds);
-	}
+                Bundle extras = data.getExtras();
+                Bitmap imgBmp = extras.getParcelable("data");
+                mBidImg.setImageBitmap(Utilities.getRoundedCornerBitmap(
+                        imgBmp,
+                        getResources().getDimensionPixelSize(
+                                R.dimen.image_round_conner)));
+                mBidImg.setTag(imgBmp);
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL) {
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		super.onClick(v);
-		switch (v.getId()) {
-		case R.id.add_race_date_txt:
+                Bundle extras = data.getExtras();
+                Bitmap imgBmp = extras.getParcelable("data");
+                mMedalImg.setImageBitmap(Utilities.getRoundedCornerBitmap(
+                        imgBmp,
+                        getResources().getDimensionPixelSize(
+                                R.dimen.image_round_conner)));
+                mMedalImg.setTag(imgBmp);
+            } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON) {
 
-			Calendar calendar = Calendar.getInstance();
-			if (!mRaceDateTxt.getText().toString().equals("")) {
+                Bundle extras = data.getExtras();
+                Bitmap imgBmp = extras.getParcelable("data");
+                mPersonImg.setImageBitmap(Utilities.getRoundedCornerBitmap(
+                        imgBmp,
+                        getResources().getDimensionPixelSize(
+                                R.dimen.image_round_conner)));
+                mPersonImg.setTag(imgBmp);
+            }
+        }
+    }
 
-				String dateStr = mRaceDateTxt.getText().toString();
-				try {
+    public static void setRace(HashMap<String, Object> race) {
 
-					Date raceDate = mDf.parse(dateStr);
-					calendar.setTime(raceDate);
-				} catch (java.text.ParseException e) {
+        mRace = race;
+    }
 
-					LogUtil.e("add_race_date_txt", e.getMessage());
-				}
-			}
+    public static void setRaceUpdate(Race race) {
 
-			int year = calendar.get(Calendar.YEAR);
-			int month = calendar.get(Calendar.MONTH);
-			int day = calendar.get(Calendar.DAY_OF_MONTH);
-			final DatePickerDialog datePickerDialog = new DatePickerDialog(
-					AddRaceActivity.this, null, year, month, day);
-			datePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-					getString(R.string.cancel),
-					new DialogInterface.OnClickListener() {
+        mRaceUpdate = race;
+    }
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							datePickerDialog.cancel();
-							datePickerDialog.dismiss();
-						}
-					});
-			datePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-					getString(R.string.done),
-					new DialogInterface.OnClickListener() {
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute,
+                          int seconds) {
+        // TODO Auto-generated method stub
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
+        String chooseTime = String.format("%02d:%02d:%02d", hourOfDay, minute, seconds);
+        mRaceFinishTimeTxt.setText(chooseTime);
+        int finishedSeconds = ((hourOfDay * 60 * 60) + (minute * 60) + seconds);
+        LogUtil.d(Constants.LOG_TAG, "Choose time: " + chooseTime + "|" + finishedSeconds);
+        mRaceFinishTimeTxt.setTag(finishedSeconds);
+    }
 
-							DatePicker datePicker = datePickerDialog
-									.getDatePicker();
-							String raceDate = String.format("%s-%s-%s",
-									datePicker.getDayOfMonth(),
-									(datePicker.getMonth() + 1),
-									datePicker.getYear());
-							mRaceDateTxt.setText(raceDate);
-							datePickerDialog.dismiss();
-						}
-					});
-			datePickerDialog.show();
-			break;
-		case R.id.add_race_finish_time_txt:
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.add_race_date_txt:
 
-			String finishedTimeStr = mRaceFinishTimeTxt.getText().toString();
-			int hour = 0;
-			int min = 0;
-			int sec = 0;
-			if (!finishedTimeStr.equals("")) {
+                Calendar calendar = Calendar.getInstance();
+                if (!mRaceDateTxt.getText().toString().equals("")) {
 
-				String[] finishedTimes = finishedTimeStr.split(":");
-				hour = Integer.valueOf(finishedTimes[0]);
-				min = Integer.valueOf(finishedTimes[1]);
-				sec = Integer.valueOf(finishedTimes[2]);
-			}
+                    String dateStr = mRaceDateTxt.getText().toString();
+                    try {
 
-			new MyTimePickerDialog(AddRaceActivity.this, this, hour, min, sec,
-					true).show();
-			break;
-		case R.id.add_race_my_shoes_txt:
+                        Date raceDate = mDf.parse(dateStr);
+                        calendar.setTime(raceDate);
+                    } catch (java.text.ParseException e) {
 
-			Intent selectShoeIntent = new Intent(AddRaceActivity.this,
-					MyShoesActivity.class);
-			selectShoeIntent.putExtra(Constants.INTENT_SELECT_SHOE_FOR_RACE,
-					true);
-			startActivityForResult(selectShoeIntent,
-					Constants.REQUETS_CODE_ADD_SHOE);
-			break;
-		case R.id.add_race_event_type_txt:
+                        LogUtil.e("add_race_date_txt", e.getMessage());
+                    }
+                }
 
-			showEventTypeChooser();
-			break;
-		case R.id.add_race_photo_of_bib:
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                final DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        AddRaceActivity.this, null, year, month, day);
+                datePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+                        getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
 
-			Utilities.showPickerImageDialog(AddRaceActivity.this,
-					Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_BID,
-					Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_BID);
-			break;
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // TODO Auto-generated method stub
+                                datePickerDialog.cancel();
+                                datePickerDialog.dismiss();
+                            }
+                        });
+                datePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+                        getString(R.string.done),
+                        new DialogInterface.OnClickListener() {
 
-		case R.id.add_race_photo_of_person:
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // TODO Auto-generated method stub
 
-			Utilities.showPickerImageDialog(AddRaceActivity.this,
-					Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_PERSON,
-					Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_PERSON);
-			break;
+                                DatePicker datePicker = datePickerDialog
+                                        .getDatePicker();
+                                String raceDate = String.format("%s-%s-%s",
+                                        datePicker.getDayOfMonth(),
+                                        (datePicker.getMonth() + 1),
+                                        datePicker.getYear());
+                                mRaceDateTxt.setText(raceDate);
+                                datePickerDialog.dismiss();
+                            }
+                        });
+                datePickerDialog.show();
+                break;
+            case R.id.add_race_finish_time_txt:
 
-		case R.id.add_race_photo_of_medal:
+                String finishedTimeStr = mRaceFinishTimeTxt.getText().toString();
+                int hour = 0;
+                int min = 0;
+                int sec = 0;
+                if (!finishedTimeStr.equals("")) {
 
-			Utilities.showPickerImageDialog(AddRaceActivity.this,
-					Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_MEDAL,
-					Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_MEDAL);
-			break;
-		case R.id.bottom_button_right_text:
+                    String[] finishedTimes = finishedTimeStr.split(":");
+                    hour = Integer.valueOf(finishedTimes[0]);
+                    min = Integer.valueOf(finishedTimes[1]);
+                    sec = Integer.valueOf(finishedTimes[2]);
+                }
 
-			if (mRaceNameEdt.getText().toString().trim().equals("" + "" + "")
-					|| mRaceDateTxt.getText().toString().equals("")
-					|| mRaceFinishTimeTxt.getText().toString().equals("")
-					|| mRaceTypeTxt.getText().toString().equals("")) {
+                new MyTimePickerDialog(AddRaceActivity.this, this, hour, min, sec,
+                        true).show();
+                break;
+            case R.id.add_race_my_shoes_txt:
 
-				Utilities.showAlertMessage(AddRaceActivity.this,
-						getString(R.string.dialog_add_shoe_fill_all_fields),
-						getString(R.string.dialog_add_race_tile));
-			} else {
+                Intent selectShoeIntent = new Intent(AddRaceActivity.this,
+                        MyShoesActivity.class);
+                selectShoeIntent.putExtra(Constants.INTENT_SELECT_SHOE_FOR_RACE,
+                        true);
+                startActivityForResult(selectShoeIntent,
+                        Constants.REQUETS_CODE_ADD_SHOE);
+                break;
+            case R.id.add_race_event_type_txt:
 
-				new AddRaceAsync().execute();
-			}
-			break;
-		}
-	}
+                showEventTypeChooser();
+                break;
+            case R.id.add_race_photo_of_bib:
 
-	/**
-	 * Show event type chooser
-	 * */
-	private void showEventTypeChooser() {
+                Utilities.showPickerImageDialog(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_BID,
+                        Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_BID);
+                break;
 
-		final Dialog dialog = new Dialog(AddRaceActivity.this);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setContentView(R.layout.dialog_choose_event_type);
-		dialog.getWindow().setBackgroundDrawable(
-				new ColorDrawable(android.graphics.Color.TRANSPARENT));
-		Window window = dialog.getWindow();
-		WindowManager.LayoutParams wlp = window.getAttributes();
-		wlp.gravity = Gravity.CENTER;
-		wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-		wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-		wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
-		window.setAttributes(wlp);
+            case R.id.add_race_photo_of_person:
 
-		TextView type5k = (TextView) dialog
-				.findViewById(R.id.dialog_choose_event_5k);
-		TextView type10k = (TextView) dialog
-				.findViewById(R.id.dialog_choose_event_10k);
-		TextView type15k = (TextView) dialog
-				.findViewById(R.id.dialog_choose_event_15k);
-		TextView typeHalfMar = (TextView) dialog
-				.findViewById(R.id.dialog_choose_event_half_mar);
-		TextView typeFullMar = (TextView) dialog
-				.findViewById(R.id.dialog_choose_event_full_mar);
-		ChooseEventTypeItemClick itemClick = new ChooseEventTypeItemClick(
-				dialog);
+                Utilities.showPickerImageDialog(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_PERSON,
+                        Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_PERSON);
+                break;
 
-		// Set tags
-		type5k.setTag(0);
+            case R.id.add_race_photo_of_medal:
+
+                Utilities.showPickerImageDialog(AddRaceActivity.this,
+                        Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_MEDAL,
+                        Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_MEDAL);
+                break;
+            case R.id.bottom_button_right_text:
+
+                if (mRaceNameEdt.getText().toString().trim().equals("" + "" + "")
+                        || mRaceDateTxt.getText().toString().equals("")
+                        || mRaceFinishTimeTxt.getText().toString().equals("")
+                        || mRaceTypeTxt.getText().toString().equals("")) {
+
+                    Utilities.showAlertMessage(AddRaceActivity.this,
+                            getString(R.string.dialog_add_shoe_fill_all_fields),
+                            getString(R.string.dialog_add_race_tile));
+                } else {
+                    //call add Race
+                    //new AddRaceAsync().execute();
+                    callAddUpdateRace();
+                }
+                break;
+        }
+    }
+
+    /**
+     * Show event type chooser
+     */
+    private void showEventTypeChooser() {
+
+        final Dialog dialog = new Dialog(AddRaceActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_choose_event_type);
+        dialog.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(wlp);
+
+        TextView type5k = (TextView) dialog
+                .findViewById(R.id.dialog_choose_event_5k);
+        TextView type10k = (TextView) dialog
+                .findViewById(R.id.dialog_choose_event_10k);
+        TextView type15k = (TextView) dialog
+                .findViewById(R.id.dialog_choose_event_15k);
+        TextView typeHalfMar = (TextView) dialog
+                .findViewById(R.id.dialog_choose_event_half_mar);
+        TextView typeFullMar = (TextView) dialog
+                .findViewById(R.id.dialog_choose_event_full_mar);
+        ChooseEventTypeItemClick itemClick = new ChooseEventTypeItemClick(
+                dialog);
+
+        // Set tags
+		/*type5k.setTag(0);
 		type10k.setTag(1);
 		type15k.setTag(2);
 		typeHalfMar.setTag(3);
-		typeFullMar.setTag(4);
+		typeFullMar.setTag(4);*/
 
-		type5k.setOnClickListener(itemClick);
-		type10k.setOnClickListener(itemClick);
-		type15k.setOnClickListener(itemClick);
-		typeHalfMar.setOnClickListener(itemClick);
-		typeFullMar.setOnClickListener(itemClick);
-		dialog.show();
-	}
+        type5k.setTag(1);
+        type10k.setTag(2);
+        type15k.setTag(3);
+        typeHalfMar.setTag(4);
+        typeFullMar.setTag(5);
 
-	private String getRaceTypeText(int raceType) {
+        type5k.setOnClickListener(itemClick);
+        type10k.setOnClickListener(itemClick);
+        type15k.setOnClickListener(itemClick);
+        typeHalfMar.setOnClickListener(itemClick);
+        typeFullMar.setOnClickListener(itemClick);
+        dialog.show();
+    }
 
-		String rareTypeStr = "";
-		switch (raceType) {
-		case Constants.SELECT_RACE_5K:
+    private String getRaceTypeText(int raceType) {
 
-			rareTypeStr = getString(R.string.add_race_type_5k);
-			break;
-		case Constants.SELECT_RACE_10K:
+        String rareTypeStr = "";
+        switch (raceType) {
+            case Constants.SELECT_RACE_5K:
 
-			rareTypeStr = getString(R.string.add_race_type_10k);
-			break;
-		case Constants.SELECT_RACE_15K:
+                rareTypeStr = getString(R.string.add_race_type_5k);
+                break;
+            case Constants.SELECT_RACE_10K:
 
-			rareTypeStr = getString(R.string.add_race_type_15k);
-			break;
-		case Constants.SELECT_RACE_HALF_MAR:
+                rareTypeStr = getString(R.string.add_race_type_10k);
+                break;
+            case Constants.SELECT_RACE_15K:
 
-			rareTypeStr = getString(R.string.add_race_type_half_mar);
-			break;
-		case Constants.SELECT_RACE_FULL_MAR:
+                rareTypeStr = getString(R.string.add_race_type_15k);
+                break;
+            case Constants.SELECT_RACE_HALF_MAR:
 
-			rareTypeStr = getString(R.string.add_race_type_full_mar);
-			break;
-		}
+                rareTypeStr = getString(R.string.add_race_type_half_mar);
+                break;
+            case Constants.SELECT_RACE_FULL_MAR:
 
-		return rareTypeStr;
-	}
+                rareTypeStr = getString(R.string.add_race_type_full_mar);
+                break;
+        }
 
-	private class ChooseEventTypeItemClick implements OnClickListener {
+        return rareTypeStr;
+    }
 
-		private Dialog dialog;
+    private class ChooseEventTypeItemClick implements OnClickListener {
 
-		public ChooseEventTypeItemClick(Dialog dialog) {
-			super();
-			this.dialog = dialog;
-		}
+        private Dialog dialog;
 
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
+        public ChooseEventTypeItemClick(Dialog dialog) {
+            super();
+            this.dialog = dialog;
+        }
 
-			int selectedItem = (Integer) v.getTag();
-			String rareTypeStr = getRaceTypeText(selectedItem);
-			mRaceTypeTxt.setText(rareTypeStr);
-			mRaceTypeTxt.setTag(selectedItem);
-			dialog.dismiss();
-		}
-	}
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
 
-	private class LoadRaceImageAsync extends AsyncTask<Void, Void, Void> {
+            int selectedItem = (Integer) v.getTag();
+            String rareTypeStr = getRaceTypeText(selectedItem);
+            mRaceTypeTxt.setText(rareTypeStr);
+            mRaceTypeTxt.setTag(selectedItem);
+            dialog.dismiss();
+        }
+    }
+
+
+    private void callAddUpdateRace() {
+        String bibUrl = "/bib.png";
+        String city = mRaceCityEdt.getText().toString();
+        String eventType = String.valueOf((Integer) mRaceTypeTxt.getTag());
+        String finisherDateTime = String.valueOf((Integer) mRaceFinishTimeTxt.getTag());
+        String finisherDateTimeStr = mRaceFinishTimeTxt.getText().toString();
+        LogUtil.d(Constants.LOG_TAG, "finisherDateTimeStr add: " + finisherDateTimeStr);
+        String medalUrl = "/medal.png";
+        String raceName = mRaceNameEdt.getText().toString();
+        String personUrl = "/person.png";
+
+        String raceDate = mRaceDateTxt.getText().toString();
+        try {
+            String[] time = raceDate.split("-");
+            raceDate = time[2] + "-" + time[1] + "-" + time[0];
+            LogUtil.d(Constants.LOG_TAG, "race date: " + raceDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String shoesId = String.valueOf((Integer) mShoeTxt.getTag());
+        String state = mRaceStateEdt.getText().toString();
+        String website = mRaceWebsiteEdt.getText().toString();
+
+        LogUtil.d(Constants.LOG_TAG, "Shoe infor to add: "
+                        + "bibURl: " + bibUrl + "|"
+                        + "city: " + city + "|"
+                        + " Event type: " + eventType
+                        + "finisherDateTime: " + finisherDateTimeStr + "|"
+                        + "medalUrl: " + medalUrl + "|"
+                        + "raceName: " + raceName + "|"
+                        + "personUrl: " + personUrl + "|"
+                        + "raceDate: " + raceDate + "|"
+                        + "shoesId: " + shoesId + "|"
+
+                        + "state: " + state + "|"
+                        + "website: " + website + "|"
+
+        );
+        if (mRaceUpdate != null) {
+            UpdateRaceRequest request = new UpdateRaceRequest(bibUrl, city, mRaceUpdate.getCreatedAt(), eventType,
+                    finisherDateTime, String.valueOf(mRaceUpdate.getId()), medalUrl, raceName, personUrl,
+                    raceDate, shoesId, state, mRaceUpdate.getUpdatedAt(), String.valueOf(mRaceUpdate.getUserID()), website);
+            request.setListener(callBackEvent);
+            new Thread(request).start();
+        } else {
+            AddRaceRequest request = new AddRaceRequest(bibUrl, city, eventType, finisherDateTime, medalUrl, raceName, personUrl, raceDate, shoesId, state, website);
+            request.setListener(callBackEvent);
+            new Thread(request).start();
+
+        }
+
+    }
+
+    private void processAddRace(String data) throws JSONException {
+        JSONObject obj = new JSONObject(data.toString());
+        String result = obj.getString("result");
+        LogUtil.d(mCurrentClassName, "Response Add Race: " + result);
+        if (result.equalsIgnoreCase("true")) {
+            Intent resultIntent = new Intent("addRaceCallBackSucceed");
+            setResult(RESULT_OK, resultIntent);
+            //dialog.dismiss();
+            finish();
+        } else {
+            LogUtil.d(mCurrentClassName, "Response Add Shoe Failed ");
+            Intent resultIntent = new Intent("addRaceCallBackFailed");
+            setResult(RESULT_OK, resultIntent);
+            //dialog.dismiss();
+            finish();
+        }
+    }
+
+    private void processUpdateRace(String data) throws JSONException {
+        JSONObject obj = new JSONObject(data.toString());
+        String result = obj.getString("result");
+        LogUtil.d(mCurrentClassName, "Response Add Race: " + result);
+        if (result.equalsIgnoreCase("true")) {
+            Intent resultIntent = new Intent("updateRaceCallBackSucceed");
+            setResult(RESULT_OK, resultIntent);
+            //dialog.dismiss();
+            finish();
+        } else {
+            LogUtil.d(mCurrentClassName, "Response Add Shoe Failed ");
+            Intent resultIntent = new Intent("updateRaceCallBackFailed");
+            setResult(RESULT_OK, resultIntent);
+            //dialog.dismiss();
+            finish();
+        }
+    }
+
+    private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
+        @Override
+        public void Wsdl2CodeStartedRequest() {
+           /* runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
+                }
+            });*/
+        }
+
+        @Override
+        public void Wsdl2CodeFinished(String methodName, final Object data) {
+            LogUtil.i(Constants.LOG_TAG, data.toString());
+            if (methodName.equals(ServiceConstants.METHOD_ADD_RACE)) {
+
+                // added race success
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            processAddRace(data.toString());
+                        } catch (Exception e) {
+
+                        } finally {
+                        }
+                    }
+                });
+
+
+            } else if (methodName.equals(ServiceConstants.METHOD_UPDATE_RACE)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            processUpdateRace(data.toString());
+                        } catch (Exception e) {
+
+                        } finally {
+                        }
+                    }
+                });
+
+            }
+
+
+        }
+
+        @Override
+        public void Wsdl2CodeFinishedWithException(Exception ex) {
+
+        }
+
+        @Override
+        public void Wsdl2CodeEndedRequest() {
+
+        }
+    };
+
+
+
+
+
+	/*private class LoadRaceImageAsync extends AsyncTask<Void, Void, Void> {
 
 		private Dialog dialog;
 		private Bitmap medalBmp, bibBmp, personBmp;
@@ -735,5 +966,5 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 			dialog.dismiss();
 			finish();
 		}
-	}
+	}*/
 }

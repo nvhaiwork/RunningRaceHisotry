@@ -1,5 +1,7 @@
 package com.runningracehisotry.webservice.base;
 
+import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 
@@ -13,7 +15,8 @@ public class UpdateRaceRequest extends BasePutRequest {
                              String finisherDateTime, String raceId, String medalUrl, String raceName,
                              String personUrl, String raceDate, String shoesId, String state,
                              String updateAt, String userId, String website) {
-        super(ServiceApi.SERVICE_URL + ServiceApi.API_UPDATE_RACE);
+        super(ServiceApi.SERVICE_URL + ServiceApi.API_UPDATE_RACE + raceId);
+        LogUtil.d(Constants.LOG_TAG, "update race url: " + ServiceApi.SERVICE_URL + ServiceApi.API_UPDATE_RACE + raceId);
         setPostParam("bib_url", bibUrl);
         setPostParam("city", city);
         setPostParam("create_at", createAt);
@@ -21,7 +24,7 @@ public class UpdateRaceRequest extends BasePutRequest {
         setPostParam("finisher_date_time", finisherDateTime);
         setPostParam("id", raceId);
         setPostParam("medal_url", medalUrl);
-        setPostParam("race_name", raceName);
+        setPostParam("name", raceName);
         setPostParam("person_url", personUrl);
         setPostParam("race_date", raceDate);
         setPostParam("shoes_id", shoesId);

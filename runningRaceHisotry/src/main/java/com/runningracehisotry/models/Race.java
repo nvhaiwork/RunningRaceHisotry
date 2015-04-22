@@ -63,6 +63,10 @@ public class Race {
     @SerializedName("race_km")
     private String raceKm;
 
+
+    @SerializedName("average_pace")
+    private String averagePace;
+
     @SerializedName("time_ago")
     private String timeAgo;
 
@@ -238,5 +242,13 @@ public class Race {
 
     public void setLikes(List<Like> likes) {
         this.likes = likes;
+    }
+
+    public String getAveragePace() {
+        return averagePace;
+    }
+
+    public void setAveragePace(String averagePace) {
+        this.averagePace = averagePace;
     }
 }

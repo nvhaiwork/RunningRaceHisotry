@@ -38,11 +38,11 @@ public class Constants {
 	public static final String RUNNING_WEBSITE = "http://runningracehistory.com/";
 
 	// Race type
-	public static final int SELECT_RACE_5K = 0;
-	public static final int SELECT_RACE_10K = 1;
-	public static final int SELECT_RACE_15K = 2;
-	public static final int SELECT_RACE_HALF_MAR = 3;
-	public static final int SELECT_RACE_FULL_MAR = 4;
+	public static final int SELECT_RACE_5K = 1;
+	public static final int SELECT_RACE_10K = 2;
+	public static final int SELECT_RACE_15K = 3;
+	public static final int SELECT_RACE_HALF_MAR = 4;
+	public static final int SELECT_RACE_FULL_MAR = 5;
 
 	// Race distance
 	public static final String RACE_5K_DISTANCE = "3.1";
