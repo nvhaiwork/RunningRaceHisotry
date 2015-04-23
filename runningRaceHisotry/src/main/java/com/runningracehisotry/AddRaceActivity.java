@@ -200,7 +200,13 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             Integer shoeId = mRaceUpdate.getShoeID();
             mShoeTxt.setTag(shoeId);
             Shoe shoeRace = mRaceUpdate.getShoe();
-            mShoeTxt.setText(String.format("%s (%s)", shoeRace.getBrand(), shoeRace.getModel()));
+            if(shoeRace != null){
+                mShoeTxt.setText(String.format("%s (%s)", shoeRace.getBrand(), shoeRace.getModel()));
+            }
+            else{
+                mShoeTxt.setText("");
+            }
+
 
             //set path for image
             mRaceMedalPath = mRaceUpdate.getMedalUrl();
