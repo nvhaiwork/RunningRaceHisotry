@@ -128,23 +128,17 @@
             android:textSize="@dimen/setting_about_title"
             android:textStyle="bold" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/setting_about_title"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/about_content_bg"
-            android:padding="5dp"
-            android:scrollbarStyle="outsideOverlay" >
 
-            <com.runningracehisotry.views.CustomFontTextView
+            <WebView
+                android:id="@+id/setting_about_us"
+                android:textSize="@dimen/setting_about_text"
+                android:layout_margin="20dp"
+                android:background="@drawable/about_content_bg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/setting_about_content"
-                android:textSize="@dimen/setting_about_text" />
-        </ScrollView>
+                android:layout_height="match_parent">
+
+                </WebView>
+
     </RelativeLayout>
 
 </RelativeLayout>

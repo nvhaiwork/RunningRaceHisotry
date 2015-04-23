@@ -3,7 +3,7 @@
  */
 package com.runningracehisotry;
 
-import java.security.NoSuchAlgorithmException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,12 +22,18 @@ import com.parse.SaveCallback;
 import com.runningracehisotry.adapters.LeftMenuAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.MenuModel;
+import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomAlertDialog;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.views.CustomAlertDialog.OnNegativeButtonClick;
 import com.runningracehisotry.views.CustomAlertDialog.OnPositiveButtonClick;
+import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceApi;
+import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.GetAboutUsRequest;
 
 import android.app.ActionBar;
 import android.app.Dialog;
@@ -41,6 +47,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -48,6 +55,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
@@ -57,6 +65,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author nvhaiwork
@@ -79,7 +90,8 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 	protected ImageView mBotLeftBtnImg, mBotRightBtnImg;
 	protected static List<HashMap<String, Object>> mHistory;
 	protected TextView mBotLeftBtnTxt, mBotRightBtnTxt, mBotMidBtnTxt;
-
+    private CustomLoadingDialog mLoadingDialogAboutUs;
+    private WebView mAboutUsContent;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -285,8 +297,14 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 			doSetting();
 			return;
 		case R.id.setting_about:
-
+            /*if(mLoadingDialogAboutUs == null) {
+                mLoadingDialogAboutUs = CustomLoadingDialog.show(this, "", "", false, false);
+            }*/
 			mAboutLayout.setVisibility(View.VISIBLE);
+            mAboutUsContent.loadUrl(ServiceApi.SERVICE_URL + ServiceApi.API_GET_ABOUT_US);
+//            GetAboutUsRequest request = new GetAboutUsRequest();
+//            request.setListener(callBackEvent);
+//            new Thread(request).start();
 			break;
 		case R.id.ic_action_menu:
 
@@ -622,7 +640,8 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 				.findViewById(R.id.setting_sound_seek_bar);
 		mAboutLayout = (RelativeLayout) dialog
 				.findViewById(R.id.setting_about_layout);
-		soundCb.setChecked(isSoundOn);
+        mAboutUsContent = (WebView) dialog.findViewById(R.id.setting_about_us);
+        soundCb.setChecked(isSoundOn);
 		facebookCb.setChecked(isLinkFb);
 		soundSeekBar.setProgress(soundLv);
 
@@ -657,5 +676,49 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         Gson gson = new Gson();
         return gson.toJson(object);
     }
+
+
+    private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
+        @Override
+        public void Wsdl2CodeStartedRequest() {
+        }
+
+        @Override
+        public void Wsdl2CodeFinished(String methodName, Object data) {
+            LogUtil.i(Constants.LOG_TAG, data.toString());
+            if (methodName.equals(ServiceConstants.METHOD_GET_ABOUT_US)) {
+                try {
+                    JSONObject jsonObjectReceive = new JSONObject(data.toString());
+                    String mHtmlAbout = jsonObjectReceive.getString("main_content");
+                    Log.d(Constants.LOG_TAG," Content about us: " + mHtmlAbout);
+                    final String mimeType = "text/html";
+                    final String encoding = "UTF-8";
+                    mAboutUsContent.loadDataWithBaseURL("", mHtmlAbout, mimeType, encoding, "");
+
+                } catch (JSONException e) {
+
+                } finally {
+                    try{
+                        if (mLoadingDialogAboutUs.isShowing()) {
+                            mLoadingDialogAboutUs.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
+                }
+            }
+
+        }
+
+        @Override
+        public void Wsdl2CodeFinishedWithException(Exception ex) {
+
+        }
+
+        @Override
+        public void Wsdl2CodeEndedRequest() {
+
+        }
+    };
 
 }

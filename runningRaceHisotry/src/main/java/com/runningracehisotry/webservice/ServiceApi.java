@@ -34,7 +34,7 @@ public class ServiceApi {
     private int timeOut = 60000;
     private String logTag = "ServiceApi";
 
-    public static final String SERVICE_URL = "http://prr.zodinet.com";
+    public static final String SERVICE_URL = "http://runningracehistory.com";
 
     // User API
     public static final String API_REGISTER = "/user/register";
