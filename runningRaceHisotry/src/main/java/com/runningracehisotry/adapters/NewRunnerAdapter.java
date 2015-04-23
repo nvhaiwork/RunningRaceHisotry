@@ -11,12 +11,9 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
+
 import com.runningracehisotry.R;
-import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Runner;
-import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.webservice.ServiceApi;
 
 import java.util.List;

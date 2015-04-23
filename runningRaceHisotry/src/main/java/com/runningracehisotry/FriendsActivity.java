@@ -6,34 +6,25 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.parse.ParseUser;
 import com.runningracehisotry.adapters.FriendAdapter;
-import com.runningracehisotry.adapters.RunnersAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
-import com.runningracehisotry.models.Shoe;
-import com.runningracehisotry.models.User;
-import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
-import com.runningracehisotry.utilities.Utilities;
+
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetAllGroupUserRequest;
 import com.runningracehisotry.webservice.base.GetGroupMemberRequest;
-import com.runningracehisotry.webservice.base.GetUserProfileRequest;
-
-import android.app.Dialog;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 public class FriendsActivity extends BaseActivity {

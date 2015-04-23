@@ -4,23 +4,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Dialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.runningracehisotry.adapters.NewMyShoeAdapter;
 import com.runningracehisotry.adapters.NewRunnerAdapter;
-import com.runningracehisotry.adapters.RunnersAdapter;
-import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Runner;
-import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomAlertDialog;
@@ -32,7 +23,6 @@ import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.AddGroupMemberRequest;
 import com.runningracehisotry.webservice.base.AddGroupRequest;
 import com.runningracehisotry.webservice.base.GetAllRunnerRequest;
-import com.runningracehisotry.webservice.base.GetAllShoesRelatedObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,54 +60,7 @@ public class RunnerActivity extends BaseActivity {
             mLoadingDialog = CustomLoadingDialog.show(RunnerActivity.this, "", "", false, false);
         }
         loadListRunner();
-        // Query available runners
-		/*ParseQuery<ParseUser> query = ParseUser.getQuery();
-		query.setLimit(1000);
-		query.findInBackground(new FindCallback<ParseUser>() {
 
-			@Override
-			public void done(List<ParseUser> users, ParseException error) {
-				// TODO Auto-generated method stub
-
-				if (users != null) {
-
-					for (ParseUser user : users) {
-
-						if (mUser.getObjectId().equals(user.getObjectId())) {
-
-							continue;
-						}
-
-						if (user.getString(Constants.FULLNAME) == null
-								|| user.getString(Constants.FULLNAME).trim()
-										.equals("")) {
-
-							continue;
-						}
-
-						boolean isFriend = false;
-						for (ParseUser friend : mFriends) {
-
-							if (friend.getObjectId().equals(user.getObjectId())) {
-
-								isFriend = true;
-								break;
-							}
-						}
-
-						if (isFriend) {
-
-							continue;
-						}
-
-						mRunners.add(user);
-					}
-				}
-
-				mRunnersAdapter.notifyDataSetChanged();
-				dialog.dismiss();
-			}
-		});*/
 
     }
 

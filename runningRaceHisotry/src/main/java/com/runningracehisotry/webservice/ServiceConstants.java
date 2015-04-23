@@ -3,7 +3,7 @@ package com.runningracehisotry.webservice;
 /**
  * Created by Mr J on 4/1/2015.
  */
-public class ServiceConstants {
+public final class ServiceConstants {
 
     // User method
     public static final String METHOD_REGISTER = "Register";

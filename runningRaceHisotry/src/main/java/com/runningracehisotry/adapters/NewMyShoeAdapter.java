@@ -14,10 +14,10 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.parse.ParseObject;
+
 import com.runningracehisotry.BaseActivity;
 import com.runningracehisotry.R;
-import com.runningracehisotry.constants.Constants;
+
 import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.views.CustomAlertDialog;

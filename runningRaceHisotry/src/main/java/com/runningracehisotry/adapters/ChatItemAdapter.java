@@ -13,7 +13,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.runningracehisotry.R;
 import com.runningracehisotry.RunningRaceApplication;
-import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Message;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.webservice.ServiceApi;

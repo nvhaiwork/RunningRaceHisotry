@@ -3,17 +3,8 @@
  */
 package com.runningracehisotry;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
-/*import com.parse.GetCallback;
-import com.parse.LogInCallback;*/
 import com.google.gson.Gson;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.RequestPasswordResetCallback;
-import com.parse.SignUpCallback;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
@@ -25,16 +16,11 @@ import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.ForgotPasswordRequest;
 import com.runningracehisotry.webservice.base.GetUserProfileRequest;
-import com.runningracehisotry.webservice.base.LoginRequest;
 import com.runningracehisotry.webservice.base.RegisterRequest;
-import com.runningracehisotry.webservice.base.UploadImageRequest;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -152,39 +138,7 @@ public class SignInActivity extends BaseActivity {
 				if (passwordConfirmStr.equals(passwordStr)) {
                     mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
                     callRegisterAccount(usernameStr, passwordConfirmStr, emailStr);
-					/*mLoadingDialog = CustomLoadingDialog.show(
-							SignInActivity.this, "", "", false, false);*/
-                    // Call api Register
-					/*final ParseUser user = new ParseUser();
-					user.setUsername(usernameStr);
-					user.setPassword(passwordStr);
-					user.setEmail(emailStr);
-					user.signUpInBackground(new SignUpCallback() {
 
-						@Override
-						public void done(ParseException error) {
-							// TODO Auto-generated method stub
-							if (error == null) {
-
-								mShoes = new ArrayList<ParseObject>();
-								mHistory = new ArrayList<HashMap<String, Object>>();
-								mFriends = new ArrayList<ParseUser>();
-								user.put(Constants.SHOES, mShoes);
-								user.put(Constants.DATA, mHistory);
-								user.put(Constants.FRIENDS, mFriends);
-								user.put(Constants.FULLNAME, usernameStr);
-								user.saveInBackground();
-								mUser = user;
-								finishLoginOrSignup(usernameStr, passwordStr);
-							} else {
-
-								Utilities.showAlertMessage(SignInActivity.this,
-										error.getMessage(),
-										getString(R.string.dialog_sign_up));
-								///mLoadingDialog.dismiss();
-							}
-						}
-					});*/
 				} else {
 					Utilities.showAlertMessage(
                             SignInActivity.this,
@@ -264,26 +218,6 @@ public class SignInActivity extends BaseActivity {
                                         getString(R.string.dialog_forgot_pass_title));
                         //dialog.dismiss();
                     }
-					/*final Dialog loadingDialog = CustomLoadingDialog.show(
-							SignInActivity.this, "", "", false, false);*/
-
-					/*ParseUser.requestPasswordResetInBackground(emailEdt
-							.getText().toString(),
-							new RequestPasswordResetCallback() {
-
-								@Override
-								public void done(ParseException error) {
-									// TODO Auto-generated method stub
-
-									loadingDialog.dismiss();
-									Utilities
-											.showAlertMessage(
-													SignInActivity.this,
-													getString(R.string.dialog_forgot_pass_message),
-													getString(R.string.dialog_forgot_pass_title));
-									dialog.dismiss();
-								}
-							});*/
 				}
 			}
 		});
@@ -320,12 +254,7 @@ public class SignInActivity extends BaseActivity {
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
         public void Wsdl2CodeStartedRequest() {
-           /* runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
-                }
-            });*/
+
         }
 
         @Override

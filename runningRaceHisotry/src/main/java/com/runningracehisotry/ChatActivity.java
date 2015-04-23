@@ -1,34 +1,17 @@
 package com.runningracehisotry;
 
-import android.content.Intent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.runningracehisotry.adapters.ChatItemAdapter;
-import com.runningracehisotry.adapters.FriendAdapter;
 import com.runningracehisotry.constants.Constants;
-import com.runningracehisotry.models.Friend;
-import com.runningracehisotry.models.Group;
 import com.runningracehisotry.models.Message;
 import com.runningracehisotry.models.User;
-import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.views.CustomFontTextView;
-import com.runningracehisotry.webservice.IWsdl2CodeEvents;
-import com.runningracehisotry.webservice.ServiceConstants;
-import com.runningracehisotry.webservice.base.GetAllGroupUserRequest;
-import com.runningracehisotry.webservice.base.GetGroupMemberRequest;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChatActivity extends BaseActivity {
 

@@ -21,17 +21,14 @@ import com.google.gson.reflect.TypeToken;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 import com.runningracehisotry.adapters.NewRaceDetailAdapter;
 import com.runningracehisotry.adapters.OnLikeItemClickListener;
-import com.runningracehisotry.adapters.RaceDetailAdapter;
 import com.runningracehisotry.adapters.NewRaceDetailAdapter.OnRaceItemClickListener;
 import com.runningracehisotry.adapters.NewRaceDetailAdapter.OnRaceItemDelete;
 import com.runningracehisotry.adapters.NewRaceDetailAdapter.OnShareItemClickListener;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Like;
 import com.runningracehisotry.models.Race;
-import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
@@ -63,9 +60,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RacesDetailActivity extends BaseActivity implements
@@ -340,85 +334,15 @@ public class RacesDetailActivity extends BaseActivity implements
                     mRaceList.expandGroup(i);
                 }
             }
-        }/*
-        if (userHistories != null) {
-			*//*mRacesDetail = new HashMap<String, List<HashMap<String, Object>>>();
-			for (HashMap<String, Object> history : userHistories) {
+        }
 
-				int raceType = 0;
-				try {
-
-					raceType = (Integer) (history.get(Constants.EVENTTYPE));
-				} catch (Exception ex) {
-
-					raceType = Integer.valueOf((String) history
-							.get(Constants.EVENTTYPE));
-				}
-
-				if (raceType == selectedRace) {
-
-					Date monthDate = (Date) history.get(Constants.RACEDATE);
-					SimpleDateFormat dateformat = new SimpleDateFormat(
-							"yyyy-MM");
-					String monthStr = dateformat.format(monthDate);
-					List<HashMap<String, Object>> histories = mRacesDetail
-							.get(monthStr);
-					if (histories == null) {
-
-						histories = new ArrayList<HashMap<String, Object>>();
-						histories.add(history);
-						mRacesDetail.put(monthStr, histories);
-					} else {
-
-						histories.add(history);
-					}
-				}
-			}
-
-			mRacesDetail = sortData(mRacesDetail);
-			if (mRacesDetail == null || mRacesDetail.size() == 0) {
-
-				mEmptyText.setVisibility(View.VISIBLE);
-			} else {
-
-				mEmptyText.setVisibility(View.INVISIBLE);
-				if (mRacesAdapter == null) {
-
-					mRacesAdapter = new RaceDetailAdapter(
-							RacesDetailActivity.this, mRacesDetail,
-							mFriendRace, resources);
-					mRaceList.setAdapter(mRacesAdapter);
-					mRacesAdapter.setRaceItemClick(this);
-					mRacesAdapter.setOnRaceItemDelete(this);
-					mRacesAdapter.setOnShareItemListenner(this);
-				} else {
-
-					mRacesAdapter.setData(mRacesDetail);
-					mRacesAdapter.notifyDataSetChanged();
-				}
-
-				// Expand all groups
-				for (int i = 0; i < mRacesAdapter.getGroupCount(); i++) {
-
-					mRaceList.expandGroup(i);
-				}
-			}*//*
-        } else {
-
-            mEmptyText.setVisibility(View.VISIBLE);
-        }*/
     }
 
 
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
         public void Wsdl2CodeStartedRequest() {
-           /* runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
-                }
-            });*/
+
         }
 
         @Override
@@ -768,78 +692,10 @@ public class RacesDetailActivity extends BaseActivity implements
 	private void displayData(int selectedRace, int... resources) {
 
 		List<HashMap<String, Object>> userHistories = null;
-		/*if (mFriendRace != -1) {
-
-			ParseUser friend = mFriends.get(mFriendRace);
-			userHistories = friend.getList(Constants.DATA);
-		} else {
-
-			userHistories = mHistory;
-		}*/
 
 		if (listRaceDetail != null) {
             mEmptyText.setVisibility(View.INVISIBLE);
-			/*mRacesDetail = new HashMap<String, List<HashMap<String, Object>>>();
-			for (HashMap<String, Object> history : userHistories) {
 
-				int raceType = 0;
-				try {
-
-					raceType = (Integer) (history.get(Constants.EVENTTYPE));
-				} catch (Exception ex) {
-
-					raceType = Integer.valueOf((String) history
-							.get(Constants.EVENTTYPE));
-				}
-
-				if (raceType == selectedRace) {
-
-					Date monthDate = (Date) history.get(Constants.RACEDATE);
-					SimpleDateFormat dateformat = new SimpleDateFormat(
-							"yyyy-MM");
-					String monthStr = dateformat.format(monthDate);
-					List<HashMap<String, Object>> histories = mRacesDetail
-							.get(monthStr);
-					if (histories == null) {
-
-						histories = new ArrayList<HashMap<String, Object>>();
-						histories.add(history);
-						mRacesDetail.put(monthStr, histories);
-					} else {
-
-						histories.add(history);
-					}
-				}
-			}
-
-			mRacesDetail = sortData(mRacesDetail);
-			if (mRacesDetail == null || mRacesDetail.size() == 0) {
-
-				mEmptyText.setVisibility(View.VISIBLE);
-			} else {
-
-				mEmptyText.setVisibility(View.INVISIBLE);
-				if (mRacesAdapter == null) {
-
-					mRacesAdapter = new RaceDetailAdapter(
-							RacesDetailActivity.this, mRacesDetail,
-							mFriendRace, resources);
-					mRaceList.setAdapter(mRacesAdapter);
-					mRacesAdapter.setRaceItemClick(this);
-					mRacesAdapter.setOnRaceItemDelete(this);
-					mRacesAdapter.setOnShareItemListenner(this);
-				} else {
-
-					mRacesAdapter.setData(mRacesDetail);
-					mRacesAdapter.notifyDataSetChanged();
-				}
-
-				// Expand all groups
-				for (int i = 0; i < mRacesAdapter.getGroupCount(); i++) {
-
-					mRaceList.expandGroup(i);
-				}
-			}*/
 		} else {
 
 			mEmptyText.setVisibility(View.VISIBLE);
@@ -922,12 +778,6 @@ public class RacesDetailActivity extends BaseActivity implements
                                 catch (Exception e){
                                     LogUtil.e(Constants.LOG_TAG, "parse to compare Sort time error: " + e.getMessage());
                                 }
-
-                               /* int lFinishTime = (Integer) lhs
-                                        .get(Constants.FINISHTIME);
-                                int rFinishTime = (Integer) rhs
-                                        .get(Constants.FINISHTIME);
-                                return lFinishTime - rFinishTime;*/
                                 return 0;
                             }
                         }
@@ -936,68 +786,7 @@ public class RacesDetailActivity extends BaseActivity implements
 
         return raceMap;
     }
-	/*private Map<String, List<HashMap<String, Object>>> sortData(
-			Map<String, List<HashMap<String, Object>>> map) {
 
-		List<String> keys = new ArrayList<String>(map.keySet());
-		Map<String, List<HashMap<String, Object>>> returnMap = new LinkedHashMap<String, List<HashMap<String, Object>>>();
-		if (keys != null) {
-
-			Collections.sort(keys, new Comparator<String>() {
-
-                @Override
-                public int compare(String lhs, String rhs) {
-                    // TODO Auto-generated method stub
-                    return rhs.compareTo(lhs);
-                }
-            });
-
-			for (String key : keys) {
-
-				returnMap.put(key, map.get(key));
-			}
-		}
-
-		returnMap = sortMapByValues(returnMap);
-		return returnMap;
-	}
-
-	private Map<String, List<HashMap<String, Object>>> sortMapByValues(
-			Map<String, List<HashMap<String, Object>>> raceMap) {
-
-		List<String> keys = new ArrayList<String>(raceMap.keySet());
-		for (String key : keys) {
-
-			List<HashMap<String, Object>> raceList = raceMap.get(key);
-			Collections.sort(raceList,
-					new Comparator<HashMap<String, Object>>() {
-
-						@Override
-						public int compare(HashMap<String, Object> lhs,
-								HashMap<String, Object> rhs) {
-							// TODO Auto-generated method stub
-
-							int selectSort = mSortGroup
-									.getCheckedRadioButtonId();
-							if (selectSort == R.id.races_detail_sort_date) {
-
-								Date lDate = (Date) lhs.get(Constants.RACEDATE);
-								Date rDate = (Date) rhs.get(Constants.RACEDATE);
-								return rDate.compareTo(lDate);
-							} else {
-
-								int lFinishTime = (Integer) lhs
-										.get(Constants.FINISHTIME);
-								int rFinishTime = (Integer) rhs
-										.get(Constants.FINISHTIME);
-								return lFinishTime - rFinishTime;
-							}
-						}
-					});
-		}
-
-		return raceMap;
-	}*/
 
 	@SuppressWarnings("unchecked")
 	private void showShareDialog(final Race race) {

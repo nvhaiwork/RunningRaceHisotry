@@ -1,15 +1,7 @@
 package com.runningracehisotry;
 
-import java.io.ByteArrayOutputStream;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
@@ -19,16 +11,13 @@ import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
-import com.runningracehisotry.webservice.base.GetUserProfileRequest;
 import com.runningracehisotry.webservice.base.UpdateUserAvatarRequest;
 import com.runningracehisotry.webservice.base.UpdateUserProfileRequest;
 import com.runningracehisotry.webservice.base.UploadImageRequest;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -73,23 +62,6 @@ public class ProfileActivity extends BaseActivity {
 				.bitmapConfig(Bitmap.Config.ARGB_8888).build();
 
         fillUserProfile();
-		/*mNameEdt.setText(mUser.getUsername());
-
-		// User image
-		if (mUser.containsKey(Constants.PICTURE)) {
-
-			ParseObject image = mUser.getParseObject(Constants.PICTURE);
-			Utilities.displayParseImage(image, mProfileImg, 0);
-		} else {
-
-			String imgUrl = Utilities.getUserProfileImage(mUser);
-			mImageLoader.displayImage(imgUrl, mProfileImg, mOptions);
-		}
-
-		if (mUser.containsKey(Constants.KIND)) {
-
-			isSocialUser = true;
-		}*/
 
 	}
 
@@ -251,12 +223,7 @@ public class ProfileActivity extends BaseActivity {
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
         public void Wsdl2CodeStartedRequest() {
-           /* runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
-                }
-            });*/
+
         }
 
         @Override
@@ -438,123 +405,4 @@ public class ProfileActivity extends BaseActivity {
             + "userJson app and Preference: " + userJson);
     }
 
-
-
-	/*private class UpdateProfileAsyncTask extends AsyncTask<Void, Void, Integer> {
-
-		Dialog dialog;
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-			dialog = CustomLoadingDialog.show(ProfileActivity.this, "", "",
-					false, false);
-		}
-
-		@Override
-		protected Integer doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			if (isImageChanged) {
-
-				if (mUser.containsKey(Constants.PICTURE)) {
-
-					ParseObject picture = mUser
-							.getParseObject(Constants.PICTURE);
-					try {
-
-						picture.delete();
-					} catch (ParseException e) {
-
-						LogUtil.e("UpdateProfileAsyncTask", e.getMessage());
-					}
-
-					mUser.remove(Constants.PICTURE);
-					ParseObject object = new ParseObject(Constants.IMAGE);
-					Bitmap bitmap = (Bitmap) mProfileImg.getTag();
-					ByteArrayOutputStream stream = new ByteArrayOutputStream();
-					bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-					byte[] bitmapdata = stream.toByteArray();
-					ParseFile file = new ParseFile(bitmapdata);
-					try {
-
-						object.put(Constants.DATA.toUpperCase(), file);
-						object.save();
-						mUser.put(Constants.PICTURE, object);
-						mUser.save();
-					} catch (ParseException e) {
-
-						LogUtil.e("Save image", e.getMessage());
-					}
-				}
-			}
-
-			String savedUsername = CustomSharedPreferences.getPreferences(
-					Constants.PREF_USERNAME, "");
-			String newUsername = mNameEdt.getText().toString().trim();
-			if (!savedUsername.equals(newUsername)) {
-
-				ParseQuery<ParseUser> query = ParseUser.getQuery();
-				query.whereEqualTo(Constants.USERNAME, newUsername);
-				try {
-					List<ParseUser> results = query.find();
-					if (results.size() > 0) {
-
-						return 0;
-					}
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-
-					return -1;
-				}
-			}
-
-			mUser.setUsername(newUsername);
-			if (!isSocialUser) {
-
-				mUser.setPassword(mNewPassEdt.getText().toString().trim());
-				CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD,
-						mNewPassEdt.getText().toString().trim());
-			}
-
-			try {
-
-				mUser.save();
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				return -1;
-			}
-
-			CustomSharedPreferences.setPreferences(Constants.PREF_USERNAME,
-					mUser.getUsername());
-			return 1;
-		}
-
-		@Override
-		protected void onPostExecute(Integer result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-
-			// Result -1: exceptions
-			// Result 0 : Username existed
-			// Result 1 : Update successfully
-			dialog.dismiss();
-			if (result == -1) {
-
-				Utilities.showAlertMessage(ProfileActivity.this,
-						getString(R.string.dialog_profile_update_fails),
-						getString(R.string.dialog_profile_title));
-			} else if (result == 0) {
-
-				Utilities.showAlertMessage(ProfileActivity.this,
-						getString(R.string.dialog_profile_username_used),
-						getString(R.string.dialog_profile_title));
-			} else {
-
-				Utilities.showAlertMessage(ProfileActivity.this,
-						getString(R.string.dialog_profile_update_successfully),
-						getString(R.string.dialog_profile_title));
-			}
-		}
-	}*/
 }

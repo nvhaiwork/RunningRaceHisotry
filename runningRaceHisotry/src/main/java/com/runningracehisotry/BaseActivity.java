@@ -15,14 +15,14 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.parse.ParseException;
+
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
+
 import com.runningracehisotry.adapters.LeftMenuAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.MenuModel;
-import com.runningracehisotry.models.User;
+
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
@@ -31,7 +31,7 @@ import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.views.CustomAlertDialog.OnNegativeButtonClick;
 import com.runningracehisotry.views.CustomAlertDialog.OnPositiveButtonClick;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
-import com.runningracehisotry.webservice.ServiceApi;
+
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetAboutUsRequest;
 

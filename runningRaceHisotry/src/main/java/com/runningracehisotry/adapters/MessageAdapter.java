@@ -16,7 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.runningracehisotry.R;
 import com.runningracehisotry.RunningRaceApplication;
-import com.runningracehisotry.models.Message;
+
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.sinch.android.rtc.messaging.WritableMessage;

@@ -1,16 +1,10 @@
 package com.runningracehisotry;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.runningracehisotry.adapters.NewShoeDistanceHistoryAdapter;
-import com.runningracehisotry.adapters.ShoeDistanceHistoryAdapter;
+
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.History;
 import com.runningracehisotry.models.Shoe;
@@ -22,7 +16,7 @@ import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.AddShoeRequest;
-import com.runningracehisotry.webservice.base.DeleteShoeRequest;
+
 import com.runningracehisotry.webservice.base.UpdateShoeRequest;
 import com.runningracehisotry.webservice.base.UploadImageRequest;
 

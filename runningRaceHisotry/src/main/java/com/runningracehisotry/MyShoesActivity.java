@@ -2,14 +2,10 @@ package com.runningracehisotry;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.runningracehisotry.adapters.MyShoesAdapter;
 import com.runningracehisotry.adapters.NewMyShoeAdapter.OnShoeItemClickListener;
 import com.runningracehisotry.adapters.NewMyShoeAdapter.OnShoeItemDelete;
 import com.runningracehisotry.adapters.NewMyShoeAdapter;
 import com.runningracehisotry.constants.Constants;
-import com.runningracehisotry.models.History;
 import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
@@ -19,9 +15,7 @@ import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.DeleteShoeRequest;
 import com.runningracehisotry.webservice.base.GetAllShoesRelatedObjectRequest;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;

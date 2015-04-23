@@ -5,13 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
+
 
 import com.google.gson.Gson;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
+
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Race;
 import com.runningracehisotry.models.Shoe;
@@ -34,10 +31,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;

@@ -8,13 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.runningracehisotry.R;
-import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.History;
 import com.runningracehisotry.utilities.Utilities;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**

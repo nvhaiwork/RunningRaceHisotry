@@ -2,7 +2,6 @@ package com.runningracehisotry.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
 
 /**
  * Created by quynt3 on 2015/04/18.

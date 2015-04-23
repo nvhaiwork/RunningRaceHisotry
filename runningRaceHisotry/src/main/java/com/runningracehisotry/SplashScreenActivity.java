@@ -1,11 +1,6 @@
 package com.runningracehisotry;
 
 import com.google.gson.Gson;
-import com.parse.GetCallback;
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
@@ -23,7 +18,6 @@ import android.view.Window;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Objects;
 
 public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEvents {
     private final String logTag = "SplashScreenActivity";
@@ -100,7 +94,7 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
                             try {
                                 handleResponseLogin(savedUserName, savedPassword);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                //e.printStackTrace();
                             }
                         }
                     });
@@ -122,9 +116,6 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
                         getString(R.string.dialog_login_email_fails),
                         "");
             } finally {
-                    /*if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }*/
             }
         } else if(methodName.equals(ServiceConstants.METHOD_GET_USER_PROFILE)) {
             handleResponseGetUserInfo(data);

@@ -16,12 +16,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
+
 import com.runningracehisotry.BaseActivity;
 import com.runningracehisotry.R;
-import com.runningracehisotry.RacesDetailActivity;
+
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Like;
 import com.runningracehisotry.models.Race;
@@ -38,11 +36,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * Created by QuyNguyen on 4/19/2015.
