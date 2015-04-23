@@ -43,8 +43,10 @@ public class FriendsActivity extends BaseActivity {
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
+    private CustomLoadingDialog mLoadingDialog;
 
-	@Override
+
+    @Override
 	protected int addContent() {
 		// TODO Auto-generated method stub
 		return R.layout.activity_friends;
@@ -60,6 +62,10 @@ public class FriendsActivity extends BaseActivity {
 
 		// Initiation data
 		// new LoadFriendsAsyncTask().execute();
+        if(mLoadingDialog == null) {
+            mLoadingDialog = CustomLoadingDialog.show(FriendsActivity.this, "", "", false, false);
+        }
+
         getGroupOfUser();
 	}
 
@@ -148,6 +154,13 @@ public class FriendsActivity extends BaseActivity {
                 mFriendListview.setAdapter(mFriendAdapter);
                 mFriendAdapter.notifyDataSetChanged();
                 LogUtil.d(Constants.LOG_TAG, "return >= show "  + returnedFriends +"|"+ totalFriends);
+                try{
+                    if (mLoadingDialog.isShowing()) {
+                        mLoadingDialog.dismiss();
+                    }
+                }
+                catch(Exception ex){
+                }
             }
 
             /*if(lstFriend != null && lstFriend.size() > 0){
@@ -162,6 +175,13 @@ public class FriendsActivity extends BaseActivity {
             }*/
         }
         catch(Exception ex){
+            try{
+                if (mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+            }
+            catch(Exception exc){
+            }
             ex.printStackTrace();
         }
     }
@@ -185,8 +205,13 @@ public class FriendsActivity extends BaseActivity {
                     // Login success
                     processGetGroupOfUser(data.toString());
                 } catch (Exception e) {
-
-                } finally {
+                    try{
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
                 }
             }
             else if (methodName.equals(ServiceConstants.METHOD_GET_GROUP_OF_USER)) {
@@ -195,7 +220,6 @@ public class FriendsActivity extends BaseActivity {
                     processGetFriendGroupOfUser(data.toString());
                 } catch (Exception e) {
 
-                } finally {
                 }
 
             }

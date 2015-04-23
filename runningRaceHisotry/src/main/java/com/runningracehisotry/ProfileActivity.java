@@ -45,7 +45,9 @@ public class ProfileActivity extends BaseActivity {
 	private EditText mOldPassEdt, mNewPassEdt, mConfirmPassEdt, mNameEdt;
     private Uri imageUriUpload;
     private String newAvatarUrl;
-	@Override
+    private CustomLoadingDialog mLoadingDialog;
+
+    @Override
 	protected int addContent() {
 		// TODO Auto-generated method stub
 		return R.layout.activity_profile;
@@ -147,6 +149,9 @@ public class ProfileActivity extends BaseActivity {
             if(isImageChanged){
                 if(imageUriUpload != null){
                     //upload
+                    if(mLoadingDialog == null) {
+                        mLoadingDialog = CustomLoadingDialog.show(ProfileActivity.this, "", "", false, false);
+                    }
                     UploadImageRequest request = new UploadImageRequest(imageUriUpload);
                     request.setListener(callBackEvent);
                     new Thread(request).start();
@@ -203,7 +208,10 @@ public class ProfileActivity extends BaseActivity {
                     // Save process
                     //new UpdateProfileAsyncTask().execute();
                     Log.d("QuyNT3", "udpate profile API 28: ");
-                    callUpdateProfile();
+                if(mLoadingDialog == null) {
+                    mLoadingDialog = CustomLoadingDialog.show(ProfileActivity.this, "", "", false, false);
+                }
+                callUpdateProfile();
                 }
             }
 
@@ -295,9 +303,13 @@ public class ProfileActivity extends BaseActivity {
                             getString(R.string.dialog_profile_update_fails),
                             "");
                 } finally {
-                    /*if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }*/
+                    try{
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
                 }
             }
             else if (methodName.equals(ServiceConstants.METHOD_UPLOAD_IMAGE)) {
@@ -312,8 +324,23 @@ public class ProfileActivity extends BaseActivity {
                                 callUpdateInfoProfile(result);
                                 newAvatarUrl = result;
                             }
+                            else{
+                                try{
+                                    if (mLoadingDialog.isShowing()) {
+                                        mLoadingDialog.dismiss();
+                                    }
+                                }
+                                catch(Exception ex){
+                                }
+                            }
                         } catch (Exception e) {
-
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                     });
@@ -353,6 +380,15 @@ public class ProfileActivity extends BaseActivity {
                                     getString(R.string.dialog_profile_update_fails),
                                     "");
 
+                        }
+                        finally {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });

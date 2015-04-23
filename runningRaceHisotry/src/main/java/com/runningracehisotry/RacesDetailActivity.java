@@ -90,9 +90,11 @@ public class RacesDetailActivity extends BaseActivity implements
     private int delRaceId;
     private int typeLike;
     private int likeRaceId;
+    private CustomLoadingDialog mLoadingDialog;
 
 
-	@Override
+
+    @Override
 	protected int addContent() {
 		// TODO Auto-generated method stub
 		return R.layout.activity_races_detail;
@@ -228,7 +230,17 @@ public class RacesDetailActivity extends BaseActivity implements
 	}
 
     private void getRaceByType(int mSelectedRace, int mFriendRace) {
-        GetRaceByTypeRequest request = new GetRaceByTypeRequest("date", mSelectedRace);
+        if(mLoadingDialog == null) {
+            mLoadingDialog = CustomLoadingDialog.show(RacesDetailActivity.this, "", "", false, false);
+        }
+
+        GetRaceByTypeRequest request = null;
+        if(mFriendRace == -1){
+            request = new GetRaceByTypeRequest("date", mSelectedRace);
+        }
+        else{
+            request = new GetRaceByTypeRequest("date", mSelectedRace, mFriendRace);
+        }
         request.setListener(callBackEvent);
         new Thread(request).start();
     }
@@ -427,26 +439,33 @@ public class RacesDetailActivity extends BaseActivity implements
                             "get race list failed",
                             "");
                 } finally {
-                    /*if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }*/
+                    try{
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
                 }
             }
             else if (methodName.equals(ServiceConstants.METHOD_DELETE_RACE_BY_ID)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        processCallApiDeleteRace(data.toString());
                         try {
+                            processCallApiDeleteRace(data.toString());
                             LogUtil.d(Constants.LOG_TAG, "List race: " + data.toString());
-
                         } catch (Exception e) {
                             e.printStackTrace();
 
                         } finally {
-                    /*if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }*/
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });
@@ -521,6 +540,13 @@ public class RacesDetailActivity extends BaseActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            try{
+                if (mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+            }
+            catch(Exception ex){
+            }
         }
     }
 
@@ -712,6 +738,9 @@ public class RacesDetailActivity extends BaseActivity implements
 		mUser.saveInBackground();
 		displayData(mSelectedRace, 0, 0, 0);*/
         //SHow race for delete
+        if(mLoadingDialog == null) {
+            mLoadingDialog = CustomLoadingDialog.show(RacesDetailActivity.this, "", "", false, false);
+        }
         this.delRaceId = raceInfo.getId();
         callDeleteRace();
 	}
@@ -1027,6 +1056,9 @@ public class RacesDetailActivity extends BaseActivity implements
         if(!userId.isEmpty()){
             int id = Integer.parseInt(userId);
             if(id != 0){
+                if(mLoadingDialog == null) {
+                    mLoadingDialog = CustomLoadingDialog.show(RacesDetailActivity.this, "", "", false, false);
+                }
                 if(isLiked(raceInfo, id)){
                     //unlike then refresh
                     callLikeRace(raceInfo.getId(),false);

@@ -66,7 +66,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
     private String mRaceMedalPath, mRaceBibPath, mRacePersonPath;
     private Uri mRaceMedalUpload, mRaceBibUpload, mRacePersonUpload;
-
+    private CustomLoadingDialog mLoadingDialog;
     private int uploadedRaceImage;
     @Override
     protected int addContent() {
@@ -473,6 +473,9 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 } else {
                     //call add Race
                     //new AddRaceAsync().execute();
+                    if(mLoadingDialog == null) {
+                        mLoadingDialog = CustomLoadingDialog.show(AddRaceActivity.this, "", "", false, false);
+                    }
                     uploadedRaceImage = 0;
                     if(mRaceMedalUpload != null){
                         uploadedRaceImage = 1;
@@ -503,6 +506,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
     }
 
     private void uploadMedalImage() {
+
         UploadImageRequest request = new UploadImageRequest(mRaceMedalUpload);
         request.setListener(callBackEvent);
         new Thread(request).start();
@@ -731,8 +735,14 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         try {
                             processAddRace(data.toString());
                         } catch (Exception e) {
-
                         } finally {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });
@@ -745,8 +755,14 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         try {
                             processUpdateRace(data.toString());
                         } catch (Exception e) {
-
                         } finally {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });
@@ -799,8 +815,14 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                                 callAddUpdateRace();
                             }
                         } catch (Exception e) {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                             e.printStackTrace();
-
                         }
                     }
                 });
@@ -812,7 +834,13 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
         @Override
         public void Wsdl2CodeFinishedWithException(Exception ex) {
-
+            try{
+                if (mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+            }
+            catch(Exception exc){
+            }
         }
 
         @Override

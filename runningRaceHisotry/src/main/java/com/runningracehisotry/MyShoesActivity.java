@@ -282,6 +282,7 @@ public class MyShoesActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 
 		if (shoe != null) {
+            mLoadingDialog = CustomLoadingDialog.show(MyShoesActivity.this, "", "", false, false);
             LogUtil.d("onShoeItemDelete","Process delete shoe id: " + shoe.getId());
             //call SHoe delete
             DeleteShoeRequest request = new DeleteShoeRequest(String.valueOf(shoe.getId()));

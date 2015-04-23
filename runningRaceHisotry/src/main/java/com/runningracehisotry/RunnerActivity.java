@@ -44,6 +44,8 @@ public class RunnerActivity extends BaseActivity {
     private List<Runner> mRunners;
     private NewRunnerAdapter mRunnersAdapter;
     private int friendId;
+    private CustomLoadingDialog mLoadingDialog;
+
     @Override
     protected int addContent() {
         // TODO Auto-generated method stub
@@ -64,6 +66,9 @@ public class RunnerActivity extends BaseActivity {
                 mImageLoader);
 		/*mListView.setAdapter(mRunnersAdapter);
 		mListView.setOnItemClickListener(this);*/
+        if(mLoadingDialog == null) {
+            mLoadingDialog = CustomLoadingDialog.show(RunnerActivity.this, "", "", false, false);
+        }
         loadListRunner();
         // Query available runners
 		/*ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -132,9 +137,24 @@ public class RunnerActivity extends BaseActivity {
                         try {
                             processGotListRunner(data);
                         } catch (JSONException e) {
-                            e.printStackTrace();
-                            Utilities.showAlertMessage(RunnerActivity.this, "Error Parse when get list shoes", "");
-                        } finally {
+                            //e.printStackTrace();
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
+                            Utilities.showAlertMessage(RunnerActivity.this, getResources().getString(R.string.runner_get_failed), "");
+                        }
+                        finally {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });
@@ -146,9 +166,14 @@ public class RunnerActivity extends BaseActivity {
                         try {
                             processAddedGroup(data);
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                             Utilities.showAlertMessage(RunnerActivity.this, "Error Parse when get list shoes", "");
-                        } finally {
                         }
                     }
                 });
@@ -163,6 +188,13 @@ public class RunnerActivity extends BaseActivity {
                             e.printStackTrace();
                             Utilities.showAlertMessage(RunnerActivity.this, "Error Parse when get list shoes", "");
                         } finally {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });
@@ -171,10 +203,13 @@ public class RunnerActivity extends BaseActivity {
 
         @Override
         public void Wsdl2CodeFinishedWithException(Exception ex) {
-
-            /*if (mLoadingDialog.isShowing()) {
-                mLoadingDialog.dismiss();
-            }*/
+            try{
+                if (mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+            }
+            catch(Exception exc){
+            }
         }
 
         @Override
@@ -278,6 +313,7 @@ public class RunnerActivity extends BaseActivity {
             Runner user = (Runner) adapterView.getAdapter().getItem(
                     position);
             LogUtil.d(mCurrentClassName,"Add runner id: " + user.getId());
+
             doAddFriend(user);
         }
     }
@@ -315,6 +351,9 @@ public class RunnerActivity extends BaseActivity {
                     public void onButtonClick(View view) {
                         // TODO Auto-generated method stub
                         dialog.dismiss();
+                        if(mLoadingDialog == null) {
+                            mLoadingDialog = CustomLoadingDialog.show(RunnerActivity.this, "", "", false, false);
+                        }
                         processAddGroup(user);
                         LogUtil.d(mCurrentClassName,"Execute Add");
 
