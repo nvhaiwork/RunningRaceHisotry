@@ -301,10 +301,10 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                 mLoadingDialogAboutUs = CustomLoadingDialog.show(this, "", "", false, false);
             }*/
 			mAboutLayout.setVisibility(View.VISIBLE);
-            mAboutUsContent.loadUrl(ServiceApi.SERVICE_URL + ServiceApi.API_GET_ABOUT_US);
-//            GetAboutUsRequest request = new GetAboutUsRequest();
-//            request.setListener(callBackEvent);
-//            new Thread(request).start();
+            //mAboutUsContent.loadUrl(ServiceApi.SERVICE_URL + ServiceApi.API_GET_ABOUT_US);
+            GetAboutUsRequest request = new GetAboutUsRequest();
+            request.setListener(callBackEvent);
+            new Thread(request).start();
 			break;
 		case R.id.ic_action_menu:
 
