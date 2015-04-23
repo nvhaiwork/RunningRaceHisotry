@@ -71,7 +71,8 @@ public class ServiceApi {
 
     public static final String API_ADD_GROUP = "/group";
     public static final String API_ADD_GROUP_MEMBER = "/groupMember";
-
+    public static final String API_ADD_LIKE_OF_RACE = "/like";
+    public static final String API_REMOVE_LIKE_OF_RACE = "/like/unlike";
     public ServiceApi(IWsdl2CodeEvents eventHandler) {
         this.eventHandler = eventHandler;
     }

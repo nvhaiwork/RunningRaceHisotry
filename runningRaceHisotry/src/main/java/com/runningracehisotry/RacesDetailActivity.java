@@ -29,6 +29,7 @@ import com.runningracehisotry.adapters.NewRaceDetailAdapter.OnRaceItemClickListe
 import com.runningracehisotry.adapters.NewRaceDetailAdapter.OnRaceItemDelete;
 import com.runningracehisotry.adapters.NewRaceDetailAdapter.OnShareItemClickListener;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Like;
 import com.runningracehisotry.models.Race;
 import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
@@ -37,8 +38,10 @@ import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceConstants;
+import com.runningracehisotry.webservice.base.AddLikeRequest;
 import com.runningracehisotry.webservice.base.DeleteRaceRequest;
 import com.runningracehisotry.webservice.base.GetRaceByTypeRequest;
+import com.runningracehisotry.webservice.base.UnLikeRequest;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -85,7 +88,7 @@ public class RacesDetailActivity extends BaseActivity implements
     int shareButton = 0, likeButton;
     int listTimeImg = 0;
     private int delRaceId;
-    private int updateRaceId;
+    private int typeLike;
     private int likeRaceId;
 
 
@@ -118,20 +121,21 @@ public class RacesDetailActivity extends BaseActivity implements
 			sortItemColor = getResources().getColorStateList(
 					R.color.races_detail_sort_text_5k);
 			shareButton = R.drawable.ic_race_share_5k;
-            likeButton = R.drawable.unlike;
+            likeButton = R.drawable.unlike_5k;
 			listTimeImg = R.drawable.ic_race_detail_time_5k;
 			listImages = R.drawable.ic_race_detail_images_5k;
 			titleImage = R.drawable.ic_races_detail_title_5k;
 			sortItemBg = R.drawable.races_detail_sort_item_5k_bg;
 			sortGroupBg = R.drawable.races_detail_sort_group_5k_bg;
 			raceColor = getResources().getColor(R.color.text_button_bg_5k);
+
 			break;
 		case Constants.SELECT_RACE_10K:
 
 			sortItemColor = getResources().getColorStateList(
 					R.color.races_detail_sort_text_10k);
 			shareButton = R.drawable.ic_race_share_10k;
-            likeButton = R.drawable.unlike;
+            likeButton = R.drawable.unlike_10k;
 			listTimeImg = R.drawable.ic_race_detail_time_10k;
 			listImages = R.drawable.ic_race_detail_images_10k;
 			titleImage = R.drawable.ic_races_detail_title_10k;
@@ -144,7 +148,7 @@ public class RacesDetailActivity extends BaseActivity implements
 			sortItemColor = getResources().getColorStateList(
 					R.color.races_detail_sort_text_15k);
 			shareButton = R.drawable.ic_race_share_15k;
-            likeButton = R.drawable.unlike;
+            likeButton = R.drawable.unlike_15k;
 			listTimeImg = R.drawable.ic_race_detail_time_15k;
 			listImages = R.drawable.ic_race_detail_images_15k;
 			titleImage = R.drawable.ic_races_detail_title_15k;
@@ -159,7 +163,7 @@ public class RacesDetailActivity extends BaseActivity implements
 			sortItemColor = getResources().getColorStateList(
 					R.color.races_detail_sort_text_half_mar);
 			shareButton = R.drawable.ic_race_share_half_mar;
-            likeButton = R.drawable.unlike;
+            likeButton = R.drawable.unlike_half;
 			listTimeImg = R.drawable.ic_race_detail_time_half_mar;
 			listImages = R.drawable.ic_race_detail_images_half_mar;
 			titleImage = R.drawable.ic_races_detail_title_half_mar;
@@ -173,7 +177,7 @@ public class RacesDetailActivity extends BaseActivity implements
 			sortItemColor = getResources().getColorStateList(
 					R.color.races_detail_sort_text_full_mar);
 			shareButton = R.drawable.ic_race_share_full_mar;
-            likeButton = R.drawable.unlike;
+            likeButton = R.drawable.unlike_full;
 			listTimeImg = R.drawable.ic_race_detail_time_full_mar;
 			listImages = R.drawable.ic_race_detail_images_full_mar;
 			titleImage = R.drawable.ic_races_detail_title_full_mar;
@@ -301,9 +305,11 @@ public class RacesDetailActivity extends BaseActivity implements
 
             mEmptyText.setVisibility(View.INVISIBLE);
             //if (mRacesAdapter == null) {
+            String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
+            if(!userId.isEmpty()) {
+                int id = Integer.parseInt(userId);
 
-                mRacesAdapter = new NewRaceDetailAdapter(
-                        RacesDetailActivity.this, listRaceDetail,
+                mRacesAdapter = new NewRaceDetailAdapter(mSelectedRace, id, RacesDetailActivity.this, listRaceDetail,
                         mFriendRace, resources);
                 mRaceList.setAdapter(mRacesAdapter);
                 mRacesAdapter.setRaceItemClick(this);
@@ -316,10 +322,11 @@ public class RacesDetailActivity extends BaseActivity implements
                 mRacesAdapter.notifyDataSetChanged();
             }*/
 
-            // Expand all groups
-            for (int i = 0; i < mRacesAdapter.getGroupCount(); i++) {
+                // Expand all groups
+                for (int i = 0; i < mRacesAdapter.getGroupCount(); i++) {
 
-                mRaceList.expandGroup(i);
+                    mRaceList.expandGroup(i);
+                }
             }
         }/*
         if (userHistories != null) {
@@ -445,6 +452,22 @@ public class RacesDetailActivity extends BaseActivity implements
                 });
 
             }
+            else if (methodName.equals(ServiceConstants.METHOD_ADD_LIKE)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        processAfterLike(data);
+                    }
+                });
+            }
+            else if (methodName.equals(ServiceConstants.METHOD_REMOVE_LIKE)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        processAfterUnLike(data);
+                    }
+                });
+            }
 
         }
 
@@ -458,6 +481,92 @@ public class RacesDetailActivity extends BaseActivity implements
 
         }
     };
+
+    private void processAfterLike(Object data) {
+        try {
+            LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE: " + data.toString());
+            JSONObject jsonObjectReceive = new JSONObject(data.toString());
+            boolean result = jsonObjectReceive.getBoolean("result");
+            // Login success
+            if (result) {
+                String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
+                if(!userId.isEmpty()) {
+                    int id = Integer.parseInt(userId);
+                    if (id != 0) {
+                        Like like = new Like(1000, id);
+                        if(listRaceDetail.keySet().size() > 0){
+                            Set<String> keys = listRaceDetail.keySet();
+                            for(String key : keys){
+                                List<Race> listRace = listRaceDetail.get(key);
+                                for(Race race : listRace){
+                                    if(race.getId() == this.likeRaceId){
+                                        race.getLikes().add(like);
+                                        LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE DONE");
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        listRaceDetail = sortDataNew(listRaceDetail);
+                        if (mRacesAdapter != null) {
+                            mRacesAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+                // add like and refresh
+            }
+            else{
+                //do nothing
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
+    }
+
+    private void processAfterUnLike(Object data) {
+        try {
+            LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE: " + data.toString());
+            JSONObject jsonObjectReceive = new JSONObject(data.toString());
+            boolean result = jsonObjectReceive.getBoolean("result");
+            // Login success
+            if (result) {
+                String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
+                if(!userId.isEmpty()) {
+                    int id = Integer.parseInt(userId);
+                    if (id != 0) {
+                        Like like = new Like(1000, id);
+                        if(listRaceDetail.keySet().size() > 0){
+                            Set<String> keys = listRaceDetail.keySet();
+                            for(String key : keys){
+                                List<Race> listRace = listRaceDetail.get(key);
+                                List<Race> listRaceTemp = new ArrayList<Race>(listRace);
+                                int i, len = listRaceTemp.size();
+                                for(i = 0; i< len; i++){
+                                    if(listRace.get(i).getId() == this.likeRaceId){
+                                        listRace.get(i).getLikes().remove(i);
+                                        LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE DONE");
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        listRaceDetail = sortDataNew(listRaceDetail);
+                        if (mRacesAdapter != null) {
+                            mRacesAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+                // add like and refresh
+            }
+            else{
+                //do nothing
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
+    }
 
     private void processCallApiDeleteRace(String data) {
         try {
@@ -912,7 +1021,50 @@ public class RacesDetailActivity extends BaseActivity implements
 
     @Override
     public void onLikeItem(Race raceInfo) {
+        this.likeRaceId = raceInfo.getId();
         LogUtil.d(Constants.LOG_TAG,"Like click");
+        String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
+        if(!userId.isEmpty()){
+            int id = Integer.parseInt(userId);
+            if(id != 0){
+                if(isLiked(raceInfo, id)){
+                    //unlike then refresh
+                    callLikeRace(raceInfo.getId(),false);
+                }
+                else{
+                    //call add like
+                    callLikeRace(raceInfo.getId(),true);
+                }
+            }
+        }
+    }
+
+    private void callLikeRace(int raceId, boolean like) {
+        if(like){
+            AddLikeRequest request = new AddLikeRequest(String.valueOf(raceId));
+            request.setListener(callBackEvent);
+            new Thread(request).start();
+        }
+        else{
+            UnLikeRequest request = new UnLikeRequest(String.valueOf(raceId));
+            request.setListener(callBackEvent);
+            new Thread(request).start();
+        }
+    }
+
+    public boolean isLiked(Race race, int userId){
+        boolean result = false;
+        List<Like> listLike = race.getLikes();
+        if(listLike != null && listLike.size() >0){
+            for(Like like : listLike){
+                if(like.getUserID() == userId){
+                    result =  true;
+                    break;
+                }
+            }
+
+        }
+        return result;
     }
 
     private class ShareImagesAsync extends

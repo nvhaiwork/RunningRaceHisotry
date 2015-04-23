@@ -21,6 +21,11 @@ public class Like {
     @SerializedName("updated_at")
     private String updatedAt;
 
+    public Like(int id, int userId){
+        setId(id);
+        setUserID(userId);
+    }
+
     public int getId() {
         return id;
     }

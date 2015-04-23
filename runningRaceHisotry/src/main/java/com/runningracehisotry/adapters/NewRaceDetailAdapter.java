@@ -1,7 +1,12 @@
 package com.runningracehisotry.adapters;
 
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,15 +16,26 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.runningracehisotry.BaseActivity;
 import com.runningracehisotry.R;
 import com.runningracehisotry.RacesDetailActivity;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Like;
 import com.runningracehisotry.models.Race;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomAlertDialog;
+import com.runningracehisotry.views.CustomLoadingDialog;
+import com.runningracehisotry.views.RaceImagesDialog;
+import com.runningracehisotry.webservice.ServiceApi;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,14 +65,16 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
     private OnLikeItemClickListener mLikeItemListener;
     private int mRaceColor, mImagesId, mTimeImageId;
     private Map<String, List<Race>> mHistories;
+    private int loggedUserId;
+    private int typeLike;
 
 
-
-    public NewRaceDetailAdapter(Context context,
-                             Map<String, List<Race>> histories,
-                             int friendPos, int... resources) {
+    public NewRaceDetailAdapter(int typeLike, int userId, Context context,
+                                Map<String, List<Race>> histories,
+                                int friendPos, int... resources) {
         super();
-
+        this.typeLike = typeLike;
+        this.loggedUserId = userId;
         this.mContext = context;
         this.mFriendPos = friendPos;
         this.mHistories = histories;
@@ -68,6 +86,52 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
         this.mDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         this.mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+
+    public void setLikeIcon(ImageView image, boolean like){
+        switch (typeLike) {
+            case Constants.SELECT_RACE_5K:
+                if(like){
+                    image.setImageResource(R.drawable.like_5k);
+                }
+                else{
+                    image.setImageResource(R.drawable.unlike_5k);
+                }
+                break;
+            case Constants.SELECT_RACE_10K:
+                if(like){
+                    image.setImageResource(R.drawable.like_10k);
+                }
+                else{
+                    image.setImageResource(R.drawable.unlike_10k);
+                }
+                break;
+            case Constants.SELECT_RACE_15K:
+                if(like){
+                    image.setImageResource(R.drawable.like_15k);
+                }
+                else{
+                    image.setImageResource(R.drawable.unlike_15k);
+                }
+                break;
+            case Constants.SELECT_RACE_HALF_MAR:
+                if(like){
+                    image.setImageResource(R.drawable.like_half);
+                }
+                else{
+                    image.setImageResource(R.drawable.unlike_half);
+                }
+                break;
+            case Constants.SELECT_RACE_FULL_MAR:
+                if(like){
+                    image.setImageResource(R.drawable.like_full);
+                }
+                else{
+                    image.setImageResource(R.drawable.unlike_full);
+                }
+                break;
+        }
     }
 
 
@@ -164,7 +228,19 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
                 0);
         //Picasso.with(mContext).load("http://cachtrimun.org/wp-content/uploads/Tac-dung-tri-mun-dieu-ky-tu-tao-bien.jpg").into(holder.images);
         holder.average.setText("Average Pace: " + race.getAveragePace());
-        holder.likeTotal.setText(race.getLikes().size() + " people like this");
+        holder.likeTotal.setText("0 people like this");
+        if((race.getLikes() != null) && (race.getLikes().size() > 0)) {
+            holder.likeTotal.setText(race.getLikes().size() + " people like this");
+            if(isLiked(race)){
+                //holder.likeButton.setImageResource(R.drawable.like);
+                setLikeIcon(holder.likeButton, true);
+            }
+            else{
+                //holder.likeButton.setImageResource(R.drawable.unlike);
+                setLikeIcon(holder.likeButton, true);
+            }
+        }
+
         // Set data
         //long finishTime = (Integer) race.get(Constants.FINISHTIME) * 1000;
         /*long finishTime = (Integer) race.get(Constants.FINISHTIME) * 1000;
@@ -241,10 +317,23 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
                         actionDownX = -1;
                     }
                 }*/
-                if ((race.getBibUrl() != null) || (race.getMedalUrl() != null) ||(race.getPersonUrl() != null)){
+                if (((race.getBibUrl() != null) && (race.getBibUrl() != null))
+                        || ((race.getMedalUrl() != null) && (race.getMedalUrl() != null))
+                        ||((race.getPersonUrl() != null) && (race.getPersonUrl() != null))){
 
-                    Utilities.showAlertMessage(mContext, "Temporary not show image",
-                            mContext.getString(R.string.dialog_race_tile));
+                    /*Utilities.showAlertMessage(mContext, "Temporary not show image",
+                            mContext.getString(R.string.dialog_race_tile));*/
+                    new LoadRaceImageAsync().execute(race);
+                    if (mCurrentView != null) {
+
+                        ObjectAnimator animator;
+                        animator = ObjectAnimator.ofFloat(mCurrentView,
+                                "translationX", 0);
+                        animator.setDuration(200);
+                        animator.start();
+                        mCurrentView = null;
+                        actionDownX = -1;
+                    }
                 }
                 else {
 
@@ -497,6 +586,20 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
     public void setOnLikeItemListener(OnLikeItemClickListener likeItemClick) {
         this.mLikeItemListener =  likeItemClick;
     }
+
+    public boolean isLiked(Race race){
+        boolean result = false;
+        List<Like> listLike = race.getLikes();
+        if(listLike != null && listLike.size() >0){
+            for(Like like : listLike){
+                if(like.getUserID() == loggedUserId){
+                    return true;
+                }
+            }
+
+        }
+        return result;
+    }
     public interface OnRaceItemDelete {
 
         public void onRaceItemDelete(Race raceInfo);
@@ -555,5 +658,86 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    public Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private class LoadRaceImageAsync extends
+            AsyncTask<Race, Void, Void> {
+
+        private Dialog dialog;
+        private List<Bitmap> images;
+
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            dialog = CustomLoadingDialog.show(mContext, "", "", false, false);
+        }
+
+        @Override
+        protected Void doInBackground(Race... paramVarArgs) {
+            // TODO Auto-generated method stub
+            Race raceInfo = paramVarArgs[0];
+            images = new ArrayList<Bitmap>();
+            if ((raceInfo.getMedalUrl() != null) &&(!raceInfo.getMedalUrl().isEmpty())) {
+
+                try {
+                    Bitmap bmp = getBitmapFromURL(ServiceApi.SERVICE_URL + raceInfo.getMedalUrl());
+                    images.add(bmp);
+                } catch (Exception e) {
+
+                    LogUtil.e("LoadRaceImageAsync", e.getMessage());
+                }
+            }
+
+            if ((raceInfo.getBibUrl() != null) &&(!raceInfo.getBibUrl().isEmpty())) {
+
+                try {
+                    Bitmap bmp = getBitmapFromURL(ServiceApi.SERVICE_URL + raceInfo.getBibUrl());
+                    images.add(bmp);
+                } catch (Exception e) {
+
+                    LogUtil.e("LoadRaceImageAsync", e.getMessage());
+                }
+            }
+            if ((raceInfo.getPersonUrl() != null) &&(!raceInfo.getPersonUrl().isEmpty())) {
+
+                try {
+                    Bitmap bmp = getBitmapFromURL(ServiceApi.SERVICE_URL + raceInfo.getPersonUrl());
+                    images.add(bmp);
+                } catch (Exception e) {
+
+                    LogUtil.e("LoadRaceImageAsync", e.getMessage());
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+
+            DialogFragment dialogFragment = RaceImagesDialog
+                    .getInstance(images);
+            dialogFragment.show(
+                    ((BaseActivity) mContext).getSupportFragmentManager(), "");
+            dialog.dismiss();
+        }
     }
 }
