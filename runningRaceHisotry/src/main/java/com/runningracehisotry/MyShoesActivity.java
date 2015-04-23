@@ -155,7 +155,7 @@ public class MyShoesActivity extends BaseActivity implements
                     +"|"+shoe.getRaces().size());
         }
 
-        mShoesAdapter = new NewMyShoeAdapter(this, lst, isSelectShoe);
+        mShoesAdapter = new NewMyShoeAdapter(this, lst, isSelectShoe, mImageLoader);
         mShoesAdapter.setShoeItemClick(MyShoesActivity.this);
         mShoesAdapter.setShoeItemDelete(MyShoesActivity.this);
         mShoeList.setAdapter(mShoesAdapter);
@@ -187,7 +187,7 @@ public class MyShoesActivity extends BaseActivity implements
 			mBotRightBtnTxt.setText(getString(R.string.add));
 		}
 
-        mShoesAdapter = new NewMyShoeAdapter(MyShoesActivity.this, new ArrayList<Shoe>(), isSelectShoe);
+        mShoesAdapter = new NewMyShoeAdapter(MyShoesActivity.this, new ArrayList<Shoe>(), isSelectShoe, mImageLoader);
         mShoeList.setAdapter(mShoesAdapter);
         mShoesAdapter.setShoeItemClick(MyShoesActivity.this);
         mShoesAdapter.setShoeItemDelete(MyShoesActivity.this);
@@ -236,6 +236,11 @@ public class MyShoesActivity extends BaseActivity implements
 					Intent addShoeIntent = new Intent();
 					addShoeIntent.putExtra(
 							Constants.INTENT_SELECT_SHOE_FOR_RACE, selected);
+                    Shoe shoe = mShoesAdapter.getLstShoes().get(selected);
+                    String shoeJson = Utilities.toJson(shoe);
+                    LogUtil.d(Constants.LOG_TAG, "shoe for race: " + shoeJson);
+                    addShoeIntent.putExtra(
+                            Constants.INTENT_SELECT_SHOE_ID_FOR_RACE, shoeJson);
 					setResult(RESULT_OK, addShoeIntent);
 				} else {
 

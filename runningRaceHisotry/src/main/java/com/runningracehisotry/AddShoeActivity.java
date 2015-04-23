@@ -19,17 +19,21 @@ import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.AddShoeRequest;
 import com.runningracehisotry.webservice.base.DeleteShoeRequest;
 import com.runningracehisotry.webservice.base.UpdateShoeRequest;
+import com.runningracehisotry.webservice.base.UploadImageRequest;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,6 +53,9 @@ public class AddShoeActivity extends BaseActivity {
     private int shoeIdUpdate;
     private int shoeIdAdd;
     private float lastMileOfShoe;
+
+    private String mShoeImgPath;
+    private Uri mUriImageUpload;
 	@Override
 	protected int addContent() {
 		// TODO Auto-generated method stub
@@ -66,11 +73,15 @@ public class AddShoeActivity extends BaseActivity {
 				Uri imageUri = Utilities.createImage();
 				Utilities.startCropImage(AddShoeActivity.this,
 						Constants.REQUETS_CODE_ADD_SHOE_IMAGE_CROP, imageUri);
+                mUriImageUpload = imageUri;
+                LogUtil.d(mCurrentClassName, "Take image: " + mUriImageUpload);
 			} else if (requestCode == Constants.REQUETS_CODE_ADD_SHOE_CHO0SE_IMAGE) {
 
 				Uri imageUri = data.getData();
 				Utilities.startCropImage(AddShoeActivity.this,
 						Constants.REQUETS_CODE_ADD_SHOE_IMAGE_CROP, imageUri);
+                mUriImageUpload = imageUri;
+                LogUtil.d(mCurrentClassName, "Choose image: " + mUriImageUpload);
 			} else if (requestCode == Constants.REQUETS_CODE_ADD_SHOE_IMAGE_CROP) {
 
 				Bundle extras = data.getExtras();
@@ -80,11 +91,19 @@ public class AddShoeActivity extends BaseActivity {
 						getResources().getDimensionPixelSize(
 								R.dimen.image_round_conner)));
 				mShoeImage.setTag(imgBmp);
+                mUriImageUpload = getImageUri(this, imgBmp);
+                LogUtil.d(mCurrentClassName, "Crop image: " + mUriImageUpload);
 				return;
 			}
 		}
 	}
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 	@Override
 	protected void initView() {
 		// TODO Auto-generated method stub
@@ -127,6 +146,10 @@ public class AddShoeActivity extends BaseActivity {
                         }
                         NewShoeDistanceHistoryAdapter adapter = new NewShoeDistanceHistoryAdapter(this,history);
                         mShoeDistanceListview.setAdapter(adapter);
+                    }
+                    mShoeImgPath = shoe.getImageUrl();
+                    if((shoe.getImageUrl() != null) && (!shoe.getImageUrl().isEmpty())){
+                        mImageLoader.displayImage(ServiceApi.SERVICE_URL + shoe.getImageUrl(), mShoeImage, mOptions);
                     }
 
                 }
@@ -180,23 +203,30 @@ public class AddShoeActivity extends BaseActivity {
                 float addMile =  newMile - lastMileOfShoe;
                 if(shoeIdUpdate > 0){
                     //call update
-                    if(addMile > 0){//has new info to update
-                        String param = String.format("%.2f", addMile);
-                        callUpdateShoe(param);
+                    if(addMile >= 0){//has new info to update
+                        //String param = String.format("%.2f", addMile);
+                        if(mUriImageUpload != null){
+                            callUploadShoeImage();
+                        }
+                        else{
+                            callUpdateShoe();
+                        }
                     }
-                    else{
-                        //back to shoe list
-                        Intent resultIntent = new Intent("updateShoeCallBack");
-                        setResult(RESULT_OK, resultIntent);
-                        finish();
-                    }
+
                 }
                 else{
                     //process Add Shoe
                     //if(addMile > 0){
                     //not check when add
-                    String param = String.format("%.2f", addMile);
-                    callAddShoe(param);
+                    //String param = String.format("%.2f", addMile);
+                    //callAddShoe(param);
+                    if(mUriImageUpload != null){
+                        callUploadShoeImage();
+                    }
+                    else{
+                        callAddShoe();
+                    }
+                    //callUploadShoeImage();
                     //}
                 }
                 //process add or update
@@ -253,6 +283,32 @@ public class AddShoeActivity extends BaseActivity {
                     }
                 });
             }
+            else if (methodName.equals(ServiceConstants.METHOD_UPLOAD_IMAGE)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            LogUtil.d(Constants.LOG_TAG, "upload response: " + data.toString());
+                            JSONObject jsonObjectReceive = new JSONObject(data.toString());
+                            String result = jsonObjectReceive.getString("name");
+                            if(result != null && !result.isEmpty()){
+                                mShoeImgPath  = result;
+                                LogUtil.d(Constants.LOG_TAG, "upload url: " + mShoeImgPath);
+                                if(shoeIdUpdate > 0){
+                                    callUpdateShoe();
+                                }
+                                else{
+                                    callAddShoe();
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+
+                        }
+                    }
+                });
+
+            }
             /*if (mLoadingDialog.isShowing()) {
                 mLoadingDialog.dismiss();
             }*/
@@ -271,15 +327,34 @@ public class AddShoeActivity extends BaseActivity {
 
         }
     };
-    private void callAddShoe(String miles) {
+
+
+
+
+    private void callAddShoe() {
+        float newMile = 0;
+        if(!mMilesTxt.getText().toString().isEmpty()) {
+            try{
+                newMile = Float.parseFloat(mMilesTxt.getText().toString());
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+            }
+        }
+        float addMile =  newMile - lastMileOfShoe;
+        String miles = "0.00";
+        if(addMile > 0){
+            miles = String.format("%.2f", addMile);
+        }
         String brand = mShoeBrandEdt.getText().toString();
         String model = mShoeModelEdt.getText().toString();
-        String imageUrl = "picture/shoe.png";
-        String param = "1";
+        String imageUrl = mShoeImgPath;
+                //String imageUrl = "picture/shoe.png";
+        //String param = "1";
         //String param = String.format("%.0f", addMile);
 
-        LogUtil.d(mCurrentClassName, "Request Add Shoe: " + brand+"|"+imageUrl +"|"+param+"|"+model);
-        AddShoeRequest request = new AddShoeRequest(brand, imageUrl, param, model);
+        LogUtil.d(mCurrentClassName, "Request Add Shoe: " + brand+"|"+imageUrl +"|"+miles+"|"+model);
+        AddShoeRequest request = new AddShoeRequest(brand, imageUrl, miles, model);
         request.setListener(callBackEvent);
         new Thread(request).start();
     }
@@ -300,21 +375,50 @@ public class AddShoeActivity extends BaseActivity {
 
     }
 
-    private void callUpdateShoe(String miles) {
+    private void callUploadShoeImage(){
+        //if(mUriImageUpload != null){
+            //upload
+            UploadImageRequest request = new UploadImageRequest(mUriImageUpload);
+            request.setListener(callBackEvent);
+            new Thread(request).start();
+        /*}
+        else{
 
+        }*/
+    }
+    private void callUpdateShoe() {
+        float newMile = 0;
+        if(!mMilesTxt.getText().toString().isEmpty()) {
+            try{
+                newMile = Float.parseFloat(mMilesTxt.getText().toString());
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+            }
+        }
+        float addMile =  newMile - lastMileOfShoe;
+        String miles = "0";
+        if(addMile > 0){
+            miles = String.format("%.2f", addMile);
+        }
         String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
         String brand = mShoeBrandEdt.getText().toString();
         String model = mShoeModelEdt.getText().toString();
-        String imageUrl = "picture/shoe.png";
+        String imageUrl = mShoeImgPath;
         String mileOnShoe = "0";
         LogUtil.d(mCurrentClassName, "Request UPdate Shoe: " + brand+"|"+shoeIdUpdate+"|"+imageUrl +"|"
                 +miles+"|"+mileOnShoe+"|"+model+"|"+userId);
 
-        UpdateShoeRequest request = new UpdateShoeRequest(brand, String.valueOf(shoeIdUpdate),
-                imageUrl, miles, mileOnShoe, model, userId);
-        request.setListener(callBackEvent);
-        new Thread(request).start();
+
+            //update without image
+            UpdateShoeRequest request = new UpdateShoeRequest(brand, String.valueOf(shoeIdUpdate),
+                    imageUrl, miles, mileOnShoe, model, userId);
+            request.setListener(callBackEvent);
+            new Thread(request).start();
+
     }
+
+
     private void processAfterUpdateShoe(Object data) throws  JSONException{
         JSONObject obj = new JSONObject(data.toString());
         String result = obj.getString("result");

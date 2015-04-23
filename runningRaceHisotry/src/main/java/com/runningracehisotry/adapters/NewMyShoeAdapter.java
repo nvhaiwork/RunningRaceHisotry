@@ -2,6 +2,7 @@ package com.runningracehisotry.adapters;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.parse.ParseObject;
 import com.runningracehisotry.BaseActivity;
 import com.runningracehisotry.R;
@@ -18,6 +21,7 @@ import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.views.CustomAlertDialog;
+import com.runningracehisotry.webservice.ServiceApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,8 @@ public class NewMyShoeAdapter extends BaseAdapter {
 
     private OnShoeItemDelete mShoeItemDelete;
     private OnShoeItemClickListener mShoeItemClick;
+    private ImageLoader mImageLoader;
+    private DisplayImageOptions mOptions;
 
     public List<Shoe> getLstShoes() {
         return lstShoes;
@@ -89,12 +95,19 @@ public class NewMyShoeAdapter extends BaseAdapter {
 
 
     //constructor function
-    public NewMyShoeAdapter(Context context, List<Shoe> list, boolean isSelectShoe) {
+    public NewMyShoeAdapter(Context context, List<Shoe> list, boolean isSelectShoe,  ImageLoader imageLoader) {
         this.mContext = context;
         this.setLstShoes(new ArrayList<Shoe>(list));
         this.mIsSelectShoe = isSelectShoe;
+        this.mImageLoader = imageLoader;
         this.mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_user_img)
+                .showImageForEmptyUri(R.drawable.ic_user_img)
+                .showImageOnFail(R.drawable.ic_user_img).cacheInMemory(true)
+                .cacheOnDisc(true).considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.ARGB_8888).build();
     }
 
     //get total object
@@ -150,7 +163,9 @@ public class NewMyShoeAdapter extends BaseAdapter {
         holder.type.setText(shoe.getBrand());
         float distanceF = shoe.getMilesOnShoes();
         holder.detail.setText(String.format("%.2f miles (%.2f km)", distanceF, distanceF / 0.62137119));
-
+        if(shoe.getImageUrl() != null) {
+            mImageLoader.displayImage(ServiceApi.SERVICE_URL + shoe.getImageUrl(), holder.image, mOptions);
+        }
         if (mIsSelectShoe) {
 
             holder.itemLayout.setOnClickListener(new View.OnClickListener() {

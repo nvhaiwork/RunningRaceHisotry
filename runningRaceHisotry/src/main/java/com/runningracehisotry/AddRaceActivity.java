@@ -22,12 +22,15 @@ import com.runningracehisotry.views.MyTimePickerDialog;
 import com.runningracehisotry.views.MyTimePickerDialog.OnTimeSetListener;
 import com.runningracehisotry.views.TimePicker;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.AddRaceRequest;
 import com.runningracehisotry.webservice.base.UpdateRaceRequest;
+import com.runningracehisotry.webservice.base.UploadImageRequest;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,6 +39,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,6 +64,10 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
     private TextView mShoeTxt, mRaceDateTxt, mRaceTypeTxt, mRaceFinishTimeTxt;
     private ImageView mBidImg, mPersonImg, mMedalImg;
 
+    private String mRaceMedalPath, mRaceBibPath, mRacePersonPath;
+    private Uri mRaceMedalUpload, mRaceBibUpload, mRacePersonUpload;
+
+    private int uploadedRaceImage;
     @Override
     protected int addContent() {
         // TODO Auto-generated method stub
@@ -193,6 +201,20 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             mShoeTxt.setTag(shoeId);
             Shoe shoeRace = mRaceUpdate.getShoe();
             mShoeTxt.setText(String.format("%s (%s)", shoeRace.getBrand(), shoeRace.getModel()));
+
+            //set path for image
+            mRaceMedalPath = mRaceUpdate.getMedalUrl();
+            mRaceBibPath = mRaceUpdate.getBibUrl();
+            mRacePersonPath = mRaceUpdate.getPersonUrl();
+            if((mRaceUpdate.getMedalUrl() != null) && (!mRaceUpdate.getMedalUrl().isEmpty())){
+                mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getMedalUrl(), mMedalImg, mOptions);
+            }
+            if((mRaceUpdate.getBibUrl() != null) && (!mRaceUpdate.getBibUrl().isEmpty())){
+                mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getBibUrl(), mBidImg, mOptions);
+            }
+            if((mRaceUpdate.getPersonUrl() != null) && (!mRaceUpdate.getPersonUrl().isEmpty())){
+                mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getPersonUrl(), mPersonImg, mOptions);
+            }
         }
 
     }
@@ -224,36 +246,48 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 Utilities.startCropImage(AddRaceActivity.this,
                         Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID,
                         imageUri);
+                mRaceBibUpload = imageUri;
+                LogUtil.d(mCurrentClassName, "Choose image: " + mRaceBibUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_MEDAL) {
 
                 Uri imageUri = data.getData();
                 Utilities.startCropImage(AddRaceActivity.this,
                         Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL,
                         imageUri);
+                mRaceMedalUpload = imageUri;
+                LogUtil.d(mCurrentClassName, "Choose image: " + mRaceMedalUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_CHO0SE_IMAGE_PERSON) {
 
                 Uri imageUri = data.getData();
                 Utilities.startCropImage(AddRaceActivity.this,
                         Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON,
                         imageUri);
+                mRacePersonUpload = imageUri;
+                LogUtil.d(mCurrentClassName, "Choose image: " + mRacePersonUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_BID) {
 
                 Uri imageUri = Utilities.createImage();
                 Utilities.startCropImage(AddRaceActivity.this,
                         Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID,
                         imageUri);
+                mRaceBibUpload = imageUri;
+                LogUtil.d(mCurrentClassName, "Take image: " + mRaceBibUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_MEDAL) {
 
                 Uri imageUri = Utilities.createImage();
                 Utilities.startCropImage(AddRaceActivity.this,
                         Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL,
                         imageUri);
+                mRaceMedalUpload = imageUri;
+                LogUtil.d(mCurrentClassName, "Take image: " + mRaceMedalUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_TAKE_IMAGE_PERSON) {
 
                 Uri imageUri = Utilities.createImage();
                 Utilities.startCropImage(AddRaceActivity.this,
                         Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON,
                         imageUri);
+                mRacePersonUpload = imageUri;
+                LogUtil.d(mCurrentClassName, "Take image: " + mRacePersonUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_BID) {
 
                 Bundle extras = data.getExtras();
@@ -263,6 +297,8 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         getResources().getDimensionPixelSize(
                                 R.dimen.image_round_conner)));
                 mBidImg.setTag(imgBmp);
+                mRaceBibUpload = getImageUri(this, imgBmp);
+                LogUtil.d(mCurrentClassName, "Crop image: " + mRaceBibUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL) {
 
                 Bundle extras = data.getExtras();
@@ -272,6 +308,8 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         getResources().getDimensionPixelSize(
                                 R.dimen.image_round_conner)));
                 mMedalImg.setTag(imgBmp);
+                mRaceMedalUpload = getImageUri(this, imgBmp);
+                LogUtil.d(mCurrentClassName, "Crop image: " + mRaceMedalUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON) {
 
                 Bundle extras = data.getExtras();
@@ -281,10 +319,18 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         getResources().getDimensionPixelSize(
                                 R.dimen.image_round_conner)));
                 mPersonImg.setTag(imgBmp);
+                mRacePersonUpload = getImageUri(this, imgBmp);
+                LogUtil.d(mCurrentClassName, "Crop image: " + mRacePersonUpload);
             }
         }
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
     public static void setRace(HashMap<String, Object> race) {
 
         mRace = race;
@@ -427,10 +473,45 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 } else {
                     //call add Race
                     //new AddRaceAsync().execute();
-                    callAddUpdateRace();
+                    uploadedRaceImage = 0;
+                    if(mRaceMedalUpload != null){
+                        uploadedRaceImage = 1;
+                        uploadMedalImage();
+                    }
+                    else if(mRaceBibUpload != null){
+                        uploadedRaceImage = 2;
+                        uploadBibImage();
+                    }
+                    else if(mRacePersonUpload != null){
+                        uploadedRaceImage = 3;
+                        uploadPersonImage();
+                    }
+                    else{
+                        callAddUpdateRace();
+                    }
+
+                    //callAddUpdateRace();
                 }
                 break;
         }
+    }
+
+    private void uploadBibImage() {
+        UploadImageRequest request = new UploadImageRequest(mRaceBibUpload);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
+
+    private void uploadMedalImage() {
+        UploadImageRequest request = new UploadImageRequest(mRaceMedalUpload);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+    }
+
+    private void uploadPersonImage() {
+        UploadImageRequest request = new UploadImageRequest(mRacePersonUpload);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
     }
 
     /**
@@ -537,15 +618,17 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
 
     private void callAddUpdateRace() {
-        String bibUrl = "/bib.png";
+        String bibUrl = mRaceBibPath;
+        String medalUrl = mRaceMedalPath;
+        String personUrl = mRacePersonPath;
+
         String city = mRaceCityEdt.getText().toString();
         String eventType = String.valueOf((Integer) mRaceTypeTxt.getTag());
         String finisherDateTime = String.valueOf((Integer) mRaceFinishTimeTxt.getTag());
         String finisherDateTimeStr = mRaceFinishTimeTxt.getText().toString();
         LogUtil.d(Constants.LOG_TAG, "finisherDateTimeStr add: " + finisherDateTimeStr);
-        String medalUrl = "/medal.png";
         String raceName = mRaceNameEdt.getText().toString();
-        String personUrl = "/person.png";
+
 
         String raceDate = mRaceDateTxt.getText().toString();
         try {
@@ -559,28 +642,28 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
         String state = mRaceStateEdt.getText().toString();
         String website = mRaceWebsiteEdt.getText().toString();
 
-        LogUtil.d(Constants.LOG_TAG, "Shoe infor to add: "
-                        + "bibURl: " + bibUrl + "|"
-                        + "city: " + city + "|"
-                        + " Event type: " + eventType
-                        + "finisherDateTime: " + finisherDateTimeStr + "|"
-                        + "medalUrl: " + medalUrl + "|"
-                        + "raceName: " + raceName + "|"
-                        + "personUrl: " + personUrl + "|"
-                        + "raceDate: " + raceDate + "|"
-                        + "shoesId: " + shoesId + "|"
 
-                        + "state: " + state + "|"
-                        + "website: " + website + "|"
-
-        );
         if (mRaceUpdate != null) {
+            LogUtil.d(Constants.LOG_TAG, "Shoe info to updateadd: " + "bibURl: " + bibUrl + "|"
+                    + "city: " + city + "|"+ " Event type: " + eventType
+                    + "finisherDateTime: " + finisherDateTimeStr + "|"
+                    + "medalUrl: " + medalUrl + "|"+ "raceName: " + raceName + "|"
+                    + "personUrl: " + personUrl + "|"+ "raceDate: " + raceDate + "|"
+                    + "shoesId: " + shoesId + "|" + "state: " + state + "|"
+                    + "website: " + website + "|");
             UpdateRaceRequest request = new UpdateRaceRequest(bibUrl, city, mRaceUpdate.getCreatedAt(), eventType,
                     finisherDateTime, String.valueOf(mRaceUpdate.getId()), medalUrl, raceName, personUrl,
                     raceDate, shoesId, state, mRaceUpdate.getUpdatedAt(), String.valueOf(mRaceUpdate.getUserID()), website);
             request.setListener(callBackEvent);
             new Thread(request).start();
         } else {
+            LogUtil.d(Constants.LOG_TAG, "Shoe infor to add: " + "bibURl: " + bibUrl + "|"
+                    + "city: " + city + "|"+ " Event type: " + eventType
+                    + "finisherDateTime: " + finisherDateTimeStr + "|"
+                    + "medalUrl: " + medalUrl + "|"+ "raceName: " + raceName + "|"
+                    + "personUrl: " + personUrl + "|"+ "raceDate: " + raceDate + "|"
+                    + "shoesId: " + shoesId + "|" + "state: " + state + "|"
+                    + "website: " + website + "|");
             AddRaceRequest request = new AddRaceRequest(bibUrl, city, eventType, finisherDateTime, medalUrl, raceName, personUrl, raceDate, shoesId, state, website);
             request.setListener(callBackEvent);
             new Thread(request).start();
@@ -664,6 +747,60 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         } catch (Exception e) {
 
                         } finally {
+                        }
+                    }
+                });
+
+            }
+            else if (methodName.equals(ServiceConstants.METHOD_UPLOAD_IMAGE)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            LogUtil.d(Constants.LOG_TAG, "upload response: " + data.toString());
+                            JSONObject jsonObjectReceive = new JSONObject(data.toString());
+                            String result = jsonObjectReceive.getString("name");
+                            switch(uploadedRaceImage){
+                                case 1:
+                                    mRaceMedalPath = result;
+                                    LogUtil.d(Constants.LOG_TAG, "upload medal: " + result);
+                                    if(mRaceBibUpload != null) {
+                                        uploadedRaceImage = 2;
+                                        uploadBibImage();
+                                    }
+                                    else if(mRacePersonUpload != null) {
+                                        uploadedRaceImage = 3;
+                                        uploadPersonImage();
+                                    }
+                                    else{
+                                        uploadedRaceImage = 4;
+                                    }
+
+                                    break;
+
+                                case 2:
+                                    mRaceBibPath = result;
+                                    LogUtil.d(Constants.LOG_TAG, "upload bib: " + result);
+                                    if(mRacePersonUpload != null) {
+                                        uploadedRaceImage = 3;
+                                        uploadPersonImage();
+                                    }
+                                    else{
+                                        uploadedRaceImage = 4;
+                                    }
+                                    break;
+                                case 3:
+                                    mRacePersonPath = result;
+                                    LogUtil.d(Constants.LOG_TAG, "upload person: " + result);
+                                    uploadedRaceImage = 4;
+                                    break;
+                            }
+                            if(uploadedRaceImage > 3){
+                                callAddUpdateRace();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+
                         }
                     }
                 });
