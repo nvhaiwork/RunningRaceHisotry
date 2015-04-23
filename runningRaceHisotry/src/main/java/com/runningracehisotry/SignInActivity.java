@@ -150,6 +150,7 @@ public class SignInActivity extends BaseActivity {
 						getString(R.string.dialog_sign_up));
 			} else {
 				if (passwordConfirmStr.equals(passwordStr)) {
+                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
                     callRegisterAccount(usernameStr, passwordConfirmStr, emailStr);
 					/*mLoadingDialog = CustomLoadingDialog.show(
 							SignInActivity.this, "", "", false, false);*/
@@ -200,8 +201,17 @@ public class SignInActivity extends BaseActivity {
 						getString(R.string.dialog_sign_in));
 			} else {
                 try {
+                    mLoadingDialog = CustomLoadingDialog.show(
+                            SignInActivity.this, "", "", false, false);
                     sv.Login(usernameStr, passwordStr);
                 } catch (Exception e) {
+                    try{
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
                     e.printStackTrace();
                 }
 			}
@@ -252,7 +262,7 @@ public class SignInActivity extends BaseActivity {
                                         SignInActivity.this,
                                         getString(R.string.dialog_forgot_pass_message),
                                         getString(R.string.dialog_forgot_pass_title));
-                        dialog.dismiss();
+                        //dialog.dismiss();
                     }
 					/*final Dialog loadingDialog = CustomLoadingDialog.show(
 							SignInActivity.this, "", "", false, false);*/
@@ -340,15 +350,16 @@ public class SignInActivity extends BaseActivity {
                                 }
                             }
                         });
-
-                        // Get data of login user
-                        /*mUser = user;
-                        mHistory = object.getList(Constants.DATA);
-                        mShoes = object.getList(Constants.SHOES);
-                        mFriends = object.getList(Constants.FRIENDS);*/
                     }
                     // Login fail
                     else {
+                        try{
+                            if (mLoadingDialog.isShowing()) {
+                                mLoadingDialog.dismiss();
+                            }
+                        }
+                        catch(Exception ex){
+                        }
                         LogUtil.d(logTag, "Login fail!!!");
                         // Show dialog notify login fail
                         Utilities.showAlertMessage(
@@ -356,19 +367,32 @@ public class SignInActivity extends BaseActivity {
                                 getString(R.string.dialog_login_email_fails),
                                 "");
                     }
+                    //mLoadingDialog.dismiss();
                 } catch (JSONException e) {
+                    try{
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
                     e.printStackTrace();
                     Utilities.showAlertMessage(
                             SignInActivity.this,
                             getString(R.string.dialog_login_email_fails),
                             "");
                 } finally {
-                    /*if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }*/
+
                 }
             }
             else if (methodName.equals(ServiceConstants.METHOD_GET_USER_PROFILE)) {
+                try{
+                    if (mLoadingDialog.isShowing()) {
+                        mLoadingDialog.dismiss();
+                    }
+                }
+                catch(Exception ex){
+                }
                 Gson gson = new Gson();
                 User user = gson.fromJson(Data.toString(), User.class);
                 if(user != null) {
@@ -413,13 +437,21 @@ public class SignInActivity extends BaseActivity {
 
                         //dialog.dismiss();
                     }
-                } catch (JSONException e) {
+                }
+                catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
             else if (methodName.equals(ServiceConstants.METHOD_REGISTER)) {
                 try {
+                    try{
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
                     JSONObject jsonObjectReceive = new JSONObject(Data.toString());
                     boolean result = jsonObjectReceive.getBoolean("result");
                     if (result) {
@@ -441,13 +473,17 @@ public class SignInActivity extends BaseActivity {
                                         getString(R.string.dialog_sign_up));
                             }
                         });
-
-                        //dialog.dismiss();
                     }
                 } catch (JSONException e) {
+                    try{
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
                     e.printStackTrace();
                 }
-
             }
         }
 

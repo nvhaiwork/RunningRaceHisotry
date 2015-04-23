@@ -65,9 +65,13 @@ public class MyShoesActivity extends BaseActivity implements
                                 e.printStackTrace();
                                 Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes", "");
                             } finally {
-                    /*if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }*/
+                                try{
+                                    if (mLoadingDialog.isShowing()) {
+                                        mLoadingDialog.dismiss();
+                                    }
+                                }
+                                catch(Exception ex){
+                                }
                             }
                         }
                     });
@@ -84,7 +88,13 @@ public class MyShoesActivity extends BaseActivity implements
                             e.printStackTrace();
                             Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes", "");
                         } finally {
-
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });
@@ -96,9 +106,12 @@ public class MyShoesActivity extends BaseActivity implements
 
         @Override
         public void Wsdl2CodeFinishedWithException(Exception ex) {
-
-            if (mLoadingDialog.isShowing()) {
-                mLoadingDialog.dismiss();
+            try{
+                if (mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+            }
+            catch(Exception e){
             }
         }
 
@@ -193,10 +206,12 @@ public class MyShoesActivity extends BaseActivity implements
         mShoesAdapter.setShoeItemDelete(MyShoesActivity.this);
 		//mShoeList.setOnItemClickListener(this);
 		//new FetchShoesAsycn().execute();
+
         loadListShoesOfCurrentUser();
 	}
 
     private void loadListShoesOfCurrentUser() {
+        mLoadingDialog = CustomLoadingDialog.show(MyShoesActivity.this, "", "", false, false);
         GetAllShoesRelatedObjectRequest request = new GetAllShoesRelatedObjectRequest();
         request.setListener(callBackEvent);
         new Thread(request).start();

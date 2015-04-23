@@ -76,12 +76,13 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
             LoginRequest request = new LoginRequest(savedUsername, savedPassword);
             request.setListener(this);
             new Thread(request).start();
+            LogUtil.d(Constants.LOG_TAG, "Login again");
 		}
 	}
 
     @Override
     public void Wsdl2CodeStartedRequest() {
-
+        LogUtil.d(Constants.LOG_TAG, "Wsdl2CodeStartedRequest");
     }
 
     @Override
@@ -156,12 +157,17 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
         User user = gson.fromJson(data.toString(), User.class);
         if(user != null) {
             RunningRaceApplication.getInstance().setCurrentUser(user);
-
+            CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, user.getId());
+            CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, data.toString());
+            LogUtil.d(logTag, "Logged use data not null");
             Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
             selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
             startActivity(selectRaceIntent);
             finish();
+        }
+       else{
+            LogUtil.d(logTag, "Logged use data null");
         }
     }
 
@@ -193,5 +199,6 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
         GetUserProfileRequest request = new GetUserProfileRequest();
         request.setListener(this);
         new Thread(request).start();
+
     }
 }

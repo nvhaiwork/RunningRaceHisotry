@@ -44,14 +44,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AddShoeActivity extends BaseActivity {
-	private ParseObject mShoe;
+	//private ParseObject mShoe;
 	private ImageView mShoeImage;
 	private ListView mShoeDistanceListview;
 	private TextView mAddMilesBtn, mMilesTxt;
 	private EditText mShoeBrandEdt, mShoeModelEdt, mAddMilesEdt;
 
     private int shoeIdUpdate;
-    private int shoeIdAdd;
+    private CustomLoadingDialog mLoadingDialog;
     private float lastMileOfShoe;
 
     private String mShoeImgPath;
@@ -242,7 +242,6 @@ public class AddShoeActivity extends BaseActivity {
 		}
 	}
 
-
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
         public void Wsdl2CodeStartedRequest() {
@@ -261,8 +260,15 @@ public class AddShoeActivity extends BaseActivity {
                             processAfterAddShoe(data);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Utilities.showAlertMessage(AddShoeActivity.this, "Error Parse when get list shoes", "");
+                            Utilities.showAlertMessage(AddShoeActivity.this, getResources().getString(R.string.shoe_add_failed), "");
                         } finally {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });
@@ -277,8 +283,15 @@ public class AddShoeActivity extends BaseActivity {
                             processAfterUpdateShoe(data);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Utilities.showAlertMessage(AddShoeActivity.this, "Error Parse when get list shoes", "");
+                            Utilities.showAlertMessage(AddShoeActivity.this, getResources().getString(R.string.shoe_update_failed), "");
                         } finally {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
                         }
                     }
                 });
@@ -302,24 +315,31 @@ public class AddShoeActivity extends BaseActivity {
                                 }
                             }
                         } catch (Exception e) {
+                            try{
+                                if (mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
+                                }
+                            }
+                            catch(Exception ex){
+                            }
+                            Utilities.showAlertMessage(AddShoeActivity.this, getResources().getString(R.string.upload_image_failed), "");
                             e.printStackTrace();
-
                         }
                     }
                 });
-
             }
-            /*if (mLoadingDialog.isShowing()) {
-                mLoadingDialog.dismiss();
-            }*/
         }
 
         @Override
         public void Wsdl2CodeFinishedWithException(Exception ex) {
 
-            /*if (mLoadingDialog.isShowing()) {
-                mLoadingDialog.dismiss();
-            }*/
+            try{
+                if (mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+            }
+            catch(Exception exc){
+            }
         }
 
         @Override
@@ -358,6 +378,7 @@ public class AddShoeActivity extends BaseActivity {
         request.setListener(callBackEvent);
         new Thread(request).start();
     }
+
     private void processAfterAddShoe(Object data ) throws  JSONException{
         JSONObject obj = new JSONObject(data.toString());
         String result = obj.getString("result");
@@ -376,15 +397,10 @@ public class AddShoeActivity extends BaseActivity {
     }
 
     private void callUploadShoeImage(){
-        //if(mUriImageUpload != null){
-            //upload
-            UploadImageRequest request = new UploadImageRequest(mUriImageUpload);
-            request.setListener(callBackEvent);
-            new Thread(request).start();
-        /*}
-        else{
-
-        }*/
+        mLoadingDialog = CustomLoadingDialog.show(AddShoeActivity.this, "", "", false, false);
+        UploadImageRequest request = new UploadImageRequest(mUriImageUpload);
+        request.setListener(callBackEvent);
+        new Thread(request).start();
     }
     private void callUpdateShoe() {
         float newMile = 0;
