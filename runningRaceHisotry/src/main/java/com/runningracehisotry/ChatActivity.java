@@ -92,13 +92,9 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     }
 
     private void sendMessage(String message) {
-        mSinchServiceInterface.sendMessage(currentFriend.getId(), message);
-
-        Message newMessage = new Message(RunningRaceApplication.getInstance().getCurrentUser().getId(), message);
-        mChatItemAdaper.addMessage(newMessage);
-
+        mSinchServiceInterface.sendMessage(currentFriend.getName(), message);
         etMessage.setText("");
-        lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+
     }
 
     @Override
@@ -120,8 +116,9 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
     @Override
     public void onMessageSent(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, String s) {
-        Message messageObject = new Message(RunningRaceApplication.getInstance().getCurrentUser().getId(), message.getTextBody());
-        mChatItemAdaper.addMessage(messageObject);
+        Message newMessage = new Message(RunningRaceApplication.getInstance().getCurrentUser().getId(), message.getTextBody());
+        mChatItemAdaper.addMessage(newMessage);
+        lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
     }
 
     @Override

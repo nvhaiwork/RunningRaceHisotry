@@ -33,7 +33,7 @@ public class SinchService extends Service {
         }
 
         public void startClient() {
-            start(RunningRaceApplication.getInstance().getCurrentUser().getId());
+            start(RunningRaceApplication.getInstance().getCurrentUser().getName());
         }
 
         public void stopClient() {
@@ -107,14 +107,6 @@ public class SinchService extends Service {
                     .applicationKey(APP_KEY)
                     .applicationSecret(APP_SECRET)
                     .environmentHost(ENVIRONMENT).build();
-
-//            SinchClientBuilder builder = Sinch.getSinchClientBuilder();
-//            builder.context(this);
-//            builder.applicationKey(APP_KEY);
-//            builder.applicationSecret(APP_SECRET);
-//            builder.environmentHost(ENVIRONMENT);
-//            builder.userId(userName);
-//            mSinchClient = builder.build();
 
             mSinchClient.setSupportMessaging(true);
             mSinchClient.startListeningOnActiveConnection();

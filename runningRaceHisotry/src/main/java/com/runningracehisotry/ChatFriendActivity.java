@@ -230,7 +230,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
     @Override
     public void onStartFailed(SinchError error) {
-
+        Log.d("a", error.toString());
     }
 
     @Override
