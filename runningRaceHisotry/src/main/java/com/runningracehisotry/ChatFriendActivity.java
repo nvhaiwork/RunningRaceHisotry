@@ -14,6 +14,7 @@ import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
 import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.models.User;
+import com.runningracehisotry.service.SinchService;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
@@ -23,10 +24,14 @@ import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetAllGroupUserRequest;
 import com.runningracehisotry.webservice.base.GetGroupMemberRequest;
 import com.runningracehisotry.webservice.base.GetUserProfileRequest;
+import com.sinch.android.rtc.SinchError;
 
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.AsyncTask;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,13 +41,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ChatFriendActivity extends BaseActivity {
+public class ChatFriendActivity extends BaseActivity implements ServiceConnection, SinchService.StartFailedListener {
 
     private ListView mFriendListview;
     private FriendAdapter mFriendAdapter;
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
+
+    private SinchService.SinchServiceInterface mSinchServiceInterface;
+
+    private int selectedPosition = -1;
 
     @Override
     protected int addContent() {
@@ -51,6 +60,9 @@ public class ChatFriendActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        bindService(new Intent(this, SinchService.class), connection,
+                BIND_AUTO_CREATE);
+
         super.initView();
 
         mFriendListview = (ListView) findViewById(R.id.friends_list);
@@ -68,13 +80,23 @@ public class ChatFriendActivity extends BaseActivity {
 
         if (adapterView.getId() == R.id.friends_list) {
 
-            Intent selectRaceIntent = new Intent(ChatFriendActivity.this,
-                    ChatActivity.class);
+            selectedPosition = position;
 
-            selectRaceIntent.putExtra(
-                    Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(lstFriend.get(position).getFriend()));
-            startActivity(selectRaceIntent);
+            if (!mSinchServiceInterface.isStarted()) {
+                mSinchServiceInterface.startClient();
+            } else {
+                goToChat();
+            }
         }
+    }
+
+    private void goToChat() {
+        Intent selectRaceIntent = new Intent(ChatFriendActivity.this,
+                ChatActivity.class);
+
+        selectRaceIntent.putExtra(
+                Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(lstFriend.get(selectedPosition).getFriend()));
+        startActivity(selectRaceIntent);
     }
 
     @Override
@@ -192,4 +214,48 @@ public class ChatFriendActivity extends BaseActivity {
         }
     };
 
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        if (SinchService.class.getName().equals(componentName.getClassName())) {
+            mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
+            mSinchServiceInterface.setStartListener(this);
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        Log.d("a", name.toShortString());
+
+    }
+
+    @Override
+    public void onStartFailed(SinchError error) {
+
+    }
+
+    @Override
+    public void onStarted() {
+        goToChat();
+    }
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            if (SinchService.class.getName().equals(componentName.getClassName())) {
+                mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
+                mSinchServiceInterface.setStartListener(ChatFriendActivity.this);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d("a", name.toShortString());
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        unbindService(connection);
+        super.onDestroy();
+    }
 }

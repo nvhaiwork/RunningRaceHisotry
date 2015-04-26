@@ -1,19 +1,32 @@
 package com.runningracehisotry;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.runningracehisotry.adapters.ChatItemAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Message;
 import com.runningracehisotry.models.User;
+import com.runningracehisotry.service.SinchService;
 import com.runningracehisotry.views.CustomFontTextView;
+import com.sinch.android.rtc.PushPair;
+import com.sinch.android.rtc.messaging.MessageClient;
+import com.sinch.android.rtc.messaging.MessageClientListener;
+import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
+import com.sinch.android.rtc.messaging.MessageFailureInfo;
+
+import java.util.List;
 
 
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends BaseActivity implements ServiceConnection, MessageClientListener {
 
     private ListView lvMessages;
     private CustomFontTextView tvDes;
@@ -21,6 +34,8 @@ public class ChatActivity extends BaseActivity {
     private Button btnSend;
     private ChatItemAdapter mChatItemAdaper;
     private User currentFriend;
+
+    private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     @Override
     protected int addContent() {
@@ -44,6 +59,9 @@ public class ChatActivity extends BaseActivity {
             mChatItemAdaper = new ChatItemAdapter(this, mImageLoader, currentFriend);
             lvMessages.setAdapter(mChatItemAdaper);
         }
+
+        getApplicationContext().bindService(new Intent(this, SinchService.class), this,
+                BIND_AUTO_CREATE);
     }
 
 
@@ -79,5 +97,46 @@ public class ChatActivity extends BaseActivity {
 
         etMessage.setText("");
         lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        mSinchServiceInterface.addMessageClientListener(this);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
+    }
+
+    @Override
+    public void onIncomingMessage(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message) {
+        Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
+        mChatItemAdaper.addMessage(messageObject);
+    }
+
+    @Override
+    public void onMessageSent(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, String s) {
+        Message messageObject = new Message(RunningRaceApplication.getInstance().getCurrentUser().getId(), message.getTextBody());
+        mChatItemAdaper.addMessage(messageObject);
+    }
+
+    @Override
+    public void onMessageFailed(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, MessageFailureInfo messageFailureInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Sending failed: ")
+                .append(messageFailureInfo.getSinchError().getMessage());
+
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+
+    }
+
+    @Override
+    public void onShouldSendPushData(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, List<PushPair> pushPairs) {
+
     }
 }

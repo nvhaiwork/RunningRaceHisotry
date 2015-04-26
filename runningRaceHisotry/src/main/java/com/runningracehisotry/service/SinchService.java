@@ -1,11 +1,14 @@
 package com.runningracehisotry.service;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.runningracehisotry.RunningRaceApplication;
 import com.sinch.android.rtc.*;
 import com.sinch.android.rtc.messaging.MessageClientListener;
 import com.sinch.android.rtc.messaging.WritableMessage;
@@ -29,8 +32,8 @@ public class SinchService extends Service {
             return SinchService.this.isStarted();
         }
 
-        public void startClient(String userName) {
-            start(userName);
+        public void startClient() {
+            start(RunningRaceApplication.getInstance().getCurrentUser().getId());
         }
 
         public void stopClient() {
@@ -69,6 +72,9 @@ public class SinchService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+//        if(!isStarted()) {
+//            mServiceInterface.startClient();
+//        }
         return mServiceInterface;
     }
 
@@ -101,6 +107,14 @@ public class SinchService extends Service {
                     .applicationKey(APP_KEY)
                     .applicationSecret(APP_SECRET)
                     .environmentHost(ENVIRONMENT).build();
+
+//            SinchClientBuilder builder = Sinch.getSinchClientBuilder();
+//            builder.context(this);
+//            builder.applicationKey(APP_KEY);
+//            builder.applicationSecret(APP_SECRET);
+//            builder.environmentHost(ENVIRONMENT);
+//            builder.userId(userName);
+//            mSinchClient = builder.build();
 
             mSinchClient.setSupportMessaging(true);
             mSinchClient.startListeningOnActiveConnection();

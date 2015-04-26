@@ -47,6 +47,8 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
 
+        <service android:name=".service.SinchService"/>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id" />
