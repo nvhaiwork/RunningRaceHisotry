@@ -60,7 +60,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
     @Override
     protected void initView() {
-        bindService(new Intent(this, SinchService.class), connection,
+        bindService(new Intent(getApplicationContext(), SinchService.class), connection,
                 BIND_AUTO_CREATE);
 
         super.initView();

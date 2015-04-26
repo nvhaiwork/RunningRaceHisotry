@@ -92,6 +92,8 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     }
 
     private void sendMessage(String message) {
+        mSinchServiceInterface.sendMessage(currentFriend.getId(), message);
+
         Message newMessage = new Message(RunningRaceApplication.getInstance().getCurrentUser().getId(), message);
         mChatItemAdaper.addMessage(newMessage);
 
@@ -100,7 +102,8 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     }
 
     @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
+    public void onServiceConnected(ComponentName name, IBinder iBinder) {
+        mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
         mSinchServiceInterface.addMessageClientListener(this);
     }
 
