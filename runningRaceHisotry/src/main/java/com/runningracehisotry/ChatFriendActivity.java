@@ -49,6 +49,8 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
 
+    private CustomLoadingDialog mLoadingDialog;
+
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     private int selectedPosition = -1;
@@ -106,6 +108,9 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
     }
 
     private void getGroupOfUser() {
+        if(mLoadingDialog == null) {
+            mLoadingDialog = CustomLoadingDialog.show(this, "", "", false, false);
+        }
         GetAllGroupUserRequest request = new GetAllGroupUserRequest();
         request.setListener(callBackEvent);
         new Thread(request).start();
@@ -196,6 +201,14 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                 } catch (Exception e) {
 
                 } finally {
+
+                    try{
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                    }
+                    catch(Exception ex){
+                    }
                 }
 
             }

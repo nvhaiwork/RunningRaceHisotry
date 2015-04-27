@@ -41,6 +41,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -70,6 +71,27 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
     private Twitter twitter;
     private RequestToken requestToken;
     private String fbID, fullName, email, avatar;
+
+    static String TWITTER_CONSUMER_KEY = "CMt7BmVQ5cn8AzV1lfHqziwE5"; // place your cosumer key here
+    static String TWITTER_CONSUMER_SECRET = "Rf4zRtxZbkeUErnr7nO5YEC0TQO3Lo8Cle1QEDmrSYfOj1mY3H"; // place your consumer secret here
+
+    // Preference Constants
+    /* Shared preference keys */
+    private static final String PREF_NAME = "sample_twitter_pref";
+    private static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
+    private static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
+    private static final String PREF_KEY_TWITTER_LOGIN = "is_twitter_loggedin";
+    private static final String PREF_USER_NAME = "twitter_user_name";
+
+    /* Any number for uniquely distinguish your request */
+    public static final int WEBVIEW_REQUEST_CODE = 100;
+
+    // Twitter oauth urls
+
+    private String consumerKey = null;
+    private String consumerSecret = null;
+    private String callbackUrl = null;
+    private String oAuthVerifier = null;
 
     public LoginChoiceScreen() {
     }
@@ -108,6 +130,11 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 		mLoginFbBtn.setOnClickListener(this);
 		mContactUsBtn.setOnClickListener(this);
 		mLoginTwitterBtn.setOnClickListener(this);
+
+        /* initializing twitter parameters from string.xml */
+        initTwitterConfigs();
+//        checkTwitterLogin();
+
 	}
 
     public void printHashKey() {
@@ -135,6 +162,12 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 		super.onActivityResult(requestCode, resultCode, data);
 //		ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            String verifier = data.getExtras().getString(oAuthVerifier);
+
+            new GetTokenTask().execute(verifier);
+        }
 	}
 
 	/*
@@ -157,67 +190,6 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
 			mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
 					"", "", false, false);
-			// new LoginFbAsync().execute();
-//			List<String> permissions = Arrays.asList("public_profile",
-//					"user_friends", "email");
-//			ParseFacebookUtils.logIn(permissions, LoginChoiceScreen.this,
-//					new LogInCallback() {
-//
-//						@Override
-//						public void done(ParseUser user, ParseException arg1) {
-//							// TODO Auto-generated method stub
-//							if (user == null) {
-//
-//								Utilities
-//										.showAlertMessage(
-//												LoginChoiceScreen.this,
-//												getString(R.string.dialog_facebook_login_fail),
-//												getString(R.string.dialog_sign_in));
-//								mLoadingDialog.dismiss();
-//							} else if (user.isNew()) {
-//
-//								requestUserInfo();
-//							} else {
-//
-//								try {
-//
-//									user.fetch();
-//									mUser = user;
-//									if (!mUser.containsKey(Constants.KIND)) {
-//
-//										mUser.put(Constants.KIND,
-//												"fb:" + user.getUsername());
-//									}
-//
-//									mHistory = user.getList(Constants.DATA);
-//									mShoes = user.getList(Constants.SHOES);
-//									mFriends = user.getList(Constants.FRIENDS);
-//									user.setPassword("kki");
-//									CustomSharedPreferences.setPreferences(
-//											Constants.PREF_USERNAME,
-//											user.getUsername());
-//									CustomSharedPreferences.setPreferences(
-//											Constants.PREF_PASSWORD, "kki");
-//									Intent selectRaceIntent = new Intent(
-//											LoginChoiceScreen.this,
-//											SelectRaceActivity.class);
-//									selectRaceIntent
-//											.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-//													| Intent.FLAG_ACTIVITY_NEW_TASK);
-//									selectRaceIntent
-//											.putExtra(
-//													Constants.INTENT_SELECT_RACE_FROM_FRIENDS,
-//													-1);
-//									startActivity(selectRaceIntent);
-//									mLoadingDialog.dismiss();
-//									finish();
-//								} catch (ParseException e) {
-//
-//									mLoadingDialog.dismiss();
-//								}
-//							}
-//						}
-//					});
 
             performFacebookLogin();
 			break;
@@ -225,125 +197,9 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
 			mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
 					"", "", false, false);
-//			ParseTwitterUtils.logIn(LoginChoiceScreen.this,
-//					new LogInCallback() {
-//
-//						@Override
-//						public void done(ParseUser user, ParseException arg1) {
-//							// TODO Auto-generated method stub
-//
-//							if (user == null) {
-//
-//								Utilities
-//										.showAlertMessage(
-//												LoginChoiceScreen.this,
-//												"Uh oh. The user cancelled the Twitter login.",
-//												getString(R.string.dialog_sign_in));
-//								mLoadingDialog.dismiss();
-//							} else if (user.isNew()) {
-//
-//								String twitterName = ParseTwitterUtils
-//										.getTwitter().getScreenName();
-//
-//								mShoes = new ArrayList<ParseObject>();
-//								mHistory = new ArrayList<HashMap<String, Object>>();
-//								mFriends = new ArrayList<ParseUser>();
-//								user.put(Constants.SHOES, mShoes);
-//								user.put(Constants.DATA, mHistory);
-//								user.put(Constants.FRIENDS, mFriends);
-//								user.put(Constants.FULLNAME, twitterName);
-//								user.put(Constants.KIND, "tw:" + twitterName);
-//								user.setPassword("kki");
-//								user.saveInBackground();
-//								mUser = user;
-//								CustomSharedPreferences.setPreferences(
-//										Constants.PREF_USERNAME,
-//										user.getUsername());
-//								CustomSharedPreferences.setPreferences(
-//										Constants.PREF_PASSWORD, "kki");
-//								Intent selectRaceIntent = new Intent(
-//										LoginChoiceScreen.this,
-//										SelectRaceActivity.class);
-//								selectRaceIntent
-//										.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-//												| Intent.FLAG_ACTIVITY_NEW_TASK);
-//								selectRaceIntent
-//										.putExtra(
-//												Constants.INTENT_SELECT_RACE_FROM_FRIENDS,
-//												-1);
-//								startActivity(selectRaceIntent);
-//								mLoadingDialog.dismiss();
-//								finish();
-//							} else {
-//
-//								try {
-//
-//									user.fetch();
-//									mUser = user;
-//									if (!mUser.containsKey(Constants.KIND)) {
-//
-//										String twitterName = ParseTwitterUtils
-//												.getTwitter().getScreenName();
-//										mUser.put(Constants.KIND, "tw:"
-//												+ twitterName);
-//									}
-//
-//									mHistory = user.getList(Constants.DATA);
-//									mShoes = user.getList(Constants.SHOES);
-//									mFriends = user.getList(Constants.FRIENDS);
-//									user.setPassword("kki");
-//									CustomSharedPreferences.setPreferences(
-//											Constants.PREF_USERNAME,
-//											user.getUsername());
-//									CustomSharedPreferences.setPreferences(
-//											Constants.PREF_PASSWORD, "kki");
-//									Intent selectRaceIntent = new Intent(
-//											LoginChoiceScreen.this,
-//											SelectRaceActivity.class);
-//									selectRaceIntent
-//											.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-//													| Intent.FLAG_ACTIVITY_NEW_TASK);
-//									selectRaceIntent
-//											.putExtra(
-//													Constants.INTENT_SELECT_RACE_FROM_FRIENDS,
-//													-1);
-//									startActivity(selectRaceIntent);
-//									mLoadingDialog.dismiss();
-//									finish();
-//								} catch (ParseException e) {
-//									// TODO Auto-generated catch block
-//									mLoadingDialog.dismiss();
-//								}
-//							}
-//						}
-//					});
-//            Uri uri = getIntent().getData();
-//
-//            if (uri != null && uri.toString().startsWith(callbackUrl)) {
-//
-//                String verifier = uri.getQueryParameter(oAuthVerifier);
-//
-//                try {
-//
-//					/* Getting oAuth authentication token */
-//                    AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
-//
-//					/* Getting user id form access token */
-//                    long userID = accessToken.getUserId();
-//                    final User user = twitter.showUser(userID);
-//                    final String username = user.getName();
-//
-//					/* save updated token */
-//                    saveTwitterInfo(accessToken);
-//
-//                    loginLayout.setVisibility(View.GONE);
-//                    shareLayout.setVisibility(View.VISIBLE);
-//                    userName.setText(getString(R.string.hello) + username);
-//
-//                } catch (Exception e) {
-//                    Log.e("Failed to login Twitter!!", e.getMessage());
-//                }
-//            }
+
+            loginToTwitter();
+
 			break;
 		case R.id.login_contact_us:
 
@@ -351,6 +207,81 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 			break;
 		}
 	}
+
+
+    private void saveTwitterInfo(AccessToken accessToken) {
+
+        long userID = accessToken.getUserId();
+
+        twitter4j.User user;
+        try {
+            user = twitter.showUser(userID);
+
+            String username = user.getName();
+
+			/* Storing oAuth tokens to shared preferences */
+            CustomSharedPreferences.setPreferences(PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
+            CustomSharedPreferences.setPreferences(PREF_KEY_OAUTH_SECRET, accessToken.getTokenSecret());
+            CustomSharedPreferences.setPreferences(PREF_KEY_TWITTER_LOGIN, true);
+            CustomSharedPreferences.setPreferences(PREF_USER_NAME, username);
+
+        } catch (TwitterException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    private void initTwitterConfigs() {
+        consumerKey = getString(R.string.twitter_consumer_key);
+        consumerSecret = getString(R.string.twitter_consumer_secret);
+        callbackUrl = getString(R.string.twitter_callback);
+        oAuthVerifier = getString(R.string.twitter_oauth_verifier);
+
+        final ConfigurationBuilder builder = new ConfigurationBuilder();
+        builder.setOAuthConsumerKey(consumerKey);
+        builder.setOAuthConsumerSecret(consumerSecret);
+
+        final Configuration configuration = builder.build();
+        final TwitterFactory factory = new TwitterFactory(configuration);
+        twitter = factory.getInstance();
+    }
+
+    private void loginToTwitter() {
+        boolean isLoggedIn = CustomSharedPreferences.getPreferences(PREF_KEY_TWITTER_LOGIN, false);
+//        isLoggedIn = false;
+
+        if (!isLoggedIn) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        requestToken = twitter.getOAuthRequestToken(callbackUrl);
+
+                        /**
+                         *  Loading twitter login page on webview for authorization
+                         *  Once authorized, results are received at onActivityResult
+                         *  */
+                        final Intent intent = new Intent(LoginChoiceScreen.this, WebViewActivity.class);
+                        intent.putExtra(WebViewActivity.EXTRA_URL, requestToken.getAuthenticationURL());
+                        startActivityForResult(intent, WEBVIEW_REQUEST_CODE);
+
+                    } catch (TwitterException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+
+        } else {
+
+            String token = CustomSharedPreferences.getPreferences(PREF_KEY_OAUTH_TOKEN, "");
+            String secret = CustomSharedPreferences.getPreferences(PREF_KEY_OAUTH_SECRET, "");
+
+            new GetTokenTask().execute(new String[]{token, secret});
+        }
+    }
+
+
+
 
         private void performFacebookLogin() {
             Log.d("FACEBOOK", "performFacebookLogin");
@@ -394,6 +325,11 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                 }
             });
         }
+
+    private boolean isTwitterLoggedInAlready() {
+        // return twitter login status from Shared Preferences
+        return CustomSharedPreferences.getPreferences(PREF_KEY_TWITTER_LOGIN, false);
+    }
 
 	private void requestUserInfo() {
 
@@ -512,25 +448,25 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
     }
 
     private void handleResponseRegister(Object data) {
-        CustomSharedPreferences.setPreferences(Constants.PREF_FB_ID, fbID);
+//        CustomSharedPreferences.setPreferences(Constants.PREF_FB_ID, fbID);
         getCurrentUserData();
-//        User newUser = new User();
-//        newUser.setId(fbID);
-//        newUser.setEmail(email);
-//        newUser.setFull_name(fullName);
-//        newUser.setName(fullName);
-//        newUser.setProfile_image(avatar);
-//        newUser.setType("fb:" + fbID);
-//
-//        RunningRaceApplication.getInstance().setCurrentUser(newUser);
-//
-//        Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
-//        selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
-//
-//        mLoadingDialog.dismiss();
-//        startActivity(selectRaceIntent);
-//        finish();
+        User newUser = new User();
+        newUser.setId(fbID);
+        newUser.setEmail(email);
+        newUser.setFull_name(fullName);
+        newUser.setName(fullName);
+        newUser.setProfile_image(avatar);
+        newUser.setType("fb:" + fbID);
+
+        RunningRaceApplication.getInstance().setCurrentUser(newUser);
+
+        Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
+        selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+
+        mLoadingDialog.dismiss();
+        startActivity(selectRaceIntent);
+        finish();
 
     }
 
@@ -563,4 +499,62 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                     }*/
         }
     }
+
+
+    private class GetTokenTask extends AsyncTask <String, Void, AccessToken> {
+
+        @Override
+        protected AccessToken doInBackground(String... params) {
+
+            AccessToken accessToken = null;
+            try {
+
+                if(params.length == 1) {
+                    accessToken = twitter.getOAuthAccessToken(requestToken, params[0]);
+                } else if(params.length == 2) {
+                    accessToken = new AccessToken(params[0], params[1]);
+                    final ConfigurationBuilder builder = new ConfigurationBuilder();
+                    builder.setDebugEnabled(true)
+                            .setOAuthConsumerKey(consumerKey)
+                            .setOAuthConsumerSecret(consumerSecret)
+                            .setOAuthAccessToken(params[0])
+                            .setOAuthAccessTokenSecret(params[1]);
+                    builder.setOAuthConsumerKey(consumerKey);
+                    builder.setOAuthConsumerSecret(consumerSecret);
+
+                    final Configuration configuration = builder.build();
+                    final TwitterFactory factory = new TwitterFactory(configuration);
+                    twitter = factory.getInstance();
+                }
+
+                long userID = accessToken.getUserId();
+                final twitter4j.User user;
+                try {
+                    user = twitter.showUser(userID);
+                    fullName = user.getName();
+                    avatar = user.getProfileImageURL();
+                    fbID = String.valueOf(userID);
+
+                    saveTwitterInfo(accessToken);
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                }
+            } catch (TwitterException e) {
+                e.printStackTrace();
+            }
+            return accessToken;
+        }
+
+        @Override
+        protected void onPostExecute(AccessToken accessToken) {
+            super.onPostExecute(accessToken);
+
+            RegisterFacebookRequest request = new RegisterFacebookRequest(fbID, fullName, avatar);
+            request.setListener(LoginChoiceScreen.this);
+            new Thread(request).start();
+
+
+        }
+    }
+
 }

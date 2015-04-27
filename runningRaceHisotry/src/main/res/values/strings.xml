@@ -168,4 +168,10 @@
     <!-- Add Runner screen -->
     <string name="runner_get_failed">Cannot get runner!</string>
     <string name="group_add_failed">Cannot add new group!</string>
+
+    <!-- Twitter Configurations -->
+    <string name="twitter_callback">http://runningracehistory.com/oauth/callback?provider=twitter</string>
+    <string name="twitter_consumer_key">CMt7BmVQ5cn8AzV1lfHqziwE5</string>
+    <string name="twitter_consumer_secret">Rf4zRtxZbkeUErnr7nO5YEC0TQO3Lo8Cle1QEDmrSYfOj1mY3H</string>
+    <string name="twitter_oauth_verifier">oauth_verifier</string>
 </resources>
