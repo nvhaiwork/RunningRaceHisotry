@@ -29,8 +29,8 @@ import org.json.JSONObject;
 
 public class FriendsActivity extends BaseActivity {
 
-	private ListView mFriendListview;
-	private FriendAdapter mFriendAdapter;
+    private ListView mFriendListview;
+    private FriendAdapter mFriendAdapter;
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
@@ -38,52 +38,52 @@ public class FriendsActivity extends BaseActivity {
 
 
     @Override
-	protected int addContent() {
-		// TODO Auto-generated method stub
-		return R.layout.activity_friends;
-	}
+    protected int addContent() {
+        // TODO Auto-generated method stub
+        return R.layout.activity_friends;
+    }
 
-	@Override
-	protected void initView() {
-		// TODO Auto-generated method stub
-		super.initView();
+    @Override
+    protected void initView() {
+        // TODO Auto-generated method stub
+        super.initView();
 
-		mFriendListview = (ListView) findViewById(R.id.friends_list);
-		mFriendListview.setOnItemClickListener(this);
+        mFriendListview = (ListView) findViewById(R.id.friends_list);
+        mFriendListview.setOnItemClickListener(this);
 
-		// Initiation data
-		// new LoadFriendsAsyncTask().execute();
+        // Initiation data
+        // new LoadFriendsAsyncTask().execute();
         if(mLoadingDialog == null) {
             mLoadingDialog = CustomLoadingDialog.show(FriendsActivity.this, "", "", false, false);
         }
 
         getGroupOfUser();
-	}
+    }
 
 
 
     @Override
-	public void onItemClick(AdapterView<?> adapterView, View view,
-			int position, long id) {
-		// TODO Auto-generated method stub
-		super.onItemClick(adapterView, view, position, id);
+    public void onItemClick(AdapterView<?> adapterView, View view,
+                            int position, long id) {
+        // TODO Auto-generated method stub
+        super.onItemClick(adapterView, view, position, id);
 
-		if (adapterView.getId() == R.id.friends_list) {
+        if (adapterView.getId() == R.id.friends_list) {
 
-			Intent selectRaceIntent = new Intent(FriendsActivity.this,
-					SelectRaceActivity.class);
-			selectRaceIntent.putExtra(
-					Constants.INTENT_SELECT_RACE_FROM_FRIENDS, position);
-			startActivity(selectRaceIntent);
-		}
-	}
+            Intent selectRaceIntent = new Intent(FriendsActivity.this,
+                    SelectRaceActivity.class);
+            selectRaceIntent.putExtra(
+                    Constants.INTENT_SELECT_RACE_FROM_FRIENDS, position);
+            startActivity(selectRaceIntent);
+        }
+    }
 
-	@Override
-	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		// super.onBackPressed();
-		backToHome();
-	}
+    @Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        // super.onBackPressed();
+        backToHome();
+    }
 
     private void getGroupOfUser() {
         GetAllGroupUserRequest request = new GetAllGroupUserRequest();
@@ -103,6 +103,15 @@ public class FriendsActivity extends BaseActivity {
                 LogUtil.d(Constants.LOG_TAG, "processGetGroupOfUser total: " + (totalFriends + 1));
                 for(Group group : lstGroup){
                     getFriendOfUser(group.getGroupId());
+                }
+            }
+            else{
+                try{
+                    if (mLoadingDialog.isShowing()) {
+                        mLoadingDialog.dismiss();
+                    }
+                }
+                catch(Exception ex){
                 }
             }
         }
