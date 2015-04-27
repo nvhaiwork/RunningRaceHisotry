@@ -449,7 +449,8 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
     private void handleResponseRegister(Object data) {
         CustomSharedPreferences.setPreferences(Constants.PREF_FB_ID, fbID);
-        getCurrentUserData();
+//        getCurrentUserData();
+
         User newUser = new User();
         newUser.setId(fbID);
         newUser.setEmail(email);

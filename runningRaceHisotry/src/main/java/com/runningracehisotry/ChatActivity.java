@@ -84,7 +84,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
         if(v.getId() == R.id.btn_send) {
             String message = etMessage.getText().toString().trim();
-            if(message != null || message.length() > 0) {
+            if(message != null && message.length() > 0) {
                 sendMessage(message);
             }
         }
@@ -112,6 +112,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     public void onIncomingMessage(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message) {
         Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
         mChatItemAdaper.addMessage(messageObject);
+        lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
     }
 
     @Override
