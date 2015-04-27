@@ -460,6 +460,11 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
         RunningRaceApplication.getInstance().setCurrentUser(newUser);
 
+        Gson gson  = new Gson();
+        String serialUSer = gson.toJson(newUser);
+
+        CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, serialUSer);
+
         Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
         selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
