@@ -111,6 +111,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
         if(mLoadingDialog == null) {
             mLoadingDialog = CustomLoadingDialog.show(this, "", "", false, false);
         }
+
         GetAllGroupUserRequest request = new GetAllGroupUserRequest();
         request.setListener(callBackEvent);
         new Thread(request).start();
@@ -129,10 +130,17 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                 for(Group group : lstGroup){
                     getFriendOfUser(group.getGroupId());
                 }
+            } else {
+                if(mLoadingDialog != null) {
+                    mLoadingDialog.dismiss();
+                }
             }
         }
         catch(Exception ex){
             ex.printStackTrace();
+            if(mLoadingDialog != null) {
+                mLoadingDialog.dismiss();
+            }
         }
 
     }
@@ -169,11 +177,18 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                 mFriendListview.setAdapter(mFriendAdapter);
                 mFriendAdapter.notifyDataSetChanged();
                 LogUtil.d(Constants.LOG_TAG, "return >= show "  + returnedFriends +"|"+ totalFriends);
+
+                if(mLoadingDialog != null) {
+                    mLoadingDialog.dismiss();
+                }
             }
 
         }
         catch(Exception ex){
             ex.printStackTrace();
+            if(mLoadingDialog != null) {
+                mLoadingDialog.dismiss();
+            }
         }
     }
 
@@ -199,15 +214,8 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                     // Login success
                     processGetFriendGroupOfUser(data.toString());
                 } catch (Exception e) {
-
-                } finally {
-
-                    try{
-                        if (mLoadingDialog.isShowing()) {
-                            mLoadingDialog.dismiss();
-                        }
-                    }
-                    catch(Exception ex){
+                    if(mLoadingDialog == null) {
+                        mLoadingDialog.dismiss();
                     }
                 }
 
