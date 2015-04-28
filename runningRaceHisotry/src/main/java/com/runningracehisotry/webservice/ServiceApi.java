@@ -61,6 +61,7 @@ public class ServiceApi {
     public static final String API_UPDATE_RACE = "/race/";
     public static final String API_DELETE_RACE_BY_ID = "/race/";
     public static final String API_GET_RACES_BY_TYPE = "/race/getRacesByType";
+    public static final String API_GET_ALL_RACES = "/race";
     //quynt3 declare
     public static final String API_GET_FRIEND_RUNNER = "/user/friendRunner";
 

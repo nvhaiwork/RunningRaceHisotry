@@ -44,7 +44,9 @@ import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.AddLikeRequest;
+import com.runningracehisotry.webservice.base.BaseGetRequest;
 import com.runningracehisotry.webservice.base.DeleteRaceRequest;
+import com.runningracehisotry.webservice.base.GetAllRaceRequest;
 import com.runningracehisotry.webservice.base.GetRaceByTypeRequest;
 import com.runningracehisotry.webservice.base.UnLikeRequest;
 
@@ -269,12 +271,20 @@ public class RacesDetailActivity extends BaseActivity implements
             this.mSelectedRace = Constants.SELECT_RACE_5K;
             LogUtil.d(Constants.LOG_TAG, "Race Call fake 6 -> 1");
         }*/
-        GetRaceByTypeRequest request = null;
+        BaseGetRequest request = null;
         if(mFriendRace == -1){
-            request = new GetRaceByTypeRequest("date", this.mSelectedRace);
+            if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
+                request = new GetAllRaceRequest();
+            } else {
+                request = new GetRaceByTypeRequest("date", this.mSelectedRace);
+            }
         }
         else{
-            request = new GetRaceByTypeRequest("date", this.mSelectedRace, mFriendRace);
+            if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
+                request = new GetAllRaceRequest();
+            } else {
+                request = new GetRaceByTypeRequest("date", this.mSelectedRace, mFriendRace);
+            }
         }
         request.setListener(callBackEvent);
         new Thread(request).start();
@@ -284,6 +294,19 @@ public class RacesDetailActivity extends BaseActivity implements
         Type listType = new TypeToken<List<Race>>(){}.getType();
         Gson gson = new Gson();
         List<Race> lst = gson.fromJson(data.toString(), listType);
+
+        //TODO magic code, remove later
+        if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
+            List<Race> lst2 = new ArrayList<Race>();
+            for(Race race : lst) {
+
+                if(race.getEvenType() == 6) {
+                    lst2.add(race);
+                }
+            }
+
+            lst = lst2;
+        }
         /*for(Race race: lst){
             if(race.getLikes() != null){
                 LogUtil.d(Constants.LOG_TAG, "Race Like: "+ race.getLikes().size());

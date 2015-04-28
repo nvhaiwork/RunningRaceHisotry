@@ -31,6 +31,7 @@ public final class ServiceConstants {
     public static final String METHOD_UPDATE_RACE = "updateRace";
     public static final String METHOD_DELETE_RACE_BY_ID = "deleteRaceById";
     public static final String METHOD_GET_RACES_BY_TYPE = "getRacesByType";
+    public static final String METHOD_GET_ALL_RACES = "getAllRace";
 
 
     //quynt3 declare

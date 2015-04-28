@@ -152,14 +152,19 @@ public class MyShoesActivity extends BaseActivity implements
                 lst.add(shoe);
             }
         }*/
-        Type listType = new TypeToken<List<Shoe>>(){}.getType();
-		Gson gson = new Gson();
-        lst = gson.fromJson(data.toString(), listType);
-        //lst = gson.fromJson(data.toString(), List.class);
-        for(Shoe shoe: lst){
-            Log.d(mCurrentClassName, "Shoe id|size|size: " + shoe.getId()
-                    +"|"+shoe.getMilesShoesHistories().size()
-                    +"|"+shoe.getRaces().size());
+        try {
+            Type listType = new TypeToken<List<Shoe>>() {
+            }.getType();
+            Gson gson = new Gson();
+            lst = gson.fromJson(data.toString(), listType);
+            //lst = gson.fromJson(data.toString(), List.class);
+            for (Shoe shoe : lst) {
+                Log.d(mCurrentClassName, "Shoe id|size|size: " + shoe.getId()
+                        + "|" + shoe.getMilesShoesHistories().size()
+                        + "|" + shoe.getRaces().size());
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
 
         mShoesAdapter = new NewMyShoeAdapter(this, lst, isSelectShoe, mImageLoader);
