@@ -158,13 +158,16 @@ public class MyShoesActivity extends BaseActivity implements
             Gson gson = new Gson();
             lst = gson.fromJson(data.toString(), listType);
             //lst = gson.fromJson(data.toString(), List.class);
-            for (Shoe shoe : lst) {
-                Log.d(mCurrentClassName, "Shoe id|size|size: " + shoe.getId()
-                        + "|" + shoe.getMilesShoesHistories().size()
-                        + "|" + shoe.getRaces().size());
-            }
+//            for (Shoe shoe : lst) {
+//                Log.d(mCurrentClassName, "Shoe id|size|size: " + shoe.getId()
+//                        + "|" + shoe.getMilesShoesHistories().size()
+//                        + "|" + shoe.getRaces().size());
+//            }
         }catch (Exception e) {
             e.printStackTrace();
+            if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }
         }
 
         mShoesAdapter = new NewMyShoeAdapter(this, lst, isSelectShoe, mImageLoader);
