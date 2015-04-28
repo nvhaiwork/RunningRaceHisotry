@@ -92,6 +92,21 @@
                 android:text="@string/add_race_type_full_mar"
                 android:textColor="@color/dialog_button_text_color"
                 android:textSize="@dimen/dialog_chooser_item_text" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/view_seperator_bg" />
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/dialog_choose_event_other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/add_race_type_other"
+                android:textColor="@color/dialog_button_text_color"
+                android:textSize="@dimen/dialog_chooser_item_text" />
         </LinearLayout>
     </LinearLayout>
 

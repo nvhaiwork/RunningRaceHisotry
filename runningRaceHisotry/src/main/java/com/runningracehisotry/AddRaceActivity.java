@@ -549,6 +549,8 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 .findViewById(R.id.dialog_choose_event_half_mar);
         TextView typeFullMar = (TextView) dialog
                 .findViewById(R.id.dialog_choose_event_full_mar);
+        TextView typeOther = (TextView) dialog
+                .findViewById(R.id.dialog_choose_event_other);
         ChooseEventTypeItemClick itemClick = new ChooseEventTypeItemClick(
                 dialog);
 
@@ -564,12 +566,15 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
         type15k.setTag(3);
         typeHalfMar.setTag(4);
         typeFullMar.setTag(5);
+        typeOther.setTag(6);
+
 
         type5k.setOnClickListener(itemClick);
         type10k.setOnClickListener(itemClick);
         type15k.setOnClickListener(itemClick);
         typeHalfMar.setOnClickListener(itemClick);
         typeFullMar.setOnClickListener(itemClick);
+        typeOther.setOnClickListener(itemClick);
         dialog.show();
     }
 
@@ -596,6 +601,10 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             case Constants.SELECT_RACE_FULL_MAR:
 
                 rareTypeStr = getString(R.string.add_race_type_full_mar);
+                break;
+            case Constants.SELECT_RACE_OTHER:
+
+                rareTypeStr = getString(R.string.add_race_type_other);
                 break;
         }
 

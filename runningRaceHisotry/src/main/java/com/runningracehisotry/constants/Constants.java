@@ -43,6 +43,7 @@ public class Constants {
 	public static final int SELECT_RACE_15K = 3;
 	public static final int SELECT_RACE_HALF_MAR = 4;
 	public static final int SELECT_RACE_FULL_MAR = 5;
+    public static final int SELECT_RACE_OTHER = 6;
 
 	// Race distance
 	public static final String RACE_5K_DISTANCE = "3.1";
@@ -50,6 +51,7 @@ public class Constants {
 	public static final String RACE_15K_DISTANCE = "9.3";
 	public static final String RACE_HALF_MAR_DISTANCE = "13.1";
 	public static final String RACE_FULL_MAR_DISTANCE = "26.2";
+    public static final String RACE_OTHER_DISTANCE = "Other";
 
 	// Race distance
 	public static final String RACE_5K = "5K";
@@ -57,6 +59,7 @@ public class Constants {
 	public static final String RACE_15K = "15K";
 	public static final String RACE_HALF_MAR = "13.1K";
 	public static final String RACE_FULL_MAR = "26.2K";
+    public static final String RACE_OTHER = "Other";
 
 	// Intent
 	public static final String INTENT_SELECT_RACE = "intent_select_race";

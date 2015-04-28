@@ -30,7 +30,7 @@ public class SelectRaceActivity extends BaseActivity {
 	private TextView mWelcomeTxt, mTitleTxt;
 	private LinearLayout mAddRaceSuccessLayout;
 	private ImageView mRace5kBtn, mRace10kBtn, mRace15kBtn, mRaceHalfMarBtn,
-			mRaceFullMarBtn, mShoesBtn, mAddRaceBtn;
+			mRaceFullMarBtn, mShoesBtn, mAddRaceBtn, mRaceOther;
 
 	/*
 	 * (non-Javadoc)
@@ -65,7 +65,7 @@ public class SelectRaceActivity extends BaseActivity {
 		mRaceFullMarBtn = (ImageView) findViewById(R.id.select_race_full_marathon);
 		mRaceHalfMarBtn = (ImageView) findViewById(R.id.select_race_half_marathon);
 		mAddRaceSuccessLayout = (LinearLayout) findViewById(R.id.select_race_add_race_success);
-
+        mRaceOther  = (ImageView) findViewById(R.id.select_race_other);
 		mShoesBtn.setOnClickListener(this);
 		mRace5kBtn.setOnClickListener(this);
 		mRace10kBtn.setOnClickListener(this);
@@ -215,7 +215,14 @@ public class SelectRaceActivity extends BaseActivity {
 					Constants.SELECT_RACE_FULL_MAR);
 			isStartRaceDetail = true;
 			break;
-		}
+            case R.id.select_race_other:
+
+                racesDetail.putExtra(Constants.INTENT_SELECT_RACE,
+                        Constants.SELECT_RACE_OTHER);
+                isStartRaceDetail = true;
+                break;
+
+        }
 
 		if (isStartRaceDetail) {
 

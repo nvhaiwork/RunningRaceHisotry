@@ -128,6 +128,14 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
                     image.setImageResource(R.drawable.unlike_full);
                 }
                 break;
+            case Constants.SELECT_RACE_OTHER:
+                if(like){
+                    image.setImageResource(R.drawable.like_other);
+                }
+                else{
+                    image.setImageResource(R.drawable.unlike_other);
+                }
+                break;
         }
     }
 
@@ -280,8 +288,10 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
                 raceDistance = Constants.RACE_HALF_MAR_DISTANCE;
                 break;
             case Constants.SELECT_RACE_FULL_MAR:
-
                 raceDistance = Constants.RACE_FULL_MAR_DISTANCE;
+                break;
+            case Constants.SELECT_RACE_OTHER:
+                raceDistance = Constants.RACE_OTHER_DISTANCE;
                 break;
         }
 

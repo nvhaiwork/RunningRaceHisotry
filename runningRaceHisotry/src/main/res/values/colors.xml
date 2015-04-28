@@ -24,6 +24,7 @@
     <color name="text_button_bg_add_race">#ffba00</color>
     <color name="text_button_bg_my_shoes">#ff0071</color>
     <color name="people_you_may_know_color">#ff747b</color>
+    <color name="text_button_bg_other">#82cafa</color>
 
     <!-- Setting -->
     <color name="setting_about_text_color">#1d4fdf</color>

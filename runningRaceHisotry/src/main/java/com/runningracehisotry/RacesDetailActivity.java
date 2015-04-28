@@ -188,6 +188,21 @@ public class RacesDetailActivity extends BaseActivity implements
                 sortItemBg = R.drawable.races_detail_sort_item_full_mar_bg;
                 sortGroupBg = R.drawable.races_detail_sort_group_full_mar_bg;
                 break;
+
+            case Constants.SELECT_RACE_OTHER:
+
+                sortItemColor = getResources().getColorStateList(
+                        R.color.races_detail_sort_text_other);
+                shareButton = R.drawable.ic_race_share_other;
+                likeButton = R.drawable.unlike_other;
+                listTimeImg = R.drawable.ic_race_detail_time_other;
+                listImages = R.drawable.ic_race_detail_images_other;
+                titleImage = R.drawable.ic_races_detail_title_other;
+                sortItemBg = R.drawable.races_detail_sort_item_other_bg;
+                sortGroupBg = R.drawable.races_detail_sort_group_other_bg;
+                raceColor = getResources().getColor(R.color.text_button_bg_other);
+
+                break;
         }
 
         mEmptyText = (TextView) findViewById(R.id.races_detail_no_item);
@@ -236,12 +251,16 @@ public class RacesDetailActivity extends BaseActivity implements
             mLoadingDialog = CustomLoadingDialog.show(RacesDetailActivity.this, "", "", false, false);
         }
 
+        /*if(mSelectedRace == Constants.SELECT_RACE_OTHER){
+            this.mSelectedRace = Constants.SELECT_RACE_5K;
+            LogUtil.d(Constants.LOG_TAG, "Race Call fake 6 -> 1");
+        }*/
         GetRaceByTypeRequest request = null;
         if(mFriendRace == -1){
-            request = new GetRaceByTypeRequest("date", mSelectedRace);
+            request = new GetRaceByTypeRequest("date", this.mSelectedRace);
         }
         else{
-            request = new GetRaceByTypeRequest("date", mSelectedRace, mFriendRace);
+            request = new GetRaceByTypeRequest("date", this.mSelectedRace, mFriendRace);
         }
         request.setListener(callBackEvent);
         new Thread(request).start();

@@ -115,6 +115,7 @@
     <string name="add_race_type_15k">15K (9.3MI)</string>
     <string name="add_race_type_half_mar">Half Marathon</string>
     <string name="add_race_type_full_mar">Full Marathon</string>
+    <string name="add_race_type_other">Other</string>
 
     <!-- Add shoe -->
     <string name="add_shoe_title">ADD A SHOE</string>
