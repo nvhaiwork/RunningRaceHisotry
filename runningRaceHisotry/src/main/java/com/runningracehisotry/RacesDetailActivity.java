@@ -256,7 +256,7 @@ public class RacesDetailActivity extends BaseActivity implements
             /*String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "0");
             mFriendRace = Integer.parseInt(userId);*/
         }
-        LogUtil.d(Constants.LOG_TAG, "Race Call by type: " + mSelectedRace +"|"+ mFriendRace);
+        LogUtil.d(Constants.LOG_TAG, "Race Call by type|friend Id: " + mSelectedRace +"|"+ mFriendRace);
         getRaceByType(mSelectedRace, mFriendRace);
     }
 
@@ -400,9 +400,7 @@ public class RacesDetailActivity extends BaseActivity implements
                 } catch (Exception e) {
                     e.printStackTrace();
                     Utilities.showAlertMessage(
-                            RacesDetailActivity.this,
-                            "get race list failed",
-                            "");
+                            RacesDetailActivity.this,getResources().getString(R.string.race_get_failed),"");
                 } finally {
                     try{
                         if (mLoadingDialog.isShowing()) {
