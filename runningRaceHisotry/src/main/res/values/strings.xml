@@ -166,6 +166,7 @@
     <string name="race_add_failed">Add race failed!</string>
     <string name="race_update_failed">Update race failed!</string>
     <string name="race_delete_failed">Delete race failed!</string>
+    <string name="race_get_failed">Cannot get race detail!</string>
     <!-- Add Runner screen -->
     <string name="runner_get_failed">Cannot get runner!</string>
     <string name="group_add_failed">Cannot add new group!</string>
