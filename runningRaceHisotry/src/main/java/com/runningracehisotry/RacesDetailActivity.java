@@ -49,6 +49,7 @@ import com.runningracehisotry.webservice.base.GetRaceByTypeRequest;
 import com.runningracehisotry.webservice.base.UnLikeRequest;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -56,6 +57,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -68,7 +70,18 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.json.JSONObject;
+
+import twitter4j.StatusUpdate;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 
 public class RacesDetailActivity extends BaseActivity implements
         OnCheckedChangeListener, OnRaceItemClickListener, OnRaceItemDelete,
@@ -93,6 +106,7 @@ public class RacesDetailActivity extends BaseActivity implements
     private int typeLike;
     private int likeRaceId;
     private CustomLoadingDialog mLoadingDialog;
+    private ProgressDialog pDialog;
 
 
 
@@ -1221,6 +1235,67 @@ public class RacesDetailActivity extends BaseActivity implements
 
             dialog.dismiss();
         }
+    }
+
+    class updateTwitterStatus extends AsyncTask<String, String, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pDialog = new ProgressDialog(RacesDetailActivity.this);
+            pDialog.setMessage("Posting to twitter...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        protected Void doInBackground(String... args) {
+
+            String status = args[0];
+            try {
+                boolean isLoggedIn = CustomSharedPreferences.getPreferences(LoginChoiceScreen.PREF_KEY_TWITTER_LOGIN, false);
+                if(isLoggedIn) {
+                    // Access Token
+                    String access_token = CustomSharedPreferences.getPreferences(LoginChoiceScreen.PREF_KEY_OAUTH_TOKEN, "");
+                    // Access Token Secret
+                    String access_token_secret = CustomSharedPreferences.getPreferences(LoginChoiceScreen.PREF_KEY_OAUTH_SECRET, "");
+
+                    AccessToken accessToken = new AccessToken(access_token, access_token_secret);
+
+
+                    ConfigurationBuilder builder = new ConfigurationBuilder();
+                    builder = new ConfigurationBuilder();
+                    builder.setDebugEnabled(true)
+                            .setOAuthConsumerKey(RacesDetailActivity.this.getString(R.string.twitter_consumer_key))
+                            .setOAuthConsumerSecret(RacesDetailActivity.this.getString(R.string.twitter_consumer_secret))
+                            .setOAuthAccessToken(access_token)
+                            .setOAuthAccessTokenSecret(access_token_secret);
+                    Twitter twitter = new TwitterFactory(builder.build()).getInstance(accessToken);
+
+                    // Update status
+                    StatusUpdate statusUpdate = new StatusUpdate(status);
+
+                    twitter4j.Status response = twitter.updateStatus(statusUpdate);
+                    Log.d("Status", response.getText());
+                } else {
+
+                }
+
+            } catch (TwitterException e) {
+                Log.d("Failed to post!", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+			/* Dismiss the progress dialog after sharing */
+            pDialog.dismiss();
+
+            Toast.makeText(RacesDetailActivity.this, "Posted to Twitter!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }

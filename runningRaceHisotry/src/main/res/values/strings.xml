@@ -178,5 +178,6 @@
 
     <!-- error when Share-->
     <string name="share_fb_failed">Cannot share via FaceBook</string>
+    <string name="share_tw_failed_not_login_before">Cannot share via FaceBook because your twitter account is not logged in before</string>
     <string name="share_tw_failed">Cannot share via Twitter</string>
 </resources>

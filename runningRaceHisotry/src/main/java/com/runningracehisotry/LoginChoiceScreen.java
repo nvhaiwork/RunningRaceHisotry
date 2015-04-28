@@ -77,11 +77,11 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
     // Preference Constants
     /* Shared preference keys */
-    private static final String PREF_NAME = "sample_twitter_pref";
-    private static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
-    private static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
-    private static final String PREF_KEY_TWITTER_LOGIN = "is_twitter_loggedin";
-    private static final String PREF_USER_NAME = "twitter_user_name";
+    public static final String PREF_NAME = "sample_twitter_pref";
+    public static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
+    public static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
+    public static final String PREF_KEY_TWITTER_LOGIN = "is_twitter_loggedin";
+    public static final String PREF_USER_NAME = "twitter_user_name";
 
     /* Any number for uniquely distinguish your request */
     public static final int WEBVIEW_REQUEST_CODE = 100;
@@ -326,76 +326,6 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
             });
         }
 
-    private boolean isTwitterLoggedInAlready() {
-        // return twitter login status from Shared Preferences
-        return CustomSharedPreferences.getPreferences(PREF_KEY_TWITTER_LOGIN, false);
-    }
-
-	private void requestUserInfo() {
-
-		Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
-				new Request.GraphUserCallback() {
-
-					@Override
-					public void onCompleted(GraphUser user, Response response) {
-						// TODO Auto-generated method stub
-
-						if (user != null) {
-
-							ParseUser pUser = ParseUser.getCurrentUser();
-							mShoes = new ArrayList<ParseObject>();
-							mHistory = new ArrayList<HashMap<String, Object>>();
-							mFriends = new ArrayList<ParseUser>();
-							pUser.setEmail(user.getProperty("email").toString());
-							pUser.put(Constants.SHOES, mShoes);
-							pUser.put(Constants.DATA, mHistory);
-							pUser.put(Constants.FRIENDS, mFriends);
-							pUser.put(Constants.FULLNAME, user.getFirstName()
-									+ " " + user.getLastName());
-							pUser.put(Constants.KIND, "fb:" + user.getId());
-							pUser.setPassword("kki");
-							pUser.saveInBackground();
-							mUser = pUser;
-
-							CustomSharedPreferences.setPreferences(
-									Constants.PREF_USERNAME,
-									pUser.getUsername());
-							CustomSharedPreferences.setPreferences(
-									Constants.PREF_PASSWORD, "kki");
-
-							Intent selectRaceIntent = new Intent(
-									LoginChoiceScreen.this,
-									SelectRaceActivity.class);
-							selectRaceIntent
-									.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-											| Intent.FLAG_ACTIVITY_NEW_TASK);
-							selectRaceIntent.putExtra(
-									Constants.INTENT_SELECT_RACE_FROM_FRIENDS,
-									-1);
-							startActivity(selectRaceIntent);
-							mLoadingDialog.dismiss();
-							finish();
-						} else if (response.getError() != null) {
-							if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY)
-									|| (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
-
-								LogUtil.e("makeMeRequestForUserData",
-										"The facebook session was invalidated.");
-							} else {
-
-								LogUtil.e("makeMeRequestForUserData",
-										"Some other error: "
-												+ response.getError()
-														.getErrorMessage());
-							}
-
-							mLoadingDialog.dismiss();
-						}
-					}
-				});
-
-		request.executeAsync();
-	}
 
     @Override
     public void Wsdl2CodeStartedRequest() {
@@ -471,6 +401,8 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
         selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
 
         mLoadingDialog.dismiss();
+
+        RunningRaceApplication.getInstance().setSocialLogin(true);
         startActivity(selectRaceIntent);
         finish();
 

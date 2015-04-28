@@ -48,7 +48,7 @@
         <activity android:name="com.runningracehisotry.ChatFriendActivity" />
         <activity android:name="com.runningracehisotry.WebViewActivity" />
         <activity android:name="com.runningracehisotry.ChatActivity"
-            android:configChanges="keyboard|keyboardHidden"/>
+            android:windowSoftInputMode="adjustNothing"/>
 
         <!-- Face book -->
         <activity
