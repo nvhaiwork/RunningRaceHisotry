@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.facebook.widget.FacebookDialog;
 import com.google.gson.Gson;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
@@ -372,6 +373,10 @@ public class Utilities {
 		} catch (Exception e) {
 		}
 	}
+
+    public static void shareTwitter(Activity context, String shareText) {
+
+    }
 
     // Gson util
     public static String toJson(Object obj){
