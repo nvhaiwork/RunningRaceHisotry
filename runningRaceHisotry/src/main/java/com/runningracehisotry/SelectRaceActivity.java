@@ -73,7 +73,7 @@ public class SelectRaceActivity extends BaseActivity {
 		mAddRaceBtn.setOnClickListener(this);
 		mRaceFullMarBtn.setOnClickListener(this);
 		mRaceHalfMarBtn.setOnClickListener(this);
-
+        mRaceOther.setOnClickListener(this);
 		// For ver 1.1, old user does not have friends, so create new friends
 		// array
 		if (mFriends == null) {

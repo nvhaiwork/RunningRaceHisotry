@@ -127,15 +127,11 @@
                 android:id="@+id/select_race_other"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:layout_marginTop="@dimen/select_race_item_margin_top"
                 android:layout_alignParentRight="true"
-
                 android:layout_below="@+id/select_race_full_marathon"
                 android:contentDescription="@null"
-
                 android:src="@drawable/ic_select_race_other"
-
-
                 android:scaleType="fitEnd" />
 
             <com.runningracehisotry.views.CustomImageButton
