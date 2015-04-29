@@ -163,6 +163,10 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                 String verifier = data.getExtras().getString(oAuthVerifier);
 
                 new GetTokenTask().execute(verifier);
+            } else {
+                if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

@@ -214,8 +214,7 @@ public class SignInActivity extends BaseActivity {
                     String email = emailEdt.getText().toString();
                     if(Utilities.isValidEmail(email)){
                         callSendMailForgotPassword(email);
-                    }
-                    else{
+                    } else {
                         Utilities
                                 .showAlertMessage(
                                         SignInActivity.this,

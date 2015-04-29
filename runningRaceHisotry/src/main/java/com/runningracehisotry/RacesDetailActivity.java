@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.facebook.Session;
 import com.facebook.model.GraphObject;
 import com.facebook.model.OpenGraphAction;
 import com.facebook.model.OpenGraphObject;
@@ -671,8 +672,6 @@ public class RacesDetailActivity extends BaseActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
-        super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == Constants.REQUETS_CODE_ADD_RACE) {
 
             //find and update then notify
@@ -685,6 +684,9 @@ public class RacesDetailActivity extends BaseActivity implements
                 LogUtil.d(Constants.LOG_TAG, "back from update RAce failed!");
             }
 
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         }
     }
 
@@ -1237,7 +1239,7 @@ public class RacesDetailActivity extends BaseActivity implements
                             RacesDetailActivity.this, action, "fitness.runs",
                             "course").build();
                     uiHelper.trackPendingDialogCall(shareDialog.present());
-                    Utilities.doShare(RacesDetailActivity.this,"com.facebook.katana", result, imageUris);
+                    Utilities.doShareSocial(RacesDetailActivity.this, "com.facebook.katana", result, imageUris);
                 }
                 catch(Exception ex){
                     Utilities.showAlertMessage(
@@ -1246,7 +1248,7 @@ public class RacesDetailActivity extends BaseActivity implements
 
             } else {
                 try{
-                    Utilities.doShare(RacesDetailActivity.this, "com.twitter.android", result, imageUris);
+                    Utilities.doShareSocial(RacesDetailActivity.this, "com.twitter.android", result, imageUris);
                 }
                 catch(Exception ex){
                     Utilities.showAlertMessage(

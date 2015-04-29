@@ -8,7 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.FacebookDialog;
 import com.google.gson.Gson;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -34,6 +39,7 @@ import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetAboutUsRequest;
+import com.runningracehisotry.webservice.base.RegisterFacebookRequest;
 
 import android.app.ActionBar;
 import android.app.Dialog;
@@ -65,6 +71,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -368,17 +375,24 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
 				FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(
 						BaseActivity.this)
-						.setDescription(getString(R.string.share_app_menu))
-						.setCaption(getString(R.string.share_app_menu))
+                        .setApplicationName(getPackageName())
+//                        .setName(getString(R.string.share_app_menu))
+//						.setDescription(getString(R.string.share_app_menu))
+//						.setCaption(getString(R.string.share_app_menu))
 						.setLink(
-								"https://play.google.com/store/apps/details?id=com.runningracehisotry")
+                                "https://play.google.com/store/apps/details?id=com.runningracehisotry")
 						.build();
-
+//
 				uiHelper.trackPendingDialogCall(shareDialog.present());
+
+//                performFacebookLogin(getString(R.string.share_app_menu));
+
+//                Utilities.doShareSocial(BaseActivity.this, "com.facebook.katana",
+//                        getString(R.string.share_app_menu), null);
 			} else if (menu.getDislayText().equals(
 					getString(R.string.menu_share_twitter))) {
 
-				Utilities.doShare(BaseActivity.this, "com.twitter.android",
+				Utilities.doShareSocial(BaseActivity.this, "com.twitter.android",
 						getString(R.string.share_app_menu), null);
 			} else if (menu.getDislayText().equals(
 					getString(R.string.menu_sign_out))) {
@@ -508,6 +522,9 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                 Constants.PREF_SETTING_LINK_FACEBOOK, false);
         CustomSharedPreferences.setPreferences(
                 Constants.PREF_SETTING_SOUND_LEVEL, 0);
+        CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
+        CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, "");
+
         Intent loginChoiceIntent = new Intent(BaseActivity.this,
                 LoginChoiceScreen.class);
         loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -720,5 +737,34 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
         }
     };
+
+    private void performFacebookLogin(final String message) {
+        Log.d("FACEBOOK", "performFacebookLogin");
+//            final Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, Arrays.asList("email"));
+        Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+                Log.d("FACEBOOK", "call");
+                if (session.isOpened()) {
+                    Log.d("FACEBOOK", "if (session.isOpened() && !isFetching)");
+//                        session.requestNewReadPermissions(newPermissionsRequest);
+                    Request shareRequest = Request.newStatusUpdateRequest(session, message, new Request.Callback() {
+                        @Override
+                        public void onCompleted(Response response) {
+
+                        }
+                    });
+                    shareRequest.executeAsync();
+                } else {
+//                    if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+//                        mLoadingDialog.dismiss();
+//                    }
+//                        Utilities.showAlertMessage(
+//                                LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
+                }
+            }
+        });
+    }
 
 }
