@@ -62,11 +62,11 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
     private OnLikeItemClickListener mLikeItemListener;
     private int mRaceColor, mImagesId, mTimeImageId;
     private Map<String, List<Race>> mHistories;
-    private int loggedUserId;
+    private String loggedUserId;
     private int typeLike;
 
 
-    public NewRaceDetailAdapter(int typeLike, int userId, Context context,
+    public NewRaceDetailAdapter(int typeLike, String userId, Context context,
                                 Map<String, List<Race>> histories,
                                 int friendPos, int... resources) {
         super();
@@ -599,7 +599,7 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
         List<Like> listLike = race.getLikes();
         if(listLike != null && listLike.size() >0){
             for(Like like : listLike){
-                if(like.getUserID() == loggedUserId){
+                if(like.getUserID().equals( loggedUserId)){
                     return true;
                 }
             }

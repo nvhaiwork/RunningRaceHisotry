@@ -84,7 +84,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
     public static final String PREF_USER_NAME = "twitter_user_name";
 
     /* Any number for uniquely distinguish your request */
-    public static final int WEBVIEW_REQUEST_CODE = 100;
+    public static final int WEBVIEW_REQUEST_CODE = 4367;
 
     // Twitter oauth urls
 
@@ -158,15 +158,15 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-//		ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
-        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+        if (requestCode == WEBVIEW_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                String verifier = data.getExtras().getString(oAuthVerifier);
 
-        if (resultCode == RESULT_OK) {
-            String verifier = data.getExtras().getString(oAuthVerifier);
-
-            new GetTokenTask().execute(verifier);
+                new GetTokenTask().execute(verifier);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         }
 	}
 
@@ -319,8 +319,16 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                                     }
                                 }
                             }
+
+
                         });
                         getMe.executeAsync();
+                    } else {
+                        if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+//                        Utilities.showAlertMessage(
+//                                LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
                     }
                 }
             });
@@ -395,6 +403,8 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
         String serialUSer = gson.toJson(newUser);
 
         CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, serialUSer);
+        CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, fbID);
+
 
         Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
         selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -440,6 +450,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
 
     private class GetTokenTask extends AsyncTask <String, Void, AccessToken> {
+        private boolean isSuccess;
 
         @Override
         protected AccessToken doInBackground(String... params) {
@@ -474,10 +485,13 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                     fbID = String.valueOf(userID);
 
                     saveTwitterInfo(accessToken);
+                    isSuccess = true;
                 } catch (TwitterException e) {
+                    isSuccess = false;
                     e.printStackTrace();
                 }
             } catch (TwitterException e) {
+                isSuccess = false;
                 e.printStackTrace();
             }
             return accessToken;
@@ -487,11 +501,17 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
         protected void onPostExecute(AccessToken accessToken) {
             super.onPostExecute(accessToken);
 
-            RegisterFacebookRequest request = new RegisterFacebookRequest(fbID, fullName, avatar);
-            request.setListener(LoginChoiceScreen.this);
-            new Thread(request).start();
-
-
+            if(isSuccess) {
+                RegisterFacebookRequest request = new RegisterFacebookRequest(fbID, fullName, avatar);
+                request.setListener(LoginChoiceScreen.this);
+                new Thread(request).start();
+            } else {
+                if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+                Utilities.showAlertMessage(
+                        LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
+            }
         }
     }
 

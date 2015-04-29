@@ -16,6 +16,7 @@ import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.ForgotPasswordRequest;
 import com.runningracehisotry.webservice.base.GetUserProfileRequest;
+import com.runningracehisotry.webservice.base.LoginRequest;
 import com.runningracehisotry.webservice.base.RegisterRequest;
 
 import android.app.Dialog;
@@ -157,7 +158,11 @@ public class SignInActivity extends BaseActivity {
                 try {
                     mLoadingDialog = CustomLoadingDialog.show(
                             SignInActivity.this, "", "", false, false);
-                    sv.Login(usernameStr, passwordStr);
+//                    sv.Login(usernameStr, passwordStr);
+
+                    LoginRequest request = new LoginRequest(usernameStr, passwordStr);
+                    request.setListener(callBackEvent);
+                    new Thread(request).start();
                 } catch (Exception e) {
                     try{
                         if (mLoadingDialog.isShowing()) {
@@ -304,6 +309,11 @@ public class SignInActivity extends BaseActivity {
                         }
                     }
                     catch(Exception ex){
+                        if (mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
+                        }
+                        Utilities.showAlertMessage(
+                                SignInActivity.this,getString(R.string.login_disconnect),"");
                     }
                     e.printStackTrace();
                     Utilities.showAlertMessage(
@@ -418,7 +428,11 @@ public class SignInActivity extends BaseActivity {
 
         @Override
         public void Wsdl2CodeFinishedWithException(Exception ex) {
-
+            if (mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }
+            Utilities.showAlertMessage(
+                    SignInActivity.this,getString(R.string.login_disconnect),"");
         }
 
         @Override

@@ -377,9 +377,9 @@ public class RacesDetailActivity extends BaseActivity implements
             //if (mRacesAdapter == null) {
             String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
             if(!userId.isEmpty()) {
-                int id = Integer.parseInt(userId);
+//                int id = Integer.parseInt(userId);
 
-                mRacesAdapter = new NewRaceDetailAdapter(mSelectedRace, id, RacesDetailActivity.this, listRaceDetail,
+                mRacesAdapter = new NewRaceDetailAdapter(mSelectedRace, userId, RacesDetailActivity.this, listRaceDetail,
                         mFriendRace, resources);
                 mRaceList.setAdapter(mRacesAdapter);
                 mRacesAdapter.setRaceItemClick(this);
@@ -496,9 +496,9 @@ public class RacesDetailActivity extends BaseActivity implements
             if (result) {
                 String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
                 if(!userId.isEmpty()) {
-                    int id = Integer.parseInt(userId);
-                    if (id != 0) {
-                        Like like = new Like(1000, id);
+//                    int id = Integer.parseInt(userId);
+                    if (userId != null && userId.length() > 0) {
+                        Like like = new Like(1000, userId);
                         if(listRaceDetail.keySet().size() > 0){
                             Set<String> keys = listRaceDetail.keySet();
                             for(String key : keys){
@@ -545,9 +545,9 @@ public class RacesDetailActivity extends BaseActivity implements
             if (result) {
                 String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
                 if(!userId.isEmpty()) {
-                    int id = Integer.parseInt(userId);
-                    if (id != 0) {
-                        Like like = new Like(1000, id);
+//                    int id = Integer.parseInt(userId);
+                    if (userId != null && userId.length() > 0) {
+                        Like like = new Like(1000, userId);
                         if(listRaceDetail.keySet().size() > 0){
                             Set<String> keys = listRaceDetail.keySet();
                             for(String key : keys){
@@ -905,12 +905,12 @@ public class RacesDetailActivity extends BaseActivity implements
         LogUtil.d(Constants.LOG_TAG,"Like click");
         String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
         if(!userId.isEmpty()){
-            int id = Integer.parseInt(userId);
-            if(id != 0){
+//            int id = Integer.parseInt(userId);
+            if(userId != null && userId.length() > 0){
                 if(mLoadingDialog == null) {
                     mLoadingDialog = CustomLoadingDialog.show(RacesDetailActivity.this, "", "", false, false);
                 }
-                if(isLiked(raceInfo, id)){
+                if(isLiked(raceInfo, userId)){
                     //unlike then refresh
                     callLikeRace(raceInfo.getId(),false);
                 }
@@ -935,12 +935,12 @@ public class RacesDetailActivity extends BaseActivity implements
         }
     }
 
-    public boolean isLiked(Race race, int userId){
+    public boolean isLiked(Race race, String userId){
         boolean result = false;
         List<Like> listLike = race.getLikes();
         if(listLike != null && listLike.size() >0){
             for(Like like : listLike){
-                if(like.getUserID() == userId){
+                if(like.getUserID().equals(userId)){
                     result =  true;
                     break;
                 }

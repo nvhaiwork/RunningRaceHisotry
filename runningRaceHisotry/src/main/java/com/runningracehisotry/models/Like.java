@@ -14,14 +14,14 @@ public class Like {
     private int shoeID;
 
     @SerializedName("user_id")
-    private int userID;
+    private String userID;
     @SerializedName("created_at")
     private String createdAt;
 
     @SerializedName("updated_at")
     private String updatedAt;
 
-    public Like(int id, int userId){
+    public Like(int id, String userId){
         setId(id);
         setUserID(userId);
     }
@@ -42,11 +42,11 @@ public class Like {
         this.shoeID = shoeID;
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
