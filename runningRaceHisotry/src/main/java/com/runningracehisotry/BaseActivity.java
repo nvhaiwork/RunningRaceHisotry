@@ -15,6 +15,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.FacebookDialog;
+import com.facebook.widget.WebDialog;
 import com.google.gson.Gson;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -373,22 +374,45 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 			} else if (menu.getDislayText().equals(
 					getString(R.string.menu_share_fb))) {
 
-				FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(
-						BaseActivity.this)
-                        .setApplicationName(getPackageName())
-//                        .setName(getString(R.string.share_app_menu))
-//						.setDescription(getString(R.string.share_app_menu))
-//						.setCaption(getString(R.string.share_app_menu))
-						.setLink(
-                                "https://play.google.com/store/apps/details?id=com.runningracehisotry")
-						.build();
-//
-				uiHelper.trackPendingDialogCall(shareDialog.present());
+//				FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(
+//						BaseActivity.this)
+//                        .setApplicationName(getPackageName())
+////                        .setName(getString(R.string.share_app_menu))
+////						.setDescription(getString(R.string.share_app_menu))
+////						.setCaption(getString(R.string.share_app_menu))
+//						.setLink(
+//                                "https://play.google.com/store/apps/details?id=com.runningracehisotry")
+//						.build();
+////
+//				uiHelper.trackPendingDialogCall(shareDialog.present());
 
 //                performFacebookLogin(getString(R.string.share_app_menu));
 
 //                Utilities.doShareSocial(BaseActivity.this, "com.facebook.katana",
 //                        getString(R.string.share_app_menu), null);
+
+                Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+                            @Override
+                            public void call(Session session, SessionState state, Exception exception) {
+                                Log.d("FACEBOOK", "call");
+                                if(session.isOpened()) {
+                                    Bundle params = new Bundle();
+//                                    params.putString("name", getString(R.string.share_app_menu));
+//                                    params.putString("caption", getString(R.string.share_app_menu));
+                                    params.putString("description", getString(R.string.share_app_menu));
+                                    params.putString("link", "https://play.google.com/store/apps/details?id=com.runningracehisotry");
+                                    params.putString("picture", "http://runningracehistory.com/images/login-logo.png");
+
+                                    WebDialog feedDialog = (
+                                            new WebDialog.FeedDialogBuilder(BaseActivity.this,
+                                                    Session.getActiveSession(),
+                                                    params)).build();
+                                    feedDialog.show();
+                                }
+                            }
+                        }
+                );
 			} else if (menu.getDislayText().equals(
 					getString(R.string.menu_share_twitter))) {
 
@@ -525,18 +549,35 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
         CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, "");
 
-        Intent loginChoiceIntent = new Intent(BaseActivity.this,
-                LoginChoiceScreen.class);
-        loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-                | Intent.FLAG_ACTIVITY_NEW_TASK);
-        RunningRaceApplication.getInstance().setCurrentUser(null);
-        startActivity(loginChoiceIntent);
-        mShoes = null;
-        mHistory = null;
-        mFriends = null;
-        AddRaceActivity.setRace(null);
-        dialog.dismiss();
-        finish();
+        CustomSharedPreferences.setPreferences(LoginChoiceScreen.PREF_KEY_OAUTH_TOKEN, "");
+        CustomSharedPreferences.setPreferences(LoginChoiceScreen.PREF_KEY_OAUTH_SECRET, "");
+
+        CustomSharedPreferences.setPreferences(LoginChoiceScreen.PREF_KEY_TWITTER_LOGIN, false);
+
+        Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+                    @Override
+                    public void call(Session session, SessionState state, Exception exception) {
+                        Log.d("FACEBOOK", "call");
+                        session.closeAndClearTokenInformation();
+
+                        Intent loginChoiceIntent = new Intent(BaseActivity.this,
+                                LoginChoiceScreen.class);
+                        loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        RunningRaceApplication.getInstance().setCurrentUser(null);
+                        startActivity(loginChoiceIntent);
+                        mShoes = null;
+                        mHistory = null;
+                        mFriends = null;
+                        AddRaceActivity.setRace(null);
+                        dialog.dismiss();
+                        finish();
+                    }
+                }
+        );
+
+
 
 	}
 
