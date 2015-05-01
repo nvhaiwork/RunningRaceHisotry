@@ -38,6 +38,7 @@ import com.runningracehisotry.views.CustomAlertDialog.OnNegativeButtonClick;
 import com.runningracehisotry.views.CustomAlertDialog.OnPositiveButtonClick;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 
+import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetAboutUsRequest;
 import com.runningracehisotry.webservice.base.RegisterFacebookRequest;
@@ -440,6 +441,20 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                         | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(chatIntent);
             }
+            else if (menu.getDislayText().equals(
+                    getString(R.string.menu_blog))) {
+                //open Blog
+                Intent blogIntent = new Intent(BaseActivity.this,
+                        BlogActivity.class);
+                blogIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(blogIntent);
+            }
+            else if (menu.getDislayText().equals(
+                    getString(R.string.menu_about))) {
+                showAboutUs();
+                //open WebView
+            }
 
 			mMenu.toggle();
 			return;
@@ -632,10 +647,20 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		menu.setDislayText(getString(R.string.menu_profile_update));
 		menus.add(menu);
 
+        // Blog
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_blog));
+        menus.add(menu);
+
 		// Contact Us
 		menu = new MenuModel();
 		menu.setDislayText(getString(R.string.menu_contact_us));
 		menus.add(menu);
+
+        // About
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_about));
+        menus.add(menu);
 
 		// Share on FB
 		menu = new MenuModel();
@@ -754,6 +779,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                     mAboutUsContent.loadDataWithBaseURL("", mHtmlAbout, mimeType, encoding, "");
 
                 } catch (JSONException e) {
+                    Utilities.showAlertMessage(BaseActivity.this, getResources().getString(R.string.menu_about_cannot_get_content), "");
 
                 } finally {
                     try{
@@ -806,6 +832,37 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                 }
             }
         });
+    }
+
+    /**
+     * Display setting screen
+     * */
+    private void showAboutUs() {
+
+        Dialog dialog = new Dialog(BaseActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_setting);
+        dialog.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(wlp);
+
+
+        mAboutLayout = (RelativeLayout) dialog
+                .findViewById(R.id.setting_about_layout);
+        mAboutUsContent = (WebView) dialog.findViewById(R.id.setting_about_us);
+
+
+        TextView aboutBtn = (TextView) dialog.findViewById(R.id.setting_about);
+
+
+        aboutBtn.setOnClickListener(this);
+        dialog.show();
     }
 
 }

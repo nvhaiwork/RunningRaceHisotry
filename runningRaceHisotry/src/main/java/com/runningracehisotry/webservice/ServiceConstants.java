@@ -44,4 +44,5 @@ public final class ServiceConstants {
     public static final String METHOD_ADD_GROUP_MEMBER = "addGroupMember";
     public static final String METHOD_ADD_LIKE = "/like";
     public static final String METHOD_REMOVE_LIKE = "/like/unlike";
+    public static final String METHOD_GET_BLOG = "getContentBlog";
 }

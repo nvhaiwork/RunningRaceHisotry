@@ -18,5 +18,6 @@ public class GetAboutUsRequest extends BaseGetRequest{
     @Override
     protected String getRequestName() {
         return ServiceConstants.METHOD_GET_ABOUT_US;
+
     }
 }
