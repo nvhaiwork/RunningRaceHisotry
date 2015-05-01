@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 
 import com.google.gson.Gson;
@@ -45,7 +47,11 @@ import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +71,13 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
     private Uri mRaceMedalUpload, mRaceBibUpload, mRacePersonUpload;
     private CustomLoadingDialog mLoadingDialog;
     private int uploadedRaceImage;
+
+    private LinearLayout lnGroup;
+    private RadioGroup rdGroup;
+    private RadioButton rdKm, rdMile;
+    private EditText edtRaceMile;
+
+
     @Override
     protected int addContent() {
         // TODO Auto-generated method stub
@@ -96,6 +109,25 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
         mBidImg = (ImageView) findViewById(R.id.add_race_photo_of_bib);
         mMedalImg = (ImageView) findViewById(R.id.add_race_photo_of_medal);
         mPersonImg = (ImageView) findViewById(R.id.add_race_photo_of_person);
+
+        /*lnGroup = (LinearLayout) findViewById(R.id.races_add_other_layout);
+        rdGroup = (RadioGroup) findViewById(R.id.races_radio_group_other);
+        edtRaceMile = (EditText) findViewById(R.id.add_race_other_add_miles_edt);
+        rdKm= (RadioButton)findViewById(R.id.race_km);
+        rdMile= (RadioButton)findViewById(R.id.race_mile);
+        edtRaceMile.setHint("Enter Length(km)");
+        rdKm.setChecked(true);
+        rdGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.race_km) {
+                    edtRaceMile.setHint("Enter Length(km)");
+                } else if (checkedId == R.id.race_mile) {
+                    edtRaceMile.setHint("Enter Length(mile)");
+                }
+            }
+        });
+        lnGroup.setVisibility(View.GONE);*/
         fillRaceUpdate();
 		/*if (mRace != null) {
 
@@ -175,7 +207,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             }
 
             int raceType = (Integer) mRaceUpdate.getEvenType();
-            String rareTypeStr = getRaceTypeText(raceType);
+            String rareTypeStr = getRaceTypeText(raceType, mRaceUpdate);
             mRaceTypeTxt.setTag(raceType);
             mRaceTypeTxt.setText(rareTypeStr);
 
@@ -499,7 +531,70 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     //callAddUpdateRace();
                 }
                 break;
+            /*case R.id.add_race_event_type_txt:
+                showInputRaceMileDialog();
+                break;*/
         }
+    }
+
+
+    /**
+     * Show dialog allows user input email address to reset password
+     * */
+    private void showInputRaceMileDialog() {
+
+        final Dialog dialog = new Dialog(AddRaceActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialod_race_input_mile);
+        dialog.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(wlp);
+
+        final EditText emailEdt = (EditText) dialog
+                .findViewById(R.id.alert_reset_email);
+        TextView resetBtn = (TextView) dialog
+                .findViewById(R.id.alert_forgot_password_reset_btn);
+        resetBtn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View paramView) {
+                // TODO Auto-generated method stub
+
+                if (!emailEdt.getText().toString().equals("")) {
+                    String miles = emailEdt.getText().toString();
+                    try{
+                        float raceMile = Float.parseFloat(miles);
+                        //String str = String.format("0.02", miles);
+                        mRaceTypeTxt.setTag(Constants.SELECT_RACE_OTHER);
+                        String strRaceMiles= miles + " MI";
+                        mRaceTypeTxt.setText(strRaceMiles);
+                        dialog.dismiss();
+                    }
+                    catch (Exception ex){
+                        dialog.dismiss();
+                        Utilities
+                                .showAlertMessage(
+                                        AddRaceActivity.this,
+                                        getString(R.string.race_input_mile_invalid),
+                                        getString(R.string.race_input_mile_invalid));
+                    }
+                    /*if(Utilities.isValidEmail(email)){
+                        callSendMailForgotPassword(email);
+                    } else {
+
+                        //dialog.dismiss();
+                    }*/
+                }
+            }
+        });
+
+        dialog.show();
     }
 
     private void uploadBibImage() {
@@ -578,7 +673,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
         dialog.show();
     }
 
-    private String getRaceTypeText(int raceType) {
+    private String getRaceTypeText(int raceType, Race race) {
 
         String rareTypeStr = "";
         switch (raceType) {
@@ -603,8 +698,10 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 rareTypeStr = getString(R.string.add_race_type_full_mar);
                 break;
             case Constants.SELECT_RACE_OTHER:
-
-                rareTypeStr = getString(R.string.add_race_type_other);
+                rareTypeStr = "0.00";
+                if(race != null){
+                    rareTypeStr = race.getRaceMiles();
+                }
                 break;
         }
 
@@ -625,10 +722,33 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             // TODO Auto-generated method stub
 
             int selectedItem = (Integer) v.getTag();
-            String rareTypeStr = getRaceTypeText(selectedItem);
-            mRaceTypeTxt.setText(rareTypeStr);
-            mRaceTypeTxt.setTag(selectedItem);
-            dialog.dismiss();
+            String rareTypeStr = getRaceTypeText(selectedItem, mRaceUpdate);
+            if(selectedItem == Constants.SELECT_RACE_OTHER){
+                this.dialog.dismiss();
+                this.dialog = null;
+                //mRaceTypeTxt.setText("0.00 MI");
+                mRaceTypeTxt.setTag(selectedItem);
+                showInputRaceMileDialog();
+                /*new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showInputRaceMileDialog();
+                    }
+                }, 500);*/
+            }
+            else{
+                mRaceTypeTxt.setText(rareTypeStr);
+                mRaceTypeTxt.setTag(selectedItem);
+                dialog.dismiss();
+            }
+
+            /*if(selectedItem == Constants.SELECT_RACE_OTHER){
+                lnGroup.setVisibility(View.VISIBLE);
+            }
+            else{
+                lnGroup.setVisibility(View.GONE);
+            }*/
+
         }
     }
 
@@ -654,7 +774,10 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String shoesId = String.valueOf((Integer) mShoeTxt.getTag());
+        String shoesId = null;
+        if(mShoeTxt.getTag() != null){
+            shoesId = String.valueOf((Integer) mShoeTxt.getTag());
+        }
         String state = mRaceStateEdt.getText().toString();
         String website = mRaceWebsiteEdt.getText().toString();
 
@@ -667,9 +790,28 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     + "personUrl: " + personUrl + "|"+ "raceDate: " + raceDate + "|"
                     + "shoesId: " + shoesId + "|" + "state: " + state + "|"
                     + "website: " + website + "|");
-            UpdateRaceRequest request = new UpdateRaceRequest(bibUrl, city, mRaceUpdate.getCreatedAt(), eventType,
-                    finisherDateTime, String.valueOf(mRaceUpdate.getId()), medalUrl, raceName, personUrl,
-                    raceDate, shoesId, state, mRaceUpdate.getUpdatedAt(), String.valueOf(mRaceUpdate.getUserID()), website);
+            Toast.makeText(this,"shoesId update: " + shoesId, Toast.LENGTH_LONG).show();
+            UpdateRaceRequest request = null;
+            if((Integer) mRaceTypeTxt.getTag() == Constants.SELECT_RACE_OTHER){
+                String raceMiles = "0.00";
+                if(!mRaceTypeTxt.getText().toString().isEmpty()){
+                    int len = mRaceTypeTxt.getText().toString().length();
+                    String realMile = mRaceTypeTxt.getText().toString().substring(0, len - 3);
+                    raceMiles = realMile.trim();
+                }
+                LogUtil.d(Constants.LOG_TAG, "Race mile update: "+ raceMiles);
+                request = new UpdateRaceRequest(bibUrl, city, mRaceUpdate.getCreatedAt(), eventType,
+                        finisherDateTime, String.valueOf(mRaceUpdate.getId()), medalUrl, raceName, personUrl,
+                        raceDate, shoesId, state, mRaceUpdate.getUpdatedAt(),
+                        String.valueOf(mRaceUpdate.getUserID()), website, raceMiles);
+            }
+            else{
+                request = new UpdateRaceRequest(bibUrl, city, mRaceUpdate.getCreatedAt(), eventType,
+                        finisherDateTime, String.valueOf(mRaceUpdate.getId()), medalUrl, raceName, personUrl,
+                        raceDate, shoesId, state, mRaceUpdate.getUpdatedAt(),
+                        String.valueOf(mRaceUpdate.getUserID()), website);
+            }
+
             request.setListener(callBackEvent);
             new Thread(request).start();
         } else {
@@ -680,7 +822,23 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     + "personUrl: " + personUrl + "|"+ "raceDate: " + raceDate + "|"
                     + "shoesId: " + shoesId + "|" + "state: " + state + "|"
                     + "website: " + website + "|");
-            AddRaceRequest request = new AddRaceRequest(bibUrl, city, eventType, finisherDateTime, medalUrl, raceName, personUrl, raceDate, shoesId, state, website);
+            Toast.makeText(this,"shoesId add: " + shoesId, Toast.LENGTH_LONG).show();
+            AddRaceRequest request = null;
+            if((Integer) mRaceTypeTxt.getTag() == Constants.SELECT_RACE_OTHER){
+                String raceMiles = "0.00";
+                if(!mRaceTypeTxt.getText().toString().isEmpty()){
+                    int len = mRaceTypeTxt.getText().toString().length();
+                    String realMile = mRaceTypeTxt.getText().toString().substring(0, len - 3);
+                    raceMiles = realMile.trim();
+                }
+                LogUtil.d(Constants.LOG_TAG, "Race mile add: "+ raceMiles);
+                request =  new AddRaceRequest(bibUrl, city, eventType, finisherDateTime, medalUrl,
+                        raceName, personUrl, raceDate, shoesId, state, website, raceMiles);
+            }
+            else{
+                request =  new AddRaceRequest(bibUrl, city, eventType, finisherDateTime, medalUrl,
+                        raceName, personUrl, raceDate, shoesId, state, website);
+            }
             request.setListener(callBackEvent);
             new Thread(request).start();
 
@@ -698,11 +856,15 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             //dialog.dismiss();
             finish();
         } else {
-            LogUtil.d(mCurrentClassName, "Response Add Shoe Failed ");
-            Intent resultIntent = new Intent("addRaceCallBackFailed");
+            Utilities.showAlertMessage(
+                    AddRaceActivity.this,
+                    getString(R.string.race_add_failed),
+                    "");
+            LogUtil.d(mCurrentClassName, "Response Add Shoe Failed responde " + data);
+            /*Intent resultIntent = new Intent("addRaceCallBackFailed");
             setResult(RESULT_OK, resultIntent);
             //dialog.dismiss();
-            finish();
+            finish();*/
         }
     }
 
@@ -716,11 +878,16 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             //dialog.dismiss();
             finish();
         } else {
-            LogUtil.d(mCurrentClassName, "Response Add Shoe Failed ");
+            Utilities.showAlertMessage(
+                    AddRaceActivity.this,
+                    getString(R.string.race_update_failed),
+                    "");
+            LogUtil.d(mCurrentClassName, "Response Update Shoe Failed responde " + data);
+            /*LogUtil.d(mCurrentClassName, "Response Add Shoe Failed ");
             Intent resultIntent = new Intent("updateRaceCallBackFailed");
             setResult(RESULT_OK, resultIntent);
             //dialog.dismiss();
-            finish();
+            finish();*/
         }
     }
 
@@ -747,6 +914,9 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         try {
                             processAddRace(data.toString());
                         } catch (Exception e) {
+                            Toast.makeText(AddRaceActivity.this,"shoesId add failed " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Utilities.showAlertMessage(AddRaceActivity.this,
+                                    getString(R.string.race_add_failed), "");
                         } finally {
                             try{
                                 if (mLoadingDialog.isShowing()) {
@@ -767,6 +937,9 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         try {
                             processUpdateRace(data.toString());
                         } catch (Exception e) {
+                            Toast.makeText(AddRaceActivity.this,"shoesId update failed " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Utilities.showAlertMessage(AddRaceActivity.this,
+                                    getString(R.string.race_update_failed), "");
                         } finally {
                             try{
                                 if (mLoadingDialog.isShowing()) {

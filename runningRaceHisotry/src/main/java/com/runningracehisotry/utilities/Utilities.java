@@ -20,6 +20,7 @@ import com.runningracehisotry.R;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.History;
 import com.runningracehisotry.models.Shoe;
+import com.runningracehisotry.models.ShoeObject;
 import com.runningracehisotry.views.CustomAlertDialog;
 import com.runningracehisotry.views.CustomAlertDialog.OnNegativeButtonClick;
 
@@ -546,5 +547,9 @@ public class Utilities {
                 context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + nameApp)));
             }
         }
+    }
+
+    public List<Shoe> convertListShoe(List<ShoeObject> list){
+        return null;
     }
 }

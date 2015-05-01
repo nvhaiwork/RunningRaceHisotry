@@ -11,6 +11,7 @@ import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
+import com.runningracehisotry.webservice.ServiceApi;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.DeleteShoeRequest;
 import com.runningracehisotry.webservice.base.GetAllShoesRelatedObjectRequest;
@@ -19,6 +20,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,7 +59,7 @@ public class MyShoesActivity extends BaseActivity implements
                                 processGotListShoe(data);
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                                Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes", "");
+                                Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes " + e.getMessage(), "");
                             } finally {
                                 try{
                                     if (mLoadingDialog.isShowing()) {
@@ -80,7 +82,7 @@ public class MyShoesActivity extends BaseActivity implements
                             processDeleteShoe(data);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes", "");
+                            Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when delete shoe " + e.getMessage(), "");
                         } finally {
                             try{
                                 if (mLoadingDialog.isShowing()) {
@@ -286,11 +288,16 @@ public class MyShoesActivity extends BaseActivity implements
 		if (shoe != null) {
             mLoadingDialog = CustomLoadingDialog.show(MyShoesActivity.this, "", "", false, false);
             LogUtil.d("onShoeItemDelete","Process delete shoe id: " + shoe.getId());
+            LogUtil.d(Constants.LOG_TAG, "URL delete shoe: " + ServiceApi.SERVICE_URL +
+                    ServiceApi.API_DELETE_SHOES_BY_ID + String.valueOf(shoe.getId()));
             //call SHoe delete
+            shoeIdDelete = shoe.getId();
+            Toast.makeText(this, "URL delete shoe: " + ServiceApi.SERVICE_URL +
+                    ServiceApi.API_DELETE_SHOES_BY_ID + String.valueOf(shoe.getId()), Toast.LENGTH_LONG).show();
             DeleteShoeRequest request = new DeleteShoeRequest(String.valueOf(shoe.getId()));
             request.setListener(callBackEvent);
             new Thread(request).start();
-            shoeIdDelete = shoe.getId();
+
 			/*try {
 
 				shoe.delete();

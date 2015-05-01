@@ -30,34 +30,64 @@
         <RadioGroup
             android:id="@+id/races_detail_sort_group"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:divider="@drawable/divide_sort_race"
             android:orientation="horizontal"
             android:padding="1dp" >
 
             <RadioButton
                 android:id="@+id/races_detail_sort_date"
                 android:layout_width="wrap_content"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:button="@null"
                 android:checked="true"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="5dp"
+                android:paddingTop="2dp"
                 android:text="@string/races_detail_sort_date"
                 android:textSize="@dimen/races_detail_sort_item_text" />
+            <View
+                android:id="@+id/races_detail_sort_1"
+                android:visibility="gone"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/text_button_bg_other" />
 
             <RadioButton
                 android:id="@+id/races_detail_sort_time"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@null"
+
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="2dp"
+                android:text="@string/races_detail_sort_time"
+                android:textSize="@dimen/races_detail_sort_item_text"
+                android:background="@android:color/white" />
+            <View
+                android:id="@+id/races_detail_sort_2"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:background="@color/text_button_bg_other" />
+            <RadioButton
+                android:id="@+id/races_detail_sort_length"
+                android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:button="@null"
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="5dp"
-                android:text="@string/races_detail_sort_time"
-                android:textSize="@dimen/races_detail_sort_item_text" />
+                android:paddingTop="2dp"
+                android:text="@string/races_detail_sort_length"
+                android:textSize="@dimen/races_detail_sort_item_text"
+                android:background="@android:color/white" />
         </RadioGroup>
     </LinearLayout>
 
@@ -68,7 +98,7 @@
         android:layout_below="@+id/races_detail_sort_layout"
         android:layout_marginTop="-7dp"
         android:adjustViewBounds="false"
-        android:background="@drawable/ic_races_detail_title_dummy"
+        android:background="@drawable/ic_races_detail_title_other"
         android:contentDescription="@null"
         android:visibility="invisible" />
 

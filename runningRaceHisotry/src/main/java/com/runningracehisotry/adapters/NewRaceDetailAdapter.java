@@ -291,7 +291,7 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
                 raceDistance = Constants.RACE_FULL_MAR_DISTANCE;
                 break;
             case Constants.SELECT_RACE_OTHER:
-                raceDistance = Constants.RACE_OTHER_DISTANCE;
+                raceDistance = race.getRaceMiles();
                 break;
         }
 
@@ -324,9 +324,9 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
                         actionDownX = -1;
                     }
                 }*/
-                if (((race.getBibUrl() != null) && (race.getBibUrl() != null))
-                        || ((race.getMedalUrl() != null) && (race.getMedalUrl() != null))
-                        ||((race.getPersonUrl() != null) && (race.getPersonUrl() != null))){
+                if (    ((race.getBibUrl() != null) && (!race.getBibUrl().isEmpty()))
+                        || ((race.getMedalUrl() != null) && (!race.getMedalUrl().isEmpty()))
+                        ||((race.getPersonUrl() != null) && (!race.getPersonUrl().isEmpty()))){
 
                     /*Utilities.showAlertMessage(mContext, "Temporary not show image",
                             mContext.getString(R.string.dialog_race_tile));*/

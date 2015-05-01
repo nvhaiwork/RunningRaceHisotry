@@ -184,4 +184,9 @@
 
     <!-- error when disconnect-->
     <string name="login_disconnect">Network is failed, please check your network</string>
+
+    <string name="race_input_mile_title">Custom Miles</string>
+    <string name="race_input_mile_content">Please input your mile.</string>
+    <string name="race_input_mile_invalid">Invalid custom Miles</string>
+    <string name="races_detail_sort_length">Length</string>
 </resources>

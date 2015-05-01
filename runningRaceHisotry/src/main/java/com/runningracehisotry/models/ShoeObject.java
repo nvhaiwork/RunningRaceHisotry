@@ -1,21 +1,13 @@
 package com.runningracehisotry.models;
 
-import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
- * create by NTQ
+ * Created by QuyNguyen on 5/1/2015.
  */
-public class Shoe{
+public class ShoeObject {
     @SerializedName("id")
     private int id;
 
@@ -43,24 +35,9 @@ public class Shoe{
     @SerializedName("races")
     private List<Race> races;
 
-    private List<History> milesShoesHistories;
-
     @SerializedName("miles_shoes_histories")
-    //private List<History> milesShoesHistories;
     private Object milesShoesHistoriesString;
 
-    public Shoe(int shoeId, String brand, String model, String imageUrl, float miles, int userId) {
-        this.id = shoeId;
-        this.brand = brand;
-        this.model = model;
-        this.imageUrl = imageUrl;
-        this.milesOnShoes = miles;
-        this.userId = userId;
-    }
-
-    public Shoe() {
-
-    }
 
     public int getId() {
         return id;
@@ -134,34 +111,11 @@ public class Shoe{
         this.races = races;
     }
 
-    public List<History> getMilesShoesHistories() {
-        Gson gson = new Gson();
-
-        Type listType= null;
-
-        try {
-            if (milesShoesHistoriesString instanceof JSONArray) {
-                listType = new TypeToken<List<Shoe>>() {
-                }.getType();
-                milesShoesHistories = gson.fromJson(((JSONArray)milesShoesHistoriesString).toString(), listType);
-            } else if (milesShoesHistoriesString instanceof JSONObject) {
-                listType = new TypeToken<Map<Integer, Shoe>>() {
-                }.getType();
-                Map<Integer, History> map = gson.fromJson(((JSONObject)milesShoesHistoriesString).toString(), listType);
-                if (map != null && map.size() > 0) {
-                    milesShoesHistories = new ArrayList<History>();
-                    for (Integer integer : map.keySet()) {
-                        milesShoesHistories.add(map.get(integer));
-                    }
-                }
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return milesShoesHistories;
+    public Object getMilesShoesHistoriesString() {
+        return milesShoesHistoriesString;
     }
 
-    public void setMilesShoesHistories(List<History> milesShoesHistories) {
-        this.milesShoesHistories = milesShoesHistories;
+    public void setMilesShoesHistoriesString(Object milesShoesHistoriesString) {
+        this.milesShoesHistoriesString = milesShoesHistoriesString;
     }
 }

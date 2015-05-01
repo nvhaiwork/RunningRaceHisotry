@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <include
+        layout="@layout/layout_activity_background"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/layout_activity_background" />
+        android:layout_height="match_parent" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/layout_buttons_bottom"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp" >
+            android:padding="10dp">
 
             <LinearLayout
                 android:id="@+id/add_race_title_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/add_race_title"
@@ -91,13 +91,13 @@
                 android:layout_below="@+id/add_race_title_layout"
                 android:layout_toLeftOf="@+id/add_race_photo_of_medal"
                 android:layout_toStartOf="@+id/add_race_photo_of_medal"
+                android:editable="false"
                 android:paddingEnd="7dp"
                 android:paddingLeft="0dp"
                 android:paddingRight="7dp"
                 android:paddingStart="0dp"
                 android:text="@string/add_race_name"
-                android:textSize="@dimen/add_race_item_text_size"
-                android:editable="false" />
+                android:textSize="@dimen/add_race_item_text_size" />
 
             <EditText
                 android:id="@+id/add_race_name_edt"
@@ -159,6 +159,7 @@
                 android:text="@string/add_race_event_type"
                 android:textSize="@dimen/add_race_item_text_size" />
 
+
             <com.runningracehisotry.views.CustomFontTextView
                 android:id="@+id/add_race_event_type_txt"
                 android:layout_width="match_parent"
@@ -173,6 +174,8 @@
                 android:padding="@dimen/add_race_item_padding"
                 android:singleLine="true"
                 android:textSize="@dimen/add_race_item_text_size" />
+
+
 
             <com.runningracehisotry.views.CustomFontTextView
                 android:id="@+id/add_race_website"
@@ -211,7 +214,7 @@
                 android:layout_marginTop="@dimen/add_race_item_margin_top"
                 android:layout_toLeftOf="@+id/add_race_photo_of_medal"
                 android:layout_toStartOf="@+id/add_race_photo_of_medal"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <com.runningracehisotry.views.CustomFontTextView
                     android:layout_width="0dp"
@@ -249,7 +252,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/add_race_photo_of_medal"
                 android:layout_toStartOf="@+id/add_race_photo_of_medal"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/add_race_state_edt"
@@ -339,9 +342,9 @@
 
     <include
         android:id="@+id/layout_buttons_bottom"
+        layout="@layout/layout_buttons_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        layout="@layout/layout_buttons_bottom" />
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

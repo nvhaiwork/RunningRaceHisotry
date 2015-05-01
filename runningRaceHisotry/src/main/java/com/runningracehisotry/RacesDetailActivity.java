@@ -128,7 +128,9 @@ public class RacesDetailActivity extends BaseActivity implements
                 .getIntExtra(Constants.INTENT_SELECT_RACE, 0);
         mFriendRace = getIntent().getIntExtra(
                 Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+        if(mSelectedRace ==  Constants.SELECT_RACE_OTHER){
 
+        }
         int sortItemBg = 0;
         int titleImage = 0;
         //int listImages = 0;
@@ -136,6 +138,12 @@ public class RacesDetailActivity extends BaseActivity implements
         int sortGroupBg = 0;
         //int listTimeImg = 0;
         ColorStateList sortItemColor = null;
+        RadioButton sortItemLength = (RadioButton) findViewById(R.id.races_detail_sort_length);
+        View view1 = (View) findViewById(R.id.races_detail_sort_1);
+        View view2 = (View) findViewById(R.id.races_detail_sort_2);
+        view1.setVisibility(View.GONE);
+        view2.setVisibility(View.GONE);
+        sortItemLength.setVisibility(View.GONE);
         switch (mSelectedRace) {
             case Constants.SELECT_RACE_5K:
 
@@ -218,7 +226,12 @@ public class RacesDetailActivity extends BaseActivity implements
                 sortItemBg = R.drawable.races_detail_sort_item_other_bg;
                 sortGroupBg = R.drawable.races_detail_sort_group_other_bg;
                 raceColor = getResources().getColor(R.color.text_button_bg_other);
-
+                //RadioButton sortItemLength = (RadioButton) findViewById(R.id.races_detail_sort_length);
+                view1.setVisibility(View.VISIBLE);
+                view2.setVisibility(View.VISIBLE);
+                sortItemLength.setVisibility(View.VISIBLE);
+                sortItemLength.setTextColor(sortItemColor);
+                sortItemLength.setBackgroundResource(sortItemBg);
                 break;
         }
 
@@ -539,7 +552,7 @@ public class RacesDetailActivity extends BaseActivity implements
 
     private void processAfterUnLike(Object data) {
         try {
-            LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE: " + data.toString());
+            LogUtil.d(Constants.LOG_TAG, "METHOD_UN_LIKE: " + data.toString());
             JSONObject jsonObjectReceive = new JSONObject(data.toString());
             boolean result = jsonObjectReceive.getBoolean("result");
             // Login success
@@ -825,7 +838,8 @@ public class RacesDetailActivity extends BaseActivity implements
                                     LogUtil.e(Constants.LOG_TAG, "parse to compare sort date error: " + e.getMessage());
                                 }
                                 return 0;
-                            } else {
+                            }
+                            else if (selectSort == R.id.races_detail_sort_time) {
                                 try{
                                     String[] dateStr1 = lhs.getFinisherTime().split(":");
                                     String[] dateStr2 = rhs.getFinisherTime().split(":");
@@ -844,6 +858,32 @@ public class RacesDetailActivity extends BaseActivity implements
                                 }
                                 return 0;
                             }
+                            else{
+                                try{
+                                    String mileStr1 = lhs.getRaceMiles();
+                                    String mileStr2 = rhs.getRaceMiles();
+                                    float lFinishTime = Float.parseFloat(mileStr1);
+                                    float rFinishTime = Float.parseFloat(mileStr2);
+                                    LogUtil.e(Constants.LOG_TAG, "parse to compare Sort length: "
+                                            + (lFinishTime - rFinishTime));
+
+                                    if((lFinishTime - rFinishTime) > 0){
+                                        return 1;
+                                    }
+                                    else if((lFinishTime - rFinishTime) == 0){
+                                        return 0;
+                                    }
+                                    else{
+                                        return -1;
+                                    }
+
+                                }
+                                catch (Exception e){
+                                    LogUtil.e(Constants.LOG_TAG, "parse to compare Sort length error: " + e.getMessage());
+                                }
+                                return 0;
+                            }
+
                         }
                     });
         }
@@ -904,7 +944,7 @@ public class RacesDetailActivity extends BaseActivity implements
     @Override
     public void onLikeItem(Race raceInfo) {
         this.likeRaceId = raceInfo.getId();
-        LogUtil.d(Constants.LOG_TAG,"Like click");
+        LogUtil.d(Constants.LOG_TAG,"Like click" + raceInfo.getId());
         String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
         if(!userId.isEmpty()){
 //            int id = Integer.parseInt(userId);
