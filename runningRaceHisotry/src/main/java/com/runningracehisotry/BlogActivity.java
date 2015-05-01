@@ -24,16 +24,22 @@ public class BlogActivity extends BaseActivity {
 
     private CustomLoadingDialog mLoadingDialog;
     private WebView mBlog;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_blog);
+    protected int addContent() {
+        return R.layout.activity_blog;
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
         mBlog = (WebView ) findViewById(R.id.menu_blog);
         GetBlogRequest request = new GetBlogRequest();
         request.setListener(callBackEvent);
         new Thread(request).start();
         mLoadingDialog = CustomLoadingDialog.show(BlogActivity.this,"", "", false, false);
     }
+
 
 
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {

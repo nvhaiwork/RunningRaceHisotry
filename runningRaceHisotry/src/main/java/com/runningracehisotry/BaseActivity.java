@@ -444,6 +444,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
             else if (menu.getDislayText().equals(
                     getString(R.string.menu_blog))) {
                 //open Blog
+                LogUtil.d(Constants.LOG_TAG, "Open Blog");
                 Intent blogIntent = new Intent(BaseActivity.this,
                         BlogActivity.class);
                 blogIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -858,10 +859,12 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         mAboutUsContent = (WebView) dialog.findViewById(R.id.setting_about_us);
 
 
-        TextView aboutBtn = (TextView) dialog.findViewById(R.id.setting_about);
+        //TextView aboutBtn = (TextView) dialog.findViewById(R.id.setting_about);
+        GetAboutUsRequest request = new GetAboutUsRequest();
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+        mAboutLayout.setVisibility(View.VISIBLE);
 
-
-        aboutBtn.setOnClickListener(this);
         dialog.show();
     }
 
