@@ -158,6 +158,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 							FacebookDialog.PendingCall pendingCall, Bundle data) {
 					}
 				});
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
 	}
 
 	@Override
