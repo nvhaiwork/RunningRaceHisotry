@@ -12,8 +12,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
     <application
-        android:name="com.runningracehisotry.RunningRaceApplication"
+        android:name=".RunningRaceApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -28,27 +33,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.runningracehisotry.LoginChoiceScreen" >
+        <activity android:name=".LoginChoiceScreen" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="oauth" android:host="runnungRaceHistory"/>
+
+                <data
+                    android:host="runnungRaceHistory"
+                    android:scheme="oauth" />
             </intent-filter>
-            </activity>
-        <activity android:name="com.runningracehisotry.SignInActivity" />
-        <activity android:name="com.runningracehisotry.SelectRaceActivity" />
-        <activity android:name="com.runningracehisotry.RacesDetailActivity" />
-        <activity android:name="com.runningracehisotry.AddRaceActivity" />
-        <activity android:name="com.runningracehisotry.MyShoesActivity" />
-        <activity android:name="com.runningracehisotry.AddShoeActivity" />
-        <activity android:name="com.runningracehisotry.RunnerActivity" />
-        <activity android:name="com.runningracehisotry.FriendsActivity" />
-        <activity android:name="com.runningracehisotry.ProfileActivity" />
-        <activity android:name="com.runningracehisotry.ChatFriendActivity" />
-        <activity android:name="com.runningracehisotry.WebViewActivity" />
-        <activity android:name="com.runningracehisotry.ChatActivity"
-            android:windowSoftInputMode="adjustNothing"/>
+        </activity>
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".SelectRaceActivity" />
+        <activity android:name=".RacesDetailActivity" />
+        <activity android:name=".AddRaceActivity" />
+        <activity android:name=".MyShoesActivity" />
+        <activity android:name=".AddShoeActivity" />
+        <activity android:name=".RunnerActivity" />
+        <activity android:name=".FriendsActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ChatFriendActivity" />
+        <activity android:name=".WebViewActivity" />
+        <activity
+            android:name=".ChatActivity"
+            android:windowSoftInputMode="adjustNothing" />
 
         <!-- Face book -->
         <activity
@@ -56,7 +66,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
 
-        <service android:name=".service.SinchService"/>
+        <service android:name=".service.SinchService" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -65,6 +75,11 @@
         <provider
             android:name="com.facebook.NativeAppCallContentProvider"
             android:authorities="com.facebook.app.NativeAppCallContentProvider621355804643302" />
+
+        <activity
+            android:name=".BlogActivity"
+            android:label="@string/title_activity_blog" >
+        </activity>
     </application>
 
 </manifest>
