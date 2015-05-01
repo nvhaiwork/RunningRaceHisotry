@@ -51,7 +51,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -698,13 +698,12 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 rareTypeStr = getString(R.string.add_race_type_full_mar);
                 break;
             case Constants.SELECT_RACE_OTHER:
-                rareTypeStr = "0.00";
+                rareTypeStr = "0.00 MI";
                 if(race != null){
-                    rareTypeStr = race.getRaceMiles();
+                    rareTypeStr = race.getRaceMiles() + " MI";
                 }
                 break;
         }
-
         return rareTypeStr;
     }
 
@@ -790,7 +789,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     + "personUrl: " + personUrl + "|"+ "raceDate: " + raceDate + "|"
                     + "shoesId: " + shoesId + "|" + "state: " + state + "|"
                     + "website: " + website + "|");
-            Toast.makeText(this,"shoesId update: " + shoesId, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,"shoesId update: " + shoesId, Toast.LENGTH_LONG).show();
             UpdateRaceRequest request = null;
             if((Integer) mRaceTypeTxt.getTag() == Constants.SELECT_RACE_OTHER){
                 String raceMiles = "0.00";
@@ -822,7 +821,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     + "personUrl: " + personUrl + "|"+ "raceDate: " + raceDate + "|"
                     + "shoesId: " + shoesId + "|" + "state: " + state + "|"
                     + "website: " + website + "|");
-            Toast.makeText(this,"shoesId add: " + shoesId, Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,"shoesId add: " + shoesId, Toast.LENGTH_LONG).show();
             AddRaceRequest request = null;
             if((Integer) mRaceTypeTxt.getTag() == Constants.SELECT_RACE_OTHER){
                 String raceMiles = "0.00";
@@ -914,7 +913,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         try {
                             processAddRace(data.toString());
                         } catch (Exception e) {
-                            Toast.makeText(AddRaceActivity.this,"shoesId add failed " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(AddRaceActivity.this,"shoesId add failed " + e.getMessage(), Toast.LENGTH_LONG).show();
                             Utilities.showAlertMessage(AddRaceActivity.this,
                                     getString(R.string.race_add_failed), "");
                         } finally {
@@ -937,7 +936,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         try {
                             processUpdateRace(data.toString());
                         } catch (Exception e) {
-                            Toast.makeText(AddRaceActivity.this,"shoesId update failed " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(AddRaceActivity.this,"shoesId update failed " + e.getMessage(), Toast.LENGTH_LONG).show();
                             Utilities.showAlertMessage(AddRaceActivity.this,
                                     getString(R.string.race_update_failed), "");
                         } finally {

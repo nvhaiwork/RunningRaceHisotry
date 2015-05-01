@@ -73,7 +73,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;

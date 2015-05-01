@@ -73,7 +73,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -1356,7 +1356,7 @@ public class RacesDetailActivity extends BaseActivity implements
 			/* Dismiss the progress dialog after sharing */
             pDialog.dismiss();
 
-            Toast.makeText(RacesDetailActivity.this, "Posted to Twitter!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(RacesDetailActivity.this, "Posted to Twitter!", Toast.LENGTH_SHORT).show();
         }
 
     }

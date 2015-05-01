@@ -20,7 +20,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -292,8 +292,8 @@ public class MyShoesActivity extends BaseActivity implements
                     ServiceApi.API_DELETE_SHOES_BY_ID + String.valueOf(shoe.getId()));
             //call SHoe delete
             shoeIdDelete = shoe.getId();
-            Toast.makeText(this, "URL delete shoe: " + ServiceApi.SERVICE_URL +
-                    ServiceApi.API_DELETE_SHOES_BY_ID + String.valueOf(shoe.getId()), Toast.LENGTH_LONG).show();
+            /*Toast.makeText(this, "URL delete shoe: " + ServiceApi.SERVICE_URL +
+                    ServiceApi.API_DELETE_SHOES_BY_ID + String.valueOf(shoe.getId()), Toast.LENGTH_LONG).show();*/
             DeleteShoeRequest request = new DeleteShoeRequest(String.valueOf(shoe.getId()));
             request.setListener(callBackEvent);
             new Thread(request).start();
