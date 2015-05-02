@@ -8,7 +8,7 @@ import com.runningracehisotry.webservice.ServiceConstants;
  */
 public class AddGroupMemberRequest  extends BasePostRequest {
 
-    public AddGroupMemberRequest(int friendId, int groupId) {
+    public AddGroupMemberRequest(String friendId, String groupId) {
         super(ServiceApi.SERVICE_URL + ServiceApi.API_ADD_GROUP_MEMBER);
         setParam("user_id", friendId);
         setParam("group_id", groupId);

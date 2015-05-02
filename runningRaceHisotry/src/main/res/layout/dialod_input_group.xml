@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/dialog_out_bg"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:id="@+id/info_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/dialog_alert_bg"
+        android:orientation="vertical"
+        android:paddingTop="10dp" >
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/alert_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="9dp"
+            android:text="Create new group"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/alert_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
+            android:paddingTop="9dp"
+            android:text="input group name"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/alert_reset_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/view_seperator_bg" />
+
+        <!--<com.runningracehisotry.views.CustomFontTextView
+            android:id="@+id/alert_forgot_password_reset_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="9dp"
+            android:text="@string/ok"
+            android:textColor="@color/dialog_button_text_color"
+            android:textSize="18sp"
+            android:textStyle="bold" >
+        </com.runningracehisotry.views.CustomFontTextView>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:padding="9dp">
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/alert_cancel_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="cancel"
+                android:textColor="@color/dialog_button_text_color"
+                android:textSize="18sp"
+                android:textStyle="bold" >
+            </com.runningracehisotry.views.CustomFontTextView>
+
+            <com.runningracehisotry.views.CustomFontTextView
+                android:id="@+id/alert_ok_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/ok"
+                android:textColor="@color/dialog_button_text_color"
+                android:textSize="18sp"
+                android:textStyle="bold" >
+            </com.runningracehisotry.views.CustomFontTextView>
+
+            </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

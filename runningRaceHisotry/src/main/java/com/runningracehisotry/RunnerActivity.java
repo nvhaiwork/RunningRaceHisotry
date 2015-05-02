@@ -4,16 +4,26 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Dialog;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runningracehisotry.adapters.NewRunnerAdapter;
+import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.Group;
 import com.runningracehisotry.models.Runner;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
+import com.runningracehisotry.views.ChooseGroupDialog;
 import com.runningracehisotry.views.CustomAlertDialog;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.views.CustomAlertDialog.OnNegativeButtonClick;
@@ -22,6 +32,7 @@ import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.AddGroupMemberRequest;
 import com.runningracehisotry.webservice.base.AddGroupRequest;
+import com.runningracehisotry.webservice.base.GetAllGroupUserRequest;
 import com.runningracehisotry.webservice.base.GetAllRunnerRequest;
 
 import org.json.JSONArray;
@@ -32,9 +43,16 @@ public class RunnerActivity extends BaseActivity {
 
     private ListView mListView;
     private List<Runner> mRunners;
+    private Runner chosenRunner;
     private NewRunnerAdapter mRunnersAdapter;
     private int friendId;
     private CustomLoadingDialog mLoadingDialog;
+    private List<Group> groups;
+    private Group chosenGroup;
+    private Dialog inputDialog;
+    private Dialog chosenDialog;
+    private CustomAlertDialog successDialog;
+    private String inputGroupName;
 
     @Override
     protected int addContent() {
@@ -87,6 +105,7 @@ public class RunnerActivity extends BaseActivity {
                                 }
                             }
                             catch(Exception ex){
+                                ex.printStackTrace();
                             }
                             Utilities.showAlertMessage(RunnerActivity.this, getResources().getString(R.string.runner_get_failed), "");
                         }
@@ -141,6 +160,16 @@ public class RunnerActivity extends BaseActivity {
                         }
                     }
                 });
+            } else if(methodName.equals(ServiceConstants.METHOD_GET_ALL_GROUP)) {
+                LogUtil.d(Constants.LOG_TAG, "processGetGroupOfUser return: " + data);
+                if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+
+                Gson gson = new Gson();
+                Type listType = new TypeToken<List<Group>>(){}.getType();
+                List<Group> lstGroup = gson.fromJson(data.toString(), listType);
+                showChooseGroupDialog(chosenRunner, lstGroup);
             }
         }
 
@@ -160,6 +189,7 @@ public class RunnerActivity extends BaseActivity {
 
         }
     };
+
 
     private void loadListRunner() {
         GetAllRunnerRequest request = new GetAllRunnerRequest();
@@ -211,6 +241,7 @@ public class RunnerActivity extends BaseActivity {
         if(result.equalsIgnoreCase("true")){
             LogUtil.d(mCurrentClassName, "Response processAddedMemberOfGroup done");
             mRunnersAdapter.notifyDataSetChanged();
+            showSuccessDialog(chosenRunner.getFullName(), chosenGroup.getGroupName());
         }
         else{
             LogUtil.d(mCurrentClassName, "Response processAddedMemberOfGroup failed");
@@ -225,10 +256,14 @@ public class RunnerActivity extends BaseActivity {
         String result = obj.getString("result");
         int groupId = obj.getInt("group_id");
 
+        chosenGroup = new Group();
+        chosenGroup.setGroupId(String.valueOf(groupId));
+        chosenGroup.setGroupName(inputGroupName);
+
         if(result.equalsIgnoreCase("true")){
             LogUtil.d(mCurrentClassName, "Response processAddedGroup done with frienId|groupID: "
                     + friendId + "|" + groupId);
-            AddGroupMemberRequest request = new AddGroupMemberRequest(friendId, groupId);
+            AddGroupMemberRequest request = new AddGroupMemberRequest(String.valueOf(friendId), String.valueOf(groupId));
             request.setListener(callBackEvent);
             new Thread(request).start();
         }
@@ -257,8 +292,19 @@ public class RunnerActivity extends BaseActivity {
                     position);
             LogUtil.d(mCurrentClassName,"Add runner id: " + user.getId());
 
-            doAddFriend(user);
+            chosenRunner = user;
+
+            getGroups();
         }
+    }
+
+    private void getGroups() {
+        mLoadingDialog = CustomLoadingDialog.show(this, "", "", false, false);
+
+        GetAllGroupUserRequest request = new GetAllGroupUserRequest();
+        request.setListener(callBackEvent);
+        new Thread(request).start();
+        LogUtil.d(Constants.LOG_TAG, "getGroupOfUser call");
     }
 
     @Override
@@ -270,45 +316,90 @@ public class RunnerActivity extends BaseActivity {
     /**
      * Display pop up allow user add friend to community group
      * */
-    private void doAddFriend(final Runner user) {
+    private void showSuccessDialog(String username, String groupName) {
 
-        final CustomAlertDialog dialog = new CustomAlertDialog(
+        successDialog = new CustomAlertDialog(
                 RunnerActivity.this);
-        dialog.setCancelableFlag(false);
-        dialog.setTitle(getString(R.string.dialog_user_title));
-        dialog.setMessage(getString(R.string.dialog_user_message));
-        dialog.setNegativeButton(getString(R.string.no),
-                new OnNegativeButtonClick() {
-
-                    @Override
-                    public void onButtonClick(final View view) {
-                        // TODO Auto-generated method stub
-
-                        dialog.dismiss();
-                    }
-                });
-        dialog.setPositiveButton(getString(R.string.yes),
+        successDialog.setCancelableFlag(false);
+        successDialog.setTitle("Add user");
+        String message = String.format("Add user: %s to group: %s Successful!", new String[]{username, groupName});
+        successDialog.setMessage(message);
+        successDialog.setPositiveButton(getString(R.string.ok),
                 new OnPositiveButtonClick() {
 
                     @Override
                     public void onButtonClick(View view) {
                         // TODO Auto-generated method stub
-                        dialog.dismiss();
-                        if(mLoadingDialog == null) {
-                            mLoadingDialog = CustomLoadingDialog.show(RunnerActivity.this, "", "", false, false);
-                        }
-                        processAddGroup(user);
-                        LogUtil.d(mCurrentClassName,"Execute Add");
-
-
+                        successDialog.dismiss();
                     }
                 });
 
-        dialog.show();
+        successDialog.show();
     }
 
-    private void processAddGroup(Runner user) {
-        AddGroupRequest request = new AddGroupRequest();
+    private void showChooseGroupDialog(final Runner user, final List<Group> groups) {
+        View.OnClickListener onDoneClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chosenGroup = groups.get(0);
+
+                AddGroupMemberRequest request = new AddGroupMemberRequest(String.valueOf(friendId), String.valueOf(chosenGroup.getGroupId()));
+                request.setListener(callBackEvent);
+                new Thread(request).start();
+
+                if(!mLoadingDialog.isShowing()) {
+                    mLoadingDialog.show();
+                }
+
+                if(chosenDialog != null && chosenDialog.isShowing()) {
+                    chosenDialog.dismiss();
+                }
+            }
+        };
+
+        View.OnClickListener onCancelClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(chosenDialog != null && chosenDialog.isShowing()) {
+                    chosenDialog.dismiss();
+                }
+                chosenGroup = null;
+            }
+        };
+
+        View.OnClickListener onCreateClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chosenGroup = null;
+
+                showInputGroupDialog();
+            }
+        };
+
+        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                chosenGroup = groups.get(position);
+            }
+        };
+        if(chosenDialog != null && chosenDialog.isShowing()) {
+            chosenDialog.dismiss();
+        }
+
+        if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+            mLoadingDialog.dismiss();
+        }
+
+        chosenDialog = new ChooseGroupDialog(this, groups, onCancelClick, onDoneClick, itemClickListener, onCreateClick);
+        chosenDialog.show();
+    }
+
+
+    private void processAddGroup(Runner user, String newGroupName) {
+        if(mLoadingDialog != null) {
+            mLoadingDialog.show();
+        }
+        AddGroupRequest request = new AddGroupRequest(newGroupName);
         request.setListener(callBackEvent);
         new Thread(request).start();
         friendId = user.getId();
@@ -316,5 +407,61 @@ public class RunnerActivity extends BaseActivity {
 
         mRunners.remove(user);
         mRunnersAdapter.notifyDataSetChanged();
+    }
+
+    private void showInputGroupDialog() {
+        if(chosenDialog != null && chosenDialog.isShowing()) {
+            chosenDialog.dismiss();
+        }
+
+        if(inputDialog != null && inputDialog.isShowing()) {
+            inputDialog.dismiss();
+        }
+
+        inputDialog = new Dialog(this);
+        inputDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        inputDialog.setContentView(R.layout.dialod_input_group);
+        inputDialog.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Window window = inputDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(wlp);
+
+        final EditText etGroup = (EditText) inputDialog
+                .findViewById(R.id.alert_reset_email);
+        TextView btnOK = (TextView) inputDialog
+                .findViewById(R.id.alert_ok_btn);
+
+        TextView btnCancel = (TextView) inputDialog
+                .findViewById(R.id.alert_cancel_btn);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                inputDialog.dismiss();
+            }
+        });
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View paramView) {
+                // TODO Auto-generated method stub
+
+                if (!etGroup.getText().toString().equals("")) {
+                    inputDialog.dismiss();
+                    String groupName = etGroup.getText().toString();
+                    inputGroupName = groupName;
+                    processAddGroup(chosenRunner, groupName);
+                }
+            }
+        });
+
+        inputDialog.show();
     }
 }
