@@ -98,6 +98,7 @@ public class RunnerActivity extends BaseActivity {
                         try {
                             processGotListRunner(data);
                         } catch (JSONException e) {
+                            chosenGroup = null;
                             //e.printStackTrace();
                             try{
                                 if (mLoadingDialog.isShowing()) {
@@ -128,6 +129,7 @@ public class RunnerActivity extends BaseActivity {
                         try {
                             processAddedGroup(data);
                         } catch (JSONException e) {
+                            chosenGroup = null;
                             try{
                                 if (mLoadingDialog.isShowing()) {
                                     mLoadingDialog.dismiss();
@@ -147,6 +149,7 @@ public class RunnerActivity extends BaseActivity {
                         try {
                             processAddedMemberOfGroup(data);
                         } catch (JSONException e) {
+                            chosenGroup = null;
                             e.printStackTrace();
                             Utilities.showAlertMessage(RunnerActivity.this, "Error Parse when get list shoes", "");
                         } finally {
@@ -175,6 +178,7 @@ public class RunnerActivity extends BaseActivity {
 
         @Override
         public void Wsdl2CodeFinishedWithException(Exception ex) {
+            chosenGroup = null;
             try{
                 if (mLoadingDialog.isShowing()) {
                     mLoadingDialog.dismiss();
@@ -242,6 +246,7 @@ public class RunnerActivity extends BaseActivity {
             LogUtil.d(mCurrentClassName, "Response processAddedMemberOfGroup done");
             mRunnersAdapter.notifyDataSetChanged();
             showSuccessDialog(chosenRunner.getFullName(), chosenGroup.getGroupName());
+            chosenGroup = null;
         }
         else{
             LogUtil.d(mCurrentClassName, "Response processAddedMemberOfGroup failed");
@@ -263,7 +268,7 @@ public class RunnerActivity extends BaseActivity {
         if(result.equalsIgnoreCase("true")){
             LogUtil.d(mCurrentClassName, "Response processAddedGroup done with frienId|groupID: "
                     + friendId + "|" + groupId);
-            AddGroupMemberRequest request = new AddGroupMemberRequest(String.valueOf(friendId), String.valueOf(groupId));
+            AddGroupMemberRequest request = new AddGroupMemberRequest(String.valueOf(chosenRunner.getId()), String.valueOf(groupId));
             request.setListener(callBackEvent);
             new Thread(request).start();
         }
@@ -341,9 +346,11 @@ public class RunnerActivity extends BaseActivity {
         View.OnClickListener onDoneClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chosenGroup = groups.get(0);
+                if(chosenGroup == null) {
+                    chosenGroup = groups.get(0);
+                }
 
-                AddGroupMemberRequest request = new AddGroupMemberRequest(String.valueOf(friendId), String.valueOf(chosenGroup.getGroupId()));
+                AddGroupMemberRequest request = new AddGroupMemberRequest(String.valueOf(chosenRunner.getId()), String.valueOf(chosenGroup.getGroupId()));
                 request.setListener(callBackEvent);
                 new Thread(request).start();
 

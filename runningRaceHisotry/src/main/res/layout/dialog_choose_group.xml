@@ -72,6 +72,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/lv_dialog_group"
                     android:layout_above="@+id/btn_dialog_create"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="0dp"
                     android:textSize="20sp"/>
 
             <Button

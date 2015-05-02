@@ -591,6 +591,19 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
         CustomSharedPreferences.setPreferences(LoginChoiceScreen.PREF_KEY_TWITTER_LOGIN, false);
 
+        Intent loginChoiceIntent = new Intent(BaseActivity.this,
+                LoginChoiceScreen.class);
+        loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                | Intent.FLAG_ACTIVITY_NEW_TASK);
+        RunningRaceApplication.getInstance().setCurrentUser(null);
+        startActivity(loginChoiceIntent);
+        mShoes = null;
+        mHistory = null;
+        mFriends = null;
+        AddRaceActivity.setRace(null);
+        dialog.dismiss();
+        finish();
+
 //        Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
 //
 //                    @Override
