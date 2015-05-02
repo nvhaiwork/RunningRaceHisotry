@@ -8,14 +8,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.FacebookDialog;
-import com.facebook.widget.WebDialog;
+//import com.facebook.Request;
+//import com.facebook.Response;
+//import com.facebook.Session;
+//import com.facebook.SessionState;
+//import com.facebook.UiLifecycleHelper;
+//import com.facebook.model.GraphUser;
+//import com.facebook.widget.FacebookDialog;
+//import com.facebook.widget.WebDialog;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -53,6 +59,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -90,7 +97,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 	protected String mCurrentClassName;
 	protected ImageLoader mImageLoader;
 	private RelativeLayout mAboutLayout;
-	protected UiLifecycleHelper uiHelper;
+//	protected UiLifecycleHelper uiHelper;
 	protected DisplayImageOptions mOptions;
 	protected LinearLayout mBottomBtnLayout;
 	protected boolean isHideActionBarButtons;
@@ -101,6 +108,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 	protected TextView mBotLeftBtnTxt, mBotRightBtnTxt, mBotMidBtnTxt;
     private CustomLoadingDialog mLoadingDialogAboutUs;
     private WebView mAboutUsContent;
+    protected CallbackManager callbackManager;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -111,6 +119,8 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
+        callbackManager = CallbackManager.Factory.create();
+
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -119,8 +129,8 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		int layoutId = addContent();
 		setContentView(layoutId);
 		CustomSharedPreferences.init(getApplicationContext());
-		uiHelper = new UiLifecycleHelper(this, null);
-		uiHelper.onCreate(savedInstanceState);
+//		uiHelper = new UiLifecycleHelper(this, null);
+//		uiHelper.onCreate(savedInstanceState);
 		mImageLoader = ImageLoader.getInstance();
 		if (!mImageLoader.isInited()) {
 
@@ -146,40 +156,41 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 
-		uiHelper.onActivityResult(requestCode, resultCode, data,
-				new FacebookDialog.Callback() {
-					@Override
-					public void onError(FacebookDialog.PendingCall pendingCall,
-							Exception error, Bundle data) {
-					}
-
-					@Override
-					public void onComplete(
-							FacebookDialog.PendingCall pendingCall, Bundle data) {
-					}
-				});
-        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+//		uiHelper.onActivityResult(requestCode, resultCode, data,
+//				new FacebookDialog.Callback() {
+//					@Override
+//					public void onError(FacebookDialog.PendingCall pendingCall,
+//							Exception error, Bundle data) {
+//					}
+//
+//					@Override
+//					public void onComplete(
+//							FacebookDialog.PendingCall pendingCall, Bundle data) {
+//					}
+//				});
+//        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		uiHelper.onPause();
+//		uiHelper.onPause();
 	}
 
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		uiHelper.onDestroy();
+//		uiHelper.onDestroy();
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
-		uiHelper.onSaveInstanceState(outState);
+//		uiHelper.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -188,7 +199,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		super.onResume();
 
 		mCurrentClassName = this.getLocalClassName();
-		uiHelper.onResume();
+//		uiHelper.onResume();
 	}
 
 	/**
@@ -393,28 +404,37 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 //                Utilities.doShareSocial(BaseActivity.this, "com.facebook.katana",
 //                        getString(R.string.share_app_menu), null);
 
-                Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
+                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                        .setContentTitle("Personal Running Race History")
+                        .setContentDescription(
+                                getString(R.string.share_app_menu))
+                        .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.runningracehisotry"))
+                        .setImageUrl(Uri.parse("http://runningracehistory.com/images/big-logo.png"))
+                        .build();
+
+                ShareDialog shareDialog = new ShareDialog(this);
+                shareDialog.registerCallback(
+                        callbackManager,
+                        new FacebookCallback<Sharer.Result>() {
+                            @Override
+                            public void onSuccess(Sharer.Result result) {
+
+                            }
 
                             @Override
-                            public void call(Session session, SessionState state, Exception exception) {
-                                Log.d("FACEBOOK", "call");
-                                if(session.isOpened()) {
-                                    Bundle params = new Bundle();
-//                                    params.putString("name", getString(R.string.share_app_menu));
-//                                    params.putString("caption", getString(R.string.share_app_menu));
-                                    params.putString("description", getString(R.string.share_app_menu));
-                                    params.putString("link", "https://play.google.com/store/apps/details?id=com.runningracehisotry");
-                                    params.putString("picture", "http://runningracehistory.com/images/login-logo.png");
+                            public void onCancel() {
 
-                                    WebDialog feedDialog = (
-                                            new WebDialog.FeedDialogBuilder(BaseActivity.this,
-                                                    Session.getActiveSession(),
-                                                    params)).build();
-                                    feedDialog.show();
-                                }
                             }
-                        }
-                );
+
+                            @Override
+                            public void onError(FacebookException e) {
+
+                            }
+                        });
+
+                shareDialog.show(linkContent);
+
+//
 			} else if (menu.getDislayText().equals(
 					getString(R.string.menu_share_twitter))) {
 
@@ -571,28 +591,28 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
         CustomSharedPreferences.setPreferences(LoginChoiceScreen.PREF_KEY_TWITTER_LOGIN, false);
 
-        Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
-
-                    @Override
-                    public void call(Session session, SessionState state, Exception exception) {
-                        Log.d("FACEBOOK", "call");
-                        session.closeAndClearTokenInformation();
-
-                        Intent loginChoiceIntent = new Intent(BaseActivity.this,
-                                LoginChoiceScreen.class);
-                        loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        RunningRaceApplication.getInstance().setCurrentUser(null);
-                        startActivity(loginChoiceIntent);
-                        mShoes = null;
-                        mHistory = null;
-                        mFriends = null;
-                        AddRaceActivity.setRace(null);
-                        dialog.dismiss();
-                        finish();
-                    }
-                }
-        );
+//        Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
+//
+//                    @Override
+//                    public void call(Session session, SessionState state, Exception exception) {
+//                        Log.d("FACEBOOK", "call");
+//                        session.closeAndClearTokenInformation();
+//
+//                        Intent loginChoiceIntent = new Intent(BaseActivity.this,
+//                                LoginChoiceScreen.class);
+//                        loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                                | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        RunningRaceApplication.getInstance().setCurrentUser(null);
+//                        startActivity(loginChoiceIntent);
+//                        mShoes = null;
+//                        mHistory = null;
+//                        mFriends = null;
+//                        AddRaceActivity.setRace(null);
+//                        dialog.dismiss();
+//                        finish();
+//                    }
+//                }
+//        );
 
 
 
@@ -807,34 +827,34 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         }
     };
 
-    private void performFacebookLogin(final String message) {
-        Log.d("FACEBOOK", "performFacebookLogin");
-//            final Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, Arrays.asList("email"));
-        Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
-
-            @Override
-            public void call(Session session, SessionState state, Exception exception) {
-                Log.d("FACEBOOK", "call");
-                if (session.isOpened()) {
-                    Log.d("FACEBOOK", "if (session.isOpened() && !isFetching)");
-//                        session.requestNewReadPermissions(newPermissionsRequest);
-                    Request shareRequest = Request.newStatusUpdateRequest(session, message, new Request.Callback() {
-                        @Override
-                        public void onCompleted(Response response) {
-
-                        }
-                    });
-                    shareRequest.executeAsync();
-                } else {
-//                    if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
-//                        mLoadingDialog.dismiss();
-//                    }
-//                        Utilities.showAlertMessage(
-//                                LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
-                }
-            }
-        });
-    }
+//    private void performFacebookLogin(final String message) {
+//        Log.d("FACEBOOK", "performFacebookLogin");
+////            final Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, Arrays.asList("email"));
+//        Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
+//
+//            @Override
+//            public void call(Session session, SessionState state, Exception exception) {
+//                Log.d("FACEBOOK", "call");
+//                if (session.isOpened()) {
+//                    Log.d("FACEBOOK", "if (session.isOpened() && !isFetching)");
+////                        session.requestNewReadPermissions(newPermissionsRequest);
+//                    Request shareRequest = Request.newStatusUpdateRequest(session, message, new Request.Callback() {
+//                        @Override
+//                        public void onCompleted(Response response) {
+//
+//                        }
+//                    });
+//                    shareRequest.executeAsync();
+//                } else {
+////                    if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+////                        mLoadingDialog.dismiss();
+////                    }
+////                        Utilities.showAlertMessage(
+////                                LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
+//                }
+//            }
+//        });
+//    }
 
     /**
      * Display setting screen

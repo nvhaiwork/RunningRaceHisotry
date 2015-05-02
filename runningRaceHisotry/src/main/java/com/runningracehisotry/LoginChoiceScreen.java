@@ -10,12 +10,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookRequestError;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphUser;
+//import com.facebook.Request;
+//import com.facebook.Response;
+//import com.facebook.Session;
+//import com.facebook.SessionState;
+//import com.facebook.model.GraphUser;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -42,6 +48,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -170,7 +178,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
-            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+//            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         }
 	}
 
@@ -191,9 +199,6 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 			startActivity(signInIntent);
 			break;
 		case R.id.login_with_fb:
-
-			mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
-					"", "", false, false);
 
             performFacebookLogin();
 			break;
@@ -290,53 +295,126 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
         private void performFacebookLogin() {
             Log.d("FACEBOOK", "performFacebookLogin");
 //            final Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, Arrays.asList("email"));
-            Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
+//            Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
+//
+//                @Override
+//                public void call(Session session, SessionState state, Exception exception) {
+//                    Log.d("FACEBOOK", "call");
+//                    if (session.isOpened()) {
+//                        Log.d("FACEBOOK", "if (session.isOpened() && !isFetching)");
+////                        session.requestNewReadPermissions(newPermissionsRequest);
+//                        Request getMe = Request.newMeRequest(session, new Request.GraphUserCallback() {
+//
+//                            @Override
+//                            public void onCompleted(GraphUser user, Response response) {
+//                                mLoadingDialog.dismiss();
+//                                Log.d("FACEBOOK", "onCompleted");
+//                                if (user != null) {
+//                                    Log.d("FACEBOOK", "user != null");
+//                                    String id = user.getId();
+//                                    email = user.getProperty("email").toString();
+//
+//                                    if (email == null || email.length() < 0) {
+//                                        Toast.makeText(LoginChoiceScreen.this, "login fail", Toast.LENGTH_LONG);
+//                                        return;
+//                                    } else {
+//                                        fbID = id;
+//                                        fullName = user.getName();
+//                                        avatar = "http://graph.facebook.com/"+ id+ "/picture?type=large";
+//
+//                                        RegisterFacebookRequest request = new RegisterFacebookRequest(id, fullName, avatar);
+//                                        request.setListener(LoginChoiceScreen.this);
+//                                        new Thread(request).start();
+//                                    }
+//                                }
+//                            }
+//
+//
+//                        });
+//                        getMe.executeAsync();
+//                    } else {
+//                        if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+//                            mLoadingDialog.dismiss();
+//                        }
+////                        Utilities.showAlertMessage(
+////                                LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
+//                    }
+//                }
+//            });
 
-                @Override
-                public void call(Session session, SessionState state, Exception exception) {
-                    Log.d("FACEBOOK", "call");
-                    if (session.isOpened()) {
-                        Log.d("FACEBOOK", "if (session.isOpened() && !isFetching)");
-//                        session.requestNewReadPermissions(newPermissionsRequest);
-                        Request getMe = Request.newMeRequest(session, new Request.GraphUserCallback() {
+            LoginManager loginManager = LoginManager.getInstance();
 
-                            @Override
-                            public void onCompleted(GraphUser user, Response response) {
+            loginManager.logInWithReadPermissions(this, Arrays.asList(new String[]{"public_profile", "email"}));
+
+            loginManager.registerCallback(callbackManager,
+                    new FacebookCallback<LoginResult>() {
+                        @Override
+                        public void onSuccess(LoginResult loginResult) {
+                            Log.d(logTag, loginResult.toString());
+                            fetchUserInfo();
+                            mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
+                                    "", "", false, false);
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
                                 mLoadingDialog.dismiss();
-                                Log.d("FACEBOOK", "onCompleted");
-                                if (user != null) {
-                                    Log.d("FACEBOOK", "user != null");
-                                    String id = user.getId();
-                                    email = user.getProperty("email").toString();
+                            }
+                            Utilities.showAlertMessage(LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
+                        }
 
-                                    if (email == null || email.length() < 0) {
-                                        Toast.makeText(LoginChoiceScreen.this, "login fail", Toast.LENGTH_LONG);
-                                        return;
-                                    } else {
-                                        fbID = id;
-                                        fullName = user.getName();
-                                        avatar = "http://graph.facebook.com/"+ id+ "/picture?type=large";
+                        @Override
+                        public void onError(FacebookException exception) {
+                            Log.d(logTag, exception.toString());
+                            Utilities.showAlertMessage(LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
+                        }
 
-                                        RegisterFacebookRequest request = new RegisterFacebookRequest(id, fullName, avatar);
-                                        request.setListener(LoginChoiceScreen.this);
-                                        new Thread(request).start();
-                                    }
+                    });
+        }
+
+    private void fetchUserInfo() {
+        final com.facebook.AccessToken accessToken = com.facebook.AccessToken.getCurrentAccessToken();
+        if (accessToken != null) {
+            GraphRequest request = GraphRequest.newMeRequest(
+                    accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(JSONObject me, GraphResponse response) {
+                            Log.d(logTag, response.toString());
+
+                            try {
+                                String id = me.getString("id");
+                                email = me.getString("email");
+
+                                if (email == null || email.length() < 0) {
+                                    Toast.makeText(LoginChoiceScreen.this, "login fail", Toast.LENGTH_LONG);
+                                    return;
+                                } else {
+                                    fbID = id;
+                                    fullName = me.getString("name");
+                                    avatar = "http://graph.facebook.com/" + id + "/picture?type=large";
+
+                                    RegisterFacebookRequest request = new RegisterFacebookRequest(id, fullName, avatar);
+                                    request.setListener(LoginChoiceScreen.this);
+                                    new Thread(request).start();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                                    mLoadingDialog.dismiss();
                                 }
                             }
-
-
-                        });
-                        getMe.executeAsync();
-                    } else {
-                        if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
-                            mLoadingDialog.dismiss();
                         }
-//                        Utilities.showAlertMessage(
-//                                LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
                     }
-                }
-            });
+
+            );
+            GraphRequest.executeBatchAsync(request);
+        } else {
+            if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                mLoadingDialog.dismiss();
+            }
         }
+    }
 
 
     @Override
@@ -437,7 +515,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
             else {
                 LogUtil.d(logTag, "Login fail!!!");
                 // Show dialog notify login fail
-                performFacebookLogin();
+//                performFacebookLogin();
             }
         } catch (JSONException e) {
             e.printStackTrace();

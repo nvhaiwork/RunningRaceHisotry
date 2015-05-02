@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.facebook.Session;
-import com.facebook.model.GraphObject;
-import com.facebook.model.OpenGraphAction;
-import com.facebook.model.OpenGraphObject;
-import com.facebook.widget.FacebookDialog;
+//import com.facebook.Session;
+//import com.facebook.model.GraphObject;
+//import com.facebook.model.OpenGraphAction;
+//import com.facebook.model.OpenGraphObject;
+//import com.facebook.widget.FacebookDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.parse.ParseException;
@@ -699,7 +699,7 @@ public class RacesDetailActivity extends BaseActivity implements
 
         } else {
             super.onActivityResult(requestCode, resultCode, data);
-            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+//            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         }
     }
 
@@ -1266,19 +1266,19 @@ public class RacesDetailActivity extends BaseActivity implements
             if (shareType == R.id.dialog_share_facebook) {
 
                 try{
-                    OpenGraphObject myobject = OpenGraphObject.Factory
-                            .createForPost("fitness.course");
-                    myobject.setProperty("title", result);
-                    myobject.setProperty("description", result);
-                    myobject.setProperty("caption", result);
-                    OpenGraphAction action = GraphObject.Factory
-                            .create(OpenGraphAction.class);
-                    action.setProperty("course", myobject);
-                    action.setImageUrls(imageBitmaps);
-                    FacebookDialog shareDialog = new FacebookDialog.OpenGraphActionDialogBuilder(
-                            RacesDetailActivity.this, action, "fitness.runs",
-                            "course").build();
-                    uiHelper.trackPendingDialogCall(shareDialog.present());
+//                    OpenGraphObject myobject = OpenGraphObject.Factory
+//                            .createForPost("fitness.course");
+//                    myobject.setProperty("title", result);
+//                    myobject.setProperty("description", result);
+//                    myobject.setProperty("caption", result);
+//                    OpenGraphAction action = GraphObject.Factory
+//                            .create(OpenGraphAction.class);
+//                    action.setProperty("course", myobject);
+//                    action.setImageUrls(imageBitmaps);
+//                    FacebookDialog shareDialog = new FacebookDialog.OpenGraphActionDialogBuilder(
+//                            RacesDetailActivity.this, action, "fitness.runs",
+//                            "course").build();
+//                    uiHelper.trackPendingDialogCall(shareDialog.present());
                     Utilities.doShareSocial(RacesDetailActivity.this, "com.facebook.katana", result, imageUris);
                 }
                 catch(Exception ex){

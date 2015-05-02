@@ -23,8 +23,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="12sp"
-                android:background="@null"
-                android:src="@drawable/com_facebook_logo" />
+                android:background="@null"/>
 
             <TextView
                 android:id="@+id/tv_title"

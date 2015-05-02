@@ -9,6 +9,7 @@
     <string name="delete">Delete</string>
     <string name="crash_toast_text">Application crashed. Please send bug report by email.</string>
     <string name="fb_app_id">981486958530273</string>
+    <string name="fb_app_name">RunningRaceHistory</string>
     <string name="parse_app_id">NwlYVoWku2ilb9hNMOmN0xyBC07JwbMLHeciWPWu</string>
     <string name="parse_client_key">iyUOGQF8Mg1KeddWfGQzeroSqlX2i4MVX9rVA1pX</string>
     <string name="contact_email">joshua@runningracehistory.com</string>
@@ -130,6 +131,9 @@
     <string name="menu_your_history">Your History</string>
     <string name="menu_runner_you_may_know">Runners You May Know</string>
     <string name="menu_your_community">Your Community/Group</string>
+
+    <string name="menu_chat_your_community">Chat With Your Community/Group</string>
+    Chat With Your Community/Group
     <string name="menu_profile_update">Profile Update</string>
     <string name="menu_contact_us">Contact Us</string>
     <string name="menu_share_fb">Share on Facebook</string>
