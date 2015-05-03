@@ -2,7 +2,10 @@ package com.runningracehisotry;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Locale;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.runningracehisotry.adapters.NewShoeDistanceHistoryAdapter;
 
 import com.runningracehisotry.constants.Constants;
@@ -125,11 +128,13 @@ public class AddShoeActivity extends BaseActivity {
             if(shoeJson != null){
                 Shoe shoe = Utilities.fromJson(shoeJson);
                 if(shoe != null){
-                    LogUtil.d(mCurrentClassName, "receive shoe !null, update shoeId = " + shoe.getId());
+                    LogUtil.d(mCurrentClassName, "receive shoe !null, update shoeId = "+shoe.getMilesOnShoes()
+                            +"|"+ shoe.getId() +
+                    "|"+ String.format(Locale.US,"%.2f", shoe.getMilesOnShoes()));
                     shoeIdUpdate = shoe.getId();
                     lastMileOfShoe = shoe.getMilesOnShoes();
                     // Data
-                    mMilesTxt.setText(String.format("%.2f", (float) shoe.getMilesOnShoes()));
+                    mMilesTxt.setText(String.format(Locale.US, "%.2f", shoe.getMilesOnShoes()));
                     mShoeBrandEdt.setText(shoe.getBrand());
                     mShoeModelEdt.setText(shoe.getModel());
                     List<History> history = shoe.getMilesShoesHistories();
@@ -143,7 +148,19 @@ public class AddShoeActivity extends BaseActivity {
                     }
                     mShoeImgPath = shoe.getImageUrl();
                     if((shoe.getImageUrl() != null) && (!shoe.getImageUrl().isEmpty())){
+                        mOptions = new DisplayImageOptions.Builder()
+                                .displayer(new RoundedBitmapDisplayer(R.dimen.image_round_conner_new))
+                                .showImageOnLoading(R.drawable.ic_photo_of_shoe)
+                                .showImageForEmptyUri(R.drawable.ic_photo_of_shoe)
+                                .showImageOnFail(R.drawable.ic_photo_of_shoe).cacheInMemory(true)
+                                .cacheOnDisc(true).considerExifParams(true)
+                                .bitmapConfig(Bitmap.Config.ARGB_8888).build();
                         mImageLoader.displayImage(ServiceApi.SERVICE_URL + shoe.getImageUrl(), mShoeImage, mOptions);
+                       /* Utilities.displayParseImage(
+                                image,
+                                mShoeImage,
+                                getResources().getDimensionPixelSize(
+                                        R.dimen.image_round_conner));*/
                     }
 
                 }
@@ -173,7 +190,7 @@ public class AddShoeActivity extends BaseActivity {
 				}
 
 				orgMile += newMile;
-				mMilesTxt.setText(String.format("%.2f", orgMile));
+				mMilesTxt.setText(String.format(Locale.US, "%.2f", orgMile));
 			} catch (Exception ex) {
 
 				LogUtil.e("add_show_add_miles_btn", ex.getMessage());
@@ -358,7 +375,7 @@ public class AddShoeActivity extends BaseActivity {
         float addMile =  newMile - lastMileOfShoe;
         String miles = "0.00";
         if(addMile > 0){
-            miles = String.format("%.2f", addMile);
+            miles = String.format(Locale.US, "%.2f", addMile);
         }
         String brand = mShoeBrandEdt.getText().toString();
         String model = mShoeModelEdt.getText().toString();
@@ -409,7 +426,7 @@ public class AddShoeActivity extends BaseActivity {
         float addMile =  newMile - lastMileOfShoe;
         String miles = "0";
         if(addMile > 0){
-            miles = String.format("%.2f", addMile);
+            miles = String.format(Locale.US, "%.2f", addMile);
         }
         String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
         String brand = mShoeBrandEdt.getText().toString();

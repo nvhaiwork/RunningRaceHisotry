@@ -307,7 +307,18 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
             @SuppressWarnings("unchecked")
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+
+                new LoadRaceImageAsync().execute(race);
+                if (mCurrentView != null) {
+
+                    ObjectAnimator animator;
+                    animator = ObjectAnimator.ofFloat(mCurrentView,
+                            "translationX", 0);
+                    animator.setDuration(200);
+                    animator.start();
+                    mCurrentView = null;
+                    actionDownX = -1;
+                }
                /* if (race.containsKey(Constants.BIB)
                         || race.containsKey(Constants.MEDAL)
                         || race.containsKey(Constants.PERSON)) {
@@ -324,12 +335,12 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
                         actionDownX = -1;
                     }
                 }*/
-                if (    ((race.getBibUrl() != null) && (!race.getBibUrl().isEmpty()))
+                /*if (    ((race.getBibUrl() != null) && (!race.getBibUrl().isEmpty()))
                         || ((race.getMedalUrl() != null) && (!race.getMedalUrl().isEmpty()))
                         ||((race.getPersonUrl() != null) && (!race.getPersonUrl().isEmpty()))){
 
-                    /*Utilities.showAlertMessage(mContext, "Temporary not show image",
-                            mContext.getString(R.string.dialog_race_tile));*/
+                    *//*Utilities.showAlertMessage(mContext, "Temporary not show image",
+                            mContext.getString(R.string.dialog_race_tile));*//*
                     new LoadRaceImageAsync().execute(race);
                     if (mCurrentView != null) {
 
@@ -347,7 +358,8 @@ public class NewRaceDetailAdapter  extends BaseExpandableListAdapter {
                     Utilities.showAlertMessage(mContext, mContext
                                     .getString(R.string.dialog_race_no_image_message),
                             mContext.getString(R.string.dialog_race_tile));
-                }
+                }*/
+
             }
         });
 

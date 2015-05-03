@@ -9,6 +9,18 @@ package com.runningracehisotry;
 
 public final class R {
     public static final class attr {
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>bottom</code></td><td>0</td><td></td></tr>
+<tr><td><code>inline</code></td><td>1</td><td></td></tr>
+<tr><td><code>top</code></td><td>2</td><td></td></tr>
+</table>
+         */
+        public static final int auxiliary_view_position=0x7f010006;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -16,27 +28,28 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int confirm_logout=0x7f010003;
-        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
-or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-         */
-        public static final int done_button_background=0x7f01000d;
-        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+        public static final int confirm_logout=0x7f010008;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int done_button_text=0x7f01000b;
-        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
+        public static final int foreground_color=0x7f010002;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>center</code></td><td>0</td><td></td></tr>
+<tr><td><code>left</code></td><td>1</td><td></td></tr>
+<tr><td><code>right</code></td><td>2</td><td></td></tr>
+</table>
          */
-        public static final int extra_fields=0x7f010008;
+        public static final int horizontal_alignment=0x7f010007;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -44,15 +57,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int fetch_user_info=0x7f010004;
-        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int is_cropped=0x7f010013;
+        public static final int is_cropped=0x7f01000c;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -60,7 +65,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int login_text=0x7f010005;
+        public static final int login_text=0x7f010009;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -68,7 +73,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int logout_text=0x7f010006;
+        public static final int logout_text=0x7f01000a;
         /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
 Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
 in (inches), mm (millimeters).
@@ -89,14 +94,26 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int minTextSize=0x7f010000;
-        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int multi_select=0x7f010002;
+        public static final int object_id=0x7f010003;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>unknown</code></td><td>0</td><td></td></tr>
+<tr><td><code>open_graph</code></td><td>1</td><td></td></tr>
+<tr><td><code>page</code></td><td>2</td><td></td></tr>
+</table>
+         */
+        public static final int object_type=0x7f010004;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -108,639 +125,696 @@ containing a value of this type.
 <tr><td><code>large</code></td><td>-4</td><td></td></tr>
 </table>
          */
-        public static final int preset_size=0x7f010012;
-        /** <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
+        public static final int preset_size=0x7f01000b;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>standard</code></td><td>0</td><td></td></tr>
+<tr><td><code>button</code></td><td>1</td><td></td></tr>
+<tr><td><code>box_count</code></td><td>2</td><td></td></tr>
+</table>
          */
-        public static final int radius_in_meters=0x7f01000e;
-        /** <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int results_limit=0x7f01000f;
-        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int search_text=0x7f010010;
-        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int show_pictures=0x7f010007;
-        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int show_search_box=0x7f010011;
-        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int show_title_bar=0x7f010009;
-        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
-or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-         */
-        public static final int title_bar_background=0x7f01000c;
-        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int title_text=0x7f01000a;
+        public static final int style=0x7f010005;
     }
     public static final class color {
         public static final int black=0x7f050000;
         public static final int com_facebook_blue=0x7f050001;
-        public static final int com_facebook_loginview_text_color=0x7f050002;
-        public static final int com_facebook_picker_search_bar_background=0x7f050003;
-        public static final int com_facebook_picker_search_bar_text=0x7f050004;
-        public static final int com_facebook_usersettingsfragment_connected_shadow_color=0x7f050005;
-        public static final int com_facebook_usersettingsfragment_connected_text_color=0x7f050006;
-        public static final int com_facebook_usersettingsfragment_not_connected_text_color=0x7f050007;
-        public static final int dialog_button_text_color=0x7f050008;
-        public static final int dialog_forgot_password_bg=0x7f050009;
-        public static final int dialog_out_bg=0x7f05000a;
-        public static final int empty_text_color=0x7f05000b;
-        public static final int here_link=0x7f05000c;
-        public static final int login_sign_in_with=0x7f05000d;
-        public static final int menu_bg=0x7f05000e;
-        public static final int people_you_may_know_color=0x7f05000f;
-        public static final int profile_image_bg=0x7f050010;
-        public static final int races_detail_sort_text_10k=0x7f050020;
-        public static final int races_detail_sort_text_15k=0x7f050021;
-        public static final int races_detail_sort_text_5k=0x7f050022;
-        public static final int races_detail_sort_text_full_mar=0x7f050023;
-        public static final int races_detail_sort_text_half_mar=0x7f050024;
-        public static final int red=0x7f050011;
-        public static final int setting_about_content_bg=0x7f050012;
-        public static final int setting_about_text_color=0x7f050013;
-        public static final int setting_about_title=0x7f050014;
-        public static final int text_button_bg_10k=0x7f050015;
-        public static final int text_button_bg_15k=0x7f050016;
-        public static final int text_button_bg_5k=0x7f050017;
-        public static final int text_button_bg_add_race=0x7f050018;
-        public static final int text_button_bg_full_mar=0x7f050019;
-        public static final int text_button_bg_half_mar=0x7f05001a;
-        public static final int text_button_bg_my_shoes=0x7f05001b;
-        public static final int text_button_bg_select_race=0x7f05001c;
-        public static final int text_button_bg_sign_in=0x7f05001d;
-        public static final int view_seperator_bg=0x7f05001e;
-        public static final int white=0x7f05001f;
+        public static final int com_facebook_button_background_color=0x7f050002;
+        public static final int com_facebook_button_background_color_disabled=0x7f050003;
+        public static final int com_facebook_button_background_color_pressed=0x7f050004;
+        public static final int com_facebook_button_like_background_color_selected=0x7f050005;
+        public static final int com_facebook_button_login_silver_background_color=0x7f050006;
+        public static final int com_facebook_button_login_silver_background_color_pressed=0x7f050007;
+        public static final int com_facebook_button_send_background_color=0x7f050008;
+        public static final int com_facebook_button_send_background_color_pressed=0x7f050009;
+        public static final int com_facebook_likeboxcountview_border_color=0x7f05000a;
+        public static final int com_facebook_likeboxcountview_text_color=0x7f05000b;
+        public static final int com_facebook_likeview_text_color=0x7f05000c;
+        public static final int com_facebook_picker_search_bar_background=0x7f05000d;
+        public static final int com_facebook_picker_search_bar_text=0x7f05000e;
+        public static final int com_facebook_share_button_text_color=0x7f05000f;
+        public static final int dialog_button_text_color=0x7f050010;
+        public static final int dialog_forgot_password_bg=0x7f050011;
+        public static final int dialog_out_bg=0x7f050012;
+        public static final int empty_text_color=0x7f050013;
+        public static final int here_link=0x7f050014;
+        public static final int login_sign_in_with=0x7f050015;
+        public static final int menu_bg=0x7f050016;
+        public static final int people_you_may_know_color=0x7f050017;
+        public static final int profile_image_bg=0x7f050018;
+        public static final int races_detail_sort_text_10k=0x7f050029;
+        public static final int races_detail_sort_text_15k=0x7f05002a;
+        public static final int races_detail_sort_text_5k=0x7f05002b;
+        public static final int races_detail_sort_text_full_mar=0x7f05002c;
+        public static final int races_detail_sort_text_half_mar=0x7f05002d;
+        public static final int races_detail_sort_text_other=0x7f05002e;
+        public static final int red=0x7f050019;
+        public static final int setting_about_content_bg=0x7f05001a;
+        public static final int setting_about_text_color=0x7f05001b;
+        public static final int setting_about_title=0x7f05001c;
+        public static final int text_button_bg_10k=0x7f05001d;
+        public static final int text_button_bg_15k=0x7f05001e;
+        public static final int text_button_bg_5k=0x7f05001f;
+        public static final int text_button_bg_add_race=0x7f050020;
+        public static final int text_button_bg_full_mar=0x7f050021;
+        public static final int text_button_bg_half_mar=0x7f050022;
+        public static final int text_button_bg_my_shoes=0x7f050023;
+        public static final int text_button_bg_other=0x7f050024;
+        public static final int text_button_bg_select_race=0x7f050025;
+        public static final int text_button_bg_sign_in=0x7f050026;
+        public static final int view_seperator_bg=0x7f050027;
+        public static final int white=0x7f050028;
     }
     public static final class dimen {
         public static final int action_bar_text_size=0x7f060000;
-        public static final int activity_horizontal_margin=0x7f06002e;
-        public static final int add_race_item_margin_top=0x7f060001;
-        public static final int add_race_item_padding=0x7f060002;
-        public static final int add_race_item_text_size=0x7f060003;
-        public static final int add_race_title_text_size=0x7f060004;
-        public static final int add_shoe_distance_hist_item=0x7f060005;
-        public static final int add_shoe_image=0x7f060006;
-        public static final int com_facebook_loginview_compound_drawable_padding=0x7f060007;
-        public static final int com_facebook_loginview_padding_bottom=0x7f060008;
-        public static final int com_facebook_loginview_padding_left=0x7f060009;
-        public static final int com_facebook_loginview_padding_right=0x7f06000a;
-        public static final int com_facebook_loginview_padding_top=0x7f06000b;
-        public static final int com_facebook_loginview_text_size=0x7f06000c;
-        public static final int com_facebook_picker_divider_width=0x7f06002d;
-        public static final int com_facebook_picker_place_image_size=0x7f06000d;
-        public static final int com_facebook_profilepictureview_preset_size_large=0x7f06000e;
-        public static final int com_facebook_profilepictureview_preset_size_normal=0x7f06000f;
-        public static final int com_facebook_profilepictureview_preset_size_small=0x7f060010;
-        public static final int com_facebook_usersettingsfragment_profile_picture_height=0x7f060011;
-        public static final int com_facebook_usersettingsfragment_profile_picture_width=0x7f060012;
-        public static final int dialog_button_text=0x7f060013;
-        public static final int dialog_chooser_item_text=0x7f060014;
-        public static final int image_round_conner=0x7f060015;
-        public static final int login_sign_in_with=0x7f060016;
-        public static final int menu_item_text=0x7f060017;
-        public static final int menu_title_text=0x7f060018;
-        public static final int my_shoes_item_img=0x7f060019;
-        public static final int my_shoes_item_text=0x7f06001a;
-        public static final int my_shoes_item_title=0x7f06001b;
-        public static final int profile_text_size=0x7f06001c;
-        public static final int race_item_delete=0x7f06001d;
-        public static final int races_detail_group_header=0x7f06001e;
-        public static final int races_detail_item_miles=0x7f06001f;
-        public static final int races_detail_item_name=0x7f060020;
-        public static final int races_detail_item_time=0x7f060021;
-        public static final int races_detail_sort_by_text=0x7f060022;
-        public static final int races_detail_sort_item_text=0x7f060023;
-        public static final int races_empty_text=0x7f060024;
-        public static final int select_race_item_margin_top=0x7f060025;
-        public static final int setting_about=0x7f060026;
-        public static final int setting_about_text=0x7f060027;
-        public static final int setting_about_title=0x7f060028;
-        public static final int sign_in_text=0x7f060029;
-        public static final int text_button_size=0x7f06002a;
-        public static final int user_item_img=0x7f06002b;
-        public static final int user_item_text=0x7f06002c;
+        public static final int activity_horizontal_margin=0x7f060001;
+        public static final int activity_vertical_margin=0x7f060002;
+        public static final int add_race_item_margin_top=0x7f060003;
+        public static final int add_race_item_padding=0x7f060004;
+        public static final int add_race_item_text_size=0x7f060005;
+        public static final int add_race_title_text_size=0x7f060006;
+        public static final int add_shoe_distance_hist_item=0x7f060007;
+        public static final int add_shoe_image=0x7f060008;
+        public static final int chat_item_img=0x7f060009;
+        public static final int chat_item_text=0x7f06000a;
+        public static final int com_facebook_likeboxcountview_border_radius=0x7f06000b;
+        public static final int com_facebook_likeboxcountview_border_width=0x7f06000c;
+        public static final int com_facebook_likeboxcountview_caret_height=0x7f06000d;
+        public static final int com_facebook_likeboxcountview_caret_width=0x7f06000e;
+        public static final int com_facebook_likeboxcountview_text_padding=0x7f06000f;
+        public static final int com_facebook_likeboxcountview_text_size=0x7f060010;
+        public static final int com_facebook_likeview_edge_padding=0x7f060011;
+        public static final int com_facebook_likeview_internal_padding=0x7f060012;
+        public static final int com_facebook_likeview_text_size=0x7f060013;
+        public static final int com_facebook_profilepictureview_preset_size_large=0x7f060014;
+        public static final int com_facebook_profilepictureview_preset_size_normal=0x7f060015;
+        public static final int com_facebook_profilepictureview_preset_size_small=0x7f060016;
+        public static final int com_facebook_share_button_compound_drawable_padding=0x7f060017;
+        public static final int com_facebook_share_button_padding_bottom=0x7f060018;
+        public static final int com_facebook_share_button_padding_left=0x7f060019;
+        public static final int com_facebook_share_button_padding_right=0x7f06001a;
+        public static final int com_facebook_share_button_padding_top=0x7f06001b;
+        public static final int com_facebook_share_button_text_size=0x7f06001c;
+        public static final int com_facebook_tooltip_horizontal_padding=0x7f06001d;
+        public static final int dialog_button_text=0x7f06001e;
+        public static final int dialog_chooser_item_text=0x7f06001f;
+        public static final int image_round_conner=0x7f060020;
+        public static final int image_round_conner_new=0x7f060021;
+        public static final int login_sign_in_with=0x7f060022;
+        public static final int menu_item_text=0x7f060023;
+        public static final int menu_title_text=0x7f060024;
+        public static final int my_shoes_item_img=0x7f060025;
+        public static final int my_shoes_item_text=0x7f060026;
+        public static final int my_shoes_item_title=0x7f060027;
+        public static final int profile_text_size=0x7f060028;
+        public static final int race_item_delete=0x7f060029;
+        public static final int races_detail_group_header=0x7f06002a;
+        public static final int races_detail_item_miles=0x7f06002b;
+        public static final int races_detail_item_name=0x7f06002c;
+        public static final int races_detail_item_time=0x7f06002d;
+        public static final int races_detail_sort_by_text=0x7f06002e;
+        public static final int races_detail_sort_item_text=0x7f06002f;
+        public static final int races_empty_text=0x7f060030;
+        public static final int select_race_item_margin_top=0x7f060031;
+        public static final int setting_about=0x7f060032;
+        public static final int setting_about_text=0x7f060033;
+        public static final int setting_about_title=0x7f060034;
+        public static final int sign_in_text=0x7f060035;
+        public static final int text_button_size=0x7f060036;
+        public static final int user_item_img=0x7f060037;
+        public static final int user_item_text=0x7f060038;
     }
     public static final class drawable {
         public static final int about_content_bg=0x7f020000;
-        public static final int com_facebook_button_blue=0x7f020001;
-        public static final int com_facebook_button_blue_focused=0x7f020002;
-        public static final int com_facebook_button_blue_normal=0x7f020003;
-        public static final int com_facebook_button_blue_pressed=0x7f020004;
-        public static final int com_facebook_button_check=0x7f020005;
-        public static final int com_facebook_button_check_off=0x7f020006;
-        public static final int com_facebook_button_check_on=0x7f020007;
-        public static final int com_facebook_button_grey_focused=0x7f020008;
-        public static final int com_facebook_button_grey_normal=0x7f020009;
-        public static final int com_facebook_button_grey_pressed=0x7f02000a;
-        public static final int com_facebook_close=0x7f02000b;
-        public static final int com_facebook_inverse_icon=0x7f02000c;
-        public static final int com_facebook_list_divider=0x7f02000d;
-        public static final int com_facebook_list_section_header_background=0x7f02000e;
-        public static final int com_facebook_loginbutton_silver=0x7f02000f;
-        public static final int com_facebook_logo=0x7f020010;
-        public static final int com_facebook_picker_default_separator_color=0x7f02006b;
-        public static final int com_facebook_picker_item_background=0x7f020011;
-        public static final int com_facebook_picker_list_focused=0x7f020012;
-        public static final int com_facebook_picker_list_longpressed=0x7f020013;
-        public static final int com_facebook_picker_list_pressed=0x7f020014;
-        public static final int com_facebook_picker_list_selector=0x7f020015;
-        public static final int com_facebook_picker_list_selector_background_transition=0x7f020016;
-        public static final int com_facebook_picker_list_selector_disabled=0x7f020017;
-        public static final int com_facebook_picker_magnifier=0x7f020018;
-        public static final int com_facebook_picker_top_button=0x7f020019;
-        public static final int com_facebook_place_default_icon=0x7f02001a;
-        public static final int com_facebook_profile_default_icon=0x7f02001b;
-        public static final int com_facebook_profile_picture_blank_portrait=0x7f02001c;
-        public static final int com_facebook_profile_picture_blank_square=0x7f02001d;
-        public static final int com_facebook_top_background=0x7f02001e;
-        public static final int com_facebook_top_button=0x7f02001f;
-        public static final int com_facebook_usersettingsfragment_background_gradient=0x7f020020;
-        public static final int dialog_alert_bg=0x7f020021;
-        public static final int dialog_forgot_password_bg=0x7f020022;
-        public static final int ic_action_menu=0x7f020023;
-        public static final int ic_action_settings=0x7f020024;
-        public static final int ic_add_race_title=0x7f020025;
-        public static final int ic_check_button=0x7f020026;
-        public static final int ic_contact_us=0x7f020027;
-        public static final int ic_fb=0x7f020028;
-        public static final int ic_launcher=0x7f020029;
-        public static final int ic_login_create_btn=0x7f02002a;
-        public static final int ic_login_fb=0x7f02002b;
-        public static final int ic_login_twitter=0x7f02002c;
-        public static final int ic_my_shoes_title=0x7f02002d;
-        public static final int ic_photo_of_bib=0x7f02002e;
-        public static final int ic_photo_of_medal=0x7f02002f;
-        public static final int ic_photo_of_person=0x7f020030;
-        public static final int ic_photo_of_shoe=0x7f020031;
-        public static final int ic_race_detail_images_10k=0x7f020032;
-        public static final int ic_race_detail_images_15k=0x7f020033;
-        public static final int ic_race_detail_images_5k=0x7f020034;
-        public static final int ic_race_detail_images_full_mar=0x7f020035;
-        public static final int ic_race_detail_images_half_mar=0x7f020036;
-        public static final int ic_race_detail_time_10k=0x7f020037;
-        public static final int ic_race_detail_time_15k=0x7f020038;
-        public static final int ic_race_detail_time_5k=0x7f020039;
-        public static final int ic_race_detail_time_full_mar=0x7f02003a;
-        public static final int ic_race_detail_time_half_mar=0x7f02003b;
-        public static final int ic_race_share_10k=0x7f02003c;
-        public static final int ic_race_share_15k=0x7f02003d;
-        public static final int ic_race_share_5k=0x7f02003e;
-        public static final int ic_race_share_full_mar=0x7f02003f;
-        public static final int ic_race_share_half_mar=0x7f020040;
-        public static final int ic_races_detail_title_10k=0x7f020041;
-        public static final int ic_races_detail_title_15k=0x7f020042;
-        public static final int ic_races_detail_title_5k=0x7f020043;
-        public static final int ic_races_detail_title_dummy=0x7f020044;
-        public static final int ic_races_detail_title_full_mar=0x7f020045;
-        public static final int ic_races_detail_title_half_mar=0x7f020046;
-        public static final int ic_select_race_10k=0x7f020047;
-        public static final int ic_select_race_15k=0x7f020048;
-        public static final int ic_select_race_5k=0x7f020049;
-        public static final int ic_select_race_add_race=0x7f02004a;
-        public static final int ic_select_race_full_marathon=0x7f02004b;
-        public static final int ic_select_race_half_marathon=0x7f02004c;
-        public static final int ic_select_race_my_shoes=0x7f02004d;
-        public static final int ic_select_text=0x7f02004e;
-        public static final int ic_setting=0x7f02004f;
-        public static final int ic_setting_medal=0x7f020050;
-        public static final int ic_setting_medal_top=0x7f020051;
-        public static final int ic_setting_rb_off=0x7f020052;
-        public static final int ic_setting_rb_on=0x7f020053;
-        public static final int ic_shoe=0x7f020054;
-        public static final int ic_twitter=0x7f020055;
-        public static final int ic_user_img=0x7f020056;
-        public static final int img_about_bg=0x7f020057;
-        public static final int img_add_race_bg=0x7f020058;
-        public static final int img_add_race_success=0x7f020059;
-        public static final int img_login_background=0x7f02005a;
-        public static final int img_navigation_bar=0x7f02005b;
-        public static final int img_profile_bg=0x7f02005c;
-        public static final int img_splash_background=0x7f02005d;
-        public static final int races_detail_sort_group_10k_bg=0x7f02005e;
-        public static final int races_detail_sort_group_15k_bg=0x7f02005f;
-        public static final int races_detail_sort_group_5k_bg=0x7f020060;
-        public static final int races_detail_sort_group_full_mar_bg=0x7f020061;
-        public static final int races_detail_sort_group_half_mar_bg=0x7f020062;
-        public static final int races_detail_sort_item_10k_bg=0x7f020063;
-        public static final int races_detail_sort_item_15k_bg=0x7f020064;
-        public static final int races_detail_sort_item_5k_bg=0x7f020065;
-        public static final int races_detail_sort_item_full_mar_bg=0x7f020066;
-        public static final int races_detail_sort_item_half_mar_bg=0x7f020067;
-        public static final int setting_cb_bg=0x7f020068;
-        public static final int shoe_circle_image_border=0x7f020069;
-        public static final int user_circle_image_border=0x7f02006a;
+        public static final int bk_ic_races_detail_title_other=0x7f020001;
+        public static final int com_facebook_button_background=0x7f020002;
+        public static final int com_facebook_button_icon=0x7f020003;
+        public static final int com_facebook_button_like_background=0x7f020004;
+        public static final int com_facebook_button_like_icon_selected=0x7f020005;
+        public static final int com_facebook_button_login_silver_background=0x7f020006;
+        public static final int com_facebook_button_send_background=0x7f020007;
+        public static final int com_facebook_button_send_icon=0x7f020008;
+        public static final int com_facebook_close=0x7f020009;
+        public static final int com_facebook_profile_picture_blank_portrait=0x7f02000a;
+        public static final int com_facebook_profile_picture_blank_square=0x7f02000b;
+        public static final int com_facebook_tooltip_black_background=0x7f02000c;
+        public static final int com_facebook_tooltip_black_bottomnub=0x7f02000d;
+        public static final int com_facebook_tooltip_black_topnub=0x7f02000e;
+        public static final int com_facebook_tooltip_black_xout=0x7f02000f;
+        public static final int com_facebook_tooltip_blue_background=0x7f020010;
+        public static final int com_facebook_tooltip_blue_bottomnub=0x7f020011;
+        public static final int com_facebook_tooltip_blue_topnub=0x7f020012;
+        public static final int com_facebook_tooltip_blue_xout=0x7f020013;
+        public static final int dialog_alert_bg=0x7f020014;
+        public static final int dialog_forgot_password_bg=0x7f020015;
+        public static final int divide_sort_race=0x7f020016;
+        public static final int ic_action_menu=0x7f020017;
+        public static final int ic_action_settings=0x7f020018;
+        public static final int ic_add_race_title=0x7f020019;
+        public static final int ic_check_button=0x7f02001a;
+        public static final int ic_contact_us=0x7f02001b;
+        public static final int ic_fb=0x7f02001c;
+        public static final int ic_launcher=0x7f02001d;
+        public static final int ic_login_create_btn=0x7f02001e;
+        public static final int ic_login_fb=0x7f02001f;
+        public static final int ic_login_twitter=0x7f020020;
+        public static final int ic_my_shoes_title=0x7f020021;
+        public static final int ic_photo_of_bib=0x7f020022;
+        public static final int ic_photo_of_medal=0x7f020023;
+        public static final int ic_photo_of_person=0x7f020024;
+        public static final int ic_photo_of_shoe=0x7f020025;
+        public static final int ic_race_detail_images_10k=0x7f020026;
+        public static final int ic_race_detail_images_15k=0x7f020027;
+        public static final int ic_race_detail_images_5k=0x7f020028;
+        public static final int ic_race_detail_images_full_mar=0x7f020029;
+        public static final int ic_race_detail_images_half_mar=0x7f02002a;
+        public static final int ic_race_detail_images_other=0x7f02002b;
+        public static final int ic_race_detail_time_10k=0x7f02002c;
+        public static final int ic_race_detail_time_15k=0x7f02002d;
+        public static final int ic_race_detail_time_5k=0x7f02002e;
+        public static final int ic_race_detail_time_full_mar=0x7f02002f;
+        public static final int ic_race_detail_time_half_mar=0x7f020030;
+        public static final int ic_race_detail_time_other=0x7f020031;
+        public static final int ic_race_share_10k=0x7f020032;
+        public static final int ic_race_share_15k=0x7f020033;
+        public static final int ic_race_share_5k=0x7f020034;
+        public static final int ic_race_share_full_mar=0x7f020035;
+        public static final int ic_race_share_half_mar=0x7f020036;
+        public static final int ic_race_share_other=0x7f020037;
+        public static final int ic_races_detail_title_10k=0x7f020038;
+        public static final int ic_races_detail_title_15k=0x7f020039;
+        public static final int ic_races_detail_title_5k=0x7f02003a;
+        public static final int ic_races_detail_title_dummy=0x7f02003b;
+        public static final int ic_races_detail_title_full_mar=0x7f02003c;
+        public static final int ic_races_detail_title_half_mar=0x7f02003d;
+        public static final int ic_races_detail_title_other=0x7f02003e;
+        public static final int ic_select_race_10k=0x7f02003f;
+        public static final int ic_select_race_15k=0x7f020040;
+        public static final int ic_select_race_5k=0x7f020041;
+        public static final int ic_select_race_add_race=0x7f020042;
+        public static final int ic_select_race_full_marathon=0x7f020043;
+        public static final int ic_select_race_half_marathon=0x7f020044;
+        public static final int ic_select_race_my_shoes=0x7f020045;
+        public static final int ic_select_race_other=0x7f020046;
+        public static final int ic_select_text=0x7f020047;
+        public static final int ic_setting=0x7f020048;
+        public static final int ic_setting_medal=0x7f020049;
+        public static final int ic_setting_medal_top=0x7f02004a;
+        public static final int ic_setting_rb_off=0x7f02004b;
+        public static final int ic_setting_rb_on=0x7f02004c;
+        public static final int ic_shoe=0x7f02004d;
+        public static final int ic_twitter=0x7f02004e;
+        public static final int ic_user_img=0x7f02004f;
+        public static final int img_about_bg=0x7f020050;
+        public static final int img_add_race_bg=0x7f020051;
+        public static final int img_add_race_success=0x7f020052;
+        public static final int img_login_background=0x7f020053;
+        public static final int img_navigation_bar=0x7f020054;
+        public static final int img_profile_bg=0x7f020055;
+        public static final int img_splash_background=0x7f020056;
+        public static final int like=0x7f020057;
+        public static final int like_10k=0x7f020058;
+        public static final int like_15k=0x7f020059;
+        public static final int like_5k=0x7f02005a;
+        public static final int like_full=0x7f02005b;
+        public static final int like_half=0x7f02005c;
+        public static final int like_other=0x7f02005d;
+        public static final int messenger_bubble_large_blue=0x7f02005e;
+        public static final int messenger_bubble_large_white=0x7f02005f;
+        public static final int messenger_bubble_small_blue=0x7f020060;
+        public static final int messenger_bubble_small_white=0x7f020061;
+        public static final int messenger_button_blue_bg_round=0x7f020062;
+        public static final int messenger_button_blue_bg_selector=0x7f020063;
+        public static final int messenger_button_send_round_shadow=0x7f020064;
+        public static final int messenger_button_white_bg_round=0x7f020065;
+        public static final int messenger_button_white_bg_selector=0x7f020066;
+        public static final int races_detail_sort_group_10k_bg=0x7f020067;
+        public static final int races_detail_sort_group_15k_bg=0x7f020068;
+        public static final int races_detail_sort_group_5k_bg=0x7f020069;
+        public static final int races_detail_sort_group_full_mar_bg=0x7f02006a;
+        public static final int races_detail_sort_group_half_mar_bg=0x7f02006b;
+        public static final int races_detail_sort_group_other_bg=0x7f02006c;
+        public static final int races_detail_sort_item_10k_bg=0x7f02006d;
+        public static final int races_detail_sort_item_15k_bg=0x7f02006e;
+        public static final int races_detail_sort_item_5k_bg=0x7f02006f;
+        public static final int races_detail_sort_item_full_mar_bg=0x7f020070;
+        public static final int races_detail_sort_item_half_mar_bg=0x7f020071;
+        public static final int races_detail_sort_item_other_bg=0x7f020072;
+        public static final int setting_cb_bg=0x7f020073;
+        public static final int shoe_circle_image_border=0x7f020074;
+        public static final int unlike=0x7f020075;
+        public static final int unlike_10k=0x7f020076;
+        public static final int unlike_15k=0x7f020077;
+        public static final int unlike_5k=0x7f020078;
+        public static final int unlike_full=0x7f020079;
+        public static final int unlike_half=0x7f02007a;
+        public static final int unlike_other=0x7f02007b;
+        public static final int user_circle_image_border=0x7f02007c;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a00b0;
-        public static final int add_race_city_edt=0x7f0a0014;
-        public static final int add_race_date=0x7f0a000b;
-        public static final int add_race_date_txt=0x7f0a000c;
-        public static final int add_race_event_type=0x7f0a000d;
-        public static final int add_race_event_type_txt=0x7f0a000e;
-        public static final int add_race_finish_time=0x7f0a0015;
-        public static final int add_race_finish_time_txt=0x7f0a0016;
-        public static final int add_race_my_shoes=0x7f0a0017;
-        public static final int add_race_my_shoes_txt=0x7f0a0018;
-        public static final int add_race_name=0x7f0a0009;
-        public static final int add_race_name_edt=0x7f0a000a;
-        public static final int add_race_photo_of_bib=0x7f0a0007;
-        public static final int add_race_photo_of_medal=0x7f0a0006;
-        public static final int add_race_photo_of_person=0x7f0a0008;
-        public static final int add_race_state_edt=0x7f0a0013;
-        public static final int add_race_state_edt_layout=0x7f0a0012;
-        public static final int add_race_state_layout=0x7f0a0011;
-        public static final int add_race_title=0x7f0a0005;
-        public static final int add_race_title_layout=0x7f0a0004;
-        public static final int add_race_website=0x7f0a000f;
-        public static final int add_race_website_edt=0x7f0a0010;
-        public static final int add_shoe_add_miles_edt=0x7f0a0021;
-        public static final int add_shoe_brand=0x7f0a001b;
-        public static final int add_shoe_brand_edt=0x7f0a001c;
-        public static final int add_shoe_distance_history_list=0x7f0a0026;
-        public static final int add_shoe_image=0x7f0a001a;
-        public static final int add_shoe_miles=0x7f0a001f;
-        public static final int add_shoe_miles_history=0x7f0a0025;
-        public static final int add_shoe_miles_layout=0x7f0a0020;
-        public static final int add_shoe_miles_on_shoe=0x7f0a0023;
-        public static final int add_shoe_miles_on_shoe_edt=0x7f0a0024;
-        public static final int add_shoe_model=0x7f0a001d;
-        public static final int add_shoe_model_edt=0x7f0a001e;
-        public static final int add_shoe_title=0x7f0a0019;
-        public static final int add_show_add_miles_btn=0x7f0a0022;
-        public static final int alert_button_layout=0x7f0a006a;
-        public static final int alert_button_left=0x7f0a006b;
-        public static final int alert_button_right=0x7f0a006d;
-        public static final int alert_button_sep=0x7f0a006c;
-        public static final int alert_content=0x7f0a0069;
-        public static final int alert_forgot_password_reset_btn=0x7f0a0078;
-        public static final int alert_reset_email=0x7f0a0077;
-        public static final int alert_title=0x7f0a0068;
-        public static final int amPm=0x7f0a00af;
-        public static final int background_img=0x7f0a0085;
-        public static final int bottom_button_center_text=0x7f0a008b;
-        public static final int bottom_button_layout=0x7f0a0086;
-        public static final int bottom_button_left_img=0x7f0a0088;
-        public static final int bottom_button_left_text=0x7f0a0087;
-        public static final int bottom_button_right_img=0x7f0a0089;
-        public static final int bottom_button_right_text=0x7f0a008a;
-        public static final int com_facebook_login_activity_progress_bar=0x7f0a0053;
-        public static final int com_facebook_picker_activity_circle=0x7f0a0052;
-        public static final int com_facebook_picker_checkbox=0x7f0a0055;
-        public static final int com_facebook_picker_checkbox_stub=0x7f0a0059;
-        public static final int com_facebook_picker_divider=0x7f0a005d;
-        public static final int com_facebook_picker_done_button=0x7f0a005c;
-        public static final int com_facebook_picker_image=0x7f0a0056;
-        public static final int com_facebook_picker_list_section_header=0x7f0a005a;
-        public static final int com_facebook_picker_list_view=0x7f0a0051;
-        public static final int com_facebook_picker_profile_pic_stub=0x7f0a0057;
-        public static final int com_facebook_picker_row_activity_circle=0x7f0a0054;
-        public static final int com_facebook_picker_search_text=0x7f0a0062;
-        public static final int com_facebook_picker_title=0x7f0a0058;
-        public static final int com_facebook_picker_title_bar=0x7f0a005f;
-        public static final int com_facebook_picker_title_bar_stub=0x7f0a005e;
-        public static final int com_facebook_picker_top_bar=0x7f0a005b;
-        public static final int com_facebook_search_bar_view=0x7f0a0061;
-        public static final int com_facebook_usersettingsfragment_login_button=0x7f0a0065;
-        public static final int com_facebook_usersettingsfragment_logo_image=0x7f0a0063;
-        public static final int com_facebook_usersettingsfragment_profile_name=0x7f0a0064;
-        public static final int dialog_choose_event_10k=0x7f0a006f;
-        public static final int dialog_choose_event_15k=0x7f0a0070;
-        public static final int dialog_choose_event_5k=0x7f0a006e;
-        public static final int dialog_choose_event_full_mar=0x7f0a0072;
-        public static final int dialog_choose_event_half_mar=0x7f0a0071;
-        public static final int dialog_choose_from_gallery=0x7f0a0074;
-        public static final int dialog_share_facebook=0x7f0a0075;
-        public static final int dialog_share_twitter=0x7f0a0076;
-        public static final int dialog_take_picture=0x7f0a0073;
-        public static final int friends_list=0x7f0a0027;
-        public static final int hour=0x7f0a00ac;
-        public static final int ic_action_menu=0x7f0a008c;
-        public static final int ic_action_save=0x7f0a008e;
-        public static final int ic_action_setting=0x7f0a008d;
-        public static final int info_content=0x7f0a0067;
-        public static final int large=0x7f0a0000;
-        public static final int layout_buttons_bottom=0x7f0a0003;
-        public static final int login_contact_us=0x7f0a002c;
-        public static final int login_create_account=0x7f0a0028;
-        public static final int login_or_sign_in_with=0x7f0a0029;
-        public static final int login_with_fb=0x7f0a002a;
-        public static final int login_with_twitter=0x7f0a002b;
-        public static final int menu_item_img=0x7f0a0091;
-        public static final int menu_item_text=0x7f0a0090;
-        public static final int menu_listview=0x7f0a008f;
-        public static final int minute=0x7f0a00ad;
-        public static final int my_shoes_check_view=0x7f0a00a7;
-        public static final int my_shoes_item_detail=0x7f0a00a6;
-        public static final int my_shoes_item_img=0x7f0a00a3;
-        public static final int my_shoes_item_img_layout=0x7f0a00a2;
-        public static final int my_shoes_item_img_layout_fake=0x7f0a00a0;
-        public static final int my_shoes_item_name=0x7f0a00a4;
-        public static final int my_shoes_item_type=0x7f0a00a5;
-        public static final int my_shoes_list=0x7f0a002e;
-        public static final int normal=0x7f0a0001;
-        public static final int parent=0x7f0a0066;
-        public static final int picker_subtitle=0x7f0a0060;
-        public static final int profile_confirm_pass=0x7f0a0034;
-        public static final int profile_image=0x7f0a0030;
-        public static final int profile_name_edt=0x7f0a0031;
-        public static final int profile_new_pass=0x7f0a0033;
-        public static final int profile_old_pass=0x7f0a0032;
-        public static final int race_detail_layout=0x7f0a0095;
-        public static final int race_image=0x7f0a0084;
-        public static final int race_image_pager=0x7f0a0079;
-        public static final int races_detail_delete=0x7f0a0092;
-        public static final int races_detail_header=0x7f0a009d;
-        public static final int races_detail_list=0x7f0a003b;
-        public static final int races_detail_no_item=0x7f0a003a;
-        public static final int races_detail_race_date=0x7f0a0096;
-        public static final int races_detail_race_date_fake=0x7f0a0093;
-        public static final int races_detail_race_imgs=0x7f0a0098;
-        public static final int races_detail_race_mile=0x7f0a009a;
-        public static final int races_detail_race_mile_fake=0x7f0a0094;
-        public static final int races_detail_race_name=0x7f0a0099;
-        public static final int races_detail_race_name_layout=0x7f0a0097;
-        public static final int races_detail_race_time=0x7f0a009b;
-        public static final int races_detail_share=0x7f0a009c;
-        public static final int races_detail_sort_date=0x7f0a0038;
-        public static final int races_detail_sort_group=0x7f0a0037;
-        public static final int races_detail_sort_layout=0x7f0a0035;
-        public static final int races_detail_sort_text=0x7f0a0036;
-        public static final int races_detail_sort_time=0x7f0a0039;
-        public static final int races_detail_title=0x7f0a002f;
-        public static final int races_detail_title_dummy=0x7f0a002d;
-        public static final int runners_you_may_know_list=0x7f0a003c;
-        public static final int seconds=0x7f0a00ae;
-        public static final int selecet_race_title=0x7f0a003e;
-        public static final int selecet_race_welcome_back=0x7f0a003d;
-        public static final int select_race_10k=0x7f0a0041;
-        public static final int select_race_15k=0x7f0a0042;
-        public static final int select_race_5k=0x7f0a0040;
-        public static final int select_race_add_race=0x7f0a0045;
-        public static final int select_race_add_race_success=0x7f0a0047;
-        public static final int select_race_full_marathon=0x7f0a0044;
-        public static final int select_race_half_marathon=0x7f0a0043;
-        public static final int select_race_my_shoes=0x7f0a0046;
-        public static final int select_race_text=0x7f0a003f;
-        public static final int setting_about=0x7f0a0081;
-        public static final int setting_about_layout=0x7f0a0082;
-        public static final int setting_about_title=0x7f0a0083;
-        public static final int setting_link_fb_rb=0x7f0a0080;
-        public static final int setting_link_fb_text=0x7f0a007f;
-        public static final int setting_medal_layout=0x7f0a007b;
-        public static final int setting_medal_top=0x7f0a007a;
-        public static final int setting_sound_rb=0x7f0a007d;
-        public static final int setting_sound_seek_bar=0x7f0a007e;
-        public static final int setting_sound_text=0x7f0a007c;
-        public static final int shoe_distance_history_item_text=0x7f0a009e;
-        public static final int shoe_item_delete=0x7f0a009f;
-        public static final int shoe_item_info_layout=0x7f0a00a1;
-        public static final int sign_in_confirm_password_edt=0x7f0a004b;
-        public static final int sign_in_email_edt=0x7f0a004c;
-        public static final int sign_in_forgot_btn=0x7f0a004f;
-        public static final int sign_in_option_layout=0x7f0a004d;
-        public static final int sign_in_password_edt=0x7f0a0049;
-        public static final int sign_in_regis_btn=0x7f0a004e;
-        public static final int sign_in_register_layout=0x7f0a004a;
-        public static final int sign_in_username_edt=0x7f0a0048;
-        public static final int small=0x7f0a0002;
-        public static final int splash_image=0x7f0a0050;
-        public static final int timePicker=0x7f0a00ab;
-        public static final int user_item_img=0x7f0a00a9;
-        public static final int user_item_img_layout=0x7f0a00a8;
-        public static final int user_item_text=0x7f0a00aa;
+        public static final int action_settings=0x7f0a00d2;
+        public static final int add_race_city_edt=0x7f0a0020;
+        public static final int add_race_date=0x7f0a0017;
+        public static final int add_race_date_txt=0x7f0a0018;
+        public static final int add_race_event_type=0x7f0a0019;
+        public static final int add_race_event_type_txt=0x7f0a001a;
+        public static final int add_race_finish_time=0x7f0a0021;
+        public static final int add_race_finish_time_txt=0x7f0a0022;
+        public static final int add_race_my_shoes=0x7f0a0023;
+        public static final int add_race_my_shoes_txt=0x7f0a0024;
+        public static final int add_race_name=0x7f0a0015;
+        public static final int add_race_name_edt=0x7f0a0016;
+        public static final int add_race_photo_of_bib=0x7f0a0013;
+        public static final int add_race_photo_of_medal=0x7f0a0012;
+        public static final int add_race_photo_of_person=0x7f0a0014;
+        public static final int add_race_state_edt=0x7f0a001f;
+        public static final int add_race_state_edt_layout=0x7f0a001e;
+        public static final int add_race_state_layout=0x7f0a001d;
+        public static final int add_race_title=0x7f0a0011;
+        public static final int add_race_title_layout=0x7f0a0010;
+        public static final int add_race_website=0x7f0a001b;
+        public static final int add_race_website_edt=0x7f0a001c;
+        public static final int add_shoe_add_miles_edt=0x7f0a002d;
+        public static final int add_shoe_brand=0x7f0a0027;
+        public static final int add_shoe_brand_edt=0x7f0a0028;
+        public static final int add_shoe_distance_history_list=0x7f0a0032;
+        public static final int add_shoe_image=0x7f0a0026;
+        public static final int add_shoe_miles=0x7f0a002b;
+        public static final int add_shoe_miles_history=0x7f0a0031;
+        public static final int add_shoe_miles_layout=0x7f0a002c;
+        public static final int add_shoe_miles_on_shoe=0x7f0a002f;
+        public static final int add_shoe_miles_on_shoe_edt=0x7f0a0030;
+        public static final int add_shoe_model=0x7f0a0029;
+        public static final int add_shoe_model_edt=0x7f0a002a;
+        public static final int add_shoe_title=0x7f0a0025;
+        public static final int add_show_add_miles_btn=0x7f0a002e;
+        public static final int alert_button_layout=0x7f0a007f;
+        public static final int alert_button_left=0x7f0a0080;
+        public static final int alert_button_right=0x7f0a0082;
+        public static final int alert_button_sep=0x7f0a0081;
+        public static final int alert_cancel_btn=0x7f0a007c;
+        public static final int alert_content=0x7f0a007a;
+        public static final int alert_forgot_password_reset_btn=0x7f0a007e;
+        public static final int alert_ok_btn=0x7f0a007d;
+        public static final int alert_reset_email=0x7f0a007b;
+        public static final int alert_title=0x7f0a0079;
+        public static final int amPm=0x7f0a00d1;
+        public static final int background_img=0x7f0a009e;
+        public static final int bottom=0x7f0a0006;
+        public static final int bottom_button_center_text=0x7f0a00a4;
+        public static final int bottom_button_layout=0x7f0a009f;
+        public static final int bottom_button_left_img=0x7f0a00a1;
+        public static final int bottom_button_left_text=0x7f0a00a0;
+        public static final int bottom_button_right_img=0x7f0a00a2;
+        public static final int bottom_button_right_text=0x7f0a00a3;
+        public static final int box_count=0x7f0a0003;
+        public static final int btn_dialog_cancel=0x7f0a0089;
+        public static final int btn_dialog_create=0x7f0a008c;
+        public static final int btn_dialog_done=0x7f0a008a;
+        public static final int btn_send=0x7f0a0037;
+        public static final int button=0x7f0a0004;
+        public static final int center=0x7f0a0009;
+        public static final int com_facebook_body_frame=0x7f0a0072;
+        public static final int com_facebook_button_xout=0x7f0a0074;
+        public static final int com_facebook_fragment_container=0x7f0a0070;
+        public static final int com_facebook_login_activity_progress_bar=0x7f0a0071;
+        public static final int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f0a0076;
+        public static final int com_facebook_tooltip_bubble_view_text_body=0x7f0a0075;
+        public static final int com_facebook_tooltip_bubble_view_top_pointer=0x7f0a0073;
+        public static final int comment_layout=0x7f0a0036;
+        public static final int comment_list=0x7f0a006c;
+        public static final int dialog_choose_event_10k=0x7f0a0084;
+        public static final int dialog_choose_event_15k=0x7f0a0085;
+        public static final int dialog_choose_event_5k=0x7f0a0083;
+        public static final int dialog_choose_event_full_mar=0x7f0a0087;
+        public static final int dialog_choose_event_half_mar=0x7f0a0086;
+        public static final int dialog_choose_event_other=0x7f0a0088;
+        public static final int dialog_choose_from_gallery=0x7f0a008e;
+        public static final int dialog_share_facebook=0x7f0a008f;
+        public static final int dialog_share_twitter=0x7f0a0090;
+        public static final int dialog_take_picture=0x7f0a008d;
+        public static final int et_message=0x7f0a0038;
+        public static final int et_new_comment=0x7f0a006d;
+        public static final int friends_list=0x7f0a003a;
+        public static final int hour=0x7f0a00ce;
+        public static final int ib_reader_round_back=0x7f0a006a;
+        public static final int ic_action_menu=0x7f0a00a9;
+        public static final int ic_action_save=0x7f0a00ab;
+        public static final int ic_action_setting=0x7f0a00aa;
+        public static final int info_content=0x7f0a0078;
+        public static final int inline=0x7f0a0007;
+        public static final int iv_avatar_friend=0x7f0a00a7;
+        public static final int iv_avatar_me=0x7f0a00a6;
+        public static final int large=0x7f0a000c;
+        public static final int layout_buttons_bottom=0x7f0a000f;
+        public static final int layout_topbar=0x7f0a0069;
+        public static final int left=0x7f0a000a;
+        public static final int login_contact_us=0x7f0a003f;
+        public static final int login_create_account=0x7f0a003b;
+        public static final int login_or_sign_in_with=0x7f0a003c;
+        public static final int login_with_fb=0x7f0a003d;
+        public static final int login_with_twitter=0x7f0a003e;
+        public static final int lv_chat_friends=0x7f0a0039;
+        public static final int lv_dialog_group=0x7f0a008b;
+        public static final int lv_message=0x7f0a0035;
+        public static final int menu_blog=0x7f0a0033;
+        public static final int menu_item_img=0x7f0a00ae;
+        public static final int menu_item_text=0x7f0a00ad;
+        public static final int menu_listview=0x7f0a00ac;
+        public static final int messenger_send_button=0x7f0a00cb;
+        public static final int minute=0x7f0a00cf;
+        public static final int my_shoes_check_view=0x7f0a00c7;
+        public static final int my_shoes_item_detail=0x7f0a00c6;
+        public static final int my_shoes_item_img=0x7f0a00c3;
+        public static final int my_shoes_item_img_layout=0x7f0a00c2;
+        public static final int my_shoes_item_img_layout_fake=0x7f0a00c0;
+        public static final int my_shoes_item_name=0x7f0a00c4;
+        public static final int my_shoes_item_type=0x7f0a00c5;
+        public static final int my_shoes_list=0x7f0a0041;
+        public static final int normal=0x7f0a000d;
+        public static final int open_graph=0x7f0a0000;
+        public static final int page=0x7f0a0001;
+        public static final int parent=0x7f0a0077;
+        public static final int profile_confirm_pass=0x7f0a0047;
+        public static final int profile_image=0x7f0a0043;
+        public static final int profile_name_edt=0x7f0a0044;
+        public static final int profile_new_pass=0x7f0a0046;
+        public static final int profile_old_pass=0x7f0a0045;
+        public static final int race_detail_layout=0x7f0a00b2;
+        public static final int race_image=0x7f0a009d;
+        public static final int race_image_pager=0x7f0a0091;
+        public static final int races_detail_delete=0x7f0a00af;
+        public static final int races_detail_header=0x7f0a00bd;
+        public static final int races_detail_list=0x7f0a0051;
+        public static final int races_detail_no_item=0x7f0a0050;
+        public static final int races_detail_race_average=0x7f0a00b8;
+        public static final int races_detail_race_date=0x7f0a00b3;
+        public static final int races_detail_race_date_fake=0x7f0a00b0;
+        public static final int races_detail_race_imgs=0x7f0a00b5;
+        public static final int races_detail_race_like=0x7f0a00bb;
+        public static final int races_detail_race_like_total=0x7f0a00ba;
+        public static final int races_detail_race_mile=0x7f0a00b7;
+        public static final int races_detail_race_mile_fake=0x7f0a00b1;
+        public static final int races_detail_race_name=0x7f0a00b6;
+        public static final int races_detail_race_name_layout=0x7f0a00b4;
+        public static final int races_detail_race_time=0x7f0a00bc;
+        public static final int races_detail_share=0x7f0a00b9;
+        public static final int races_detail_sort_1=0x7f0a004c;
+        public static final int races_detail_sort_2=0x7f0a004e;
+        public static final int races_detail_sort_date=0x7f0a004b;
+        public static final int races_detail_sort_group=0x7f0a004a;
+        public static final int races_detail_sort_layout=0x7f0a0048;
+        public static final int races_detail_sort_length=0x7f0a004f;
+        public static final int races_detail_sort_text=0x7f0a0049;
+        public static final int races_detail_sort_time=0x7f0a004d;
+        public static final int races_detail_title=0x7f0a0042;
+        public static final int races_detail_title_dummy=0x7f0a0040;
+        public static final int races_detail_title_text=0x7f0a0052;
+        public static final int right=0x7f0a000b;
+        public static final int row_group_name=0x7f0a00cc;
+        public static final int runners_you_may_know_list=0x7f0a0053;
+        public static final int seconds=0x7f0a00d0;
+        public static final int selecet_race_title=0x7f0a0055;
+        public static final int selecet_race_welcome_back=0x7f0a0054;
+        public static final int select_race_10k=0x7f0a0058;
+        public static final int select_race_15k=0x7f0a0059;
+        public static final int select_race_5k=0x7f0a0057;
+        public static final int select_race_add_race=0x7f0a005c;
+        public static final int select_race_add_race_success=0x7f0a005f;
+        public static final int select_race_full_marathon=0x7f0a005b;
+        public static final int select_race_half_marathon=0x7f0a005a;
+        public static final int select_race_my_shoes=0x7f0a005e;
+        public static final int select_race_other=0x7f0a005d;
+        public static final int select_race_text=0x7f0a0056;
+        public static final int setting_about=0x7f0a0099;
+        public static final int setting_about_layout=0x7f0a009a;
+        public static final int setting_about_title=0x7f0a009b;
+        public static final int setting_about_us=0x7f0a009c;
+        public static final int setting_link_fb_rb=0x7f0a0098;
+        public static final int setting_link_fb_text=0x7f0a0097;
+        public static final int setting_medal_layout=0x7f0a0093;
+        public static final int setting_medal_top=0x7f0a0092;
+        public static final int setting_sound_rb=0x7f0a0095;
+        public static final int setting_sound_seek_bar=0x7f0a0096;
+        public static final int setting_sound_text=0x7f0a0094;
+        public static final int shoe_distance_history_item_text=0x7f0a00be;
+        public static final int shoe_item_delete=0x7f0a00bf;
+        public static final int shoe_item_info_layout=0x7f0a00c1;
+        public static final int sign_in_confirm_password_edt=0x7f0a0063;
+        public static final int sign_in_email_edt=0x7f0a0064;
+        public static final int sign_in_forgot_btn=0x7f0a0067;
+        public static final int sign_in_option_layout=0x7f0a0065;
+        public static final int sign_in_password_edt=0x7f0a0061;
+        public static final int sign_in_regis_btn=0x7f0a0066;
+        public static final int sign_in_register_layout=0x7f0a0062;
+        public static final int sign_in_username_edt=0x7f0a0060;
+        public static final int small=0x7f0a000e;
+        public static final int splash_image=0x7f0a0068;
+        public static final int standard=0x7f0a0005;
+        public static final int timePicker=0x7f0a00cd;
+        public static final int top=0x7f0a0008;
+        public static final int tv_des=0x7f0a0034;
+        public static final int tv_group_item=0x7f0a00a8;
+        public static final int tv_message=0x7f0a00a5;
+        public static final int tv_title=0x7f0a006b;
+        public static final int unknown=0x7f0a0002;
+        public static final int urlContainer=0x7f0a006e;
+        public static final int user_item_img=0x7f0a00c9;
+        public static final int user_item_img_layout=0x7f0a00c8;
+        public static final int user_item_text=0x7f0a00ca;
+        public static final int webView=0x7f0a006f;
     }
     public static final class layout {
         public static final int activity_add_race=0x7f030000;
         public static final int activity_add_shoe=0x7f030001;
         public static final int activity_base=0x7f030002;
-        public static final int activity_friends=0x7f030003;
-        public static final int activity_login_choice=0x7f030004;
-        public static final int activity_my_shoes=0x7f030005;
-        public static final int activity_profile=0x7f030006;
-        public static final int activity_races_detail=0x7f030007;
-        public static final int activity_runners=0x7f030008;
-        public static final int activity_select_race=0x7f030009;
-        public static final int activity_signin=0x7f03000a;
-        public static final int activity_splash_screen=0x7f03000b;
-        public static final int com_facebook_friendpickerfragment=0x7f03000c;
-        public static final int com_facebook_login_activity_layout=0x7f03000d;
-        public static final int com_facebook_picker_activity_circle_row=0x7f03000e;
-        public static final int com_facebook_picker_checkbox=0x7f03000f;
-        public static final int com_facebook_picker_image=0x7f030010;
-        public static final int com_facebook_picker_list_row=0x7f030011;
-        public static final int com_facebook_picker_list_section_header=0x7f030012;
-        public static final int com_facebook_picker_search_box=0x7f030013;
-        public static final int com_facebook_picker_title_bar=0x7f030014;
-        public static final int com_facebook_picker_title_bar_stub=0x7f030015;
-        public static final int com_facebook_placepickerfragment=0x7f030016;
-        public static final int com_facebook_placepickerfragment_list_row=0x7f030017;
-        public static final int com_facebook_search_bar_layout=0x7f030018;
-        public static final int com_facebook_usersettingsfragment=0x7f030019;
-        public static final int dialog_alert=0x7f03001a;
-        public static final int dialog_choose_event_type=0x7f03001b;
-        public static final int dialog_choose_images=0x7f03001c;
-        public static final int dialog_choose_share=0x7f03001d;
-        public static final int dialog_forgot_password=0x7f03001e;
-        public static final int dialog_race_images=0x7f03001f;
-        public static final int dialog_setting=0x7f030020;
-        public static final int fragment_image_dialog=0x7f030021;
-        public static final int layout_activity_background=0x7f030022;
-        public static final int layout_buttons_bottom=0x7f030023;
-        public static final int layout_header=0x7f030024;
-        public static final int layout_menu=0x7f030025;
-        public static final int layout_menu_item=0x7f030026;
-        public static final int layout_race_detail_item=0x7f030027;
-        public static final int layout_race_detail_item_header=0x7f030028;
-        public static final int layout_shoe_distance_history_item=0x7f030029;
-        public static final int layout_shoes_item=0x7f03002a;
-        public static final int layout_user_item=0x7f03002b;
-        public static final int time_picker_dialog=0x7f03002c;
-        public static final int time_picker_widget=0x7f03002d;
+        public static final int activity_blog=0x7f030003;
+        public static final int activity_chat=0x7f030004;
+        public static final int activity_chat_friend=0x7f030005;
+        public static final int activity_friends=0x7f030006;
+        public static final int activity_login_choice=0x7f030007;
+        public static final int activity_my_shoes=0x7f030008;
+        public static final int activity_profile=0x7f030009;
+        public static final int activity_races_detail=0x7f03000a;
+        public static final int activity_runners=0x7f03000b;
+        public static final int activity_select_race=0x7f03000c;
+        public static final int activity_signin=0x7f03000d;
+        public static final int activity_splash_screen=0x7f03000e;
+        public static final int activity_test=0x7f03000f;
+        public static final int activity_webview=0x7f030010;
+        public static final int com_facebook_activity_layout=0x7f030011;
+        public static final int com_facebook_login_fragment=0x7f030012;
+        public static final int com_facebook_tooltip_bubble=0x7f030013;
+        public static final int dialod_input_group=0x7f030014;
+        public static final int dialod_race_input_mile=0x7f030015;
+        public static final int dialog_alert=0x7f030016;
+        public static final int dialog_choose_event_type=0x7f030017;
+        public static final int dialog_choose_group=0x7f030018;
+        public static final int dialog_choose_images=0x7f030019;
+        public static final int dialog_choose_share=0x7f03001a;
+        public static final int dialog_forgot_password=0x7f03001b;
+        public static final int dialog_race_images=0x7f03001c;
+        public static final int dialog_setting=0x7f03001d;
+        public static final int fragment_image_dialog=0x7f03001e;
+        public static final int layout_activity_background=0x7f03001f;
+        public static final int layout_buttons_bottom=0x7f030020;
+        public static final int layout_chat_item=0x7f030021;
+        public static final int layout_group_item=0x7f030022;
+        public static final int layout_header=0x7f030023;
+        public static final int layout_menu=0x7f030024;
+        public static final int layout_menu_item=0x7f030025;
+        public static final int layout_race_detail_item=0x7f030026;
+        public static final int layout_race_detail_item_header=0x7f030027;
+        public static final int layout_shoe_distance_history_item=0x7f030028;
+        public static final int layout_shoes_item=0x7f030029;
+        public static final int layout_user_item=0x7f03002a;
+        public static final int messenger_button_send_blue_large=0x7f03002b;
+        public static final int messenger_button_send_blue_round=0x7f03002c;
+        public static final int messenger_button_send_blue_small=0x7f03002d;
+        public static final int messenger_button_send_white_large=0x7f03002e;
+        public static final int messenger_button_send_white_round=0x7f03002f;
+        public static final int messenger_button_send_white_small=0x7f030030;
+        public static final int row_group=0x7f030031;
+        public static final int time_picker_dialog=0x7f030032;
+        public static final int time_picker_widget=0x7f030033;
     }
     public static final class menu {
-        public static final int splash_screen=0x7f090000;
+        public static final int menu_blog=0x7f090000;
+        public static final int splash_screen=0x7f090001;
     }
     public static final class raw {
         public static final int win=0x7f040000;
     }
     public static final class string {
-        public static final int add=0x7f070000;
-        public static final int add_race_city=0x7f070001;
-        public static final int add_race_date=0x7f070002;
-        public static final int add_race_event_type=0x7f070003;
-        public static final int add_race_finish_time=0x7f070004;
-        public static final int add_race_my_shoes=0x7f070005;
-        public static final int add_race_name=0x7f070006;
-        public static final int add_race_require=0x7f070007;
-        public static final int add_race_state=0x7f070008;
-        public static final int add_race_title=0x7f070009;
-        public static final int add_race_type_10k=0x7f07000a;
-        public static final int add_race_type_15k=0x7f07000b;
-        public static final int add_race_type_5k=0x7f07000c;
-        public static final int add_race_type_full_mar=0x7f07000d;
-        public static final int add_race_type_half_mar=0x7f07000e;
-        public static final int add_race_website=0x7f07000f;
-        public static final int add_shoe_add_mile_on_shoe=0x7f070010;
-        public static final int add_shoe_brand=0x7f070011;
-        public static final int add_shoe_miles_distance_history=0x7f070012;
-        public static final int add_shoe_miles_on_shoe=0x7f070013;
-        public static final int add_shoe_model=0x7f070014;
-        public static final int add_shoe_title=0x7f070015;
-        public static final int app_name=0x7f070016;
-        public static final int back=0x7f070017;
-        public static final int cancel=0x7f070018;
-        public static final int com_facebook_choose_friends=0x7f070019;
-        public static final int com_facebook_dialogloginactivity_ok_button=0x7f07001a;
-        public static final int com_facebook_internet_permission_error_message=0x7f07001b;
-        public static final int com_facebook_internet_permission_error_title=0x7f07001c;
-        public static final int com_facebook_loading=0x7f07001d;
-        public static final int com_facebook_loginview_cancel_action=0x7f07001e;
-        public static final int com_facebook_loginview_log_in_button=0x7f07001f;
-        public static final int com_facebook_loginview_log_out_action=0x7f070020;
-        public static final int com_facebook_loginview_log_out_button=0x7f070021;
-        public static final int com_facebook_loginview_logged_in_as=0x7f070022;
-        public static final int com_facebook_loginview_logged_in_using_facebook=0x7f070023;
-        public static final int com_facebook_logo_content_description=0x7f070024;
-        public static final int com_facebook_nearby=0x7f070025;
-        public static final int com_facebook_picker_done_button_text=0x7f070026;
-        public static final int com_facebook_placepicker_subtitle_catetory_only_format=0x7f070027;
-        public static final int com_facebook_placepicker_subtitle_format=0x7f070028;
-        public static final int com_facebook_placepicker_subtitle_were_here_only_format=0x7f070029;
-        public static final int com_facebook_requesterror_password_changed=0x7f07002a;
-        public static final int com_facebook_requesterror_permissions=0x7f07002b;
-        public static final int com_facebook_requesterror_reconnect=0x7f07002c;
-        public static final int com_facebook_requesterror_relogin=0x7f07002d;
-        public static final int com_facebook_requesterror_web_login=0x7f07002e;
-        public static final int com_facebook_usersettingsfragment_log_in_button=0x7f07002f;
-        public static final int com_facebook_usersettingsfragment_logged_in=0x7f070030;
-        public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f070031;
-        public static final int confirm_password=0x7f070032;
-        public static final int contact_body=0x7f070033;
-        public static final int contact_email=0x7f070034;
-        public static final int contact_subject=0x7f070035;
-        public static final int crash_toast_text=0x7f070036;
-        public static final int create_account=0x7f070037;
-        public static final int delete=0x7f070038;
-        public static final int dialog_add_race_tile=0x7f070039;
-        public static final int dialog_add_shoe_fill_all_fields=0x7f07003a;
-        public static final int dialog_add_shoe_tile=0x7f07003b;
-        public static final int dialog_choose_image_from_gallery=0x7f07003c;
-        public static final int dialog_choose_image_take_picture=0x7f07003d;
-        public static final int dialog_confirm_delete_race=0x7f07003e;
-        public static final int dialog_confirm_delete_shoe=0x7f07003f;
-        public static final int dialog_confirm_password_does_not_match=0x7f070040;
-        public static final int dialog_contact_us_fails_message=0x7f070041;
-        public static final int dialog_contact_us_fails_title=0x7f070042;
-        public static final int dialog_facebook_login_fail=0x7f070043;
-        public static final int dialog_fill_information=0x7f070044;
-        public static final int dialog_forgot_pass_message=0x7f070045;
-        public static final int dialog_forgot_pass_title=0x7f070046;
-        public static final int dialog_login_email_fails=0x7f070047;
-        public static final int dialog_logout_message=0x7f070048;
-        public static final int dialog_logout_title=0x7f070049;
-        public static final int dialog_profile_input_username=0x7f07004a;
-        public static final int dialog_profile_new_password_not_match=0x7f07004b;
-        public static final int dialog_profile_new_password_not_set=0x7f07004c;
-        public static final int dialog_profile_old_password_incorrect=0x7f07004d;
-        public static final int dialog_profile_title=0x7f07004e;
-        public static final int dialog_profile_update_fails=0x7f07004f;
-        public static final int dialog_profile_update_successfully=0x7f070050;
-        public static final int dialog_profile_username_used=0x7f070051;
-        public static final int dialog_race_no_image_message=0x7f070052;
-        public static final int dialog_race_tile=0x7f070053;
-        public static final int dialog_reset_password_message=0x7f070054;
-        public static final int dialog_reset_password_title=0x7f070055;
-        public static final int dialog_share_facebook=0x7f070056;
-        public static final int dialog_share_twitter=0x7f070057;
-        public static final int dialog_shoe_tile=0x7f070058;
-        public static final int dialog_sign_in=0x7f070059;
-        public static final int dialog_sign_up=0x7f07005a;
-        public static final int dialog_user_message=0x7f07005b;
-        public static final int dialog_user_title=0x7f07005c;
-        public static final int done=0x7f07005d;
-        public static final int email=0x7f07005e;
-        public static final int email_address=0x7f07005f;
-        public static final int fb_app_id=0x7f070060;
-        public static final int forgot_password=0x7f070061;
-        public static final int login_sign_in_with=0x7f070062;
-        public static final int menu_contact_us=0x7f070063;
-        public static final int menu_profile_update=0x7f070064;
-        public static final int menu_runner_you_may_know=0x7f070065;
-        public static final int menu_running_website=0x7f070066;
-        public static final int menu_share_fb=0x7f070067;
-        public static final int menu_share_twitter=0x7f070068;
-        public static final int menu_sign_out=0x7f070069;
-        public static final int menu_your_community=0x7f07006a;
-        public static final int menu_your_history=0x7f07006b;
-        public static final int no=0x7f07006c;
-        public static final int ok=0x7f07006d;
-        public static final int parse_app_id=0x7f07006e;
-        public static final int parse_client_key=0x7f07006f;
-        public static final int password=0x7f070070;
-        public static final int profile_add_photo=0x7f070071;
-        public static final int profile_confirm_password=0x7f070072;
-        public static final int profile_name=0x7f070073;
-        public static final int profile_new_password=0x7f070074;
-        public static final int profile_old_password=0x7f070075;
-        public static final int races_detail_no_item=0x7f070076;
-        public static final int races_detail_please_add_race=0x7f070077;
-        public static final int races_detail_sort_by=0x7f070078;
-        public static final int races_detail_sort_date=0x7f070079;
-        public static final int races_detail_sort_time=0x7f07007a;
-        public static final int save=0x7f07007b;
-        public static final int select_race_user_history=0x7f07007c;
-        public static final int select_race_welcome_back=0x7f07007d;
-        public static final int setting_about=0x7f07007e;
-        public static final int setting_about_content=0x7f07007f;
-        public static final int setting_about_title=0x7f070080;
-        public static final int setting_link_fb=0x7f070081;
-        public static final int setting_sounds=0x7f070082;
-        public static final int share_app_menu=0x7f070083;
-        public static final int sign_in_forgot_password=0x7f070084;
-        public static final int sign_in_register=0x7f070085;
-        public static final int time=0x7f070086;
-        public static final int time_set=0x7f070087;
-        public static final int username=0x7f070088;
-        public static final int username_hint=0x7f070089;
-        public static final int yes=0x7f07008a;
+        public static final int action_settings=0x7f070000;
+        public static final int add=0x7f070001;
+        public static final int add_race_city=0x7f070002;
+        public static final int add_race_date=0x7f070003;
+        public static final int add_race_event_type=0x7f070004;
+        public static final int add_race_finish_time=0x7f070005;
+        public static final int add_race_my_shoes=0x7f070006;
+        public static final int add_race_name=0x7f070007;
+        public static final int add_race_require=0x7f070008;
+        public static final int add_race_state=0x7f070009;
+        public static final int add_race_title=0x7f07000a;
+        public static final int add_race_type_10k=0x7f07000b;
+        public static final int add_race_type_15k=0x7f07000c;
+        public static final int add_race_type_5k=0x7f07000d;
+        public static final int add_race_type_full_mar=0x7f07000e;
+        public static final int add_race_type_half_mar=0x7f07000f;
+        public static final int add_race_type_other=0x7f070010;
+        public static final int add_race_website=0x7f070011;
+        public static final int add_shoe_add_mile_on_shoe=0x7f070012;
+        public static final int add_shoe_brand=0x7f070013;
+        public static final int add_shoe_miles_distance_history=0x7f070014;
+        public static final int add_shoe_miles_on_shoe=0x7f070015;
+        public static final int add_shoe_model=0x7f070016;
+        public static final int add_shoe_title=0x7f070017;
+        public static final int app_name=0x7f070018;
+        public static final int back=0x7f070019;
+        public static final int cancel=0x7f07001a;
+        public static final int com_facebook_image_download_unknown_error=0x7f07001b;
+        public static final int com_facebook_internet_permission_error_message=0x7f07001c;
+        public static final int com_facebook_internet_permission_error_title=0x7f07001d;
+        public static final int com_facebook_like_button_liked=0x7f07001e;
+        public static final int com_facebook_like_button_not_liked=0x7f07001f;
+        public static final int com_facebook_loading=0x7f070020;
+        public static final int com_facebook_loginview_cancel_action=0x7f070021;
+        public static final int com_facebook_loginview_log_in_button=0x7f070022;
+        public static final int com_facebook_loginview_log_in_button_long=0x7f070023;
+        public static final int com_facebook_loginview_log_out_action=0x7f070024;
+        public static final int com_facebook_loginview_log_out_button=0x7f070025;
+        public static final int com_facebook_loginview_logged_in_as=0x7f070026;
+        public static final int com_facebook_loginview_logged_in_using_facebook=0x7f070027;
+        public static final int com_facebook_send_button_text=0x7f070028;
+        public static final int com_facebook_share_button_text=0x7f070029;
+        public static final int com_facebook_tooltip_default=0x7f07002a;
+        public static final int confirm_password=0x7f07002b;
+        public static final int contact_body=0x7f07002c;
+        public static final int contact_email=0x7f07002d;
+        public static final int contact_subject=0x7f07002e;
+        public static final int crash_toast_text=0x7f07002f;
+        public static final int create_account=0x7f070030;
+        public static final int delete=0x7f070031;
+        public static final int detail_race_type_other=0x7f070032;
+        public static final int dialog_add_race_tile=0x7f070033;
+        public static final int dialog_add_shoe_fill_all_fields=0x7f070034;
+        public static final int dialog_add_shoe_tile=0x7f070035;
+        public static final int dialog_choose_image_from_gallery=0x7f070036;
+        public static final int dialog_choose_image_take_picture=0x7f070037;
+        public static final int dialog_confirm_delete_race=0x7f070038;
+        public static final int dialog_confirm_delete_shoe=0x7f070039;
+        public static final int dialog_confirm_password_does_not_match=0x7f07003a;
+        public static final int dialog_contact_us_fails_message=0x7f07003b;
+        public static final int dialog_contact_us_fails_title=0x7f07003c;
+        public static final int dialog_facebook_login_fail=0x7f07003d;
+        public static final int dialog_fill_information=0x7f07003e;
+        public static final int dialog_forgot_pass_message=0x7f07003f;
+        public static final int dialog_forgot_pass_title=0x7f070040;
+        public static final int dialog_login_email_fails=0x7f070041;
+        public static final int dialog_logout_message=0x7f070042;
+        public static final int dialog_logout_title=0x7f070043;
+        public static final int dialog_profile_input_username=0x7f070044;
+        public static final int dialog_profile_new_password_not_match=0x7f070045;
+        public static final int dialog_profile_new_password_not_set=0x7f070046;
+        public static final int dialog_profile_old_password_incorrect=0x7f070047;
+        public static final int dialog_profile_title=0x7f070048;
+        public static final int dialog_profile_update_fails=0x7f070049;
+        public static final int dialog_profile_update_successfully=0x7f07004a;
+        public static final int dialog_profile_username_used=0x7f07004b;
+        public static final int dialog_race_no_image_message=0x7f07004c;
+        public static final int dialog_race_tile=0x7f07004d;
+        public static final int dialog_reset_password_message=0x7f07004e;
+        public static final int dialog_reset_password_title=0x7f07004f;
+        public static final int dialog_share_facebook=0x7f070050;
+        public static final int dialog_share_twitter=0x7f070051;
+        public static final int dialog_shoe_tile=0x7f070052;
+        public static final int dialog_sign_in=0x7f070053;
+        public static final int dialog_sign_up=0x7f070054;
+        public static final int dialog_user_message=0x7f070055;
+        public static final int dialog_user_title=0x7f070056;
+        public static final int done=0x7f070057;
+        public static final int email=0x7f070058;
+        public static final int email_address=0x7f070059;
+        public static final int fb_app_id=0x7f07005a;
+        public static final int fb_app_name=0x7f07005b;
+        public static final int forgot_password=0x7f07005c;
+        public static final int group_add_failed=0x7f07005d;
+        public static final int hello_world=0x7f07005e;
+        public static final int login_disconnect=0x7f07005f;
+        public static final int login_sign_in_with=0x7f070060;
+        public static final int menu_about=0x7f070061;
+        public static final int menu_about_cannot_get_content=0x7f070062;
+        public static final int menu_blog=0x7f070063;
+        public static final int menu_blog_cannot_get_content=0x7f070064;
+        public static final int menu_chat=0x7f070065;
+        public static final int menu_chat_your_community=0x7f070066;
+        public static final int menu_contact_us=0x7f070067;
+        public static final int menu_profile_update=0x7f070068;
+        public static final int menu_runner_you_may_know=0x7f070069;
+        public static final int menu_running_website=0x7f07006a;
+        public static final int menu_share_fb=0x7f07006b;
+        public static final int menu_share_twitter=0x7f07006c;
+        public static final int menu_sign_out=0x7f07006d;
+        public static final int menu_your_community=0x7f07006e;
+        public static final int menu_your_history=0x7f07006f;
+        public static final int messenger_send_button_text=0x7f070070;
+        public static final int no=0x7f070071;
+        public static final int ok=0x7f070072;
+        public static final int parse_app_id=0x7f070073;
+        public static final int parse_client_key=0x7f070074;
+        public static final int password=0x7f070075;
+        public static final int profile_add_photo=0x7f070076;
+        public static final int profile_confirm_password=0x7f070077;
+        public static final int profile_name=0x7f070078;
+        public static final int profile_new_password=0x7f070079;
+        public static final int profile_old_password=0x7f07007a;
+        public static final int race_add_failed=0x7f07007b;
+        public static final int race_delete_failed=0x7f07007c;
+        public static final int race_get_failed=0x7f07007d;
+        public static final int race_input_mile_content=0x7f07007e;
+        public static final int race_input_mile_invalid=0x7f07007f;
+        public static final int race_input_mile_title=0x7f070080;
+        public static final int race_update_failed=0x7f070081;
+        public static final int races_detail_no_item=0x7f070082;
+        public static final int races_detail_please_add_race=0x7f070083;
+        public static final int races_detail_sort_by=0x7f070084;
+        public static final int races_detail_sort_date=0x7f070085;
+        public static final int races_detail_sort_length=0x7f070086;
+        public static final int races_detail_sort_time=0x7f070087;
+        public static final int runner_get_failed=0x7f070088;
+        public static final int save=0x7f070089;
+        public static final int select_race_user_history=0x7f07008a;
+        public static final int select_race_welcome_back=0x7f07008b;
+        public static final int setting_about=0x7f07008c;
+        public static final int setting_about_content=0x7f07008d;
+        public static final int setting_about_title=0x7f07008e;
+        public static final int setting_link_fb=0x7f07008f;
+        public static final int setting_sounds=0x7f070090;
+        public static final int share_app_menu=0x7f070091;
+        public static final int share_fb_failed=0x7f070092;
+        public static final int share_tw_failed=0x7f070093;
+        public static final int share_tw_failed_not_login_before=0x7f070094;
+        public static final int shoe_add_failed=0x7f070095;
+        public static final int shoe_delete_failed=0x7f070096;
+        public static final int shoe_update_failed=0x7f070097;
+        public static final int sign_in_forgot_password=0x7f070098;
+        public static final int sign_in_register=0x7f070099;
+        public static final int sign_in_register_failed=0x7f07009a;
+        public static final int time=0x7f07009b;
+        public static final int time_set=0x7f07009c;
+        public static final int title_activity_blog=0x7f07009d;
+        public static final int twitter_callback=0x7f07009e;
+        public static final int twitter_consumer_key=0x7f07009f;
+        public static final int twitter_consumer_secret=0x7f0700a0;
+        public static final int twitter_oauth_verifier=0x7f0700a1;
+        public static final int upload_image_failed=0x7f0700a2;
+        public static final int username=0x7f0700a3;
+        public static final int username_hint=0x7f0700a4;
+        public static final int yes=0x7f0700a5;
     }
     public static final class style {
         /** 
@@ -757,9 +831,28 @@ containing a value of this type.
         /**  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f080001;
-        public static final int com_facebook_loginview_default_style=0x7f080002;
-        public static final int com_facebook_loginview_silver_style=0x7f080003;
-        public static final int new_dialog=0x7f080004;
+        public static final int MessengerButton=0x7f080002;
+        public static final int MessengerButton_Blue=0x7f080003;
+        public static final int MessengerButton_Blue_Large=0x7f080004;
+        public static final int MessengerButton_Blue_Small=0x7f080005;
+        public static final int MessengerButton_White=0x7f080006;
+        public static final int MessengerButton_White_Large=0x7f080007;
+        public static final int MessengerButton_White_Small=0x7f080008;
+        public static final int MessengerButtonText=0x7f080009;
+        public static final int MessengerButtonText_Blue=0x7f08000a;
+        public static final int MessengerButtonText_Blue_Large=0x7f08000b;
+        public static final int MessengerButtonText_Blue_Small=0x7f08000c;
+        public static final int MessengerButtonText_White=0x7f08000d;
+        public static final int MessengerButtonText_White_Large=0x7f08000e;
+        public static final int MessengerButtonText_White_Small=0x7f08000f;
+        public static final int com_facebook_button=0x7f080010;
+        public static final int com_facebook_button_like=0x7f080011;
+        public static final int com_facebook_button_send=0x7f080012;
+        public static final int com_facebook_button_share=0x7f080013;
+        public static final int com_facebook_loginview_default_style=0x7f080014;
+        public static final int com_facebook_loginview_silver_style=0x7f080015;
+        public static final int new_dialog=0x7f080016;
+        public static final int tooltip_bubble_text=0x7f080017;
     }
     public static final class styleable {
         /** Attributes that can be used with a AutoFitTextView.
@@ -809,33 +902,131 @@ containing a value of this type.
           @attr name com.runningracehisotry:minTextSize
         */
         public static final int AutoFitTextView_minTextSize = 0;
-        /** Attributes that can be used with a com_facebook_friend_picker_fragment.
+        /** Attributes that can be used with a com_facebook_like_view.
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #com_facebook_friend_picker_fragment_multi_select com.runningracehisotry:multi_select}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_auxiliary_view_position com.runningracehisotry:auxiliary_view_position}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_foreground_color com.runningracehisotry:foreground_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_horizontal_alignment com.runningracehisotry:horizontal_alignment}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_object_id com.runningracehisotry:object_id}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_object_type com.runningracehisotry:object_type}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_style com.runningracehisotry:style}</code></td><td></td></tr>
            </table>
-           @see #com_facebook_friend_picker_fragment_multi_select
+           @see #com_facebook_like_view_auxiliary_view_position
+           @see #com_facebook_like_view_foreground_color
+           @see #com_facebook_like_view_horizontal_alignment
+           @see #com_facebook_like_view_object_id
+           @see #com_facebook_like_view_object_type
+           @see #com_facebook_like_view_style
          */
-        public static final int[] com_facebook_friend_picker_fragment = {
-            0x7f010002
+        public static final int[] com_facebook_like_view = {
+            0x7f010002, 0x7f010003, 0x7f010004, 0x7f010005,
+            0x7f010006, 0x7f010007
         };
         /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#multi_select}
-          attribute's value can be found in the {@link #com_facebook_friend_picker_fragment} array.
+          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#auxiliary_view_position}
+          attribute's value can be found in the {@link #com_facebook_like_view} array.
 
 
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>bottom</code></td><td>0</td><td></td></tr>
+<tr><td><code>inline</code></td><td>1</td><td></td></tr>
+<tr><td><code>top</code></td><td>2</td><td></td></tr>
+</table>
+          @attr name com.runningracehisotry:auxiliary_view_position
+        */
+        public static final int com_facebook_like_view_auxiliary_view_position = 4;
+        /**
+          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#foreground_color}
+          attribute's value can be found in the {@link #com_facebook_like_view} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.runningracehisotry:multi_select
+          @attr name com.runningracehisotry:foreground_color
         */
-        public static final int com_facebook_friend_picker_fragment_multi_select = 0;
+        public static final int com_facebook_like_view_foreground_color = 0;
+        /**
+          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#horizontal_alignment}
+          attribute's value can be found in the {@link #com_facebook_like_view} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>center</code></td><td>0</td><td></td></tr>
+<tr><td><code>left</code></td><td>1</td><td></td></tr>
+<tr><td><code>right</code></td><td>2</td><td></td></tr>
+</table>
+          @attr name com.runningracehisotry:horizontal_alignment
+        */
+        public static final int com_facebook_like_view_horizontal_alignment = 5;
+        /**
+          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#object_id}
+          attribute's value can be found in the {@link #com_facebook_like_view} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.runningracehisotry:object_id
+        */
+        public static final int com_facebook_like_view_object_id = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#object_type}
+          attribute's value can be found in the {@link #com_facebook_like_view} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>unknown</code></td><td>0</td><td></td></tr>
+<tr><td><code>open_graph</code></td><td>1</td><td></td></tr>
+<tr><td><code>page</code></td><td>2</td><td></td></tr>
+</table>
+          @attr name com.runningracehisotry:object_type
+        */
+        public static final int com_facebook_like_view_object_type = 2;
+        /**
+          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#style}
+          attribute's value can be found in the {@link #com_facebook_like_view} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>standard</code></td><td>0</td><td></td></tr>
+<tr><td><code>button</code></td><td>1</td><td></td></tr>
+<tr><td><code>box_count</code></td><td>2</td><td></td></tr>
+</table>
+          @attr name com.runningracehisotry:style
+        */
+        public static final int com_facebook_like_view_style = 3;
         /** Attributes that can be used with a com_facebook_login_view.
            <p>Includes the following attributes:</p>
            <table>
@@ -843,17 +1034,15 @@ containing a value of this type.
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
            <tr><td><code>{@link #com_facebook_login_view_confirm_logout com.runningracehisotry:confirm_logout}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_login_view_fetch_user_info com.runningracehisotry:fetch_user_info}</code></td><td></td></tr>
            <tr><td><code>{@link #com_facebook_login_view_login_text com.runningracehisotry:login_text}</code></td><td></td></tr>
            <tr><td><code>{@link #com_facebook_login_view_logout_text com.runningracehisotry:logout_text}</code></td><td></td></tr>
            </table>
            @see #com_facebook_login_view_confirm_logout
-           @see #com_facebook_login_view_fetch_user_info
            @see #com_facebook_login_view_login_text
            @see #com_facebook_login_view_logout_text
          */
         public static final int[] com_facebook_login_view = {
-            0x7f010003, 0x7f010004, 0x7f010005, 0x7f010006
+            0x7f010008, 0x7f010009, 0x7f01000a
         };
         /**
           <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#confirm_logout}
@@ -870,20 +1059,6 @@ containing a value of this type.
         */
         public static final int com_facebook_login_view_confirm_logout = 0;
         /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#fetch_user_info}
-          attribute's value can be found in the {@link #com_facebook_login_view} array.
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:fetch_user_info
-        */
-        public static final int com_facebook_login_view_fetch_user_info = 1;
-        /**
           <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#login_text}
           attribute's value can be found in the {@link #com_facebook_login_view} array.
 
@@ -896,7 +1071,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.runningracehisotry:login_text
         */
-        public static final int com_facebook_login_view_login_text = 2;
+        public static final int com_facebook_login_view_login_text = 1;
         /**
           <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#logout_text}
           attribute's value can be found in the {@link #com_facebook_login_view} array.
@@ -910,198 +1085,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name com.runningracehisotry:logout_text
         */
-        public static final int com_facebook_login_view_logout_text = 3;
-        /** Attributes that can be used with a com_facebook_picker_fragment.
-           <p>Includes the following attributes:</p>
-           <table>
-           <colgroup align="left" />
-           <colgroup align="left" />
-           <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #com_facebook_picker_fragment_done_button_background com.runningracehisotry:done_button_background}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_picker_fragment_done_button_text com.runningracehisotry:done_button_text}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_picker_fragment_extra_fields com.runningracehisotry:extra_fields}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_picker_fragment_show_pictures com.runningracehisotry:show_pictures}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_picker_fragment_show_title_bar com.runningracehisotry:show_title_bar}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_picker_fragment_title_bar_background com.runningracehisotry:title_bar_background}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_picker_fragment_title_text com.runningracehisotry:title_text}</code></td><td></td></tr>
-           </table>
-           @see #com_facebook_picker_fragment_done_button_background
-           @see #com_facebook_picker_fragment_done_button_text
-           @see #com_facebook_picker_fragment_extra_fields
-           @see #com_facebook_picker_fragment_show_pictures
-           @see #com_facebook_picker_fragment_show_title_bar
-           @see #com_facebook_picker_fragment_title_bar_background
-           @see #com_facebook_picker_fragment_title_text
-         */
-        public static final int[] com_facebook_picker_fragment = {
-            0x7f010007, 0x7f010008, 0x7f010009, 0x7f01000a,
-            0x7f01000b, 0x7f01000c, 0x7f01000d
-        };
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#done_button_background}
-          attribute's value can be found in the {@link #com_facebook_picker_fragment} array.
-
-
-          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
-or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name com.runningracehisotry:done_button_background
-        */
-        public static final int com_facebook_picker_fragment_done_button_background = 6;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#done_button_text}
-          attribute's value can be found in the {@link #com_facebook_picker_fragment} array.
-
-
-          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:done_button_text
-        */
-        public static final int com_facebook_picker_fragment_done_button_text = 4;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#extra_fields}
-          attribute's value can be found in the {@link #com_facebook_picker_fragment} array.
-
-
-          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:extra_fields
-        */
-        public static final int com_facebook_picker_fragment_extra_fields = 1;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#show_pictures}
-          attribute's value can be found in the {@link #com_facebook_picker_fragment} array.
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:show_pictures
-        */
-        public static final int com_facebook_picker_fragment_show_pictures = 0;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#show_title_bar}
-          attribute's value can be found in the {@link #com_facebook_picker_fragment} array.
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:show_title_bar
-        */
-        public static final int com_facebook_picker_fragment_show_title_bar = 2;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#title_bar_background}
-          attribute's value can be found in the {@link #com_facebook_picker_fragment} array.
-
-
-          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
-or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name com.runningracehisotry:title_bar_background
-        */
-        public static final int com_facebook_picker_fragment_title_bar_background = 5;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#title_text}
-          attribute's value can be found in the {@link #com_facebook_picker_fragment} array.
-
-
-          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:title_text
-        */
-        public static final int com_facebook_picker_fragment_title_text = 3;
-        /** Attributes that can be used with a com_facebook_place_picker_fragment.
-           <p>Includes the following attributes:</p>
-           <table>
-           <colgroup align="left" />
-           <colgroup align="left" />
-           <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #com_facebook_place_picker_fragment_radius_in_meters com.runningracehisotry:radius_in_meters}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_place_picker_fragment_results_limit com.runningracehisotry:results_limit}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_place_picker_fragment_search_text com.runningracehisotry:search_text}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_place_picker_fragment_show_search_box com.runningracehisotry:show_search_box}</code></td><td></td></tr>
-           </table>
-           @see #com_facebook_place_picker_fragment_radius_in_meters
-           @see #com_facebook_place_picker_fragment_results_limit
-           @see #com_facebook_place_picker_fragment_search_text
-           @see #com_facebook_place_picker_fragment_show_search_box
-         */
-        public static final int[] com_facebook_place_picker_fragment = {
-            0x7f01000e, 0x7f01000f, 0x7f010010, 0x7f010011
-        };
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#radius_in_meters}
-          attribute's value can be found in the {@link #com_facebook_place_picker_fragment} array.
-
-
-          <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:radius_in_meters
-        */
-        public static final int com_facebook_place_picker_fragment_radius_in_meters = 0;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#results_limit}
-          attribute's value can be found in the {@link #com_facebook_place_picker_fragment} array.
-
-
-          <p>Must be an integer value, such as "<code>100</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:results_limit
-        */
-        public static final int com_facebook_place_picker_fragment_results_limit = 1;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#search_text}
-          attribute's value can be found in the {@link #com_facebook_place_picker_fragment} array.
-
-
-          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:search_text
-        */
-        public static final int com_facebook_place_picker_fragment_search_text = 2;
-        /**
-          <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#show_search_box}
-          attribute's value can be found in the {@link #com_facebook_place_picker_fragment} array.
-
-
-          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.runningracehisotry:show_search_box
-        */
-        public static final int com_facebook_place_picker_fragment_show_search_box = 3;
+        public static final int com_facebook_login_view_logout_text = 2;
         /** Attributes that can be used with a com_facebook_profile_picture_view.
            <p>Includes the following attributes:</p>
            <table>
@@ -1115,7 +1099,7 @@ containing a value of this type.
            @see #com_facebook_profile_picture_view_preset_size
          */
         public static final int[] com_facebook_profile_picture_view = {
-            0x7f010012, 0x7f010013
+            0x7f01000b, 0x7f01000c
         };
         /**
           <p>This symbol is the offset where the {@link com.runningracehisotry.R.attr#is_cropped}

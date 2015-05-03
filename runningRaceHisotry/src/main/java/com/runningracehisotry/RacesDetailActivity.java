@@ -139,6 +139,7 @@ public class RacesDetailActivity extends BaseActivity implements
         //int listTimeImg = 0;
         ColorStateList sortItemColor = null;
         RadioButton sortItemLength = (RadioButton) findViewById(R.id.races_detail_sort_length);
+        View viewTitle = (View) findViewById(R.id.races_detail_title_text);
         View view1 = (View) findViewById(R.id.races_detail_sort_1);
         View view2 = (View) findViewById(R.id.races_detail_sort_2);
         view1.setVisibility(View.GONE);
@@ -227,6 +228,7 @@ public class RacesDetailActivity extends BaseActivity implements
                 sortGroupBg = R.drawable.races_detail_sort_group_other_bg;
                 raceColor = getResources().getColor(R.color.text_button_bg_other);
                 //RadioButton sortItemLength = (RadioButton) findViewById(R.id.races_detail_sort_length);
+                viewTitle.setVisibility(View.VISIBLE);
                 view1.setVisibility(View.VISIBLE);
                 view2.setVisibility(View.VISIBLE);
                 sortItemLength.setVisibility(View.VISIBLE);

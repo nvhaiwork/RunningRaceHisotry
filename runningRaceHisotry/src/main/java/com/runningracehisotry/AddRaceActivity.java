@@ -11,6 +11,8 @@ import java.util.logging.LogRecord;
 
 import com.google.gson.Gson;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Race;
 import com.runningracehisotry.models.Shoe;
@@ -242,12 +244,33 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             mRaceBibPath = mRaceUpdate.getBibUrl();
             mRacePersonPath = mRaceUpdate.getPersonUrl();
             if((mRaceUpdate.getMedalUrl() != null) && (!mRaceUpdate.getMedalUrl().isEmpty())){
+                mOptions = new DisplayImageOptions.Builder()
+                        .displayer(new RoundedBitmapDisplayer(R.dimen.image_round_conner_new))
+                        .showImageOnLoading(R.drawable.ic_photo_of_bib)
+                        .showImageForEmptyUri(R.drawable.ic_photo_of_bib)
+                        .showImageOnFail(R.drawable.ic_photo_of_bib).cacheInMemory(true)
+                        .cacheOnDisc(true).considerExifParams(true)
+                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();
                 mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getMedalUrl(), mMedalImg, mOptions);
             }
             if((mRaceUpdate.getBibUrl() != null) && (!mRaceUpdate.getBibUrl().isEmpty())){
+                mOptions = new DisplayImageOptions.Builder()
+                        .displayer(new RoundedBitmapDisplayer(R.dimen.image_round_conner_new))
+                        .showImageOnLoading(R.drawable.ic_photo_of_medal)
+                        .showImageForEmptyUri(R.drawable.ic_photo_of_medal)
+                        .showImageOnFail(R.drawable.ic_photo_of_medal).cacheInMemory(true)
+                        .cacheOnDisc(true).considerExifParams(true)
+                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();
                 mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getBibUrl(), mBidImg, mOptions);
             }
             if((mRaceUpdate.getPersonUrl() != null) && (!mRaceUpdate.getPersonUrl().isEmpty())){
+                mOptions = new DisplayImageOptions.Builder()
+                        .displayer(new RoundedBitmapDisplayer(R.dimen.image_round_conner_new))
+                        .showImageOnLoading(R.drawable.ic_photo_of_person)
+                        .showImageForEmptyUri(R.drawable.ic_photo_of_person)
+                        .showImageOnFail(R.drawable.ic_photo_of_person).cacheInMemory(true)
+                        .cacheOnDisc(true).considerExifParams(true)
+                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();
                 mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getPersonUrl(), mPersonImg, mOptions);
             }
         }

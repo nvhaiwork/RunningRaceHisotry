@@ -103,9 +103,9 @@ public class NewMyShoeAdapter extends BaseAdapter {
         this.mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mOptions = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_user_img)
-                .showImageForEmptyUri(R.drawable.ic_user_img)
-                .showImageOnFail(R.drawable.ic_user_img).cacheInMemory(true)
+                .showImageOnLoading(R.drawable.ic_shoe)
+                .showImageForEmptyUri(R.drawable.ic_shoe)
+                .showImageOnFail(R.drawable.ic_shoe).cacheInMemory(true)
                 .cacheOnDisc(true).considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.ARGB_8888).build();
     }

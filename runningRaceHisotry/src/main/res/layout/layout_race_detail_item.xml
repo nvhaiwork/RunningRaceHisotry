@@ -114,7 +114,8 @@
                 android:text="race name"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textSize="@dimen/races_detail_item_miles" />
+                android:textSize="@dimen/races_detail_item_miles"
+                android:gravity="center_vertical" />
         </RelativeLayout>
 
         <com.runningracehisotry.views.CustomFontTextView
