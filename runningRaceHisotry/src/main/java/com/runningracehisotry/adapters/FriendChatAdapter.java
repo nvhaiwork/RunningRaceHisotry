@@ -1,0 +1,123 @@
+package com.runningracehisotry.adapters;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.runningracehisotry.R;
+import com.runningracehisotry.models.Friend;
+import com.runningracehisotry.models.Group;
+import com.runningracehisotry.webservice.ServiceApi;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by ngocm on 05/03/15.
+ */
+public class FriendChatAdapter extends BaseExpandableListAdapter {
+    private Context context;
+    private Map<String, List<Friend>> friendMap;
+    private List<Group> groups;
+    private ImageLoader mImageLoader;
+    private DisplayImageOptions mOptions;
+
+    public FriendChatAdapter(Context context, Map<String, List<Friend>> friendMap, List<Group> groups, ImageLoader imageLoader) {
+        this.context = context;
+        this.friendMap = friendMap;
+        this.groups = groups;
+
+        this.mImageLoader = imageLoader;
+        mOptions = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_user_img)
+                .showImageForEmptyUri(R.drawable.ic_user_img)
+                .showImageOnFail(R.drawable.ic_user_img).cacheInMemory(true)
+                .cacheOnDisc(true).considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.ARGB_8888).build();
+    }
+
+    @Override
+    public int getGroupCount() {
+        return groups.size();
+    }
+
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return friendMap.get(groups.get(groupPosition).getGroupId()).size();
+    }
+
+    @Override
+    public Group getGroup(int groupPosition) {
+        return groups.get(groupPosition);
+    }
+
+    @Override
+    public Friend getChild(int groupPosition, int childPosition) {
+        return friendMap.get(groups.get(groupPosition).getGroupId()).get(childPosition);
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return groupPosition *100 + childPosition;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        String headerTitle = groups.get(groupPosition).getGroupName();
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) this.context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.layout_group_item, null);
+        }
+
+        TextView header = (TextView) convertView
+                .findViewById(R.id.tv_group_item);
+        header.setText(headerTitle);
+
+        return convertView;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        Friend friend = getChild(groupPosition, childPosition);
+        final String childText = friend.getFriend().getFull_name();
+
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this.context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.layout_user_item, null);
+        }
+
+        TextView tvName = (TextView) convertView
+                .findViewById(R.id.user_item_text);
+
+        ImageView ivAvatar = (ImageView) convertView
+                .findViewById(com.runningracehisotry.R.id.user_item_img);
+
+        tvName.setText(childText);
+        mImageLoader.displayImage(ServiceApi.SERVICE_URL + friend.getFriend().getProfile_image(), ivAvatar, mOptions);
+        return convertView;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
+}

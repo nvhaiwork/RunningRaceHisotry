@@ -2,12 +2,15 @@ package com.runningracehisotry;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.parse.ParseUser;
 import com.runningracehisotry.adapters.FriendAdapter;
+import com.runningracehisotry.adapters.FriendChatAdapter;
 import com.runningracehisotry.adapters.RunnersAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
@@ -35,6 +38,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -43,17 +47,19 @@ import org.json.JSONObject;
 
 public class ChatFriendActivity extends BaseActivity implements ServiceConnection, SinchService.StartFailedListener {
 
-    private ListView mFriendListview;
-    private FriendAdapter mFriendAdapter;
+    private ExpandableListView mFriendListview;
+    private FriendChatAdapter mFriendAdapter;
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
+    private Map<String, List<Friend>> friendMap;
 
     private CustomLoadingDialog mLoadingDialog;
 
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     private int selectedPosition = -1;
+    private int selectedGroupPosition = -1;
 
     @Override
     protected int addContent() {
@@ -67,8 +73,33 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
         super.initView();
 
-        mFriendListview = (ListView) findViewById(R.id.friends_list);
-        mFriendListview.setOnItemClickListener(this);
+        mFriendListview = (ExpandableListView) findViewById(R.id.friends_list);
+//        mFriendListview.setOnItemClickListener(this);
+        mFriendListview.setGroupIndicator(null);
+
+        mFriendListview.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                mFriendListview.expandGroup(groupPosition);
+            }
+        });
+
+        mFriendListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                selectedPosition = childPosition;
+                selectedGroupPosition = groupPosition;
+
+                if (!mSinchServiceInterface.isStarted()) {
+                    mSinchServiceInterface.startClient();
+                } else {
+                    goToChat();
+                }
+                return false;
+            }
+        });
+
+        friendMap = new HashMap<String, List<Friend>>();
 
         getGroupOfUser();
     }
@@ -97,7 +128,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                 ChatActivity.class);
 
         selectRaceIntent.putExtra(
-                Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(lstFriend.get(selectedPosition).getFriend()));
+                Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(friendMap.get(lstGroup.get(selectedGroupPosition).getGroupId()).get(selectedPosition).getFriend()));
         startActivity(selectRaceIntent);
     }
 
@@ -166,15 +197,28 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                     + "|" + fr.getFriend().getProfile_image());
             LogUtil.d(Constants.LOG_TAG, "return|total: " + returnedFriends +"|"+ totalFriends);
 
-            lstFriend.add(fr);
+            if(friendMap.containsKey(fr.getGroupId())) {
+                friendMap.get(fr.getGroupId()).add(fr);
+            } else {
+                List<Friend> list = new ArrayList<Friend>();
+                list.add(fr);
+                friendMap.put(fr.getGroupId(), list);
+
+            }
+
+//            lstFriend.add(fr);
 
             if(returnedFriends < totalFriends){
                 returnedFriends++;
                 LogUtil.d(Constants.LOG_TAG, "return < add " + returnedFriends +"|"+ totalFriends);
             }
             else{
-                mFriendAdapter = new FriendAdapter(this, lstFriend, mImageLoader);
+                mFriendAdapter = new FriendChatAdapter(this, friendMap, lstGroup, mImageLoader);
                 mFriendListview.setAdapter(mFriendAdapter);
+                for(int i=0; i < mFriendAdapter.getGroupCount(); i++) {
+                    mFriendListview.expandGroup(i);
+                }
+
                 mFriendAdapter.notifyDataSetChanged();
                 LogUtil.d(Constants.LOG_TAG, "return >= show "  + returnedFriends +"|"+ totalFriends);
 
@@ -214,7 +258,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                     // Login success
                     processGetFriendGroupOfUser(data.toString());
                 } catch (Exception e) {
-                    if(mLoadingDialog == null) {
+                    if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
                         mLoadingDialog.dismiss();
                     }
                 }

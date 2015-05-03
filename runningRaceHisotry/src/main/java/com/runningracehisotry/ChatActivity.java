@@ -3,8 +3,10 @@ package com.runningracehisotry;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.os.IBinder;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -44,6 +46,12 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
     @Override
     protected void initView() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         getExtraFriend();
 
         super.initView();
@@ -58,6 +66,15 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
             lvMessages = (ListView) findViewById(R.id.lv_message);
             mChatItemAdaper = new ChatItemAdapter(this, mImageLoader, currentFriend);
             lvMessages.setAdapter(mChatItemAdaper);
+
+            etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus && mChatItemAdaper.getCount() > 0) {
+                        lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+                    }
+                }
+            });
         }
 
         getApplicationContext().bindService(new Intent(this, SinchService.class), this,
