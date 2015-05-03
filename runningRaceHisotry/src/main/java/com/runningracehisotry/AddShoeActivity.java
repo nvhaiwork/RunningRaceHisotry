@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.runningracehisotry.adapters.NewShoeDistanceHistoryAdapter;
 
 import com.runningracehisotry.constants.Constants;
@@ -155,7 +156,28 @@ public class AddShoeActivity extends BaseActivity {
                                 .showImageOnFail(R.drawable.ic_photo_of_shoe).cacheInMemory(true)
                                 .cacheOnDisc(true).considerExifParams(true)
                                 .bitmapConfig(Bitmap.Config.ARGB_8888).build();
-                        mImageLoader.displayImage(ServiceApi.SERVICE_URL + shoe.getImageUrl(), mShoeImage, mOptions);
+                        //mImageLoader.displayImage(ServiceApi.SERVICE_URL + shoe.getImageUrl(), mShoeImage, mOptions);
+                        mImageLoader.loadImage(ServiceApi.SERVICE_URL + shoe.getImageUrl(), new SimpleImageLoadingListener()
+                        {
+                            @Override
+                            public void onLoadingComplete(String imageUri, View view, final Bitmap loadedImage)
+                            {
+                                // Do whatever you want with Bitmap
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try{
+                                            Bitmap bmp = Utilities.getRoundedCornerBitmap(loadedImage, 14);
+                                            mShoeImage.setImageBitmap(bmp);
+                                        }
+                                        catch (Exception ex){
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+                        //Bitmap bitmap = mImageLoader.loadImageSync(ServiceApi.SERVICE_URL + shoe.getImageUrl());
                        /* Utilities.displayParseImage(
                                 image,
                                 mShoeImage,

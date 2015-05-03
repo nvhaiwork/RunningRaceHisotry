@@ -5,17 +5,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 
 import com.google.gson.Gson;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Race;
 import com.runningracehisotry.models.Shoe;
+import com.runningracehisotry.utilities.ImageLoaderMedal;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
@@ -244,34 +245,118 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             mRaceBibPath = mRaceUpdate.getBibUrl();
             mRacePersonPath = mRaceUpdate.getPersonUrl();
             if((mRaceUpdate.getMedalUrl() != null) && (!mRaceUpdate.getMedalUrl().isEmpty())){
-                mOptions = new DisplayImageOptions.Builder()
+                /*mOptions = new DisplayImageOptions.Builder()
                         .displayer(new RoundedBitmapDisplayer(R.dimen.image_round_conner_new))
                         .showImageOnLoading(R.drawable.ic_photo_of_bib)
                         .showImageForEmptyUri(R.drawable.ic_photo_of_bib)
                         .showImageOnFail(R.drawable.ic_photo_of_bib).cacheInMemory(true)
                         .cacheOnDisc(true).considerExifParams(true)
-                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();
-                mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getMedalUrl(), mMedalImg, mOptions);
+                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();*/
+                //mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getMedalUrl(), mMedalImg, mOptions);
+                //Bitmap bitmap = mImageLoader.loadImageSync(ServiceApi.SERVICE_URL + mRaceUpdate.getMedalUrl());
+
+                mImageLoaderMedal.loadImage(ServiceApi.SERVICE_URL + mRaceUpdate.getMedalUrl(), new SimpleImageLoadingListener()
+                {
+                    @Override
+                    public void onLoadingStarted(String arg0, View arg1) {
+                    }
+
+                    @Override
+                    public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String arg0, View arg1) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(final String imageUri, View view, final Bitmap loadedImage)
+                    {
+                        // Do whatever you want with Bitmap
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    Bitmap bmp = Utilities.getRoundedCornerBitmap(loadedImage, 14);
+                                    if(bmp != null) {
+                                        LogUtil.d(Constants.LOG_TAG, "Loaded bitmap Medal url|bitmap: " + imageUri + "|" + bmp.toString());
+                                        mMedalImg.setImageBitmap(bmp);
+                                    }
+                                    else{
+                                        LogUtil.d(Constants.LOG_TAG, "Load bitmap Medal NULL url|bitmap: " + imageUri);
+                                    }
+                                }
+                                catch (Exception ex){
+                                }
+                            }
+                        });
+
+                    }
+                });
+
+
             }
             if((mRaceUpdate.getBibUrl() != null) && (!mRaceUpdate.getBibUrl().isEmpty())){
-                mOptions = new DisplayImageOptions.Builder()
+                /*mOptions = new DisplayImageOptions.Builder()
                         .displayer(new RoundedBitmapDisplayer(R.dimen.image_round_conner_new))
                         .showImageOnLoading(R.drawable.ic_photo_of_medal)
                         .showImageForEmptyUri(R.drawable.ic_photo_of_medal)
                         .showImageOnFail(R.drawable.ic_photo_of_medal).cacheInMemory(true)
                         .cacheOnDisc(true).considerExifParams(true)
-                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();
-                mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getBibUrl(), mBidImg, mOptions);
+                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();*/
+                //mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getBibUrl(), mBidImg, mOptions);
+
+                mImageLoader.loadImage(ServiceApi.SERVICE_URL + mRaceUpdate.getBibUrl(), new SimpleImageLoadingListener()
+                {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, final Bitmap loadedImage)
+                    {
+                        // Do whatever you want with Bitmap
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    Bitmap bmp = Utilities.getRoundedCornerBitmap(loadedImage, 14);
+                                    mBidImg.setImageBitmap(bmp);
+                                }
+                                catch (Exception ex){
+                                }
+                            }
+                        });
+
+                    }
+                });
             }
             if((mRaceUpdate.getPersonUrl() != null) && (!mRaceUpdate.getPersonUrl().isEmpty())){
-                mOptions = new DisplayImageOptions.Builder()
+                /*mOptions = new DisplayImageOptions.Builder()
                         .displayer(new RoundedBitmapDisplayer(R.dimen.image_round_conner_new))
                         .showImageOnLoading(R.drawable.ic_photo_of_person)
                         .showImageForEmptyUri(R.drawable.ic_photo_of_person)
                         .showImageOnFail(R.drawable.ic_photo_of_person).cacheInMemory(true)
                         .cacheOnDisc(true).considerExifParams(true)
-                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();
-                mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getPersonUrl(), mPersonImg, mOptions);
+                        .bitmapConfig(Bitmap.Config.ARGB_8888).build();*/
+                //mImageLoader.displayImage(ServiceApi.SERVICE_URL + mRaceUpdate.getPersonUrl(), mPersonImg, mOptions);
+                mImageLoaderPerson.loadImage(ServiceApi.SERVICE_URL + mRaceUpdate.getPersonUrl(), new SimpleImageLoadingListener()
+                {
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, final Bitmap loadedImage)
+                    {
+                        // Do whatever you want with Bitmap
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    Bitmap bmp = Utilities.getRoundedCornerBitmap(loadedImage, 14);
+                                    mPersonImg.setImageBitmap(bmp);
+                                }
+                                catch (Exception ex){
+                                }
+                            }
+                        });
+
+                    }
+                });
             }
         }
 

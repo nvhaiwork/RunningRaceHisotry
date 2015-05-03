@@ -36,6 +36,8 @@ import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.MenuModel;
 
 import com.runningracehisotry.utilities.CustomSharedPreferences;
+import com.runningracehisotry.utilities.ImageLoaderMedal;
+import com.runningracehisotry.utilities.ImageLoaderPerson;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomAlertDialog;
@@ -96,6 +98,8 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 	protected static ParseUser mUser;
 	protected String mCurrentClassName;
 	protected ImageLoader mImageLoader;
+    protected ImageLoaderMedal mImageLoaderMedal;
+    protected ImageLoaderPerson mImageLoaderPerson;
 	private RelativeLayout mAboutLayout;
 //	protected UiLifecycleHelper uiHelper;
 	protected DisplayImageOptions mOptions;
@@ -133,10 +137,21 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 //		uiHelper.onCreate(savedInstanceState);
 		mImageLoader = ImageLoader.getInstance();
 		if (!mImageLoader.isInited()) {
-
 			mImageLoader.init(ImageLoaderConfiguration
 					.createDefault(BaseActivity.this));
 		}
+
+        mImageLoaderMedal = ImageLoaderMedal.getInstance();
+        if (!mImageLoaderMedal.isInited()) {
+            mImageLoaderMedal.init(ImageLoaderConfiguration
+                    .createDefault(BaseActivity.this));
+        }
+
+        mImageLoaderPerson = ImageLoaderPerson.getInstance();
+        if (!mImageLoaderPerson.isInited()) {
+            mImageLoaderPerson.init(ImageLoaderConfiguration
+                    .createDefault(BaseActivity.this));
+        }
 
 		initView();
 	}
