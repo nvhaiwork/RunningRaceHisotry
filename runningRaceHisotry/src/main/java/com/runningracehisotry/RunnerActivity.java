@@ -244,6 +244,7 @@ public class RunnerActivity extends BaseActivity {
 
         if(result.equalsIgnoreCase("true")){
             LogUtil.d(mCurrentClassName, "Response processAddedMemberOfGroup done");
+            mRunners.remove(chosenRunner);
             mRunnersAdapter.notifyDataSetChanged();
             showSuccessDialog(chosenRunner.getFullName(), chosenGroup.getGroupName());
             chosenGroup = null;
