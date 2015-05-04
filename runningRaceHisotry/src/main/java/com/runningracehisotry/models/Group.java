@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Group {
     @SerializedName("id")
-    private String groupId;
+    private int groupId;
 
     @SerializedName("user_id")
     private String userId;
@@ -22,11 +22,11 @@ public class Group {
     private String updateDate;
 
 
-    public String getGroupId() {
+    public int getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
 

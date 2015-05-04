@@ -8,41 +8,29 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.parse.ParseUser;
-import com.runningracehisotry.adapters.FriendAdapter;
 import com.runningracehisotry.adapters.FriendChatAdapter;
-import com.runningracehisotry.adapters.RunnersAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
-import com.runningracehisotry.models.Shoe;
-import com.runningracehisotry.models.User;
 import com.runningracehisotry.service.SinchService;
-import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
-import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetAllGroupUserRequest;
 import com.runningracehisotry.webservice.base.GetGroupMemberRequest;
-import com.runningracehisotry.webservice.base.GetUserProfileRequest;
 import com.sinch.android.rtc.SinchError;
 
-import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ChatFriendActivity extends BaseActivity implements ServiceConnection, SinchService.StartFailedListener {
@@ -52,7 +40,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
-    private Map<String, List<Friend>> friendMap;
+    private Map<Integer, List<Friend>> friendMap;
 
     private CustomLoadingDialog mLoadingDialog;
 
@@ -63,7 +51,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
     @Override
     protected int addContent() {
-        return R.layout.activity_friends;
+        return R.layout.activity_chat_friend;
     }
 
     @Override
@@ -99,7 +87,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
             }
         });
 
-        friendMap = new HashMap<String, List<Friend>>();
+        friendMap = new HashMap<Integer, List<Friend>>();
 
         getGroupOfUser();
     }
@@ -176,7 +164,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
     }
 
-    private void getFriendOfUser(String groupId) {
+    private void getFriendOfUser(int groupId) {
         GetGroupMemberRequest request = new GetGroupMemberRequest(groupId);
         request.setListener(callBackEvent);
         new Thread(request).start();
@@ -197,7 +185,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                     + "|" + fr.getFriend().getProfile_image());
             LogUtil.d(Constants.LOG_TAG, "return|total: " + returnedFriends +"|"+ totalFriends);
 
-            if(friendMap.containsKey(fr.getGroupId())) {
+            if(friendMap.containsKey(Integer.valueOf(fr.getGroupId()))) {
                 friendMap.get(fr.getGroupId()).add(fr);
             } else {
                 List<Friend> list = new ArrayList<Friend>();

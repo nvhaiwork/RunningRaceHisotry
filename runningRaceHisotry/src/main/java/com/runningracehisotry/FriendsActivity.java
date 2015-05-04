@@ -40,7 +40,7 @@ public class FriendsActivity extends BaseActivity {
     @Override
     protected int addContent() {
         // TODO Auto-generated method stub
-        return R.layout.activity_friends;
+        return R.layout.activity_friend;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class FriendsActivity extends BaseActivity {
         // TODO Auto-generated method stub
         super.initView();
 
-        mFriendListview = (ListView) findViewById(R.id.friends_list);
+        mFriendListview = (ListView) findViewById(R.id.lv_friends);
         mFriendListview.setOnItemClickListener(this);
 
         // Initiation data
@@ -68,7 +68,7 @@ public class FriendsActivity extends BaseActivity {
         // TODO Auto-generated method stub
         super.onItemClick(adapterView, view, position, id);
 
-        if (adapterView.getId() == R.id.friends_list) {
+        if (adapterView.getId() == R.id.lv_friends) {
 
             Intent selectRaceIntent = new Intent(FriendsActivity.this,
                     SelectRaceActivity.class);
@@ -121,7 +121,7 @@ public class FriendsActivity extends BaseActivity {
 
     }
 
-    private void getFriendOfUser(String groupId) {
+    private void getFriendOfUser(int groupId) {
         GetGroupMemberRequest request = new GetGroupMemberRequest(groupId);
         request.setListener(callBackEvent);
         new Thread(request).start();

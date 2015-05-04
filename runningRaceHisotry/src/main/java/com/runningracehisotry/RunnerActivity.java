@@ -262,7 +262,7 @@ public class RunnerActivity extends BaseActivity {
         int groupId = obj.getInt("group_id");
 
         chosenGroup = new Group();
-        chosenGroup.setGroupId(String.valueOf(groupId));
+        chosenGroup.setGroupId(groupId);
         chosenGroup.setGroupName(inputGroupName);
 
         if(result.equalsIgnoreCase("true")){

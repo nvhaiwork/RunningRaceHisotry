@@ -13,8 +13,8 @@
         android:textColor="@color/white"
         android:textSize="@dimen/login_sign_in_with" />
 
-    <ExpandableListView
-        android:id="@+id/friends_list"
+    <ListView
+        android:id="@+id/lv_friends"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

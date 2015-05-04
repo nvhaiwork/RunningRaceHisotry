@@ -15,7 +15,7 @@ public class Friend {
     private String friendId;
 
     @SerializedName("group_id")
-    private String groupId;
+    private int groupId;
 
     @SerializedName("created_at")
     private String createDate;
@@ -42,11 +42,11 @@ public class Friend {
         this.friendId = friendId;
     }
 
-    public String getGroupId() {
+    public int getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
 

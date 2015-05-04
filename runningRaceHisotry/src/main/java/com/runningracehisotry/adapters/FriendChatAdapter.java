@@ -24,12 +24,12 @@ import java.util.Map;
  */
 public class FriendChatAdapter extends BaseExpandableListAdapter {
     private Context context;
-    private Map<String, List<Friend>> friendMap;
+    private Map<Integer, List<Friend>> friendMap;
     private List<Group> groups;
     private ImageLoader mImageLoader;
     private DisplayImageOptions mOptions;
 
-    public FriendChatAdapter(Context context, Map<String, List<Friend>> friendMap, List<Group> groups, ImageLoader imageLoader) {
+    public FriendChatAdapter(Context context, Map<Integer, List<Friend>> friendMap, List<Group> groups, ImageLoader imageLoader) {
         this.context = context;
         this.friendMap = friendMap;
         this.groups = groups;
