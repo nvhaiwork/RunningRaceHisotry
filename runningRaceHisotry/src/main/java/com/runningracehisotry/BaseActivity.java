@@ -433,7 +433,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                         new FacebookCallback<Sharer.Result>() {
                             @Override
                             public void onSuccess(Sharer.Result result) {
-
+                                Log.d("BaseActivity", result.toString());
                             }
 
                             @Override
@@ -443,7 +443,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
                             @Override
                             public void onError(FacebookException e) {
-
+                                e.printStackTrace();
                             }
                         });
 
