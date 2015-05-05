@@ -444,6 +444,7 @@ public class RacesDetailActivity extends BaseActivity implements
                     try{
                         if (mLoadingDialog.isShowing()) {
                             mLoadingDialog.dismiss();
+                            mLoadingDialog = null;
                         }
                     }
                     catch(Exception ex){
@@ -464,6 +465,7 @@ public class RacesDetailActivity extends BaseActivity implements
                             try{
                                 if (mLoadingDialog.isShowing()) {
                                     mLoadingDialog.dismiss();
+                                    mLoadingDialog = null;
                                 }
                             }
                             catch(Exception ex){
@@ -543,8 +545,9 @@ public class RacesDetailActivity extends BaseActivity implements
             e.printStackTrace();
         } finally {
             try{
-                if (mLoadingDialog.isShowing()) {
+                if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
                     mLoadingDialog.dismiss();
+                    mLoadingDialog = null;
                 }
             }
             catch(Exception ex){
@@ -593,6 +596,14 @@ public class RacesDetailActivity extends BaseActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            try{
+                if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                    mLoadingDialog = null;
+                }
+            }
+            catch(Exception ex){
+            }
         }
     }
 
@@ -953,13 +964,16 @@ public class RacesDetailActivity extends BaseActivity implements
             if(userId != null && userId.length() > 0){
                 if(mLoadingDialog == null) {
                     mLoadingDialog = CustomLoadingDialog.show(RacesDetailActivity.this, "", "", false, false);
+                    LogUtil.d(Constants.LOG_TAG,"Loading");
                 }
                 if(isLiked(raceInfo, userId)){
                     //unlike then refresh
+                    LogUtil.d(Constants.LOG_TAG,"Liked -> unlike");
                     callLikeRace(raceInfo.getId(),false);
                 }
                 else{
                     //call add like
+                    LogUtil.d(Constants.LOG_TAG,"UnLike -> Like");
                     callLikeRace(raceInfo.getId(),true);
                 }
             }
@@ -982,8 +996,10 @@ public class RacesDetailActivity extends BaseActivity implements
     public boolean isLiked(Race race, String userId){
         boolean result = false;
         List<Like> listLike = race.getLikes();
+        LogUtil.d(Constants.LOG_TAG,"User ID: " + userId);
         if(listLike != null && listLike.size() >0){
             for(Like like : listLike){
+                LogUtil.d(Constants.LOG_TAG,"Like user ID: " + like.getUserID());
                 if(like.getUserID().equals(userId)){
                     result =  true;
                     break;
@@ -1299,6 +1315,7 @@ public class RacesDetailActivity extends BaseActivity implements
             }
 
             dialog.dismiss();
+            dialog = null;
         }
     }
 
