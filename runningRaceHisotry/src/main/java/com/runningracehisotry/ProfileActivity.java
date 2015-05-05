@@ -247,7 +247,7 @@ public class ProfileActivity extends BaseActivity {
                                             "");
                                     updateStoredInformation();
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    //e.printStackTrace();
                                 }
                             }
                         });
@@ -264,7 +264,7 @@ public class ProfileActivity extends BaseActivity {
                                 "");
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     Utilities.showAlertMessage(
                             ProfileActivity.this,
                             getString(R.string.dialog_profile_update_fails),

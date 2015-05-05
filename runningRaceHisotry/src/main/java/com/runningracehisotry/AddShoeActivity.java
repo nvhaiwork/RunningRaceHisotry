@@ -215,7 +215,7 @@ public class AddShoeActivity extends BaseActivity {
 				mMilesTxt.setText(String.format(Locale.US, "%.2f", orgMile));
 			} catch (Exception ex) {
 
-				LogUtil.e("add_show_add_miles_btn", ex.getMessage());
+				LogUtil.e("add_show_add_miles_btn", "error when parse");
 			}
 
 			mAddMilesEdt.setText("");
@@ -292,7 +292,7 @@ public class AddShoeActivity extends BaseActivity {
                         try {
                             processAfterAddShoe(data);
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
                             Utilities.showAlertMessage(AddShoeActivity.this, getResources().getString(R.string.shoe_add_failed), "");
                         } finally {
                             try{
@@ -315,7 +315,7 @@ public class AddShoeActivity extends BaseActivity {
                         try {
                             processAfterUpdateShoe(data);
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
                             Utilities.showAlertMessage(AddShoeActivity.this, getResources().getString(R.string.shoe_update_failed), "");
                         } finally {
                             try{
@@ -356,7 +356,7 @@ public class AddShoeActivity extends BaseActivity {
                             catch(Exception ex){
                             }
                             Utilities.showAlertMessage(AddShoeActivity.this, getResources().getString(R.string.upload_image_failed), "");
-                            e.printStackTrace();
+                            //e.printStackTrace();
                         }
                     }
                 });
@@ -391,7 +391,7 @@ public class AddShoeActivity extends BaseActivity {
                 newMile = Float.parseFloat(mMilesTxt.getText().toString());
             }
             catch(Exception ex){
-                ex.printStackTrace();
+                //ex.printStackTrace();
             }
         }
         float addMile =  newMile - lastMileOfShoe;
@@ -442,7 +442,7 @@ public class AddShoeActivity extends BaseActivity {
                 newMile = Float.parseFloat(mMilesTxt.getText().toString());
             }
             catch(Exception ex){
-                ex.printStackTrace();
+                //ex.printStackTrace();
             }
         }
         float addMile =  newMile - lastMileOfShoe;

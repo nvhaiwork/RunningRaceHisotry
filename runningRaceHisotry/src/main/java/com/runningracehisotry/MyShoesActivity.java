@@ -58,8 +58,8 @@ public class MyShoesActivity extends BaseActivity implements
                             try {
                                 processGotListShoe(data);
                             } catch (JSONException e) {
-                                e.printStackTrace();
-                                Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes " + e.getMessage(), "");
+                                //e.printStackTrace();
+                                Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when get list shoes", "");
                             } finally {
                                 try{
                                     if (mLoadingDialog.isShowing()) {
@@ -81,8 +81,8 @@ public class MyShoesActivity extends BaseActivity implements
                         try {
                             processDeleteShoe(data);
                         } catch (JSONException e) {
-                            e.printStackTrace();
-                            Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when delete shoe " + e.getMessage(), "");
+                            //e.printStackTrace();
+                            Utilities.showAlertMessage(MyShoesActivity.this, "Error Parse when delete shoe", "");
                         } finally {
                             try{
                                 if (mLoadingDialog.isShowing()) {
@@ -166,7 +166,7 @@ public class MyShoesActivity extends BaseActivity implements
 //                        + "|" + shoe.getRaces().size());
 //            }
         }catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
                 mLoadingDialog.dismiss();
             }

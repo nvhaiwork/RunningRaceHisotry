@@ -235,7 +235,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
             CustomSharedPreferences.setPreferences(PREF_USER_NAME, username);
 
         } catch (TwitterException e1) {
-            e1.printStackTrace();
+            //e1.printStackTrace();
         }
     }
 
@@ -274,7 +274,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                         startActivityForResult(intent, WEBVIEW_REQUEST_CODE);
 
                     } catch (TwitterException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                 }
             }).start();
@@ -399,7 +399,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                                     new Thread(request).start();
                                 }
                             } catch (JSONException e) {
-                                e.printStackTrace();
+                                //e.printStackTrace();
                                 if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
                                     mLoadingDialog.dismiss();
                                 }
@@ -518,7 +518,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 //                performFacebookLogin();
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             Utilities.showAlertMessage(
                     this,
                     getString(R.string.dialog_login_email_fails),
@@ -570,11 +570,11 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                     isSuccess = true;
                 } catch (TwitterException e) {
                     isSuccess = false;
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
             } catch (TwitterException e) {
                 isSuccess = false;
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             return accessToken;
         }

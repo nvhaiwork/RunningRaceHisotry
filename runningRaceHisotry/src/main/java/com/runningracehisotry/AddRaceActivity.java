@@ -206,7 +206,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 mRaceFinishTimeTxt.setTag(finishedSeconds);
                 //String finishTimeStr = String.format("%02d:%02d:%02d",
             } catch (Exception ex) {
-                ex.printStackTrace();
+                //ex.printStackTrace();
             }
 
             int raceType = (Integer) mRaceUpdate.getEvenType();
@@ -221,7 +221,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 String[] dateSplit = date.split("-");
                 raceDate = dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
             } catch (Exception ex) {
-                ex.printStackTrace();
+                //ex.printStackTrace();
             }
             mRaceDateTxt.setText(raceDate);
             mRaceCityEdt.setText(mRaceUpdate.getCity());
@@ -378,7 +378,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     Gson gson = new Gson();
                     shoeForRace = gson.fromJson(json, Shoe.class);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    //ex.printStackTrace();
                 }
                 mShoeTxt.setText(String.format("%s (%s)",
                         shoeForRace.getBrand(), shoeForRace.getModel()));
@@ -879,7 +879,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             raceDate = time[2] + "-" + time[1] + "-" + time[0];
             LogUtil.d(Constants.LOG_TAG, "race date: " + raceDate);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         String shoesId = null;
         if(mShoeTxt.getTag() != null){
@@ -1114,7 +1114,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                             }
                             catch(Exception ex){
                             }
-                            e.printStackTrace();
+                            //e.printStackTrace();
                         }
                     }
                 });

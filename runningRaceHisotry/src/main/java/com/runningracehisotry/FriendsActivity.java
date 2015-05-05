@@ -119,7 +119,7 @@ public class FriendsActivity extends BaseActivity {
             }
         }
         catch(Exception ex){
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
 
     }
@@ -186,7 +186,7 @@ public class FriendsActivity extends BaseActivity {
             }
             catch(Exception exc){
             }
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
     }
 

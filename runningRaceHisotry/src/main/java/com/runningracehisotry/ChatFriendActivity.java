@@ -159,7 +159,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
             }
         }
         catch(Exception ex){
-            ex.printStackTrace();
+            //ex.printStackTrace();
             if(mLoadingDialog != null) {
                 mLoadingDialog.dismiss();
             }
@@ -225,7 +225,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
         }
         catch(Exception ex){
-            ex.printStackTrace();
+            //ex.printStackTrace();
             if(mLoadingDialog != null) {
                 mLoadingDialog.dismiss();
             }
