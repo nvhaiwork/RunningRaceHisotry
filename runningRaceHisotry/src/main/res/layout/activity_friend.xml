@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:background="@color/red"
         android:padding="7dp"
-        android:text="@string/menu_chat_your_community"
+        android:text="@string/menu_your_community"
         android:textColor="@color/white"
         android:textSize="@dimen/login_sign_in_with" />
 
