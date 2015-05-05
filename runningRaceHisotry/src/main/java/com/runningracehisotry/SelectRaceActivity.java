@@ -30,7 +30,7 @@ public class SelectRaceActivity extends BaseActivity {
 	private TextView mWelcomeTxt, mTitleTxt;
 	private LinearLayout mAddRaceSuccessLayout;
 	private ImageView mRace5kBtn, mRace10kBtn, mRace15kBtn, mRaceHalfMarBtn,
-			mRaceFullMarBtn, mShoesBtn, mAddRaceBtn, mRaceOther;
+			mRaceFullMarBtn, mShoesBtn, mAddRaceBtn, mRaceOther, mRaceOtherFriend;
 
 	/*
 	 * (non-Javadoc)
@@ -66,6 +66,7 @@ public class SelectRaceActivity extends BaseActivity {
 		mRaceHalfMarBtn = (ImageView) findViewById(R.id.select_race_half_marathon);
 		mAddRaceSuccessLayout = (LinearLayout) findViewById(R.id.select_race_add_race_success);
         mRaceOther  = (ImageView) findViewById(R.id.select_race_other);
+        mRaceOtherFriend  = (ImageView) findViewById(R.id.select_race_other_friend);
 		mShoesBtn.setOnClickListener(this);
 		mRace5kBtn.setOnClickListener(this);
 		mRace10kBtn.setOnClickListener(this);
@@ -74,6 +75,7 @@ public class SelectRaceActivity extends BaseActivity {
 		mRaceFullMarBtn.setOnClickListener(this);
 		mRaceHalfMarBtn.setOnClickListener(this);
         mRaceOther.setOnClickListener(this);
+        mRaceOtherFriend.setOnClickListener(this);
 		// For ver 1.1, old user does not have friends, so create new friends
 		// array
 		if (mFriends == null) {
@@ -89,6 +91,8 @@ public class SelectRaceActivity extends BaseActivity {
 			mShoesBtn.setVisibility(View.GONE);
 			mWelcomeTxt.setVisibility(View.GONE);
 			mAddRaceBtn.setVisibility(View.GONE);
+            mRaceOther.setVisibility(View.GONE);
+            mRaceOtherFriend.setVisibility(View.VISIBLE);
 			//String username = (String) friend.getFull_name();
 			String username = "Friend";
 			String userHis = String.format(
@@ -216,6 +220,12 @@ public class SelectRaceActivity extends BaseActivity {
 			isStartRaceDetail = true;
 			break;
             case R.id.select_race_other:
+
+                racesDetail.putExtra(Constants.INTENT_SELECT_RACE,
+                        Constants.SELECT_RACE_OTHER);
+                isStartRaceDetail = true;
+                break;
+            case R.id.select_race_other_friend:
 
                 racesDetail.putExtra(Constants.INTENT_SELECT_RACE,
                         Constants.SELECT_RACE_OTHER);

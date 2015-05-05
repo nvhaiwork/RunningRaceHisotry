@@ -110,6 +110,19 @@
                 android:contentDescription="@null"
                 android:scaleType="fitEnd"
                 android:src="@drawable/ic_select_race_full_marathon" />
+            <com.runningracehisotry.views.CustomImageButton
+                android:id="@+id/select_race_other_friend"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/select_race_full_marathon"
+                android:layout_marginTop="@dimen/select_race_item_margin_top"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:scaleType="fitEnd"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_select_race_other_friend"
+                />
 
             <com.runningracehisotry.views.CustomImageButton
                 android:id="@+id/select_race_add_race"
@@ -121,12 +134,13 @@
                 android:layout_toLeftOf="@+id/select_race_other"
                 android:scaleType="fitEnd"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_select_race_add_race"
-                 />
+                android:src="@drawable/ic_select_race_add_race" />
             <com.runningracehisotry.views.CustomImageButton
+
                 android:id="@+id/select_race_other"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="-10dp"
                 android:layout_marginTop="-5dp"
                 android:layout_marginBottom="4dp"
                 android:layout_alignParentRight="true"
@@ -136,6 +150,7 @@
                 android:scaleType="fitEnd" />
 
             <com.runningracehisotry.views.CustomImageButton
+
                 android:id="@+id/select_race_my_shoes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
