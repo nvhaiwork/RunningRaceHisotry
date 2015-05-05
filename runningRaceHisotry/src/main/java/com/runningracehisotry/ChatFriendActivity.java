@@ -144,6 +144,9 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
             Type listType = new TypeToken<List<Group>>(){}.getType();
             lstGroup = gson.fromJson(json, listType);
             if(lstGroup.size() > 0){
+                mFriendAdapter = new FriendChatAdapter(this, lstGroup, mImageLoader);
+                mFriendListview.setAdapter(mFriendAdapter);
+
                 totalFriends = lstGroup.size() - 1;
                 LogUtil.d(Constants.LOG_TAG, "processGetGroupOfUser total: " + (totalFriends + 1));
                 for(Group group : lstGroup){
@@ -175,7 +178,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
         try{
             LogUtil.d(Constants.LOG_TAG, "processGetFriendGroupOfUser return: " + json);
             Gson gson = new Gson();
-            //Type listType = new TypeToken<Friend>(){}.getType();
+            Type listType = new TypeToken<List<Friend>>(){}.getType();
             JSONArray arr= new JSONArray(json);
             JSONObject obj = arr.getJSONObject(0);
             LogUtil.d(Constants.LOG_TAG, "processGetFriendGroupOfUser return after: " + obj.toString());
@@ -185,29 +188,34 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                     + "|" + fr.getFriend().getProfile_image());
             LogUtil.d(Constants.LOG_TAG, "return|total: " + returnedFriends +"|"+ totalFriends);
 
-            if(friendMap.containsKey(Integer.valueOf(fr.getGroupId()))) {
-                friendMap.get(fr.getGroupId()).add(fr);
-            } else {
-                List<Friend> list = new ArrayList<Friend>();
-                list.add(fr);
-                friendMap.put(fr.getGroupId(), list);
-
+//            if(friendMap.containsKey(Integer.valueOf(fr.getGroupId()))) {
+//                friendMap.get(fr.getGroupId()).add(fr);
+//            } else {
+//                List<Friend> list = new ArrayList<Friend>();
+//                list.add(fr);
+//                friendMap.put(fr.getGroupId(), list);
+//
+//            }
+            List<Friend> listFriend = gson.fromJson(json, listType);
+            mFriendAdapter.addItem(listFriend);
+            for(int i=0; i < mFriendAdapter.getGroupCount(); i++) {
+                mFriendListview.expandGroup(i);
             }
 
 //            lstFriend.add(fr);
 
             if(returnedFriends < totalFriends){
-                returnedFriends++;
+                returnedFriends += listFriend.size();
                 LogUtil.d(Constants.LOG_TAG, "return < add " + returnedFriends +"|"+ totalFriends);
             }
             else{
-                mFriendAdapter = new FriendChatAdapter(this, friendMap, lstGroup, mImageLoader);
-                mFriendListview.setAdapter(mFriendAdapter);
-                for(int i=0; i < mFriendAdapter.getGroupCount(); i++) {
-                    mFriendListview.expandGroup(i);
-                }
-
-                mFriendAdapter.notifyDataSetChanged();
+//                mFriendAdapter = new FriendChatAdapter(this, friendMap, lstGroup, mImageLoader);
+//                mFriendListview.setAdapter(mFriendAdapter);
+//                for(int i=0; i < mFriendAdapter.getGroupCount(); i++) {
+//                    mFriendListview.expandGroup(i);
+//                }
+//
+//                mFriendAdapter.notifyDataSetChanged();
                 LogUtil.d(Constants.LOG_TAG, "return >= show "  + returnedFriends +"|"+ totalFriends);
 
                 if(mLoadingDialog != null) {

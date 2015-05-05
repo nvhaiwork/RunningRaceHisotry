@@ -16,6 +16,7 @@ import com.runningracehisotry.models.Friend;
 
 import com.runningracehisotry.webservice.ServiceApi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,15 +24,14 @@ import java.util.List;
  */
 public class FriendAdapter  extends BaseAdapter {
 
-    private List<Friend> mFriends;
+    private List<Friend> mFriends = new ArrayList<Friend>();
     private LayoutInflater mInflater;
     private ImageLoader mImageLoader;
     private DisplayImageOptions mOptions;
 
-    public FriendAdapter(Context context, List<Friend> runners,
+    public FriendAdapter(Context context,
                             ImageLoader imageLoader) {
         super();
-        this.mFriends = runners;
         this.mImageLoader = imageLoader;
         this.mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -108,5 +108,10 @@ public class FriendAdapter  extends BaseAdapter {
 
         ImageView image;
         TextView text;
+    }
+
+    public void addItem(List<Friend> friends) {
+        mFriends.addAll(friends);
+        notifyDataSetChanged();
     }
 }

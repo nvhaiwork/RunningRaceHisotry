@@ -51,6 +51,9 @@ public class FriendsActivity extends BaseActivity {
         mFriendListview = (ListView) findViewById(R.id.lv_friends);
         mFriendListview.setOnItemClickListener(this);
 
+        mFriendAdapter = new FriendAdapter(this, mImageLoader);
+        mFriendListview.setAdapter(mFriendAdapter);
+
         // Initiation data
         // new LoadFriendsAsyncTask().execute();
         if(mLoadingDialog == null) {
@@ -132,27 +135,28 @@ public class FriendsActivity extends BaseActivity {
         try{
             LogUtil.d(Constants.LOG_TAG, "processGetFriendGroupOfUser return: " + json);
             Gson gson = new Gson();
-            //Type listType = new TypeToken<Friend>(){}.getType();
+            Type listType = new TypeToken<List<Friend>>(){}.getType();
             JSONArray arr= new JSONArray(json);
             JSONObject obj = arr.getJSONObject(0);
             LogUtil.d(Constants.LOG_TAG, "processGetFriendGroupOfUser return after: " + obj.toString());
             Friend fr  = gson.fromJson(obj.toString(), Friend.class);
-
             LogUtil.d(Constants.LOG_TAG, "Friend return: " + fr.getFriend().getFull_name()
                     + "|" + fr.getFriend().getProfile_image());
             LogUtil.d(Constants.LOG_TAG, "return|total: " + returnedFriends +"|"+ totalFriends);
 
             lstFriend.add(fr);
 
+            List<Friend> listFriend = gson.fromJson(json, listType);
+
+            mFriendAdapter.addItem(listFriend);
+
             if(returnedFriends<totalFriends){
-                returnedFriends++;
+                returnedFriends += listFriend.size();
 
                 LogUtil.d(Constants.LOG_TAG, "return < add " + returnedFriends +"|"+ totalFriends);
             }
             else{
-                mFriendAdapter = new FriendAdapter(this, lstFriend, mImageLoader);
-                mFriendListview.setAdapter(mFriendAdapter);
-                mFriendAdapter.notifyDataSetChanged();
+
                 LogUtil.d(Constants.LOG_TAG, "return >= show "  + returnedFriends +"|"+ totalFriends);
                 try{
                     if (mLoadingDialog.isShowing()) {

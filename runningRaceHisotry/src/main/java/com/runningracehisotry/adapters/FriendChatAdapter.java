@@ -16,6 +16,8 @@ import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
 import com.runningracehisotry.webservice.ServiceApi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,14 +26,13 @@ import java.util.Map;
  */
 public class FriendChatAdapter extends BaseExpandableListAdapter {
     private Context context;
-    private Map<Integer, List<Friend>> friendMap;
+    private Map<Integer, List<Friend>> friendMap = new HashMap<Integer, List<Friend>>();
     private List<Group> groups;
     private ImageLoader mImageLoader;
     private DisplayImageOptions mOptions;
 
-    public FriendChatAdapter(Context context, Map<Integer, List<Friend>> friendMap, List<Group> groups, ImageLoader imageLoader) {
+    public FriendChatAdapter(Context context, List<Group> groups, ImageLoader imageLoader) {
         this.context = context;
-        this.friendMap = friendMap;
         this.groups = groups;
 
         this.mImageLoader = imageLoader;
@@ -50,7 +51,10 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return friendMap.get(groups.get(groupPosition).getGroupId()).size();
+        if(friendMap.get(groups.get(groupPosition).getGroupId()) == null)
+            return 0;
+        else
+            return friendMap.get(groups.get(groupPosition).getGroupId()).size();
     }
 
     @Override
@@ -60,7 +64,10 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Friend getChild(int groupPosition, int childPosition) {
-        return friendMap.get(groups.get(groupPosition).getGroupId()).get(childPosition);
+        if(friendMap.get(groups.get(groupPosition).getGroupId()) == null || friendMap.get(groups.get(groupPosition).getGroupId()).size() < childPosition + 1)
+            return null;
+        else
+            return friendMap.get(groups.get(groupPosition).getGroupId()).get(childPosition);
     }
 
     @Override
@@ -119,5 +126,11 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    public void addItem(List<Friend> friends) {
+        friendMap.put(friends.get(0).getGroupId(), friends);
+
+        notifyDataSetChanged();
     }
 }
