@@ -6,6 +6,7 @@ import android.util.Base64;
 import com.runningracehisotry.RunningRaceApplication;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.webservice.ServiceApi;
 
 import java.net.URI;
@@ -44,9 +45,11 @@ public abstract class BasePostRequest extends BaseRequest{
             String fbID = CustomSharedPreferences.getPreferences(Constants.PREF_FB_ID, "");
 
             if(RunningRaceApplication.getInstance().isSocialLogin()) {
-                String s = String.format("%s:%s", fbID, "123456");
+                LogUtil.d(Constants.LOG_TAG, "send request SNS ID: "+ fbID);
+                        String s = String.format("%s:%s", fbID, "123456");
                 mHttpPost.setHeader("Authorization", "Basic "+ Base64.encodeToString(s.getBytes(), Base64.NO_WRAP));
             } else if(userName.length() * password.length() > 0) {
+                LogUtil.d(Constants.LOG_TAG, "send request SNS NOT user ID: "+ userName);
                 String s = String.format("%s:%s", userName, password);
                 mHttpPost.setHeader("Authorization", "Basic "+ Base64.encodeToString(s.getBytes(), Base64.NO_WRAP));
             }

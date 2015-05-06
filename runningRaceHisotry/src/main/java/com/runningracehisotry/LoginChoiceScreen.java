@@ -454,10 +454,19 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
     }
 
     private void handleResponseGetUserInfo(Object data) {
+        if(RunningRaceApplication.getInstance().isSocialLogin()){
+            LogUtil.e(Constants.LOG_TAG,"SNS login result: " + data.toString());
+        }
         Gson gson = new Gson();
         User user = gson.fromJson(data.toString(), User.class);
         if(user != null) {
             RunningRaceApplication.getInstance().setCurrentUser(user);
+            CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, user.getId());
+            if(RunningRaceApplication.getInstance().isSocialLogin()){
+                LogUtil.e(Constants.LOG_TAG,"SNS login result userID: " + user.getId()
+                + "|" + CustomSharedPreferences.getPreferences(Constants.PREF_FB_ID, ""));
+            }
+            CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, data.toString());
 
             Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
             selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -485,7 +494,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
         String serialUSer = gson.toJson(newUser);
 
         CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, serialUSer);
-        CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, fbID);
+        //CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, fbID);
 
 
         Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
@@ -495,8 +504,11 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
         mLoadingDialog.dismiss();
 
         RunningRaceApplication.getInstance().setSocialLogin(true);
-        startActivity(selectRaceIntent);
-        finish();
+        getCurrentUserData();
+        /*startActivity(selectRaceIntent);
+        finish();*/
+
+
 
     }
 

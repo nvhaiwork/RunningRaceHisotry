@@ -516,6 +516,7 @@ public class RacesDetailActivity extends BaseActivity implements
                 if(!userId.isEmpty()) {
 //                    int id = Integer.parseInt(userId);
                     if (userId != null && userId.length() > 0) {
+                        LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE user ID " + userId);
                         Like like = new Like(1000, userId);
                         if(listRaceDetail.keySet().size() > 0){
                             Set<String> keys = listRaceDetail.keySet();
@@ -534,6 +535,9 @@ public class RacesDetailActivity extends BaseActivity implements
                         if (mRacesAdapter != null) {
                             mRacesAdapter.notifyDataSetChanged();
                         }
+                    }
+                    else{
+                        LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE user ID empty SNS?");
                     }
                 }
                 // add like and refresh
@@ -567,6 +571,7 @@ public class RacesDetailActivity extends BaseActivity implements
 //                    int id = Integer.parseInt(userId);
                     if (userId != null && userId.length() > 0) {
                         Like like = new Like(1000, userId);
+                        LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE user ID: " + userId);
                         if(listRaceDetail.keySet().size() > 0){
                             Set<String> keys = listRaceDetail.keySet();
                             for(String key : keys){
@@ -586,6 +591,9 @@ public class RacesDetailActivity extends BaseActivity implements
                         if (mRacesAdapter != null) {
                             mRacesAdapter.notifyDataSetChanged();
                         }
+                    }
+                    else{
+                        LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE user ID empty SNS?");
                     }
                 }
                 // add like and refresh
@@ -996,13 +1004,16 @@ public class RacesDetailActivity extends BaseActivity implements
     public boolean isLiked(Race race, String userId){
         boolean result = false;
         List<Like> listLike = race.getLikes();
-        LogUtil.d(Constants.LOG_TAG,"User ID: " + userId);
+        LogUtil.d(Constants.LOG_TAG,"User ID Login: " + userId);
         if(listLike != null && listLike.size() >0){
             for(Like like : listLike){
                 LogUtil.d(Constants.LOG_TAG,"Like user ID: " + like.getUserID());
-                if(like.getUserID().equals(userId)){
+                if(like.getUserID().equalsIgnoreCase(userId)){
                     result =  true;
                     break;
+                }
+                else if(like.getUserID().equalsIgnoreCase(userId)){
+
                 }
             }
 
