@@ -33,8 +33,13 @@ public class WebViewActivity extends Activity {
 		webView.loadUrl(url);
 	}
 
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
 
-	class MyWebViewClient extends WebViewClient {
+    class MyWebViewClient extends WebViewClient {
 		
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {

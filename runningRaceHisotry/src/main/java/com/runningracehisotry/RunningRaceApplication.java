@@ -9,6 +9,7 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
@@ -29,6 +30,7 @@ public class RunningRaceApplication extends Application {
     private User currentUser;
     private boolean isSocialLogin;
     private static RunningRaceApplication mInstance;
+    private LoginManager loginManager;
 
 	/*
 	 * (non-Javadoc)
@@ -49,6 +51,7 @@ public class RunningRaceApplication extends Application {
 //		ParseInstallation.getCurrentInstallation().saveInBackground();
 
         FacebookSdk.sdkInitialize(this);
+        loginManager = LoginManager.getInstance();
 
         mInstance = this;
 	}
@@ -71,5 +74,9 @@ public class RunningRaceApplication extends Application {
 
     public void setSocialLogin(boolean isSocialLogin) {
         this.isSocialLogin = isSocialLogin;
+    }
+
+    public LoginManager getLoginManager() {
+        return loginManager;
     }
 }

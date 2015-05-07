@@ -84,7 +84,7 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/fb_app_id"/>
         <meta-data android:name="com.facebook.sdk.ApplicationName"
             android:value="@string/fb_app_name" />
-        <provider android:authorities="com.facebook.app.FacebookContentProvider981486958530273"
+        <provider android:authorities="com.facebook.app.FacebookContentProvider388804361301515"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true"/>
 

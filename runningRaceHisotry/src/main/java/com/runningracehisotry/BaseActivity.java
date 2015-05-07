@@ -19,6 +19,7 @@ import java.util.List;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
@@ -538,8 +539,6 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 	 * */
 	private void saveUserData() {
 
-		final Dialog dialog = CustomLoadingDialog.show(BaseActivity.this, "",
-				"", false, false);
 //		if (mShoes != null) {
 //
 //			mUser.put(Constants.SHOES, mShoes);
@@ -616,34 +615,8 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         mHistory = null;
         mFriends = null;
         AddRaceActivity.setRace(null);
-        dialog.dismiss();
+
         finish();
-
-//        Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
-//
-//                    @Override
-//                    public void call(Session session, SessionState state, Exception exception) {
-//                        Log.d("FACEBOOK", "call");
-//                        session.closeAndClearTokenInformation();
-//
-//                        Intent loginChoiceIntent = new Intent(BaseActivity.this,
-//                                LoginChoiceScreen.class);
-//                        loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                                | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                        RunningRaceApplication.getInstance().setCurrentUser(null);
-//                        startActivity(loginChoiceIntent);
-//                        mShoes = null;
-//                        mHistory = null;
-//                        mFriends = null;
-//                        AddRaceActivity.setRace(null);
-//                        dialog.dismiss();
-//                        finish();
-//                    }
-//                }
-//        );
-
-
-
 	}
 
 	/**
