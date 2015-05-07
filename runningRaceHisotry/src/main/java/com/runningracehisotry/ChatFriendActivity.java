@@ -116,7 +116,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                 ChatActivity.class);
 
         selectRaceIntent.putExtra(
-                Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(friendMap.get(lstGroup.get(selectedGroupPosition).getGroupId()).get(selectedPosition).getFriend()));
+                Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend()));
         startActivity(selectRaceIntent);
     }
 

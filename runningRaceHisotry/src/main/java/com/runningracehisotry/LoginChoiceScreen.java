@@ -274,7 +274,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                         startActivityForResult(intent, WEBVIEW_REQUEST_CODE);
 
                     } catch (TwitterException e) {
-                        //e.printStackTrace();
+                        e.printStackTrace();
                     }
                 }
             }).start();
@@ -462,6 +462,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
         if(user != null) {
             RunningRaceApplication.getInstance().setCurrentUser(user);
             CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, user.getId());
+
             if(RunningRaceApplication.getInstance().isSocialLogin()){
                 LogUtil.e(Constants.LOG_TAG,"SNS login result userID: " + user.getId()
                 + "|" + CustomSharedPreferences.getPreferences(Constants.PREF_FB_ID, ""));
@@ -471,6 +472,8 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
             Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
             selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+
+            mLoadingDialog.dismiss();
             startActivity(selectRaceIntent);
             finish();
         }
@@ -478,33 +481,34 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
     private void handleResponseRegister(Object data) {
         CustomSharedPreferences.setPreferences(Constants.PREF_FB_ID, fbID);
-//        getCurrentUserData();
-
-        User newUser = new User();
-        newUser.setId(fbID);
-        newUser.setEmail(email);
-        newUser.setFull_name(fullName);
-        newUser.setName(fullName);
-        newUser.setProfile_image(avatar);
-        newUser.setType("fb:" + fbID);
-
-        RunningRaceApplication.getInstance().setCurrentUser(newUser);
-
-        Gson gson  = new Gson();
-        String serialUSer = gson.toJson(newUser);
-
-        CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, serialUSer);
-        //CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, fbID);
-
-
-        Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
-        selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
-
-        mLoadingDialog.dismiss();
-
         RunningRaceApplication.getInstance().setSocialLogin(true);
         getCurrentUserData();
+
+//        User newUser = new User();
+//        newUser.setId(fbID);
+//        newUser.setEmail(email);
+//        newUser.setFull_name(fullName);
+//        newUser.setName(fullName);
+//        newUser.setProfile_image(avatar);
+//        newUser.setType("fb:" + fbID);
+//
+//        RunningRaceApplication.getInstance().setCurrentUser(newUser);
+//
+//        Gson gson  = new Gson();
+//        String serialUSer = gson.toJson(newUser);
+//
+//        CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, serialUSer);
+//        //CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, fbID);
+//
+//
+//        Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
+//        selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+//
+//        mLoadingDialog.dismiss();
+//
+//        RunningRaceApplication.getInstance().setSocialLogin(true);
+//        getCurrentUserData();
         /*startActivity(selectRaceIntent);
         finish();*/
 
