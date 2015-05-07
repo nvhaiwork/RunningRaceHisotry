@@ -48,6 +48,7 @@ import com.runningracehisotry.webservice.base.AddLikeRequest;
 import com.runningracehisotry.webservice.base.BaseGetRequest;
 import com.runningracehisotry.webservice.base.DeleteRaceRequest;
 import com.runningracehisotry.webservice.base.GetAllRaceRequest;
+import com.runningracehisotry.webservice.base.GetLikeOfRaceRequest;
 import com.runningracehisotry.webservice.base.GetRaceByTypeRequest;
 import com.runningracehisotry.webservice.base.UnLikeRequest;
 
@@ -75,6 +76,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 //import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import twitter4j.StatusUpdate;
@@ -291,14 +293,16 @@ public class RacesDetailActivity extends BaseActivity implements
         if(mFriendRace == -1){
             if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
                 request = new GetAllRaceRequest();
-            } else {
+            }
+            else {
                 request = new GetRaceByTypeRequest("date", this.mSelectedRace);
             }
         }
         else{
             if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
                 request = new GetAllRaceRequest();
-            } else {
+            }
+            else {
                 request = new GetRaceByTypeRequest("date", this.mSelectedRace, mFriendRace);
             }
         }
@@ -315,12 +319,10 @@ public class RacesDetailActivity extends BaseActivity implements
         if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
             List<Race> lst2 = new ArrayList<Race>();
             for(Race race : lst) {
-
                 if(race.getEvenType() == 6) {
                     lst2.add(race);
                 }
             }
-
             lst = lst2;
         }
         /*for(Race race: lst){
@@ -368,7 +370,70 @@ public class RacesDetailActivity extends BaseActivity implements
 
         fillData(mSelectedRace,raceColor, listImages, listTimeImg, shareButton, likeButton );
 
+        if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
+            for(String keyDetail : listRaceDetail.keySet()){
+                List<Race> temp = new ArrayList<Race>(listRaceDetail.get(keyDetail));
 
+                for(Race rTemp: temp) {
+                    LogUtil.d(Constants.LOG_TAG, "Call API get Like for race ID: " + rTemp.getId());
+                    GetLikeOfRaceRequest request = new GetLikeOfRaceRequest(rTemp.getId());
+                    request.setListener(callBackEvent);
+                    new Thread(request).start();
+                }
+            }
+        }
+    }
+
+    private void processAddLike(String json) throws JSONException{
+
+        Type listType = new TypeToken<List<Like>>(){}.getType();
+        Gson gson = new Gson();
+        List<Like> listLike = gson.fromJson(json, listType);
+        if(listLike != null && listLike.size()>0){
+            listRaceDetail = addLikeForRace(listRaceDetail, listLike);
+            if (mRacesAdapter != null) {
+                mRacesAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private Map<String, List<Race>> addLikeForRace(
+            Map<String, List<Race>> map, List<Like> lstLike) {
+
+        List<String> keys = new ArrayList<String>(map.keySet());
+        Map<String, List<Race>> returnMap = new LinkedHashMap<String, List<Race>>();
+        if (keys != null) {
+
+            Collections.sort(keys, new Comparator<String>() {
+
+                @Override
+                public int compare(String lhs, String rhs) {
+                    // TODO Auto-generated method stub
+                    return rhs.compareTo(lhs);
+                }
+            });
+
+            for (String key : keys) {
+
+                returnMap.put(key, map.get(key));
+            }
+        }
+
+        returnMap = sortMapNewByValues(returnMap);
+        int i, len;
+        for(String keyDetail : returnMap.keySet()){
+            len = returnMap.get(keyDetail).size();
+            for(i=0; i<len; i++){
+                if(returnMap.get(keyDetail).get(i).getId() == lstLike.get(0).getShoeID()){
+                    LogUtil.d(Constants.LOG_TAG, "Add like for race ID: " + lstLike.get(0).getShoeID());
+                    returnMap.get(keyDetail).get(i).setLikes(lstLike);
+                    break;
+                }
+            }
+            //listRaceDetail.get(keyDetail));
+
+        }
+        return returnMap;
     }
 
     private void fillData(int selectedRace, int... resources) {
@@ -451,6 +516,30 @@ public class RacesDetailActivity extends BaseActivity implements
                     }
                 }
             }
+
+            else if (methodName.equals(ServiceConstants.METHOD_GET_LIKE_OF_RACE)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            processAddLike(data.toString());
+                        }
+                        catch (Exception e) {
+                            LogUtil.d(Constants.LOG_TAG, "error when parse like");
+                            e.printStackTrace();
+
+
+                        }
+                        finally {
+                            try{
+                            }
+                            catch(Exception ex){
+                            }
+                        }
+                    }
+                });
+
+            }
             else if (methodName.equals(ServiceConstants.METHOD_DELETE_RACE_BY_ID)) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -517,7 +606,7 @@ public class RacesDetailActivity extends BaseActivity implements
 //                    int id = Integer.parseInt(userId);
                     if (userId != null && userId.length() > 0) {
                         LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE user ID " + userId);
-                        Like like = new Like(1000, userId);
+                        Like like = new Like(1000, userId, this.likeRaceId);
                         if(listRaceDetail.keySet().size() > 0){
                             Set<String> keys = listRaceDetail.keySet();
                             for(String key : keys){
@@ -570,7 +659,7 @@ public class RacesDetailActivity extends BaseActivity implements
                 if(!userId.isEmpty()) {
 //                    int id = Integer.parseInt(userId);
                     if (userId != null && userId.length() > 0) {
-                        Like like = new Like(1000, userId);
+                        //Like like = new Like(1000, userId);
                         LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE user ID: " + userId);
                         if(listRaceDetail.keySet().size() > 0){
                             Set<String> keys = listRaceDetail.keySet();
@@ -580,7 +669,19 @@ public class RacesDetailActivity extends BaseActivity implements
                                 int i, len = listRaceTemp.size();
                                 for(i = 0; i< len; i++){
                                     if(listRace.get(i).getId() == this.likeRaceId){
-                                        listRace.get(i).getLikes().remove(i);
+                                        List<Like> likes = listRace.get(i).getLikes();
+                                        if(likes !=null && likes.size()>0){
+                                            int lenLike = likes.size();
+                                            for(int j =0; j < lenLike; j++){
+                                                LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE DONE IN: "
+                                                        + likes.get(j).getUserID());
+                                                if(String.valueOf(likes.get(j).getUserID()).equalsIgnoreCase(userId)){
+                                                    LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE DONE IN IN");
+                                                    listRace.get(i).getLikes().remove(j);
+                                                    break;
+                                                }
+                                            }
+                                        }
                                         LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE DONE");
                                         break;
                                     }
@@ -602,6 +703,7 @@ public class RacesDetailActivity extends BaseActivity implements
                 //do nothing
             }
         } catch (Exception e) {
+            LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE EXCEPTION");
             e.printStackTrace();
         } finally {
             try{
