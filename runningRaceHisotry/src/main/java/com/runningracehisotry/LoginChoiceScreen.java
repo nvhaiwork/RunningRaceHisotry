@@ -138,11 +138,6 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 		mLoginFbBtn.setOnClickListener(this);
 		mContactUsBtn.setOnClickListener(this);
 		mLoginTwitterBtn.setOnClickListener(this);
-
-        /* initializing twitter parameters from string.xml */
-        initTwitterConfigs();
-//        checkTwitterLogin();
-
 	}
 
     public void printHashKey() {
@@ -263,6 +258,8 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                 @Override
                 public void run() {
                     try {
+                        initTwitterConfigs();
+
                         requestToken = twitter.getOAuthRequestToken(callbackUrl);
 
                         /**
