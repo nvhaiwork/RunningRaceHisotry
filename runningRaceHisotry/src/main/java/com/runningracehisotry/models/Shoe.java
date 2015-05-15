@@ -3,8 +3,10 @@ package com.runningracehisotry.models;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
+import com.runningracehisotry.utilities.LogUtil;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -140,11 +142,16 @@ public class Shoe{
         Type listType= null;
 
         try {
+            LogUtil.d("UTILITY", "error milesShoesHistoriesString: " + milesShoesHistoriesString);
             if (milesShoesHistoriesString instanceof JSONArray) {
-                listType = new TypeToken<List<Shoe>>() {
+                LogUtil.d("UTILITY", "error Array: " + milesShoesHistoriesString);
+                listType = new TypeToken<List<History>>() {
                 }.getType();
                 milesShoesHistories = gson.fromJson(((JSONArray)milesShoesHistoriesString).toString(), listType);
-            } else if (milesShoesHistoriesString instanceof JSONObject) {
+
+            }
+            else if (milesShoesHistoriesString instanceof JSONObject) {
+                LogUtil.d("UTILITY", "error Object: " + milesShoesHistoriesString);
                 listType = new TypeToken<Map<Integer, Shoe>>() {
                 }.getType();
                 Map<Integer, History> map = gson.fromJson(((JSONObject)milesShoesHistoriesString).toString(), listType);
@@ -155,13 +162,28 @@ public class Shoe{
                     }
                 }
             }
-        }catch (Exception e) {
-            e.printStackTrace();
+            else{
+                LogUtil.d("UTILITY", "error NONE");
+            }
         }
+        catch (Exception e) {
+            LogUtil.d("UTILITY", "error when getn history shoe: " +e.getMessage());
+                    e.printStackTrace();
+        }
+        LogUtil.d("UTILITY", "error milesShoesHistories: " +(milesShoesHistories == null));
+        //LogUtil.d("UTILITY", "error milesShoesHistories: " +milesShoesHistories.size());
         return milesShoesHistories;
     }
 
     public void setMilesShoesHistories(List<History> milesShoesHistories) {
         this.milesShoesHistories = milesShoesHistories;
+    }
+
+    public Object getMilesShoesHistoriesString() {
+        return milesShoesHistoriesString;
+    }
+
+    public void setMilesShoesHistoriesString(Object milesShoesHistoriesString) {
+        this.milesShoesHistoriesString = milesShoesHistoriesString;
     }
 }

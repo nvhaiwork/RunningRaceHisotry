@@ -430,11 +430,13 @@ public class Utilities {
         String temp = history.getCreatedAt().substring(0, 10);
         LogUtil.d("UTILITY", "temp date: " + temp);
         String[] split = temp.split("-");
-        StringBuilder str = new StringBuilder(split[2]);
+
+        StringBuilder str = new StringBuilder(split[1]);
         str.append("/");
-        str.append(split[1]);
+        str.append(split[2]);
         str.append("/");
-        str.append(split[0]);
+        str.append(split[0].substring(2,4));
+
         str.append(": you added ");
         str.append(history.getMiles());
         str.append(" miles");

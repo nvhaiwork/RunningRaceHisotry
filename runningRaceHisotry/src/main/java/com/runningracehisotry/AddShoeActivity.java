@@ -38,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -139,6 +140,26 @@ public class AddShoeActivity extends BaseActivity {
                     mShoeBrandEdt.setText(shoe.getBrand());
                     mShoeModelEdt.setText(shoe.getModel());
                     List<History> history = shoe.getMilesShoesHistories();
+                    JSONArray arrShoe = null;
+                    JSONObject objShoe = null;
+                    JSONObject obj = null;
+                    try {
+                        obj = new JSONObject(shoeJson);
+                        arrShoe = obj.getJSONArray("miles_shoes_histories");
+                    }
+                    catch(JSONException ex){
+                        try {
+                            objShoe = obj.getJSONObject("miles_shoes_histories");
+                        }
+                        catch(Exception exx){}
+                    }
+                    if(arrShoe != null){
+                        shoe.setMilesShoesHistoriesString(arrShoe);
+                    }
+                    else if(objShoe != null){
+                        shoe.setMilesShoesHistoriesString(objShoe);
+                    }
+                    history = shoe.getMilesShoesHistories();
                     if(history != null && history.size()>0){
                         for(History his : history){
                             LogUtil.d(mCurrentClassName, "Shoe update infor: " + his.getCreatedAt()
@@ -184,6 +205,9 @@ public class AddShoeActivity extends BaseActivity {
                                 getResources().getDimensionPixelSize(
                                         R.dimen.image_round_conner));*/
                     }
+
+                }
+                else{
 
                 }
             }
@@ -292,7 +316,7 @@ public class AddShoeActivity extends BaseActivity {
                         try {
                             processAfterAddShoe(data);
                         } catch (JSONException e) {
-                            //e.printStackTrace();
+                            e.printStackTrace();
                             Utilities.showAlertMessage(AddShoeActivity.this, getResources().getString(R.string.shoe_add_failed), "");
                         } finally {
                             try{
@@ -315,7 +339,7 @@ public class AddShoeActivity extends BaseActivity {
                         try {
                             processAfterUpdateShoe(data);
                         } catch (JSONException e) {
-                            //e.printStackTrace();
+                            e.printStackTrace();
                             Utilities.showAlertMessage(AddShoeActivity.this, getResources().getString(R.string.shoe_update_failed), "");
                         } finally {
                             try{
@@ -470,6 +494,7 @@ public class AddShoeActivity extends BaseActivity {
 
     private void processAfterUpdateShoe(Object data) throws  JSONException{
         JSONObject obj = new JSONObject(data.toString());
+        LogUtil.d(mCurrentClassName, "Response UPdate Shoe full:" + data.toString());
         String result = obj.getString("result");
         LogUtil.d(mCurrentClassName, "Response UPdate Shoe: " + result);
         if(result.equalsIgnoreCase("true")){

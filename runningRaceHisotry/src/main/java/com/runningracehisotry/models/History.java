@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName;
  * Created by ngoc yen on 4/12/2015.
  */
 public class History {
-    @SerializedName("id")
+    //@SerializedName("id")
     private int id;
 
-    @SerializedName("shoes_id")
+    //@SerializedName("shoes_id")
     private int shoesID;
 
     @SerializedName("miles")
@@ -18,7 +18,7 @@ public class History {
     @SerializedName("created_at")
     private String createdAt;
 
-    @SerializedName("updated_at")
+    //@SerializedName("updated_at")
     private String updatedAt;
 
     public int getId() {

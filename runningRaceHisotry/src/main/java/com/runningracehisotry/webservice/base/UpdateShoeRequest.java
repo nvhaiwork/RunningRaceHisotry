@@ -18,6 +18,7 @@ public class UpdateShoeRequest extends BasePutRequest {
         setPostParam("miles_on_shoes", milesOnShoes);
         setPostParam("model", model);
         setPostParam("user_id", userId);
+        setPostParam("id", shoesId);
     }
 
     @Override
