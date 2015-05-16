@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -180,6 +181,8 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
                 return false;
             }
         });
+        /*ExpandableListView eLV = (ExpandableListView) parent;
+        eLV.expandGroup(groupPosition);*/
         return convertView;
     }
 
@@ -187,7 +190,7 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         final Race race = getChild(groupPosition, childPosition);
-        LogUtil.d(Constants.LOG_TAG, "Race: " + race.getRaceDate() + "|"+ race.getFinisherTime());
+        LogUtil.e(Constants.LOG_TAG, "Race: " + race.getRaceDate() + "|"+ race.getFinisherTime());
         if (convertView == null) {
 
             holder = new ViewHolder();
@@ -481,9 +484,14 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
         return this.mHistories;
     }
 
-    /*@Override
+    @Override
     public void registerDataSetObserver(DataSetObserver observer) {
         super.registerDataSetObserver(observer);
+    }
+    /*
+    @Override
+    public void unregisterDataSetObserver (DataSetObserver observer){
+        super.unregisterDataSetObserver(observer);
     }*/
 
     private class HeaderViewHolder {

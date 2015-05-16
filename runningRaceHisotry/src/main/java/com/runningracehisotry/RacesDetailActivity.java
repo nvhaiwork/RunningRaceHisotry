@@ -412,16 +412,19 @@ public class RacesDetailActivity extends BaseActivity implements
         for(a = 0; a< b; a++){
             LogUtil.e(Constants.LOG_TAG, "BEFORE SORT Race " + a + " has date: " + listRace.get(a).getRaceDate().substring(0,10));
         }
-        sortByDate();
+
         for(a = 0; a< b; a++){
             LogUtil.e(Constants.LOG_TAG, "AFTER SORT Race " + a + " has date: " + listRace.get(a).getRaceDate().substring(0,10));
         }
+        /*sortByTime();
+        listRaceDetail.clear();
+        listRaceDetail.keySet().clear();
+        listRaceDetail = parseSortByTimeOrLength();
+        fillDataSort(mSelectedRace, raceColor, listImages, listTimeImg, shareButton, likeButton);*/
+        sortByDate();
         listRaceDetail.clear();
         listRaceDetail.keySet().clear();
         listRaceDetail = parseSortByDate();
-
-
-
         fillDataSort(mSelectedRace, raceColor, listImages, listTimeImg, shareButton, likeButton);
 
         if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
@@ -875,7 +878,7 @@ public class RacesDetailActivity extends BaseActivity implements
         TreeMap<String, List<Race>> listRaceDetailTemp = new TreeMap<String, List<Race>>();
         listRaceDetailTemp.keySet().clear();
         Set<String> keys = listRaceDetail.keySet();
-        for(String key : keys){
+        /*for(String key : keys){
             List<Race> listRaceTemp = new ArrayList<Race>();
             listRaceTemp.clear();
             List<Race> temp = listRaceDetail.get(key);
@@ -919,6 +922,48 @@ public class RacesDetailActivity extends BaseActivity implements
         else{
             LogUtil.d(Constants.LOG_TAG, "Still nothing!");
             mEmptyText.setVisibility(View.VISIBLE);
+        }
+        */
+        List<Race> listTemp = new ArrayList<Race>(listRace);
+        int i,len = listTemp.size();
+        for(i=0; i<len;i++){
+            if(listTemp.get(i).getId() == delRaceId){
+                LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE DONE");
+                listRace.remove(i);
+                break;
+            }
+        }
+        //listRace.clear();
+        //listRace = new ArrayList<Race>(listTemp);
+                        /*if(listRaceDetail.keySet().size() > 0){
+                            Set<String> keys = listRaceDetail.keySet();
+                            for(String key : keys){
+                                List<Race> listRace = listRaceDetail.get(key);
+                                for(Race race : listRace){
+                                    if(race.getId() == this.likeRaceId){
+                                        race.getLikes().add(like);
+                                        LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE DONE");
+                                        break;
+                                    }
+                                }
+                            }
+                        }*/
+        //listRaceDetail = sortDataNew(listRaceDetail);
+        int selectSort = mSortGroup
+                .getCheckedRadioButtonId();
+        listRaceDetail.clear();
+        listRaceDetail.keySet().clear();
+        if (selectSort == R.id.races_detail_sort_date) {
+            sortByDate();
+            listRaceDetail = parseSortByDate();
+        }
+        else if (selectSort == R.id.races_detail_sort_time) {
+            sortByTime();
+            listRaceDetail = parseSortByTimeOrLength();
+        }
+        else{
+            sortByLength();
+            listRaceDetail = parseSortByTimeOrLength();
         }
         for(String key1 : keys){
             //List<Race> list = new ArrayList<Race>(listRaceDetail.get(key1));
@@ -1061,6 +1106,7 @@ public class RacesDetailActivity extends BaseActivity implements
             LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT TIME");
             printSortedMap(listRaceDetail);
             LogUtil.d(Constants.LOG_TAG, "==================================================");
+
         }
         else{
             sortByLength();
@@ -1082,7 +1128,11 @@ public class RacesDetailActivity extends BaseActivity implements
             //mRacesSortAdapter.notifyDataSetChanged();
             mRacesSortAdapter.setData(listRaceDetail);
             mRacesSortAdapter.notifyDataSetChanged();
+            //mRacesSortAdapter.notifyDataSetInvalidated();
             //mRaceList.invalidateViews();
+            /*for (int i = 0; i < mRacesSortAdapter.getGroupCount(); i++) {
+                mRaceList.expandGroup(i);
+            }*/
 
         }
         else{
