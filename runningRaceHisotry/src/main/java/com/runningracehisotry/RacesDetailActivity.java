@@ -114,7 +114,7 @@ public class RacesDetailActivity extends BaseActivity implements
     //private Map<String, List<HashMap<String, Object>>> mRacesDetail;
     //define store var
     private List<Race> listRace = new ArrayList<Race>();
-    Map<String, List<Race>> listRaceDetail = new TreeMap<String, List<Race>>();
+    LinkedHashMap<String, List<Race>> listRaceDetail = new LinkedHashMap<String, List<Race>>();
     //private Map<String, String> listKeyDateRace = new HashMap<String, String>();
     //private Map<String, List<Race>> listRaceDetail = new HashMap<String, List<Race>>();
     int raceColor = 0;
@@ -127,16 +127,8 @@ public class RacesDetailActivity extends BaseActivity implements
     private CustomLoadingDialog mLoadingDialog;
     private ProgressDialog pDialog;
 
-    private void printSortedMap(Map<String, List<Race>> map){
-        for(String key: map.keySet()){
-            List<Race> list = map.get(key);
-            LogUtil.e(Constants.LOG_TAG, "AFter PARSE, key:" + key + " has " +list.size() + " race date 0: " + list.get(0).getRaceDate());
-            for(Race race : list){
-                LogUtil.e(Constants.LOG_TAG, "AFter PARSE, race: " + race.getRaceDate());
-            }
-        }
-    }
-    private void printSortedTreeMap(TreeMap<String, List<Race>> map){
+
+    private void printSortedMap(LinkedHashMap<String, List<Race>> map){
         for(String key: map.keySet()){
             List<Race> list = map.get(key);
             LogUtil.e(Constants.LOG_TAG, "AFter PARSE, key:" + key + " has " +list.size() + " race date 0: " + list.get(0).getRaceDate());
@@ -160,12 +152,12 @@ public class RacesDetailActivity extends BaseActivity implements
         listRace = list;
     }
 
-    private TreeMap<String, List<Race>> parseSortByDate(){
-        TreeMap<String, List<Race>> mapDate = new TreeMap<String, List<Race>>();
+    private LinkedHashMap<String, List<Race>> parseSortByDate(){
+        LinkedHashMap<String, List<Race>> mapDate = new LinkedHashMap<String, List<Race>>();
         int i, j, t, len1 = listRace.size();
         for(i =0;i <len1; i++){
             t=i;
-            String date = listRace.get(i).getRaceDate().substring(0,10);
+            String date = listRace.get(i).getRaceDate().substring(0,7);
             LogUtil.e(Constants.LOG_TAG, "PARSE KEY: " + date);
             List<Race> list = new ArrayList<Race>();
             list.add(list.size(), listRace.get(i));
@@ -186,8 +178,8 @@ public class RacesDetailActivity extends BaseActivity implements
     }
 
 
-    private Map<String, List<Race>> parseSortByTimeOrLength(){
-        Map<String, List<Race>> mapTime = new LinkedHashMap<String, List<Race>>();
+    private LinkedHashMap<String, List<Race>> parseSortByTimeOrLength(){
+        LinkedHashMap<String, List<Race>> mapTime = new LinkedHashMap<String, List<Race>>();
         int i, len1 = listRace.size();
         for(i =0;i <len1; i++){
             String date = listRace.get(i).getRaceDate().substring(0,10) + "_" +i;
@@ -203,30 +195,7 @@ public class RacesDetailActivity extends BaseActivity implements
     }
 
 
-    public static Map<String, List<Race>> sortByDateValue(Map<String, List<Race>> unsortMap) {
 
-        //DateValueComparator vc= new DateValueComparator();
-        Map<String, List<Race>> sortedMap = new LinkedHashMap<String, List<Race>>(unsortMap);
-        //sortedMap.putAll(unsortMap);
-        return sortedMap;
-    }
-
-    /*public static TreeMap<String, List<Race>> sortByDateValueThenRace(Map<String, List<Race>> unsortMap) {
-
-        DateValueComparator vc= new DateValueComparator(unsortMap);
-        TreeMap<String, List<Race>> sortedMap = new TreeMap<String, List<Race>>(vc);
-        Set<String> set = unsortMap.keySet();
-        for(String s: set){
-            List<Race> list = unsortMap.get(s);
-            LogUtil.e(Constants.LOG_TAG, "SORT OK  PUT IN: " + (list != null));
-            LogUtil.e(Constants.LOG_TAG, "SORT OK  PUT IN: " + list.size());
-            Collections.sort(list, new RaceDateComparator());
-            sortedMap.put(s, list);
-        }
-
-        //sortedMap.putAll(unsortMap);
-        return sortedMap;
-    }*/
     @Override
     protected int addContent() {
         // TODO Auto-generated method stub
@@ -449,102 +418,9 @@ public class RacesDetailActivity extends BaseActivity implements
         }
         listRaceDetail.clear();
         listRaceDetail.keySet().clear();
-        TreeMap<String, List<Race>> mapDate = parseSortByDate();
-        listRaceDetail = mapDate;
-        //TreeMap<String, List<Race>> mapDate = sortByDateValue(mapDateTemp);
-
-        if(mapDate.size() > 0){
-            b = mapDate.size();
-            List<String> keys = new ArrayList<String>(mapDate.keySet());
-            //for(a = 0; a<b; a++){
-            //String key = keys.get(0);
-            for(String key : mapDate.keySet()){
-                List<Race> list = mapDate.get(key);
-                LogUtil.e(Constants.LOG_TAG, "Races date for key: " + key +" size: " + list.size());
-                for(Race race: list){
-                    LogUtil.e(Constants.LOG_TAG, "RAce date: " + race.getRaceDate().substring(0, 10));
-                }
-            }
-        }
+        listRaceDetail = parseSortByDate();
 
 
-        /*TreeMap<String, List<Race>> mapDateSort = sortByDateValueThenRace(mapDate);
-
-        if(mapDateSort.size() > 0){
-            *//*b = mapDateSort.size();
-            List<String> keys = new ArrayList<String>(mapDate.keySet());*//*
-            //for(a = 0; a<b; a++){
-            //String key = keys.get(0);
-            for(String key : mapDateSort.keySet()){
-                List<Race> list = mapDateSort.get(key);
-                LogUtil.e(Constants.LOG_TAG, "SORT OK Races date for key: " + key +" size: " + list.size());
-                for(Race race: list){
-                    LogUtil.e(Constants.LOG_TAG, "SORT OK  RAce date: " + race.getRaceDate().substring(0, 10));
-                }
-            }
-        }*/
-
-        /*sortByTime();
-        Map<String, List<Race>> mapTime = parseSortByTimeOrLength();
-        if(mapDate.size() > 0){
-            for(String key : mapTime.keySet()){
-                List<Race> list = mapTime.get(key);
-                //LogUtil.d(Constants.LOG_TAG, "Races time for key: " + key + " size: " + list.size());
-                for(Race race: list){
-                    //LogUtil.d(Constants.LOG_TAG, "RAce time: " + race.getFinisherTime());
-                }
-            }
-        }
-
-        sortByLength();
-        Map<String, List<Race>> mapLength = parseSortByTimeOrLength();
-        if(mapDate.size() > 0){
-            for(String key : mapLength.keySet()){
-                List<Race> list = mapLength.get(key);
-                //LogUtil.d(Constants.LOG_TAG, "Races length for key: " + key +" size: " + list.size());
-                for(Race race: list){
-                    //LogUtil.d(Constants.LOG_TAG, "RAce length: " + race.getRaceMiles());
-                }
-            }
-        }*/
-
-
-        /*listKeyDateRace.clear();
-        listKeyDateRace.keySet().clear();
-        for(Race race: lst){
-            String raceDate = race.getRaceDate().substring(0,7);
-            //LogUtil.d(Constants.LOG_TAG, "Race date: " + raceDate);
-            try{
-                listKeyDateRace.put(raceDate, "raceDate");
-            }
-            catch (Exception ex){
-            }
-        }
-        for(String key : listKeyDateRace.keySet()){
-            //LogUtil.d(Constants.LOG_TAG, "Race key: " + key);
-        }
-        listRaceDetail.clear();
-        listRaceDetail.keySet().clear();
-        for(String key : listKeyDateRace.keySet()){
-            listRace.clear();
-            for(Race race: lst){
-                String raceDate = race.getRaceDate().substring(0,7);
-                //LogUtil.d(Constants.LOG_TAG, "Add race date: " + raceDate);
-                if(raceDate.equalsIgnoreCase(key)){
-                    //LogUtil.d(Constants.LOG_TAG, "Add Race for key: " + key);
-                    listRace.add(race);
-                }
-            }
-            //LogUtil.d(Constants.LOG_TAG, "Races for key: " + key +" size: " + listRace.size());
-            listRaceDetail.put(key, new ArrayList<Race>(listRace));
-        }
-        for(String keyDetail : listRaceDetail.keySet()){
-            List<Race> temp = new ArrayList<Race>(listRaceDetail.get(keyDetail));
-            //LogUtil.d(Constants.LOG_TAG, String.format("Date %s has total race: %s", keyDetail, temp.size()));
-        }
-
-        fillData(mSelectedRace,raceColor, listImages, listTimeImg, shareButton, likeButton );
-*/
 
         fillDataSort(mSelectedRace, raceColor, listImages, listTimeImg, shareButton, likeButton);
 
@@ -606,36 +482,16 @@ public class RacesDetailActivity extends BaseActivity implements
         List<Like> listLike = gson.fromJson(json, listType);
         if(listLike != null && listLike.size()>0){
             //listRaceDetail = addLikeForRace(listRaceDetail, listLike);
-            addLikeForRace(listRaceDetail, listLike);
+            addLikeForRace(listLike);
             if (mRacesSortAdapter != null) {
                 mRacesSortAdapter.notifyDataSetChanged();
             }
         }
     }
 
-    private void addLikeForRace(
-            Map<String, List<Race>> map, List<Like> lstLike) {
+    private void addLikeForRace(List<Like> lstLike) {
 
-        /*List<String> keys = new ArrayList<String>(map.keySet());
-        Map<String, List<Race>> returnMap = new LinkedHashMap<String, List<Race>>();
-        if (keys != null) {
 
-            Collections.sort(keys, new Comparator<String>() {
-
-                @Override
-                public int compare(String lhs, String rhs) {
-                    // TODO Auto-generated method stub
-                    return rhs.compareTo(lhs);
-                }
-            });
-
-            for (String key : keys) {
-
-                returnMap.put(key, map.get(key));
-            }
-        }*/
-
-        //returnMap = sortMapNewByValues(returnMap);
         int i, len;
         for(String keyDetail : listRaceDetail.keySet()){
             len = listRaceDetail.get(keyDetail).size();
@@ -915,14 +771,15 @@ public class RacesDetailActivity extends BaseActivity implements
                         }
                         else if (selectSort == R.id.races_detail_sort_time) {
                             sortByTime();
-                            //listRaceDetail = parseSortByTimeOrLength();
+                            listRaceDetail = parseSortByTimeOrLength();
                         }
                         else{
                             sortByLength();
-                            //listRaceDetail = parseSortByTimeOrLength();
+                            listRaceDetail = parseSortByTimeOrLength();
                         }
                         LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE DONE REMAIN: " + listRaceDetail.size());
                         if (mRacesSortAdapter != null) {
+                            mRacesSortAdapter.getData().clear();
                             mRacesSortAdapter.setData(listRaceDetail);
                             mRacesSortAdapter.notifyDataSetChanged();
                         }
@@ -1082,8 +939,10 @@ public class RacesDetailActivity extends BaseActivity implements
             }
 
             listRaceDetail = parseSortByDate();
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
             LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT DATE");
-            //printSortedTreeMap(listRaceDetail);
+            printSortedMap(listRaceDetail);
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
         }
         else if (selectSort == R.id.races_detail_sort_time) {
             sortByTime();
@@ -1092,22 +951,11 @@ public class RacesDetailActivity extends BaseActivity implements
                 LogUtil.e(Constants.LOG_TAG, "AFTER SORT Race Time" + a + " has date: " + listRace.get(a).getRaceDate().substring(0,10)
                 + "|"+listRace.get(a).getFinisherTime());
             }
-
-
-
             listRaceDetail = parseSortByTimeOrLength();
-
-
-            Map<String, List<Race>> map = parseSortByTimeOrLength();
             LogUtil.d(Constants.LOG_TAG, "==================================================");
-            LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT TIME 1");
-            printSortedMap(map);
+            LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT TIME");
+            printSortedMap(listRaceDetail);
             LogUtil.d(Constants.LOG_TAG, "==================================================");
-
-
-            Map<String, List<Race>> mapSort = sortByDateValue(map);
-            LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT TIME 2");
-            printSortedMap(mapSort);
         }
         else{
             sortByLength();
@@ -1116,18 +964,20 @@ public class RacesDetailActivity extends BaseActivity implements
                 LogUtil.e(Constants.LOG_TAG, "AFTER SORT Race Length" + a + " has date: " + listRace.get(a).getRaceDate().substring(0,10)
                 + "|"+listRace.get(a).getRaceMiles());
             }
-            //listRaceDetail = parseSortByTimeOrLength();
-            //LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT LENGTH");
-            //printSorted();
+            listRaceDetail = parseSortByTimeOrLength();
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
+            LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT LENGTH");
+            printSortedMap(listRaceDetail);
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
         }
         if (mRacesSortAdapter != null) {
             LogUtil.d(Constants.LOG_TAG, "sort notifyDataSetChanged setData " + listRaceDetail.size());
-            //mRacesSortAdapter.getData().clear();
+            mRacesSortAdapter.getData().clear();
             //mRaceList.invalidateViews();
             //mRacesSortAdapter.notifyDataSetChanged();
             mRacesSortAdapter.setData(listRaceDetail);
             mRacesSortAdapter.notifyDataSetChanged();
-            mRaceList.invalidateViews();
+            //mRaceList.invalidateViews();
 
         }
         else{

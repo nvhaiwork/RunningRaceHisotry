@@ -59,13 +59,13 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
     private OnShareItemClickListener mShareItemListener;
     private OnLikeItemClickListener mLikeItemListener;
     private int mRaceColor, mImagesId, mTimeImageId;
-    private Map<String, List<Race>> mHistories;
+    private LinkedHashMap<String, List<Race>> mHistories;
     private String loggedUserId;
     private int typeLike;
 
 
     public RaceDetailSortAdapter(int typeLike, String userId, Context context,
-                                Map<String, List<Race>> histories,
+                                 LinkedHashMap<String, List<Race>> histories,
                                 int friendPos, int... resources) {
         super();
         this.typeLike = typeLike;
@@ -467,20 +467,20 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
         return convertView;
     }
 
-    public void setData(Map<String, List<Race>> mRacesDetail) {
+    public void setData(LinkedHashMap<String, List<Race>> mRacesDetail) {
         this.mHistories = new LinkedHashMap<String, List<Race>>(mRacesDetail);
-        notifyDataSetInvalidated();
-        this.notifyDataSetChanged();
+        //notifyDataSetInvalidated();
+        //this.notifyDataSetChanged();
     }
 
-    public Map<String, List<Race>> getData() {
+    public LinkedHashMap<String, List<Race>> getData() {
         return this.mHistories;
     }
 
-    @Override
+    /*@Override
     public void registerDataSetObserver(DataSetObserver observer) {
         super.registerDataSetObserver(observer);
-    }
+    }*/
 
     private class HeaderViewHolder {
 
