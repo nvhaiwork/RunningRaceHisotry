@@ -143,10 +143,7 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         HeaderViewHolder holder = null;
         String headerStr = getGroupKey(groupPosition);
-        if(headerStr.length() > 7){
-            headerStr = headerStr.substring(0, 10);
-            LogUtil.e(Constants.LOG_TAG, "HEADER FOR TIME/LENGTH: " + headerStr);
-        }
+
         if (convertView == null) {
 
             holder = new HeaderViewHolder();
@@ -160,7 +157,14 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
             holder = (HeaderViewHolder) convertView.getTag();
         }
 
-        holder.header.setText(headerStr);
+
+        if(headerStr.length() > 7){
+            holder.header.setText(headerStr.substring(0, 10));
+            LogUtil.e(Constants.LOG_TAG, "HEADER FOR TIME/LENGTH: " + headerStr);
+        }
+        else{
+            holder.header.setText(headerStr);
+        }
         holder.header.setBackgroundColor(mRaceColor);
         holder.header.setOnTouchListener(new View.OnTouchListener() {
 
@@ -475,7 +479,11 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
     }
 
     public void setData(LinkedHashMap<String, List<Race>> mRacesDetail) {
-        this.mHistories = new LinkedHashMap<String, List<Race>>(mRacesDetail);
+        /*this.mHistories.entrySet().clear();
+        this.mHistories.keySet().clear();
+        this.mHistories.clear();*/
+        //this.mHistories = null;
+        this.mHistories = mRacesDetail;//new LinkedHashMap<String, List<Race>>(mRacesDetail);
         //notifyDataSetInvalidated();
         //this.notifyDataSetChanged();
     }
@@ -484,10 +492,10 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
         return this.mHistories;
     }
 
-    @Override
+    /*@Override
     public void registerDataSetObserver(DataSetObserver observer) {
         super.registerDataSetObserver(observer);
-    }
+    }*/
     /*
     @Override
     public void unregisterDataSetObserver (DataSetObserver observer){
@@ -660,15 +668,18 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
         return mHistories.get(key).size();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public List<Race> getGroup(int groupPosition) {
         String key = (String) (new ArrayList(mHistories.keySet()))
                 .get(groupPosition);
+        LogUtil.e(Constants.LOG_TAG, "get list race group: " +key);
         return mHistories.get(key);
     }
 
     @Override
     public Race getChild(int groupPosition, int childPosition) {
+        LogUtil.e(Constants.LOG_TAG, "get  race detail: " +getGroup(groupPosition).get(childPosition));
         return getGroup(groupPosition).get(childPosition);
     }
 
