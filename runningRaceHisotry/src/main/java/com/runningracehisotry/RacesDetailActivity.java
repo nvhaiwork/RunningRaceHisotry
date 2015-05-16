@@ -189,7 +189,7 @@ public class RacesDetailActivity extends BaseActivity implements
             LogUtil.e(Constants.LOG_TAG, "ADD TIME/LENGTH: " + date +"|" + listRace.get(i).getRaceDate());
             LogUtil.e(Constants.LOG_TAG, "ADD TIME/LENGTH: " + list.size());
             mapTime.put(date, list);
-            LogUtil.e(Constants.LOG_TAG, "ADD TIME/LENGTH: " + mapTime.get(date).get(0).getRaceDate());
+            //LogUtil.e(Constants.LOG_TAG, "ADD TIME/LENGTH: " + mapTime.get(date).get(0).getRaceDate());
         }
         return mapTime;
     }
@@ -679,7 +679,17 @@ public class RacesDetailActivity extends BaseActivity implements
                     if (userId != null && userId.length() > 0) {
                         LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE user ID " + userId);
                         Like like = new Like(1000, userId, this.likeRaceId);
-                        if(listRaceDetail.keySet().size() > 0){
+                        List<Race> listTemp = new ArrayList<Race>(listRace);
+                        for(Race race : listTemp){
+                            if(race.getId() == this.likeRaceId){
+                                race.getLikes().add(like);
+                                LogUtil.d(Constants.LOG_TAG, "METHOD_ADD_LIKE DONE");
+                                break;
+                            }
+                        }
+                        listRace.clear();
+                        listRace = new ArrayList<Race>(listTemp);
+                        /*if(listRaceDetail.keySet().size() > 0){
                             Set<String> keys = listRaceDetail.keySet();
                             for(String key : keys){
                                 List<Race> listRace = listRaceDetail.get(key);
@@ -691,9 +701,28 @@ public class RacesDetailActivity extends BaseActivity implements
                                     }
                                 }
                             }
-                        }
+                        }*/
                         //listRaceDetail = sortDataNew(listRaceDetail);
+                        int selectSort = mSortGroup
+                                .getCheckedRadioButtonId();
+                        listRaceDetail.clear();
+                        listRaceDetail.keySet().clear();
+                        if (selectSort == R.id.races_detail_sort_date) {
+                            sortByDate();
+                            listRaceDetail = parseSortByDate();
+                        }
+                        else if (selectSort == R.id.races_detail_sort_time) {
+                            sortByTime();
+                            listRaceDetail = parseSortByTimeOrLength();
+                        }
+                        else{
+                            sortByLength();
+                            listRaceDetail = parseSortByTimeOrLength();
+                        }
+                        LogUtil.d(Constants.LOG_TAG, "METHOD_LIKE DONE REMAIN: " + listRaceDetail.size());
                         if (mRacesSortAdapter != null) {
+                            mRacesSortAdapter.getData().clear();
+                            mRacesSortAdapter.setData(listRaceDetail);
                             mRacesSortAdapter.notifyDataSetChanged();
                         }
                     }
@@ -761,7 +790,7 @@ public class RacesDetailActivity extends BaseActivity implements
                             }
                         }
                         //listRaceDetail = sortDataNew(listRaceDetail);
-                        int selectSort = mSortGroup
+                        /*int selectSort = mSortGroup
                                 .getCheckedRadioButtonId();
                         listRaceDetail.clear();
                         listRaceDetail.keySet().clear();
@@ -776,7 +805,7 @@ public class RacesDetailActivity extends BaseActivity implements
                         else{
                             sortByLength();
                             listRaceDetail = parseSortByTimeOrLength();
-                        }
+                        }*/
                         LogUtil.d(Constants.LOG_TAG, "METHOD_REMOVE_LIKE DONE REMAIN: " + listRaceDetail.size());
                         if (mRacesSortAdapter != null) {
                             mRacesSortAdapter.getData().clear();
@@ -895,9 +924,25 @@ public class RacesDetailActivity extends BaseActivity implements
             //List<Race> list = new ArrayList<Race>(listRaceDetail.get(key1));
             LogUtil.d(Constants.LOG_TAG, "Key: " + key1 +" size: " + listRaceDetail.get(key1).size());
         }
-        LogUtil.d(Constants.LOG_TAG, "refresh list race!");
+
+        if (mRacesSortAdapter != null) {
+            LogUtil.d(Constants.LOG_TAG, "sort notifyDataSetChanged setData " + listRaceDetail.size());
+            mRacesSortAdapter.getData().clear();
+            //mRaceList.invalidateViews();
+            //mRacesSortAdapter.notifyDataSetChanged();
+            mRacesSortAdapter.setData(listRaceDetail);
+            mRacesSortAdapter.notifyDataSetChanged();
+            //mRaceList.invalidateViews();
+
+        }
+        else{
+            LogUtil.d(Constants.LOG_TAG, "sort notifyDataSetChanged NULL");
+        }
+        /*LogUtil.d(Constants.LOG_TAG, "refresh list race!");
+
         mRacesSortAdapter.setData(listRaceDetail);
-        mRacesSortAdapter.notifyDataSetChanged();
+        mRacesSortAdapter.notifyDataSetChanged();*/
+        //refreshListView();
     }
 
     @Override
@@ -918,6 +963,66 @@ public class RacesDetailActivity extends BaseActivity implements
         } else {
             super.onActivityResult(requestCode, resultCode, data);
 //            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+        }
+    }
+
+    private void refreshListView(){
+        int selectSort = mSortGroup
+                .getCheckedRadioButtonId();
+        listRaceDetail.clear();
+        listRaceDetail.keySet().clear();
+        if (selectSort == R.id.races_detail_sort_date) {
+            sortByDate();
+            int a, b = listRace.size();
+            for(a = 0; a< b; a++){
+                LogUtil.e(Constants.LOG_TAG, "AFTER SORT Race DAte" + a + " has date: " + listRace.get(a).getRaceDate().substring(0,10)
+                        + "|"+listRace.get(a).getFinisherTime());
+            }
+
+            listRaceDetail = parseSortByDate();
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
+            LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT DATE");
+            printSortedMap(listRaceDetail);
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
+        }
+        else if (selectSort == R.id.races_detail_sort_time) {
+            sortByTime();
+            int a, b = listRace.size();
+            for(a = 0; a< b; a++){
+                LogUtil.e(Constants.LOG_TAG, "AFTER SORT Race Time" + a + " has date: " + listRace.get(a).getRaceDate().substring(0,10)
+                        + "|"+listRace.get(a).getFinisherTime());
+            }
+            listRaceDetail = parseSortByTimeOrLength();
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
+            LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT TIME");
+            printSortedMap(listRaceDetail);
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
+        }
+        else{
+            sortByLength();
+            int a, b = listRace.size();
+            for(a = 0; a< b; a++){
+                LogUtil.e(Constants.LOG_TAG, "AFTER SORT Race Length" + a + " has date: " + listRace.get(a).getRaceDate().substring(0,10)
+                        + "|"+listRace.get(a).getRaceMiles());
+            }
+            listRaceDetail = parseSortByTimeOrLength();
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
+            LogUtil.d(Constants.LOG_TAG, "PRINT AFTER SORT LENGTH");
+            printSortedMap(listRaceDetail);
+            LogUtil.d(Constants.LOG_TAG, "==================================================");
+        }
+        if (mRacesSortAdapter != null) {
+            LogUtil.d(Constants.LOG_TAG, "sort notifyDataSetChanged setData " + listRaceDetail.size());
+            mRacesSortAdapter.getData().clear();
+            //mRaceList.invalidateViews();
+            //mRacesSortAdapter.notifyDataSetChanged();
+            mRacesSortAdapter.setData(listRaceDetail);
+            mRacesSortAdapter.notifyDataSetChanged();
+            //mRaceList.invalidateViews();
+
+        }
+        else{
+            LogUtil.d(Constants.LOG_TAG, "sort notifyDataSetChanged NULL");
         }
     }
 
@@ -1221,7 +1326,7 @@ public class RacesDetailActivity extends BaseActivity implements
     @Override
     public void onLikeItem(Race raceInfo) {
         this.likeRaceId = raceInfo.getId();
-        LogUtil.d(Constants.LOG_TAG,"Like click" + raceInfo.getId());
+        LogUtil.d(Constants.LOG_TAG, "Like click" + raceInfo.getId());
         String userId = CustomSharedPreferences.getPreferences(Constants.PREF_USER_ID, "");
         if(!userId.isEmpty()){
 //            int id = Integer.parseInt(userId);

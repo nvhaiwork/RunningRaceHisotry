@@ -142,6 +142,10 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         HeaderViewHolder holder = null;
         String headerStr = getGroupKey(groupPosition);
+        if(headerStr.length() > 7){
+            headerStr = headerStr.substring(0, 10);
+            LogUtil.e(Constants.LOG_TAG, "HEADER FOR TIME/LENGTH: " + headerStr);
+        }
         if (convertView == null) {
 
             holder = new HeaderViewHolder();
