@@ -220,9 +220,11 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                 String date = mRaceUpdate.getRaceDate().substring(0, 10);
                 String[] dateSplit = date.split("-");
                 raceDate = dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
+                raceDate = Utilities.getDateTimeEachRace(date);
             } catch (Exception ex) {
                 //ex.printStackTrace();
             }
+
             mRaceDateTxt.setText(raceDate);
             mRaceCityEdt.setText(mRaceUpdate.getCity());
             mRaceStateEdt.setText(mRaceUpdate.getState());
@@ -509,9 +511,10 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     String dateStr = mRaceDateTxt.getText().toString();
                     try {
 
-                        Date raceDate = mDf.parse(dateStr);
-                        calendar.setTime(raceDate);
-                    } catch (java.text.ParseException e) {
+                        //Date raceDate = mDf.parse(dateStr);
+                        Date raceDate = Utilities.getDateFromString(dateStr, "MMM dd, yyyy");
+                                calendar.setTime(raceDate);
+                    } catch (Exception e) {
 
                         LogUtil.e("add_race_date_txt", e.getMessage());
                     }
@@ -543,10 +546,13 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
                                 DatePicker datePicker = datePickerDialog
                                         .getDatePicker();
-                                String raceDate = String.format("%s-%s-%s",
+                                /*String raceDate = String.format("%s-%s-%s",
                                         datePicker.getDayOfMonth(),
                                         (datePicker.getMonth() + 1),
-                                        datePicker.getYear());
+                                        datePicker.getYear());*/
+                                String str =Utilities.getDateTimeAddRace(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth());
+                                String raceDate = Utilities.getDateTimeEachRace(str);
+
                                 mRaceDateTxt.setText(raceDate);
                                 datePickerDialog.dismiss();
                             }
@@ -875,9 +881,11 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
         String raceDate = mRaceDateTxt.getText().toString();
         try {
-            String[] time = raceDate.split("-");
+            /*String[] time = raceDate.split("-");
             raceDate = time[2] + "-" + time[1] + "-" + time[0];
-            LogUtil.d(Constants.LOG_TAG, "race date: " + raceDate);
+            LogUtil.d(Constants.LOG_TAG, "race date 1: " + raceDate);*/
+            raceDate = Utilities.getDateTimeStringAddRace(raceDate);
+            LogUtil.d(Constants.LOG_TAG, "race date 2: " + raceDate);
         } catch (Exception e) {
             //e.printStackTrace();
         }

@@ -590,4 +590,53 @@ public class Utilities {
         return result;
     }
 
+
+
+
+    public static String getDateTimeAddRace(int year, int month, int date){
+        String result = year + "-" + month +"-"+ date;
+        String strMonth = String.valueOf(month);
+        try{
+            if(month <9){
+                strMonth =  "0" + strMonth;
+            }
+            String str1 = year + "-" + strMonth +"-"+ date;
+            //result = getDateTimeRaceTitle(str1);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+
+
+    public static Date getDateFromString(String str, String format){
+        Date result = new Date();
+        try{
+            SimpleDateFormat format2 = new SimpleDateFormat(format, Locale.US);
+            result = format2.parse(str);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String getDateTimeStringAddRace(String str){
+        String result = str;
+        try{
+            SimpleDateFormat format1 = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+            Date date = format1.parse(str);
+            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            result = format2.format(date);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 }
