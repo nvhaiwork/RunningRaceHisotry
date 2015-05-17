@@ -372,20 +372,20 @@ public class RacesDetailActivity extends BaseActivity implements
         }*/
         BaseGetRequest request = null;
         if(mFriendRace == -1){
-            if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
-                request = new GetAllRaceRequest();
-            }
-            else {
+//            if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
+//                request = new GetAllRaceRequest();
+//            }
+//            else {
                 request = new GetRaceByTypeRequest("date", this.mSelectedRace);
-            }
+//            }
         }
         else{
-            if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
-                request = new GetAllRaceRequest();
-            }
-            else {
+//            if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
+//                request = new GetAllRaceRequest();
+//            }
+//            else {
                 request = new GetRaceByTypeRequest("date", this.mSelectedRace, mFriendRace);
-            }
+//            }
         }
         request.setListener(callBackEvent);
         new Thread(request).start();
@@ -397,15 +397,15 @@ public class RacesDetailActivity extends BaseActivity implements
         List<Race> lst = gson.fromJson(data.toString(), listType);
 
         //TODO magic code, remove later
-        if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
-            List<Race> lst2 = new ArrayList<Race>();
-            for(Race race : lst) {
-                if(race.getEvenType() == 6) {
-                    lst2.add(race);
-                }
-            }
-            lst = lst2;
-        }
+//        if(mSelectedRace == Constants.SELECT_RACE_OTHER) {
+//            List<Race> lst2 = new ArrayList<Race>();
+//            for(Race race : lst) {
+//                if(race.getEvenType() == 6) {
+//                    lst2.add(race);
+//                }
+//            }
+//            lst = lst2;
+//        }
 
         listRace = new ArrayList<Race>(lst);
         int a =0,b = listRace.size();

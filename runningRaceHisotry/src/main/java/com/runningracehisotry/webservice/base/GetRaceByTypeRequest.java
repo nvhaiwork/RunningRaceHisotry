@@ -12,7 +12,7 @@ public class GetRaceByTypeRequest extends BaseGetRequest{
         super(ServiceApi.SERVICE_URL + ServiceApi.API_GET_RACES_BY_TYPE);
         this.setParam("sort", date);
         this.setParam("type", typeId);
-        this.setParam("user_id", userId);
+        this.setParam("userId", userId);
 
     }
 
@@ -20,7 +20,7 @@ public class GetRaceByTypeRequest extends BaseGetRequest{
         super(ServiceApi.SERVICE_URL + ServiceApi.API_GET_RACES_BY_TYPE);
         this.setParam("sort", date);
         this.setParam("type", typeId);
-        this.setParam("user_id", userId);
+        this.setParam("userId", userId);
 
     }
 

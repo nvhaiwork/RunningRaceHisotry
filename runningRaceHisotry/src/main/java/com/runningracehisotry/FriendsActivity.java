@@ -2,63 +2,83 @@ package com.runningracehisotry;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.runningracehisotry.adapters.FriendAdapter;
+import com.runningracehisotry.adapters.FriendChatAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
+import com.runningracehisotry.service.SinchService;
 import com.runningracehisotry.utilities.LogUtil;
-
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetAllGroupUserRequest;
 import com.runningracehisotry.webservice.base.GetGroupMemberRequest;
-import android.content.Intent;
+import com.sinch.android.rtc.SinchError;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
 import org.json.JSONArray;
-
 import org.json.JSONObject;
 
 public class FriendsActivity extends BaseActivity {
 
-    private ListView mFriendListview;
-    private FriendAdapter mFriendAdapter;
+    private ExpandableListView mFriendListview;
+    private FriendChatAdapter mFriendAdapter;
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
+    private Map<Integer, List<Friend>> friendMap;
+
     private CustomLoadingDialog mLoadingDialog;
 
+    private int selectedPosition = -1;
+    private int selectedGroupPosition = -1;
 
     @Override
     protected int addContent() {
-        // TODO Auto-generated method stub
         return R.layout.activity_friend;
     }
 
     @Override
     protected void initView() {
-        // TODO Auto-generated method stub
         super.initView();
 
-        mFriendListview = (ListView) findViewById(R.id.lv_friends);
-        mFriendListview.setOnItemClickListener(this);
+        mFriendListview = (ExpandableListView) findViewById(R.id.friends_list);
+//        mFriendListview.setOnItemClickListener(this);
+        mFriendListview.setGroupIndicator(null);
 
-        mFriendAdapter = new FriendAdapter(this, mImageLoader);
-        mFriendListview.setAdapter(mFriendAdapter);
+        mFriendListview.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+                mFriendListview.expandGroup(groupPosition);
+            }
+        });
 
-        // Initiation data
-        // new LoadFriendsAsyncTask().execute();
-        if(mLoadingDialog == null) {
-            mLoadingDialog = CustomLoadingDialog.show(FriendsActivity.this, "", "", false, false);
-        }
+        mFriendListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                selectedPosition = childPosition;
+                selectedGroupPosition = groupPosition;
+
+                goToChat();
+                return false;
+            }
+        });
+
+        friendMap = new HashMap<Integer, List<Friend>>();
 
         getGroupOfUser();
     }
@@ -68,27 +88,35 @@ public class FriendsActivity extends BaseActivity {
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view,
                             int position, long id) {
-        // TODO Auto-generated method stub
         super.onItemClick(adapterView, view, position, id);
 
-        if (adapterView.getId() == R.id.lv_friends) {
+        if (adapterView.getId() == R.id.friends_list) {
 
-            Intent selectRaceIntent = new Intent(FriendsActivity.this,
-                    SelectRaceActivity.class);
-            selectRaceIntent.putExtra(
-                    Constants.INTENT_SELECT_RACE_FROM_FRIENDS, position);
-            startActivity(selectRaceIntent);
+            selectedPosition = position;
+
+            goToChat();
         }
+    }
+
+    private void goToChat() {
+        Intent selectRaceIntent = new Intent(FriendsActivity.this,
+                SelectRaceActivity.class);
+        selectRaceIntent.putExtra(
+                Constants.INTENT_SELECT_RACE_FROM_FRIENDS, Integer.valueOf(mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getId()));
+        startActivity(selectRaceIntent);
     }
 
     @Override
     public void onBackPressed() {
-        // TODO Auto-generated method stub
         // super.onBackPressed();
         backToHome();
     }
 
     private void getGroupOfUser() {
+        if(mLoadingDialog == null) {
+            mLoadingDialog = CustomLoadingDialog.show(this, "", "", false, false);
+        }
+
         GetAllGroupUserRequest request = new GetAllGroupUserRequest();
         request.setListener(callBackEvent);
         new Thread(request).start();
@@ -102,24 +130,25 @@ public class FriendsActivity extends BaseActivity {
             Type listType = new TypeToken<List<Group>>(){}.getType();
             lstGroup = gson.fromJson(json, listType);
             if(lstGroup.size() > 0){
+                mFriendAdapter = new FriendChatAdapter(this, lstGroup, mImageLoader);
+                mFriendListview.setAdapter(mFriendAdapter);
+
                 totalFriends = lstGroup.size() - 1;
                 LogUtil.d(Constants.LOG_TAG, "processGetGroupOfUser total: " + (totalFriends + 1));
                 for(Group group : lstGroup){
                     getFriendOfUser(group.getGroupId());
                 }
-            }
-            else{
-                try{
-                    if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }
-                }
-                catch(Exception ex){
+            } else {
+                if(mLoadingDialog != null) {
+                    mLoadingDialog.dismiss();
                 }
             }
         }
         catch(Exception ex){
             //ex.printStackTrace();
+            if(mLoadingDialog != null) {
+                mLoadingDialog.dismiss();
+            }
         }
 
     }
@@ -140,65 +169,58 @@ public class FriendsActivity extends BaseActivity {
             JSONObject obj = arr.getJSONObject(0);
             LogUtil.d(Constants.LOG_TAG, "processGetFriendGroupOfUser return after: " + obj.toString());
             Friend fr  = gson.fromJson(obj.toString(), Friend.class);
+
             LogUtil.d(Constants.LOG_TAG, "Friend return: " + fr.getFriend().getFull_name()
                     + "|" + fr.getFriend().getProfile_image());
             LogUtil.d(Constants.LOG_TAG, "return|total: " + returnedFriends +"|"+ totalFriends);
 
-            lstFriend.add(fr);
-
+//            if(friendMap.containsKey(Integer.valueOf(fr.getGroupId()))) {
+//                friendMap.get(fr.getGroupId()).add(fr);
+//            } else {
+//                List<Friend> list = new ArrayList<Friend>();
+//                list.add(fr);
+//                friendMap.put(fr.getGroupId(), list);
+//
+//            }
             List<Friend> listFriend = gson.fromJson(json, listType);
-
             mFriendAdapter.addItem(listFriend);
+            for(int i=0; i < mFriendAdapter.getGroupCount(); i++) {
+                mFriendListview.expandGroup(i);
+            }
 
-            if(returnedFriends<totalFriends){
+//            lstFriend.add(fr);
+
+            if(returnedFriends < totalFriends){
                 returnedFriends += listFriend.size();
-
                 LogUtil.d(Constants.LOG_TAG, "return < add " + returnedFriends +"|"+ totalFriends);
             }
             else{
-
+//                mFriendAdapter = new FriendChatAdapter(this, friendMap, lstGroup, mImageLoader);
+//                mFriendListview.setAdapter(mFriendAdapter);
+//                for(int i=0; i < mFriendAdapter.getGroupCount(); i++) {
+//                    mFriendListview.expandGroup(i);
+//                }
+//
+//                mFriendAdapter.notifyDataSetChanged();
                 LogUtil.d(Constants.LOG_TAG, "return >= show "  + returnedFriends +"|"+ totalFriends);
-                try{
-                    if (mLoadingDialog.isShowing()) {
-                        mLoadingDialog.dismiss();
-                    }
-                }
-                catch(Exception ex){
-                }
-            }
 
-            /*if(lstFriend != null && lstFriend.size() > 0){
-                //show data
-                mFriendAdapter = new FriendAdapter(this, lstFriend, mImageLoader);
-                mFriendListview.setAdapter(mFriendAdapter);
-                mFriendAdapter.notifyDataSetChanged();
-                for(Friend fr : lstFriend){
-                    LogUtil.d(Constants.LOG_TAG, "Friend return: " + fr.getFriend().getFull_name()
-                            + "|" + fr.getFriend().getProfile_image());
-                }
-            }*/
-        }
-        catch(Exception ex){
-            try{
-                if (mLoadingDialog.isShowing()) {
+                if(mLoadingDialog != null) {
                     mLoadingDialog.dismiss();
                 }
             }
-            catch(Exception exc){
-            }
+
+        }
+        catch(Exception ex){
             //ex.printStackTrace();
+            if(mLoadingDialog != null) {
+                mLoadingDialog.dismiss();
+            }
         }
     }
 
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
         public void Wsdl2CodeStartedRequest() {
-           /* runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mLoadingDialog = CustomLoadingDialog.show(SignInActivity.this, "", "", false, false);
-                }
-            });*/
         }
 
         @Override
@@ -209,13 +231,8 @@ public class FriendsActivity extends BaseActivity {
                     // Login success
                     processGetGroupOfUser(data.toString());
                 } catch (Exception e) {
-                    try{
-                        if (mLoadingDialog.isShowing()) {
-                            mLoadingDialog.dismiss();
-                        }
-                    }
-                    catch(Exception ex){
-                    }
+
+                } finally {
                 }
             }
             else if (methodName.equals(ServiceConstants.METHOD_GET_GROUP_OF_USER)) {
@@ -223,7 +240,9 @@ public class FriendsActivity extends BaseActivity {
                     // Login success
                     processGetFriendGroupOfUser(data.toString());
                 } catch (Exception e) {
-
+                    if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                        mLoadingDialog.dismiss();
+                    }
                 }
 
             }
@@ -241,54 +260,4 @@ public class FriendsActivity extends BaseActivity {
 
         }
     };
-	/*private class LoadFriendsAsyncTask extends AsyncTask<Void, Void, Void> {
-
-		Dialog dialog;
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-			dialog = CustomLoadingDialog.show(FriendsActivity.this, "", "",
-					false, false);
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-
-			List<ParseUser> errorFriend = new ArrayList<ParseUser>();
-			for (ParseUser friend : mFriends) {
-
-				try {
-
-					friend.fetchIfNeeded();
-				} catch (Exception e) {
-
-					errorFriend.add(friend);
-					LogUtil.e("Load friend async", e.getMessage());
-				}
-			}
-
-			mFriends.removeAll(errorFriend);
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-
-			if (mFriendAdapter == null) {
-
-				mFriendAdapter = new RunnersAdapter(FriendsActivity.this,
-						mFriends, mImageLoader);
-				mFriendListview.setAdapter(mFriendAdapter);
-			} else {
-
-				mFriendAdapter.notifyDataSetChanged();
-			}
-			dialog.dismiss();
-		}
-	}*/
 }
