@@ -1044,6 +1044,7 @@ public class RacesDetailActivity extends BaseActivity implements
             //displayData(mSelectedRace, 0, 0, 0);
             if(data != null && (data.getAction() != null) && data.getAction().equalsIgnoreCase("updateRaceCallBackSucceed")){
                 getRaceByType(mSelectedRace, mFriendRace);
+                mSortGroup.check(R.id.races_detail_sort_date);
                 LogUtil.d(Constants.LOG_TAG, "back from update RAce ok");
             }
             else{

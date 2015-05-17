@@ -157,15 +157,6 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
 
             holder = (HeaderViewHolder) convertView.getTag();
         }
-
-
-        if(headerStr.length() > 7){
-            holder.header.setText(Utilities.getDateTimeRaceTitle(headerStr.substring(0, 10)));
-            LogUtil.e(Constants.LOG_TAG, "HEADER FOR TIME/LENGTH: " + headerStr);
-        }
-        else{
-            holder.header.setText(Utilities.getDateTimeRaceTitle(headerStr));
-        }
         holder.header.setBackgroundColor(mRaceColor);
         holder.header.setOnTouchListener(new View.OnTouchListener() {
 
@@ -188,6 +179,17 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
         });
         /*ExpandableListView eLV = (ExpandableListView) parent;
         eLV.expandGroup(groupPosition);*/
+        if(headerStr.length() > 7){
+            holder.header.setText(Utilities.getDateTimeRaceTitle(headerStr.substring(0, 10)));
+            LogUtil.e(Constants.LOG_TAG, "HEADER FOR TIME/LENGTH: " + headerStr);
+            //convertView.setVisibility(View.GONE);
+            holder.header.setVisibility(View.GONE);
+        }
+        else{
+            holder.header.setText(Utilities.getDateTimeRaceTitle(headerStr));
+            //convertView.setVisibility(View.VISIBLE);
+            holder.header.setVisibility(View.VISIBLE);
+        }
         return convertView;
     }
 
