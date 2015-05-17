@@ -63,6 +63,7 @@ import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -85,6 +86,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 //import android.widget.Toast;
 
+import org.apache.http.conn.routing.RouteInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -337,6 +339,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
             /*if(mLoadingDialogAboutUs == null) {
                 mLoadingDialogAboutUs = CustomLoadingDialog.show(this, "", "", false, false);
             }*/
+
 			mAboutLayout.setVisibility(View.VISIBLE);
             //mAboutUsContent.loadUrl(ServiceApi.SERVICE_URL + ServiceApi.API_GET_ABOUT_US);
             GetAboutUsRequest request = new GetAboutUsRequest();
@@ -716,7 +719,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 	 * */
 	private void doSetting() {
 
-		Dialog dialog = new Dialog(BaseActivity.this);
+		final Dialog dialog = new Dialog(BaseActivity.this);
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.dialog_setting);
 		dialog.getWindow().setBackgroundDrawable(
@@ -756,6 +759,17 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		soundSeekBar.setMax(maxVol);
 
 		TextView aboutBtn = (TextView) dialog.findViewById(R.id.setting_about);
+        final ImageView closeAboutBtn = (ImageView) dialog.findViewById(R.id.setting_about_close);
+        WebView webview = (WebView) dialog.findViewById(R.id.setting_about_us);
+        webview.setBackgroundColor(0x00000000);
+        if(Build.VERSION.SDK_INT > 11){ webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);}
+        closeAboutBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtil.d("SOUND", "CLOSE ABOUT");
+                dialog.dismiss();
+            }
+        });
 		dialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -861,7 +875,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
      * */
     private void showAboutUs() {
 
-        Dialog dialog = new Dialog(BaseActivity.this);
+        final Dialog dialog = new Dialog(BaseActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_setting);
         dialog.getWindow().setBackgroundDrawable(
@@ -879,7 +893,17 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                 .findViewById(R.id.setting_about_layout);
         mAboutUsContent = (WebView) dialog.findViewById(R.id.setting_about_us);
 
-
+        final ImageView closeAboutBtn = (ImageView) dialog.findViewById(R.id.setting_about_close);
+        WebView webview = (WebView) dialog.findViewById(R.id.setting_about_us);
+        webview.setBackgroundColor(0x00000000);
+        if(Build.VERSION.SDK_INT > 11){ webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);}
+        closeAboutBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtil.d("SOUND", "CLOSE ABOUT LETF MENU");
+                dialog.dismiss();
+            }
+        });
         //TextView aboutBtn = (TextView) dialog.findViewById(R.id.setting_about);
         GetAboutUsRequest request = new GetAboutUsRequest();
         request.setListener(callBackEvent);

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dialog_out_bg" >
+    android:layout_marginBottom="-90dp"
+    android:background="@color/dialog_out_bg">
 
     <ImageView
         android:id="@+id/setting_medal_top"
@@ -11,14 +12,16 @@
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
-        android:src="@drawable/ic_setting_medal_top" />
+        android:src="@drawable/ic_setting_medal_top"
+        android:visibility="visible" />
 
     <RelativeLayout
         android:id="@+id/setting_medal_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/setting_medal_top"
-        android:layout_centerHorizontal="true" >
+        android:layout_centerHorizontal="true"
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,12 +38,12 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingLeft="60dp"
-            android:paddingRight="60dp" >
+            android:paddingRight="60dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <com.runningracehisotry.views.CustomFontTextView
                     android:id="@+id/setting_sound_text"
@@ -71,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <com.runningracehisotry.views.CustomFontTextView
                     android:id="@+id/setting_link_fb_text"
@@ -114,7 +117,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/img_about_bg"
-        android:visibility="gone" >
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/setting_about_close"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/x_button" />
 
         <com.runningracehisotry.views.CustomFontTextView
             android:id="@+id/setting_about_title"
@@ -122,6 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
             android:padding="5dp"
             android:text="@string/setting_about_title"
             android:textColor="@color/setting_about_title"
@@ -129,15 +141,19 @@
             android:textStyle="bold" />
 
 
-            <WebView
-                android:id="@+id/setting_about_us"
-                android:textSize="@dimen/setting_about_text"
-                android:layout_margin="20dp"
-                android:background="@drawable/about_content_bg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <WebView
+            android:id="@+id/setting_about_us"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/setting_about_title"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="340dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/about_content_bg"
+            android:textSize="20sp">
 
-                </WebView>
+        </WebView>
 
     </RelativeLayout>
 
