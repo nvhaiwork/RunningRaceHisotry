@@ -105,6 +105,14 @@ public class NewRunnerAdapter extends BaseAdapter {
         return converView;
     }
 
+    public List<Runner> getRunners() {
+        return mRunners;
+    }
+
+    public void setRunners(List<Runner> mRunners) {
+        this.mRunners = mRunners;
+    }
+
     private class ViewHolder {
 
         ImageView image;

@@ -6,7 +6,9 @@
     android:gravity="center_horizontal">
     <SearchView
         android:background="@drawable/bg_search_view"
+        android:textSize="@dimen/login_sign_in_with"
         android:queryHint="Search"
+
         android:layout_gravity="center_horizontal"
         android:id="@+id/search_view"
         android:layout_width="match_parent"

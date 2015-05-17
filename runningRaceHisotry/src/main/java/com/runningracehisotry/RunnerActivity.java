@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -54,6 +55,34 @@ public class RunnerActivity extends BaseActivity {
     private CustomAlertDialog successDialog;
     private String inputGroupName;
 
+    private SearchView searchView;
+
+
+    private SearchView.OnQueryTextListener listenerSearch =  new SearchView.OnQueryTextListener()
+    {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String newText) {
+            // TODO Auto-generated method stub
+            //filter and show
+            filterRunner(newText);
+            return false;
+        }
+    };
+
+    private void filterRunner(String newText) {
+        List<Runner> list = mRunnersAdapter.getRunners();
+        if(list != null && list.size()>0) {
+            list.remove(0);
+            mRunnersAdapter.setRunners(list);
+            mRunnersAdapter.notifyDataSetChanged();
+        }
+    }
+
     @Override
     protected int addContent() {
         // TODO Auto-generated method stub
@@ -64,6 +93,15 @@ public class RunnerActivity extends BaseActivity {
     protected void initView() {
         // TODO Auto-generated method stub
         super.initView();
+        searchView = (SearchView) findViewById(R.id.search_view);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.onActionViewExpanded();
+            }
+        });
+        searchView.setOnQueryTextListener(listenerSearch);
+        searchView.setQueryRefinementEnabled(true);
         mListView = (ListView) findViewById(R.id.runners_you_may_know_list);
 		/*final Dialog dialog = CustomLoadingDialog.show(RunnerActivity.this, "",
 				"", false, false);*/
