@@ -591,12 +591,10 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                 "");
 
         // Setting
-        CustomSharedPreferences.setPreferences(
-                Constants.PREF_SETTING_SOUND, false);
-        CustomSharedPreferences.setPreferences(
-                Constants.PREF_SETTING_LINK_FACEBOOK, false);
-        CustomSharedPreferences.setPreferences(
-                Constants.PREF_SETTING_SOUND_LEVEL, 0);
+        /*CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_SOUND, false);
+        CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_LINK_FACEBOOK, false);
+        CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_SOUND_LEVEL, 0);
+        */
         CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
         CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, "");
 
@@ -735,7 +733,8 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		int soundLv = CustomSharedPreferences.getPreferences(
 				Constants.PREF_SETTING_SOUND_LEVEL, 0);
 		boolean isSoundOn = CustomSharedPreferences.getPreferences(
-				Constants.PREF_SETTING_SOUND, false);
+				Constants.PREF_SETTING_SOUND, true);
+        LogUtil.d("SOUND", "SOUND ON SETTING: " + isSoundOn);
 		boolean isLinkFb = CustomSharedPreferences.getPreferences(
 				Constants.PREF_SETTING_LINK_FACEBOOK, false);
 		final CheckBox soundCb = (CheckBox) dialog

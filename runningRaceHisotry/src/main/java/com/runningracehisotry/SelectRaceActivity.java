@@ -9,6 +9,7 @@ import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
+import com.runningracehisotry.utilities.LogUtil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -138,7 +139,8 @@ public class SelectRaceActivity extends BaseActivity {
 
 				mAddRaceSuccessLayout.setVisibility(View.VISIBLE);
 				boolean isSoundOn = CustomSharedPreferences.getPreferences(
-						Constants.PREF_SETTING_SOUND, false);
+						Constants.PREF_SETTING_SOUND, true);
+                LogUtil.d("SOUND", "SOUND ON ADD ARCE: " + isSoundOn);
 				final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 				final int currentVol = audioManager
 						.getStreamVolume(AudioManager.STREAM_MUSIC);

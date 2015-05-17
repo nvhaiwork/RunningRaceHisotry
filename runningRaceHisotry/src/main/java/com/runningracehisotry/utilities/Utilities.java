@@ -3,8 +3,11 @@ package com.runningracehisotry.utilities;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -554,4 +557,37 @@ public class Utilities {
     public List<Shoe> convertListShoe(List<ShoeObject> list){
         return null;
     }
+
+    public static String getDateTimeRaceTitle(String str){
+        String result = str;
+        try{
+            String s[] = null;
+            if(str.length()<=7) {
+                s = str.split("-");
+                result = s[1] + "-" + s[0];
+            }
+            else{
+                s = str.split("-");
+                result = s[1] + "-" + s[2] + "-" + s[0];
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static String getDateTimeEachRace(String str){
+        String result = str;
+        try{
+            SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            Date date = format1.parse(str);
+            SimpleDateFormat format2 = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+            result = format2.format(date);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

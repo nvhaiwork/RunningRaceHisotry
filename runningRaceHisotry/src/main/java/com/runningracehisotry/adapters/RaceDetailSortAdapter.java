@@ -24,6 +24,7 @@ import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Like;
 import com.runningracehisotry.models.Race;
 import com.runningracehisotry.utilities.LogUtil;
+import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.CustomAlertDialog;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.views.RaceImagesDialog;
@@ -159,11 +160,11 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
 
 
         if(headerStr.length() > 7){
-            holder.header.setText(headerStr.substring(0, 10));
+            holder.header.setText(Utilities.getDateTimeRaceTitle(headerStr.substring(0, 10)));
             LogUtil.e(Constants.LOG_TAG, "HEADER FOR TIME/LENGTH: " + headerStr);
         }
         else{
-            holder.header.setText(headerStr);
+            holder.header.setText(Utilities.getDateTimeRaceTitle(headerStr));
         }
         holder.header.setBackgroundColor(mRaceColor);
         holder.header.setOnTouchListener(new View.OnTouchListener() {
@@ -311,7 +312,8 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
         //holder.name.setText(race.get(Constants.RACENAME).toString());
         holder.name.setText(race.getName());
         //holder.date.setText(mDateFormat.format(raceDate));
-        holder.date.setText(race.getRaceDate().substring(0,10));
+        //holder.date.setText(race.getRaceDate().substring(0,10));
+        holder.date.setText(Utilities.getDateTimeEachRace(race.getRaceDate().substring(0,10)));
         holder.images.setOnClickListener(new View.OnClickListener() {
 
             @SuppressWarnings("unchecked")
