@@ -36,9 +36,11 @@ import com.runningracehisotry.webservice.base.AddGroupRequest;
 import com.runningracehisotry.webservice.base.GetAllGroupUserRequest;
 import com.runningracehisotry.webservice.base.GetAllRunnerRequest;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 public class RunnerActivity extends BaseActivity {
 
@@ -62,7 +64,11 @@ public class RunnerActivity extends BaseActivity {
     {
         @Override
         public boolean onQueryTextSubmit(String query) {
-            return false;
+            LogUtil.d(Constants.LOG_TAG,"String query: " + query +" close keyboard");
+            searchView.setIconified(true);
+            searchView.clearFocus();
+            searchView.onActionViewCollapsed();
+            return true;
         }
 
         @Override
@@ -74,12 +80,39 @@ public class RunnerActivity extends BaseActivity {
         }
     };
 
-    private void filterRunner(String newText) {
-        List<Runner> list = mRunnersAdapter.getRunners();
+    private synchronized void filterRunner(String newText) {
+        List<Runner> list = mRunners;
         if(list != null && list.size()>0) {
-            list.remove(0);
-            mRunnersAdapter.setRunners(list);
-            mRunnersAdapter.notifyDataSetChanged();
+            LogUtil.d(Constants.LOG_TAG, "listNew: " + !newText.trim().isEmpty());
+            if(newText != null && !newText.trim().isEmpty()) {
+                LogUtil.d(Constants.LOG_TAG, "listNew siz");
+                List<Runner> listNew = new ArrayList<Runner>();
+                for(Runner r: list){
+                    if(r.getName().contains(newText)){
+                        listNew.add(listNew.size(), r);
+                    }
+                }
+                synchronized (listNew) {
+                    mRunnersAdapter.setRunners(listNew);
+                    mRunnersAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
+    private synchronized void filterRunnerApache(String newText){
+        List<Runner> list = mRunners;
+        if(list != null && list.size()>0) {
+            LogUtil.d(Constants.LOG_TAG, "listNew: " + !newText.trim().isEmpty());
+            if(newText != null && !newText.trim().isEmpty()) {
+                LogUtil.d(Constants.LOG_TAG, "listNew siz");
+                List<Runner> listNew = new ArrayList<Runner>();
+                //listNew = ;
+                synchronized (listNew) {
+                    mRunnersAdapter.setRunners(listNew);
+                    mRunnersAdapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 
