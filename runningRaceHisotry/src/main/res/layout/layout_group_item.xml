@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/red"
-    android:padding="5dp" >
+    android:id="@+id/ll_group" >
 
     <com.runningracehisotry.views.CustomFontTextView
         android:id="@+id/tv_group_item"
@@ -11,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:textColor="@color/white"
-        android:text="absasdsddfsasdfd"
         android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"
         android:textSize="@dimen/user_item_text" />
 
 </RelativeLayout>
