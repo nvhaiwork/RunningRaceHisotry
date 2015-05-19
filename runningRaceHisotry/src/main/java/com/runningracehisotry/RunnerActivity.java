@@ -75,7 +75,13 @@ public class RunnerActivity extends BaseActivity {
         public boolean onQueryTextChange(String newText) {
             // TODO Auto-generated method stub
             //filter and show
-            filterRunner(newText);
+            if(newText.length() > 0) {
+                filterRunner(newText);
+            } else {
+                mRunnersAdapter.setRunners(mRunners);
+                mRunnersAdapter.notifyDataSetChanged();
+            }
+
             return false;
         }
     };
@@ -88,7 +94,7 @@ public class RunnerActivity extends BaseActivity {
                 LogUtil.d(Constants.LOG_TAG, "listNew siz");
                 List<Runner> listNew = new ArrayList<Runner>();
                 for(Runner r: list){
-                    if(r.getName().contains(newText)){
+                    if(r.getName().toLowerCase().contains(newText.toLowerCase())){
                         listNew.add(listNew.size(), r);
                     }
                 }
@@ -131,6 +137,14 @@ public class RunnerActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 searchView.onActionViewExpanded();
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                mRunnersAdapter.setRunners(mRunners);
+                mRunnersAdapter.notifyDataSetChanged();
+                return false;
             }
         });
         searchView.setOnQueryTextListener(listenerSearch);

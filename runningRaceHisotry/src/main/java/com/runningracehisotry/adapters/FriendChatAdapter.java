@@ -96,8 +96,14 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
 
         TextView header = (TextView) convertView
                 .findViewById(R.id.tv_group_item);
-        header.setText(headerTitle);
 
+        if(groups.get(groupPosition).getGroupId() == -1) {
+            header.setVisibility(View.GONE);
+        } else {
+            header.setVisibility(View.VISIBLE);
+
+            header.setText(headerTitle);
+        }
         return convertView;
     }
 
@@ -131,6 +137,12 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
     public void addItem(List<Friend> friends) {
         friendMap.put(friends.get(0).getGroupId(), friends);
 
+        notifyDataSetChanged();
+    }
+
+    public void setData(List<Group> groups, Map<Integer, List<Friend>> friendMap) {
+        this.groups = groups;
+        this.friendMap = friendMap;
         notifyDataSetChanged();
     }
 }
