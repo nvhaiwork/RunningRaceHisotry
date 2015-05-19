@@ -619,7 +619,27 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     Utilities.showAlertMessage(AddRaceActivity.this,
                             getString(R.string.dialog_add_shoe_fill_all_fields),
                             getString(R.string.dialog_add_race_tile));
-                } else {
+                }
+                else {
+                    if((Integer) mRaceTypeTxt.getTag() == Constants.SELECT_RACE_OTHER) {
+                        String raceMiles = "0.00";
+                        float miles =0;
+                        try{
+                            int len = mRaceTypeTxt.getText().toString().length();
+                            String realMile = mRaceTypeTxt.getText().toString().substring(0, len - 3);
+                            raceMiles = realMile.trim();
+                            miles = Float.parseFloat(raceMiles);
+                        }
+                        catch(Exception ex){
+                        }
+                        if(raceMiles.equalsIgnoreCase("0.00") || (miles == 0)){
+                            Utilities.showAlertMessage(AddRaceActivity.this,
+                                    getString(R.string.dialog_add_race_invalid_mile),
+                                    getString(R.string.dialog_add_race_tile));
+                            return;
+                        }
+                    }
+
                     //call add Race
                     //new AddRaceAsync().execute();
                     if(mLoadingDialog == null) {
@@ -680,23 +700,33 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             public void onClick(View paramView) {
                 // TODO Auto-generated method stub
 
-                if (!emailEdt.getText().toString().equals("")) {
+                //if (!emailEdt.getText().toString().equals("")) {
                     String miles = emailEdt.getText().toString();
                     try{
                         float raceMile = Float.parseFloat(miles);
                         //String str = String.format("0.02", miles);
-                        mRaceTypeTxt.setTag(Constants.SELECT_RACE_OTHER);
-                        String strRaceMiles= miles + " MI";
-                        mRaceTypeTxt.setText(strRaceMiles);
+
                         dialog.dismiss();
+                        if(raceMile == 0){
+                            Utilities
+                                    .showAlertMessage(
+                                            AddRaceActivity.this,
+                                            getString(R.string.dialog_add_race_invalid_mile),
+                                            getString(R.string.dialog_add_race_tile));
+                        }
+                        else{
+                            mRaceTypeTxt.setTag(Constants.SELECT_RACE_OTHER);
+                            String strRaceMiles= miles + " MI";
+                            mRaceTypeTxt.setText(strRaceMiles);
+                        }
                     }
                     catch (Exception ex){
                         dialog.dismiss();
                         Utilities
                                 .showAlertMessage(
                                         AddRaceActivity.this,
-                                        getString(R.string.race_input_mile_invalid),
-                                        getString(R.string.race_input_mile_invalid));
+                                        getString(R.string.dialog_add_race_invalid_mile),
+                                        getString(R.string.dialog_add_race_tile));
                     }
                     /*if(Utilities.isValidEmail(email)){
                         callSendMailForgotPassword(email);
@@ -704,7 +734,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
 
                         //dialog.dismiss();
                     }*/
-                }
+                //}
             }
         });
 

@@ -205,4 +205,6 @@
     <string name="menu_about_cannot_get_content">Cannot load About Us content!</string>
 
     <string name="detail_race_type_other">Other Races</string>
+
+    <string name="dialog_add_race_invalid_mile">Invalid Miles</string>
 </resources>
