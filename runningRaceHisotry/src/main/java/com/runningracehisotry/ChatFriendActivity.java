@@ -81,27 +81,41 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
     private synchronized void filterRunner(String newText) {
         List<Group> groups = new ArrayList<Group>();
-        Group group = new Group();
-        group.setGroupId(-1);
-        groups.add(group);
+//        Group group = new Group();
+//        group.setGroupId(-1);
+//        groups.add(group);
         List<Friend> tempFriend = new ArrayList<Friend>();
         Map<Integer, List<Friend>> tempMap = new HashMap<Integer, List<Friend>>();
         if(friendMap != null && friendMap.size()>0) {
             LogUtil.d(Constants.LOG_TAG, "listNew: " + !newText.trim().isEmpty());
             if(newText != null && !newText.trim().isEmpty()) {
                 LogUtil.d(Constants.LOG_TAG, "listNew siz");
-                List<Runner> listNew = new ArrayList<Runner>();
                 for(Integer id: friendMap.keySet()){
                     List<Friend> friends = friendMap.get(id);
                     for (Friend friend : friends) {
                         if(friend.getFriend().getFull_name().toLowerCase().contains(newText.toLowerCase())) {
                             tempFriend.add(friend);
+                            if(tempMap.containsKey(friend.getGroupId())) {
+                                tempMap.get(friend.getGroupId()).add(friend);
+                            } else {
+                                List<Friend> tempListFriend = new ArrayList<Friend>();
+                                tempListFriend.add(friend);
+                                tempMap.put(friend.getGroupId(), tempListFriend);
+                            }
                         }
                     }
 
                 }
 
-                tempMap.put(Integer.valueOf(-1), tempFriend);
+                for (Integer groupid : tempMap.keySet()) {
+                    for (Group g : lstGroup) {
+                        if(g.getGroupId() == groupid) {
+                            groups.add(g);
+                        }
+                    }
+                }
+
+//                tempMap.put(Integer.valueOf(-1), tempFriend);
                 synchronized (tempMap) {
                     mFriendAdapter.setData(groups, tempMap);
                     expandAllGroup();
@@ -268,17 +282,20 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                     + "|" + fr.getFriend().getProfile_image());
             LogUtil.d(Constants.LOG_TAG, "return|total: " + returnedFriends +"|"+ totalFriends);
 
-            if(friendMap.containsKey(Integer.valueOf(fr.getGroupId()))) {
-                friendMap.get(fr.getGroupId()).add(fr);
-            } else {
-                List<Friend> list = new ArrayList<Friend>();
-                list.add(fr);
-                friendMap.put(fr.getGroupId(), list);
-
-            }
             List<Friend> listFriend = gson.fromJson(json, listType);
             mFriendAdapter.addItem(listFriend);
             expandAllGroup();
+
+            friendMap.put(listFriend.get(0).getGroupId(), listFriend);
+
+//            if(friendMap.containsKey(fr.getGroupId())) {
+//                friendMap.get(fr.getGroupId()).add(fr);
+//            } else {
+//                List<Friend> list = new ArrayList<Friend>();
+//                list.add(fr);
+//                friendMap.put(fr.getGroupId(), list);
+//
+//            }
 
 //            lstFriend.add(fr);
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runningracehisotry.adapters.FriendChatAdapter;
+import com.runningracehisotry.adapters.FriendGroupAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
@@ -36,7 +37,7 @@ import org.json.JSONObject;
 public class FriendsActivity extends BaseActivity {
 
     private ExpandableListView mFriendListview;
-    private FriendChatAdapter mFriendAdapter;
+    private FriendGroupAdapter mFriendAdapter;
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
@@ -130,7 +131,7 @@ public class FriendsActivity extends BaseActivity {
             Type listType = new TypeToken<List<Group>>(){}.getType();
             lstGroup = gson.fromJson(json, listType);
             if(lstGroup.size() > 0){
-                mFriendAdapter = new FriendChatAdapter(this, lstGroup, mImageLoader);
+                mFriendAdapter = new FriendGroupAdapter(this, lstGroup, mImageLoader);
                 mFriendListview.setAdapter(mFriendAdapter);
 
                 totalFriends = lstGroup.size() - 1;

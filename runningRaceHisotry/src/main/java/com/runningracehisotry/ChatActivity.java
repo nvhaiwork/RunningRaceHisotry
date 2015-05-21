@@ -141,11 +141,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
     @Override
     public void onMessageFailed(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, MessageFailureInfo messageFailureInfo) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Sending failed: ")
-                .append(messageFailureInfo.getSinchError().getMessage());
-
-        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+        //TODO change this
     }
 
     @Override

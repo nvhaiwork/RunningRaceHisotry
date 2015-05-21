@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/chat_group_color"
+    android:id="@+id/ll_group" >
+
+    <com.runningracehisotry.views.CustomFontTextView
+        android:id="@+id/tv_group_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="@color/white"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dp"
+        android:textSize="@dimen/user_item_text" />
+
+</RelativeLayout>

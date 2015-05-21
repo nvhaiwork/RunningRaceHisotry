@@ -4,11 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <include
-        layout="@layout/search_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <com.runningracehisotry.views.CustomFontTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,6 +12,11 @@
         android:text="@string/menu_chat_your_community"
         android:textColor="@color/white"
         android:textSize="@dimen/login_sign_in_with" />
+
+    <include
+        layout="@layout/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <ExpandableListView
         android:id="@+id/friends_list"

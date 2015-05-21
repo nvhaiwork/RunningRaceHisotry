@@ -4,6 +4,8 @@
     <color name="white">#FFF</color>
     <color name="black">#000</color>
     <color name="red">#FF0000</color>
+    <color name="chat_title_color">#fc3559</color>
+    <color name="chat_group_color">#ff506c</color>
     <color name="dialog_out_bg">#99000000</color>
     <color name="view_seperator_bg">#e2e2e6</color>
     <color name="login_sign_in_with">#ff5700</color>

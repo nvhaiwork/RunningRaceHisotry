@@ -16,7 +16,6 @@ import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
 import com.runningracehisotry.webservice.ServiceApi;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +23,14 @@ import java.util.Map;
 /**
  * Created by ngocm on 05/03/15.
  */
-public class FriendChatAdapter extends BaseExpandableListAdapter {
+public class FriendGroupAdapter extends BaseExpandableListAdapter {
     private Context context;
     private Map<Integer, List<Friend>> friendMap = new HashMap<Integer, List<Friend>>();
     private List<Group> groups;
     private ImageLoader mImageLoader;
     private DisplayImageOptions mOptions;
 
-    public FriendChatAdapter(Context context, List<Group> groups, ImageLoader imageLoader) {
+    public FriendGroupAdapter(Context context, List<Group> groups, ImageLoader imageLoader) {
         this.context = context;
         this.groups = groups;
 
@@ -91,7 +90,7 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.layout_group_item, null);
+            convertView = inflater.inflate(R.layout.layout_group_item_friend, null);
         }
 
         TextView header = (TextView) convertView
@@ -117,7 +116,7 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.user_item_text);
 
         ImageView ivAvatar = (ImageView) convertView
-                .findViewById(com.runningracehisotry.R.id.user_item_img);
+                .findViewById(R.id.user_item_img);
 
         tvName.setText(childText);
         mImageLoader.displayImage(ServiceApi.SERVICE_URL + friend.getFriend().getProfile_image(), ivAvatar, mOptions);
