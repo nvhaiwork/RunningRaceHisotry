@@ -37,7 +37,7 @@ import org.json.JSONObject;
 public class FriendsActivity extends BaseActivity {
 
     private ExpandableListView mFriendListview;
-    private FriendGroupAdapter mFriendAdapter;
+    private FriendChatAdapter mFriendAdapter;
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
@@ -131,7 +131,7 @@ public class FriendsActivity extends BaseActivity {
             Type listType = new TypeToken<List<Group>>(){}.getType();
             lstGroup = gson.fromJson(json, listType);
             if(lstGroup.size() > 0){
-                mFriendAdapter = new FriendGroupAdapter(this, lstGroup, mImageLoader);
+                mFriendAdapter = new FriendChatAdapter(this, lstGroup, mImageLoader);
                 mFriendListview.setAdapter(mFriendAdapter);
 
                 totalFriends = lstGroup.size() - 1;
