@@ -48,6 +48,8 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
+    private static final String TAG = SinchService.class.getSimpleName();
+
     private int selectedPosition = -1;
     private int selectedGroupPosition = -1;
 
@@ -173,10 +175,19 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                 selectedGroupPosition = groupPosition;
 
                 if (!mSinchServiceInterface.isStarted()) {
-                    mSinchServiceInterface.startClient();
+                    Log.d(TAG, "mSinchServiceInterface.isStarted(): false");
+                    String userName = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getName();
+                    mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
                 } else {
+                    Log.d(TAG, "mSinchServiceInterface.isStarted(): true");
                     goToChat();
                 }
+
+//                String userName = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getName();
+//                mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
+
+//                goToChat();
+
                 return false;
             }
         });
@@ -193,16 +204,16 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
                             int position, long id) {
         super.onItemClick(adapterView, view, position, id);
 
-        if (adapterView.getId() == R.id.friends_list) {
-
-            selectedPosition = position;
-
-            if (!mSinchServiceInterface.isStarted()) {
-                mSinchServiceInterface.startClient();
-            } else {
-                goToChat();
-            }
-        }
+//        if (adapterView.getId() == R.id.friends_list) {
+//
+//            selectedPosition = position;
+//
+//            if (!mSinchServiceInterface.isStarted()) {
+//                mSinchServiceInterface.startClient();
+//            } else {
+//                goToChat();
+//            }
+//        }
     }
 
     private void goToChat() {

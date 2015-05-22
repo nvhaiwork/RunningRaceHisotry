@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.runningracehisotry;
 
 import java.security.MessageDigest;
@@ -73,8 +70,8 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents {
 
-	private Dialog mLoadingDialog;
-	private ImageView mCreateBtn, mLoginFbBtn, mLoginTwitterBtn, mContactUsBtn;
+    private Dialog mLoadingDialog;
+    private ImageView mCreateBtn, mLoginFbBtn, mLoginTwitterBtn, mContactUsBtn;
     private final String logTag = "LoginChoiceScreen";
     private Twitter twitter;
     private RequestToken requestToken;
@@ -109,36 +106,36 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
      *
      * @see com.runningracehisotry.BaseActivity#addContent()
      */
-	@Override
-	protected int addContent() {
-		// TODO Auto-generated method stub
-		return R.layout.activity_login_choice;
-	}
+    @Override
+    protected int addContent() {
+        // TODO Auto-generated method stub
+        return R.layout.activity_login_choice;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.runningracehisotry.BaseActivity#initView()
-	 */
-	@Override
-	protected void initView() {
-		// TODO Auto-generated method stub
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.runningracehisotry.BaseActivity#initView()
+     */
+    @Override
+    protected void initView() {
+        // TODO Auto-generated method stub
         printHashKey();
 
 
-		super.initView();
+        super.initView();
 
-		isHideActionBarButtons = true;
-		mLoginFbBtn = (ImageView) findViewById(R.id.login_with_fb);
-		mContactUsBtn = (ImageView) findViewById(R.id.login_contact_us);
-		mCreateBtn = (ImageView) findViewById(R.id.login_create_account);
-		mLoginTwitterBtn = (ImageView) findViewById(R.id.login_with_twitter);
+        isHideActionBarButtons = true;
+        mLoginFbBtn = (ImageView) findViewById(R.id.login_with_fb);
+        mContactUsBtn = (ImageView) findViewById(R.id.login_contact_us);
+        mCreateBtn = (ImageView) findViewById(R.id.login_create_account);
+        mLoginTwitterBtn = (ImageView) findViewById(R.id.login_with_twitter);
 
-		mCreateBtn.setOnClickListener(this);
-		mLoginFbBtn.setOnClickListener(this);
-		mContactUsBtn.setOnClickListener(this);
-		mLoginTwitterBtn.setOnClickListener(this);
-	}
+        mCreateBtn.setOnClickListener(this);
+        mLoginFbBtn.setOnClickListener(this);
+        mContactUsBtn.setOnClickListener(this);
+        mLoginTwitterBtn.setOnClickListener(this);
+    }
 
     public void printHashKey() {
 
@@ -160,7 +157,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
     }
 
     @Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == WEBVIEW_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 String verifier = data.getExtras().getString(oAuthVerifier);
@@ -175,42 +172,42 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
             super.onActivityResult(requestCode, resultCode, data);
 //            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         }
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.runningracehisotry.BaseActivity#onClick(android.view.View)
-	 */
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		super.onClick(v);
-		switch (v.getId()) {
-		case R.id.login_create_account:
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.runningracehisotry.BaseActivity#onClick(android.view.View)
+     */
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.login_create_account:
 
-			Intent signInIntent = new Intent(LoginChoiceScreen.this,
-					SignInActivity.class);
-			startActivity(signInIntent);
-			break;
-		case R.id.login_with_fb:
+                Intent signInIntent = new Intent(LoginChoiceScreen.this,
+                        SignInActivity.class);
+                startActivity(signInIntent);
+                break;
+            case R.id.login_with_fb:
 
-            performFacebookLogin();
-			break;
-		case R.id.login_with_twitter:
+                performFacebookLogin();
+                break;
+            case R.id.login_with_twitter:
 
-			mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
-					"", "", false, false);
+                mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
+                        "", "", false, false);
 
-            loginToTwitter();
+                loginToTwitter();
 
-			break;
-		case R.id.login_contact_us:
+                break;
+            case R.id.login_contact_us:
 
-			Utilities.contactUs(LoginChoiceScreen.this);
-			break;
-		}
-	}
+                Utilities.contactUs(LoginChoiceScreen.this);
+                break;
+        }
+    }
 
 
     private void saveTwitterInfo(AccessToken accessToken) {
@@ -289,8 +286,8 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
 
 
-        private void performFacebookLogin() {
-            Log.d("FACEBOOK", "performFacebookLogin");
+    private void performFacebookLogin() {
+        Log.d("FACEBOOK", "performFacebookLogin");
 //            final Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, Arrays.asList("email"));
 //            Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
 //
@@ -339,36 +336,36 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 //                }
 //            });
 
-            LoginManager loginManager = LoginManager.getInstance();
+        LoginManager loginManager = LoginManager.getInstance();
 
-            loginManager.logInWithReadPermissions(this, Arrays.asList(new String[]{"public_profile", "email"}));
+        loginManager.logInWithReadPermissions(this, Arrays.asList(new String[]{"public_profile", "email"}));
 
-            loginManager.registerCallback(callbackManager,
-                    new FacebookCallback<LoginResult>() {
-                        @Override
-                        public void onSuccess(LoginResult loginResult) {
-                            Log.d(logTag, loginResult.toString());
-                            fetchUserInfo();
-                            mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
-                                    "", "", false, false);
+        loginManager.registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.d(logTag, loginResult.toString());
+                        fetchUserInfo();
+                        mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
+                                "", "", false, false);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                            mLoadingDialog.dismiss();
                         }
+                        Utilities.showAlertMessage(LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
+                    }
 
-                        @Override
-                        public void onCancel() {
-                            if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-                                mLoadingDialog.dismiss();
-                            }
-                            Utilities.showAlertMessage(LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
-                        }
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Log.d(logTag, exception.toString());
+                        Utilities.showAlertMessage(LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
+                    }
 
-                        @Override
-                        public void onError(FacebookException exception) {
-                            Log.d(logTag, exception.toString());
-                            Utilities.showAlertMessage(LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
-                        }
-
-                    });
-        }
+                });
+    }
 
     private void fetchUserInfo() {
         final com.facebook.AccessToken accessToken = com.facebook.AccessToken.getCurrentAccessToken();
@@ -392,6 +389,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                                     avatar = "http://graph.facebook.com/" + id + "/picture?type=large";
 
                                     RegisterFacebookRequest request = new RegisterFacebookRequest(id, fullName, avatar);
+
                                     request.setListener(LoginChoiceScreen.this);
                                     new Thread(request).start();
                                 }
@@ -462,7 +460,13 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
 
             if(RunningRaceApplication.getInstance().isSocialLogin()){
                 LogUtil.e(Constants.LOG_TAG,"SNS login result userID: " + user.getId()
-                + "|" + CustomSharedPreferences.getPreferences(Constants.PREF_FB_ID, ""));
+                        + "|" + CustomSharedPreferences.getPreferences(Constants.PREF_FB_ID, ""));
+                CustomSharedPreferences.setPreferences(
+                        Constants.PREF_SNS_ID, fbID);
+                CustomSharedPreferences.setPreferences(
+                        Constants.PREF_SNS_FULL_NAME, fullName);
+                CustomSharedPreferences.setPreferences(
+                        Constants.PREF_SNS_AVATAR, avatar);
             }
             CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, data.toString());
 

@@ -80,6 +80,9 @@ public class Constants {
 	public static final String PREF_SETTING_SOUND = "com.runningracehisotry.setting.sound";
 	public static final String PREF_SETTING_SOUND_LEVEL = "com.runningracehisotry.setting.sound.level";
 	public static final String PREF_SETTING_LINK_FACEBOOK = "com.runningracehisotry.setting.link.facebook";
+	public static final String PREF_SNS_ID = "com.runningracehisotry.sns.id";
+	public static final String PREF_SNS_AVATAR = "com.runningracehisotry.sns.avatar";
+	public static final String PREF_SNS_FULL_NAME = "com.runningracehisotry.sns.fullname";
 
 	// Parse object keys
 	public static final String DATE = "Date";

@@ -593,6 +593,13 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD,
                 "");
 
+		CustomSharedPreferences.setPreferences(
+				Constants.PREF_SNS_ID, "");
+		CustomSharedPreferences.setPreferences(
+				Constants.PREF_SNS_FULL_NAME, "");
+		CustomSharedPreferences.setPreferences(
+				Constants.PREF_SNS_AVATAR, "");
+
         // Setting
         /*CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_SOUND, false);
         CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_LINK_FACEBOOK, false);
@@ -611,6 +618,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         loginChoiceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
                 | Intent.FLAG_ACTIVITY_NEW_TASK);
         RunningRaceApplication.getInstance().setCurrentUser(null);
+		RunningRaceApplication.getInstance().setSocialLogin(false);
         startActivity(loginChoiceIntent);
         mShoes = null;
         mHistory = null;

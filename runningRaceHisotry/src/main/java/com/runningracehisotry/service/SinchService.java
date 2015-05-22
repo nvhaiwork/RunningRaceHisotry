@@ -32,8 +32,8 @@ public class SinchService extends Service {
             return SinchService.this.isStarted();
         }
 
-        public void startClient() {
-            start(RunningRaceApplication.getInstance().getCurrentUser().getName());
+        public void startClient(String user) {
+            start(user);
         }
 
         public void stopClient() {
@@ -83,9 +83,11 @@ public class SinchService extends Service {
     }
 
     public void sendMessage(String recipientUserId, String textBody) {
+        Log.d(TAG, "call sendMessage: " + textBody);
         if (isStarted()) {
             WritableMessage message = new WritableMessage(recipientUserId, textBody);
             mSinchClient.getMessageClient().send(message);
+            Log.d(TAG, "sendMessage: " + textBody);
         }
     }
 
@@ -102,6 +104,7 @@ public class SinchService extends Service {
     }
 
     private void start(String userName) {
+        Log.d(TAG, "call start: ");
         if (mSinchClient == null) {
             mSinchClient = Sinch.getSinchClientBuilder().context(getApplicationContext()).userId(userName)
                     .applicationKey(APP_KEY)
@@ -113,6 +116,7 @@ public class SinchService extends Service {
 
             mSinchClient.addSinchClientListener(new MySinchClientListener());
             mSinchClient.start();
+            Log.d(TAG, "call start: ");
         }
     }
 
