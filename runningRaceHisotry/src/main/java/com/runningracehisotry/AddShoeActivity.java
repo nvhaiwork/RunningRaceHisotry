@@ -272,19 +272,27 @@ public class AddShoeActivity extends BaseActivity {
 
                 }
                 else{
-                    //process Add Shoe
-                    //if(addMile > 0){
-                    //not check when add
-                    //String param = String.format("%.2f", addMile);
-                    //callAddShoe(param);
-                    if(mUriImageUpload != null){
-                        callUploadShoeImage();
+                    if(mMilesTxt.getText().toString().isEmpty() || (mMilesTxt.getText().toString().equalsIgnoreCase("0.00"))){
+                        Utilities.showAlertMessage(AddShoeActivity.this,
+                                getString(R.string.dialog_add_shoe_fill_all_fields),
+                                getString(R.string.dialog_add_shoe_tile));
                     }
-                    else{
-                        callAddShoe();
+                    else {
+
+
+                        //process Add Shoe
+                        //if(addMile > 0){
+                        //not check when add
+                        //String param = String.format("%.2f", addMile);
+                        //callAddShoe(param);
+                        if (mUriImageUpload != null) {
+                            callUploadShoeImage();
+                        } else {
+                            callAddShoe();
+                        }
+                        //callUploadShoeImage();
+                        //}
                     }
-                    //callUploadShoeImage();
-                    //}
                 }
                 //process add or update
 				//new SaveShoeAsync().execute();

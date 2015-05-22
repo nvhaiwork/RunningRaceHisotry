@@ -147,7 +147,7 @@ public class SelectRaceActivity extends BaseActivity {
 				if (isSoundOn) {
 
 					int settingVol = CustomSharedPreferences.getPreferences(
-							Constants.PREF_SETTING_SOUND_LEVEL, 0);
+							Constants.PREF_SETTING_SOUND_LEVEL, 50);
 					MediaPlayer mediaPlayer = MediaPlayer.create(
 							getApplicationContext(), R.raw.win);
 					audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,

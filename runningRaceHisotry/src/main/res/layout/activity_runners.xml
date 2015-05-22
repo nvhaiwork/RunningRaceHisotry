@@ -12,7 +12,7 @@
     <com.runningracehisotry.views.CustomFontTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/people_you_may_know_color"
+        android:background="@color/sub_new_people_you_may_know_color"
         android:padding="7dp"
         android:text="@string/menu_runner_you_may_know"
         android:textColor="@color/white"

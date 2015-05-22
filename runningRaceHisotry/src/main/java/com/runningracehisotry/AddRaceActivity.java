@@ -246,6 +246,9 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             mRaceMedalPath = mRaceUpdate.getMedalUrl();
             mRaceBibPath = mRaceUpdate.getBibUrl();
             mRacePersonPath = mRaceUpdate.getPersonUrl();
+            LogUtil.e("IMAGE", "LoadRaceImageAsync URL Medal: " + ServiceApi.SERVICE_URL + mRaceUpdate.getMedalUrl());
+            LogUtil.e("IMAGE", "LoadRaceImageAsync URL Bib: " + ServiceApi.SERVICE_URL + mRaceUpdate.getBibUrl());
+            LogUtil.e("IMAGE", "LoadRaceImageAsync URL Person : " + ServiceApi.SERVICE_URL + mRaceUpdate.getPersonUrl());
             if((mRaceUpdate.getMedalUrl() != null) && (!mRaceUpdate.getMedalUrl().isEmpty())){
                 /*mOptions = new DisplayImageOptions.Builder()
                         .displayer(new RoundedBitmapDisplayer(R.dimen.image_round_conner_new))
@@ -633,10 +636,16 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         catch(Exception ex){
                         }
                         if(raceMiles.equalsIgnoreCase("0.00") || (miles == 0)){
-                            Utilities.showAlertMessage(AddRaceActivity.this,
-                                    getString(R.string.dialog_add_race_invalid_mile),
-                                    getString(R.string.dialog_add_race_tile));
-                            return;
+                            if (mRaceUpdate == null) {//add race
+                                LogUtil.e("MEDAL", "Add RAce, not check mile =0");
+                                Utilities.showAlertMessage(AddRaceActivity.this,
+                                        getString(R.string.dialog_add_race_invalid_mile),
+                                        getString(R.string.dialog_add_race_tile));
+                                return;
+                            }
+                            else{
+                                LogUtil.e("MEDAL", "Update RAce, not check mile =0");
+                            }
                         }
                     }
 
@@ -648,17 +657,21 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     uploadedRaceImage = 0;
                     if(mRaceMedalUpload != null){
                         uploadedRaceImage = 1;
+                        LogUtil.e("MEDAL", " upload medal");
                         uploadMedalImage();
                     }
                     else if(mRaceBibUpload != null){
                         uploadedRaceImage = 2;
+                        LogUtil.e("MEDAL", " upload BIB");
                         uploadBibImage();
                     }
                     else if(mRacePersonUpload != null){
                         uploadedRaceImage = 3;
+                        LogUtil.e("MEDAL", " upload PERSON");
                         uploadPersonImage();
                     }
                     else{
+                        LogUtil.e("MEDAL", " CALL ADD/UDPATE DRACE");
                         callAddUpdateRace();
                     }
 

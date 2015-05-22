@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -91,6 +92,11 @@ public class ChatItemAdapter extends BaseAdapter {
                     .findViewById(R.id.iv_avatar_friend);
             holder.text = (TextView) converView
                     .findViewById(R.id.tv_message);
+
+            holder.lnMe = (LinearLayout) converView
+                    .findViewById(R.id.user_item_img_layout_me);
+            holder.lnFriend = (LinearLayout) converView
+                    .findViewById(R.id.user_item_img_layout_friend);
             converView.setTag(holder);
         } else {
 
@@ -98,13 +104,17 @@ public class ChatItemAdapter extends BaseAdapter {
         }
 
         if(message.getUserID().equals(RunningRaceApplication.getInstance().getCurrentUser().getId())) {
+            holder.lnFriend.setVisibility(View.GONE);
             holder.imageFriend.setVisibility(View.GONE);
+            holder.lnMe.setVisibility(View.VISIBLE);
             holder.imageME.setVisibility(View.VISIBLE);
             holder.text.setBackgroundColor(context.getResources().getColor(R.color.text_button_bg_5k));
             holder.text.setPadding(50, 0, 25, 0);
             mImageLoader.displayImage(ServiceApi.SERVICE_URL + RunningRaceApplication.getInstance().getCurrentUser().getProfile_image(), holder.imageME, mOptions);
         } else {
+            holder.lnMe.setVisibility(View.GONE);
             holder.imageME.setVisibility(View.GONE);
+            holder.lnFriend.setVisibility(View.VISIBLE);
             holder.imageFriend.setVisibility(View.VISIBLE);
             holder.text.setBackgroundColor(context.getResources().getColor(R.color.white));
             holder.text.setPadding(25, 0, 50, 0);
@@ -117,7 +127,7 @@ public class ChatItemAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-
+        LinearLayout lnMe, lnFriend;
         ImageView imageME;
         ImageView imageFriend;
         TextView text;

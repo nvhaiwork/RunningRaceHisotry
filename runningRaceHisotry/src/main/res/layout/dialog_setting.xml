@@ -123,6 +123,7 @@
             android:id="@+id/setting_about_close"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:visibility="gone"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/x_button" />
@@ -132,16 +133,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="20dp"
-            android:padding="5dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="-2dp"
+
             android:text="@string/setting_about_title"
             android:textColor="@color/setting_about_title"
             android:textSize="@dimen/setting_about_title"
             android:textStyle="bold" />
 
 
-        <WebView
+        <EditText
+            android:text="@string/setting_about_content"
+            android:scrollbars="vertical"
+            android:editable="false"
+            android:isScrollContainer="true"
             android:id="@+id/setting_about_us"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -150,10 +155,11 @@
             android:layout_marginBottom="355dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:padding="7dp"
             android:background="@drawable/about_content_bg"
-            android:textSize="20sp">
+            android:textSize="15sp"/>
 
-        </WebView>
+
 
     </RelativeLayout>
 

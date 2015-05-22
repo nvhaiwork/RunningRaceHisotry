@@ -44,7 +44,7 @@ public class ChooseGroupDialog extends Dialog {
 	public ChooseGroupDialog(Context context, List<Group> groups, View.OnClickListener mCancelClick, View.OnClickListener mDoneClick, AdapterView.OnItemClickListener onListViewItemClick, View.OnClickListener mAddGroupClick) {
 		super(context);
 		// TODO Auto-generated constructor stub
-		this.isCancelable = true;
+		this.isCancelable = false;
         this.groups = groups;
 
         this.mCancelClick = mCancelClick;

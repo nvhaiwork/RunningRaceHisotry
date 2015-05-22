@@ -747,9 +747,13 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
             // TODO Auto-generated method stub
             Race raceInfo = paramVarArgs[0];
             images = new ArrayList<Bitmap>();
+            LogUtil.e("IMAGE", "LoadRaceImageAsync URL Medal: " + ServiceApi.SERVICE_URL + raceInfo.getMedalUrl());
+            LogUtil.e("IMAGE", "LoadRaceImageAsync URL Bib: " + ServiceApi.SERVICE_URL + raceInfo.getBibUrl());
+            LogUtil.e("IMAGE", "LoadRaceImageAsync URL Person : " + ServiceApi.SERVICE_URL + raceInfo.getPersonUrl());
             if ((raceInfo.getMedalUrl() != null) &&(!raceInfo.getMedalUrl().isEmpty())) {
 
                 try {
+                    LogUtil.e("IMAGE", "LoadRaceImageAsync URL Medal: " + ServiceApi.SERVICE_URL + raceInfo.getMedalUrl());
                     Bitmap bmp = getBitmapFromURL(ServiceApi.SERVICE_URL + raceInfo.getMedalUrl());
                     images.add(bmp);
                 } catch (Exception e) {
@@ -761,6 +765,7 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
             if ((raceInfo.getBibUrl() != null) &&(!raceInfo.getBibUrl().isEmpty())) {
 
                 try {
+                    LogUtil.e("IMAGE", "LoadRaceImageAsync URL BIb: " + ServiceApi.SERVICE_URL + raceInfo.getBibUrl());
                     Bitmap bmp = getBitmapFromURL(ServiceApi.SERVICE_URL + raceInfo.getBibUrl());
                     images.add(bmp);
                 } catch (Exception e) {
@@ -771,6 +776,7 @@ public class RaceDetailSortAdapter   extends BaseExpandableListAdapter {
             if ((raceInfo.getPersonUrl() != null) &&(!raceInfo.getPersonUrl().isEmpty())) {
 
                 try {
+                    LogUtil.e("IMAGE", "LoadRaceImageAsync URL Person : " + ServiceApi.SERVICE_URL + raceInfo.getPersonUrl());
                     Bitmap bmp = getBitmapFromURL(ServiceApi.SERVICE_URL + raceInfo.getPersonUrl());
                     images.add(bmp);
                 } catch (Exception e) {

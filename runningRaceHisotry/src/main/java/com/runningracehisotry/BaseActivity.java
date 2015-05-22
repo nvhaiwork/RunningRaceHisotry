@@ -114,7 +114,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 	protected static List<HashMap<String, Object>> mHistory;
 	protected TextView mBotLeftBtnTxt, mBotRightBtnTxt, mBotMidBtnTxt;
     private CustomLoadingDialog mLoadingDialogAboutUs;
-    private WebView mAboutUsContent;
+    //private EditText mAboutUsContent;
     protected CallbackManager callbackManager;
 	/*
 	 * (non-Javadoc)
@@ -593,13 +593,6 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD,
                 "");
 
-		CustomSharedPreferences.setPreferences(
-				Constants.PREF_SNS_ID, "");
-		CustomSharedPreferences.setPreferences(
-				Constants.PREF_SNS_FULL_NAME, "");
-		CustomSharedPreferences.setPreferences(
-				Constants.PREF_SNS_AVATAR, "");
-
         // Setting
         /*CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_SOUND, false);
         CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_LINK_FACEBOOK, false);
@@ -742,7 +735,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
 		// Initiation views
 		int soundLv = CustomSharedPreferences.getPreferences(
-				Constants.PREF_SETTING_SOUND_LEVEL, 0);
+				Constants.PREF_SETTING_SOUND_LEVEL, 50);
 		boolean isSoundOn = CustomSharedPreferences.getPreferences(
 				Constants.PREF_SETTING_SOUND, true);
         LogUtil.d("SOUND", "SOUND ON SETTING: " + isSoundOn);
@@ -756,7 +749,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 				.findViewById(R.id.setting_sound_seek_bar);
 		mAboutLayout = (RelativeLayout) dialog
 				.findViewById(R.id.setting_about_layout);
-        mAboutUsContent = (WebView) dialog.findViewById(R.id.setting_about_us);
+        //mAboutUsContent = (EditText) dialog.findViewById(R.id.setting_about_us);
         soundCb.setChecked(isSoundOn);
 		facebookCb.setChecked(isLinkFb);
 		soundSeekBar.setProgress(soundLv);
@@ -764,13 +757,14 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		// Set max value for seekbar
 		AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		int maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-		soundSeekBar.setMax(maxVol);
-
+		//soundSeekBar.setMax(maxVol);
+        soundSeekBar.setMax(100);
+        LogUtil.d("SOUND", "SOUND ON SETTING LEVEL: " + soundLv + "||" + maxVol);
 		TextView aboutBtn = (TextView) dialog.findViewById(R.id.setting_about);
         final ImageView closeAboutBtn = (ImageView) dialog.findViewById(R.id.setting_about_close);
-        WebView webview = (WebView) dialog.findViewById(R.id.setting_about_us);
+        /*WebView webview = (WebView) dialog.findViewById(R.id.setting_about_us);
         webview.setBackgroundColor(0x00000000);
-        if(Build.VERSION.SDK_INT > 11){ webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);}
+        if(Build.VERSION.SDK_INT > 11){ webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);}*/
         closeAboutBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -820,7 +814,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
                     Log.d(Constants.LOG_TAG," Content about us: " + mHtmlAbout);
                     final String mimeType = "text/html";
                     final String encoding = "UTF-8";
-                    mAboutUsContent.loadDataWithBaseURL("", mHtmlAbout, mimeType, encoding, "");
+                    //mAboutUsContent.loadDataWithBaseURL("", mHtmlAbout, mimeType, encoding, "");
 
                 } catch (JSONException e) {
                     Utilities.showAlertMessage(BaseActivity.this, getResources().getString(R.string.menu_about_cannot_get_content), "");
@@ -899,12 +893,12 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
         mAboutLayout = (RelativeLayout) dialog
                 .findViewById(R.id.setting_about_layout);
-        mAboutUsContent = (WebView) dialog.findViewById(R.id.setting_about_us);
+        //mAboutUsContent = (TextView) dialog.findViewById(R.id.setting_about_us);
 
         final ImageView closeAboutBtn = (ImageView) dialog.findViewById(R.id.setting_about_close);
-        WebView webview = (WebView) dialog.findViewById(R.id.setting_about_us);
+        /*WebView webview = (WebView) dialog.findViewById(R.id.setting_about_us);
         webview.setBackgroundColor(0x00000000);
-        if(Build.VERSION.SDK_INT > 11){ webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);}
+        if(Build.VERSION.SDK_INT > 11){ webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);}*/
         closeAboutBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
