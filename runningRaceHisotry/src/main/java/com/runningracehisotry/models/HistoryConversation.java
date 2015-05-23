@@ -1,5 +1,7 @@
 package com.runningracehisotry.models;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
@@ -58,7 +60,7 @@ private SQLiteDatabase database;
         public void close()
         {
             try{
-                if(database.isOpen()){
+                if(database !=null && database.isOpen()){
                     database.close();
                 }
             }
@@ -84,10 +86,28 @@ private SQLiteDatabase database;
             return database;
         }
 
-    public List<Message> getMessageFromUserId(int userId, int friendID){
+    public List<Message> getMessageFromUserId(int userId, int friendId){
         List<Message> list = new ArrayList<Message>();
         try{
-
+			Cursor cursor = getReadableDatabase().query(CONVERSATION_TABLE,
+				new String[] { SENDER_ID, TEXT_CONTENT },
+				SENDER_ID + "=? OR " + SENDER_ID + "=?", new String[] { String.valueOf(userId), String.valueOf(friendId) },
+				null, null, null, null);
+		if (cursor != null) {
+			// move to first row
+			cursor.moveToFirst();
+			list = new ArrayList<Message>();
+			Message unread = null;
+			// iterate if remain
+			while (cursor.isAfterLast() == false) {
+				unread = new Message(String.valueOf(cursor.getInt(0)), cursor.getString(1));
+				list.add(unread);
+				unread = null;
+				cursor.moveToNext();
+			}
+			cursor.close();
+		}
+		close();
         }
         catch (Exception e){
 
@@ -96,14 +116,27 @@ private SQLiteDatabase database;
     }
 
 
-    public int addMessage(int userId, String content){
-        int result = 0 ;
-        try{
+    public long addMessage(int userId, String content){
+        long result = 0;
+		// set values to insert
+		ContentValues values = new ContentValues();
+		values.put(SENDER_ID, userId);
+		values.put(TEXT_CONTENT, content);
+		// Inserting Row		
+		try {
+			Log.d(TAG, "Add message OPEN");
+			result = getWritableDatabase().insert(CONVERSATION_TABLE, null, values);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Log.d(TAG, "Add failed: ");
+			// e.printStackTrace();
+		}
+		finally{			
+			close();
+		}
 
-        }
-        catch (Exception e){
-
-        }
-        return result;
+		// Log.d(Constant.FUNNY_CHAT, "Close add user: " + result);
+		return result;
+        
     }
 }
