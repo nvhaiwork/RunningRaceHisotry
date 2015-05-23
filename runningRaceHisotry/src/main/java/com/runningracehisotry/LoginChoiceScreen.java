@@ -28,6 +28,7 @@ import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.User;
+import com.runningracehisotry.service.MessageService;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
@@ -39,6 +40,8 @@ import com.runningracehisotry.webservice.base.LoginRequest;
 import com.runningracehisotry.webservice.base.RegisterFacebookRequest;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -475,6 +478,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
             selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
 
             mLoadingDialog.dismiss();
+
             startActivity(selectRaceIntent);
             finish();
         }

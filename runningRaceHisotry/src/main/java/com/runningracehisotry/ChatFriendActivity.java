@@ -1,11 +1,14 @@
 package com.runningracehisotry;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.runningracehisotry.adapters.FriendChatAdapter;
@@ -13,19 +16,29 @@ import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
 import com.runningracehisotry.models.Runner;
+import com.runningracehisotry.service.MessageService;
 import com.runningracehisotry.service.SinchService;
+import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetAllGroupUserRequest;
 import com.runningracehisotry.webservice.base.GetGroupMemberRequest;
+import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.SinchError;
+import com.sinch.android.rtc.messaging.Message;
+import com.sinch.android.rtc.messaging.MessageClient;
+import com.sinch.android.rtc.messaging.MessageClientListener;
+import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
+import com.sinch.android.rtc.messaging.MessageFailureInfo;
 
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,7 +48,7 @@ import android.widget.SearchView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class ChatFriendActivity extends BaseActivity implements ServiceConnection, SinchService.StartFailedListener {
+public class ChatFriendActivity extends BaseActivity implements SinchService.StartFailedListener {
 
     private ExpandableListView mFriendListview;
     private FriendChatAdapter mFriendAdapter;
@@ -43,17 +56,20 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
     private Map<Integer, List<Friend>> friendMap;
+    private Map<String, List<com.runningracehisotry.models.Message>> messageMap = new HashMap<String, List<com.runningracehisotry.models.Message>>();
 
     private CustomLoadingDialog mLoadingDialog;
 
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
-    private static final String TAG = SinchService.class.getSimpleName();
+    private static final String TAG = "ChatFriendActivity";
 
     private int selectedPosition = -1;
     private int selectedGroupPosition = -1;
 
     private SearchView searchView;
+
+    private boolean isProcessing;
 
     private SearchView.OnQueryTextListener listenerSearch =  new SearchView.OnQueryTextListener()
     {
@@ -171,22 +187,25 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
         mFriendListview.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                selectedPosition = childPosition;
-                selectedGroupPosition = groupPosition;
+                if(!isProcessing) {
+                    isProcessing = true;
+                    selectedPosition = childPosition;
+                    selectedGroupPosition = groupPosition;
 
-                if (!mSinchServiceInterface.isStarted()) {
-                    Log.d(TAG, "mSinchServiceInterface.isStarted(): false");
-                    String userName = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getName();
-                    mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
-                } else {
-                    Log.d(TAG, "mSinchServiceInterface.isStarted(): true");
-                    goToChat();
-                }
+//                if (!mSinchServiceInterface.isStarted()) {
+//                    Log.d(TAG, "mSinchServiceInterface.isStarted(): false");
+//                    String userName = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getName();
+//                    mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
+//                } else {
+//                    Log.d(TAG, "mSinchServiceInterface.isStarted(): true");
+//                    goToChat();
+//                }
 
 //                String userName = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getName();
 //                mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
 
-//                goToChat();
+                    goToChat();
+                }
 
                 return false;
             }
@@ -223,6 +242,7 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
         selectRaceIntent.putExtra(
                 Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend()));
         startActivity(selectRaceIntent);
+
     }
 
     @Override
@@ -387,19 +407,6 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
         }
     };
 
-    @Override
-    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-        if (SinchService.class.getName().equals(componentName.getClassName())) {
-            mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
-            mSinchServiceInterface.setStartListener(this);
-        }
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        Log.d("a", name.toShortString());
-
-    }
 
     @Override
     public void onStartFailed(SinchError error) {
@@ -408,7 +415,32 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
 
     @Override
     public void onStarted() {
-        goToChat();
+//        mSinchServiceInterface.addMessageClientListener(new MessageClientListener() {
+//            @Override
+//            public void onIncomingMessage(MessageClient messageClient, Message message) {
+//                Log.d(TAG, "onIncomingMessage: " + message.getTextBody());
+//            }
+//
+//            @Override
+//            public void onMessageSent(MessageClient messageClient, Message message, String s) {
+//                Log.d(TAG, "onMessageSent: " + message.getTextBody());
+//            }
+//
+//            @Override
+//            public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
+//
+//            }
+//
+//            @Override
+//            public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+//                Log.d(TAG, "onMessageDelivered: " + messageDeliveryInfo.getMessageId());
+//            }
+//
+//            @Override
+//            public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
+//
+//            }
+//        });
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -416,7 +448,35 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             if (SinchService.class.getName().equals(componentName.getClassName())) {
                 mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
+                mSinchServiceInterface.addMessageClientListener(new MessageClientListener() {
+                    @Override
+                    public void onIncomingMessage(MessageClient messageClient, Message message) {
+                        Log.d(TAG, "onIncomingMessage: " + message.getTextBody());
+                    }
+
+                    @Override
+                    public void onMessageSent(MessageClient messageClient, Message message, String s) {
+                        Log.d(TAG, "onMessageSent: " + message.getTextBody());
+                    }
+
+                    @Override
+                    public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
+
+                    }
+
+                    @Override
+                    public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+                        Log.d(TAG, "onMessageDelivered: " + messageDeliveryInfo.getMessageId());
+                    }
+
+                    @Override
+                    public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
+
+                    }
+                });
                 mSinchServiceInterface.setStartListener(ChatFriendActivity.this);
+//                mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
+                registerInBackground();
             }
         }
 
@@ -426,9 +486,49 @@ public class ChatFriendActivity extends BaseActivity implements ServiceConnectio
         }
     };
 
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                String regid = "";
+                regid = CustomSharedPreferences.getPreferences(Constants.PREF_GCM_DEVICE_ID, "");
+                if(regid.length() == 0) {
+                    try {
+                        String androidID = "984219596580";
+
+                        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(RunningRaceApplication.getInstance());
+                        regid = gcm.register(androidID);
+                        msg = "Device registered, registration ID=" + regid;
+
+
+                    } catch (IOException ex) {
+                        msg = "Error :" + ex.getMessage();
+                    }
+                }
+                return regid;
+            }
+
+            @Override
+            protected void onPostExecute(String regid) {
+                if(regid.length() > 0) {
+                    CustomSharedPreferences.setPreferences(Constants.PREF_GCM_DEVICE_ID, regid);
+                }
+
+                mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
+            }
+        }.execute(null, null, null);
+    }
+
     @Override
     protected void onDestroy() {
         unbindService(connection);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isProcessing = false;
     }
 }

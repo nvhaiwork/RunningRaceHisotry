@@ -12,7 +12,8 @@
         android:text="@string/menu_your_community"
         android:textColor="@color/white"
         android:textSize="@dimen/login_sign_in_with"
-        android:id="@+id/tv_des" />
+        android:id="@+id/tv_des"
+        android:layout_alignParentTop="true"/>
 
     <ListView
         android:id="@+id/lv_message"

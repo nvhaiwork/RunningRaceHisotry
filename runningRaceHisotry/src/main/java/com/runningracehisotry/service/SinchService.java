@@ -4,14 +4,27 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.runningracehisotry.RunningRaceApplication;
+import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.sinch.android.rtc.*;
+import com.sinch.android.rtc.messaging.Message;
+import com.sinch.android.rtc.messaging.MessageClient;
 import com.sinch.android.rtc.messaging.MessageClientListener;
+import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
+import com.sinch.android.rtc.messaging.MessageFailureInfo;
 import com.sinch.android.rtc.messaging.WritableMessage;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.List;
 
 public class SinchService extends Service {
 
@@ -113,12 +126,46 @@ public class SinchService extends Service {
 
             mSinchClient.setSupportMessaging(true);
             mSinchClient.startListeningOnActiveConnection();
+            mSinchClient.setSupportActiveConnectionInBackground(true);
+            mSinchClient.checkManifest();
+            mSinchClient.getMessageClient().addMessageClientListener(new MessageClientListener() {
+                @Override
+                public void onIncomingMessage(MessageClient messageClient, Message message) {
+                    Log.d(TAG, "onIncomingMessage: " + message.getTextBody());
+                }
+
+                @Override
+                public void onMessageSent(MessageClient messageClient, Message message, String s) {
+                    Log.d(TAG, "onMessageSent: " + message.getTextBody());
+                }
+
+                @Override
+                public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
+
+                }
+
+                @Override
+                public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+                    Log.d(TAG, "onMessageDelivered: " + messageDeliveryInfo.getMessageId());
+                }
+
+                @Override
+                public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
+
+                }
+            });
+            String regid = CustomSharedPreferences.getPreferences(Constants.PREF_GCM_DEVICE_ID, "");
+            if(regid.length() > 0) {
+                mSinchClient.setSupportPushNotifications(true);
+                mSinchClient.registerPushNotificationData(regid.getBytes(Charset.forName("UTF-8")));
+            }
 
             mSinchClient.addSinchClientListener(new MySinchClientListener());
             mSinchClient.start();
             Log.d(TAG, "call start: ");
         }
     }
+
 
     private void stop() {
         if (mSinchClient != null) {
@@ -138,6 +185,7 @@ public class SinchService extends Service {
 
         @Override
         public void onClientFailed(SinchClient client, SinchError error) {
+            Log.d(TAG, "SinchClient fail:" + error.getMessage());
             if (mListener != null) {
                 mListener.onStartFailed(error);
             }

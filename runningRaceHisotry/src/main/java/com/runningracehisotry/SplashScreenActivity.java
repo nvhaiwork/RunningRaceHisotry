@@ -4,6 +4,7 @@ package com.runningracehisotry;
 import com.google.gson.Gson;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.User;
+import com.runningracehisotry.service.MessageService;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
@@ -14,8 +15,12 @@ import com.runningracehisotry.webservice.base.LoginRequest;
 import com.runningracehisotry.webservice.base.RegisterFacebookRequest;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.view.Window;
 
 
@@ -195,7 +200,8 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
             CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, user.getId());
             CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, data.toString());
             LogUtil.d(logTag, "Logged use data not null");
-            Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
+
+            Intent selectRaceIntent = new Intent(SplashScreenActivity.this, SelectRaceActivity.class);
             selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
             startActivity(selectRaceIntent);

@@ -65,19 +65,16 @@ private String loggedUserId;
 
     @Override
     protected void initView() {
+        super.initView();
         this.loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//        getWindow().setSoftInputMode(
+//                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
 
         getExtraFriend();
-
-
-        super.initView();
-
 
         if(currentFriend != null) {
             etMessage = (EditText) findViewById(R.id.et_message);
@@ -216,7 +213,7 @@ private String loggedUserId;
         long sentTime = message.getTimestamp().getTime();
         String ownerId = currentFriend.getId();
         Log.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
-                + msgId + "|"+ userIdDb + "|"+ friendIdDb + "|"+ content + "|"+ sentTime + "|"+ ownerId);
+                + msgId + "|" + userIdDb + "|" + friendIdDb + "|" + content + "|" + sentTime + "|"+ ownerId);
         if(userIdDb != null) {
             //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
             Message messageObject = new Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
