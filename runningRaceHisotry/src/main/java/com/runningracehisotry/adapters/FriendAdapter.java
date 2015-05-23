@@ -2,6 +2,7 @@ package com.runningracehisotry.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.runningracehisotry.R;
+import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 
 import com.runningracehisotry.webservice.ServiceApi;
@@ -90,6 +92,7 @@ public class FriendAdapter  extends BaseAdapter {
 
         holder.text.setText(friendGroup.getFriend().getFull_name());
         mImageLoader.displayImage(ServiceApi.SERVICE_URL + friendGroup.getFriend().getProfile_image(), holder.image, mOptions);
+        Log.d(Constants.LOG_TAG, "IMAGE FRIEND: " + ServiceApi.SERVICE_URL + friendGroup.getFriend().getProfile_image());
         // Image
         /*if (user.containsKey(Constants.PICTURE)) {
 

@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
+import com.runningracehisotry.RunningRaceApplication;
+import com.runningracehisotry.constants.Constants;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,27 +20,35 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by QuyNguyen on 5/23/2015.
  */
-public class HistoryConversation  extends SQLiteOpenHelper {
+public class HistoryConversation extends SQLiteOpenHelper {
 
-    private static final String TAG                  = "HistoryConversation";
-public static final String  DATABASE_FILE_PATH      = Environment.getExternalStorageDirectory().getAbsolutePath();
-    public static final String  DATABASE_PARENT_FOLDER = "com.runningracehisotry";
-public static final String  DATABASE_NAME      = "Running";
-public static final String  CONVERSATION_TABLE        = "Conversation";
-public static final String  SENDER_ID       = "sender_id";
-    public static final String  TEXT_CONTENT      = "text_content";
+    private static final String TAG = "HistoryConversation";
+    /*public static final String DATABASE_FILE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String DATABASE_PARENT_FOLDER = "com.runningracehisotry";
+    public static final String DATABASE_NAME = "Running";*/
+    public static final String CONVERSATION_TABLE = "ConversationChat";
+    public static final String MESSAGE_ID = "message_id";
+    public static final String SENDER_ID = "user_id";
+    public static final String FRIEND_ID = "friend_id";
+    public static final String TEXT_CONTENT = "text_content";
+    public static final String SENT_TIME = "long_time";
+    public static final String OWNER_ID = "owner_id";
 
-    public static final String CONVERSATION_TABLE_CREATE     = "create table "
-        + CONVERSATION_TABLE + " (" + SENDER_ID + " integer, " + TEXT_CONTENT + " text);";
+    public static final String CONVERSATION_TABLE_CREATE = "CREATE TABLE " + CONVERSATION_TABLE + " ( "
+            + MESSAGE_ID + " TEXT PRIMARY KEY , "
+            + SENDER_ID + " TEXT , "
+            + FRIEND_ID + " TEXT , "
+            + TEXT_CONTENT + " TEXT , "
+            + SENT_TIME + " INTEGER , "
+            + OWNER_ID + " TEXT )";
 
     protected static final int DATABASE_VERSION = 1;
 
 
-
-private volatile SQLiteDatabase database;
+    private volatile SQLiteDatabase database;
     //private volatile SQLiteDatabase mDb = null;
 
-    private volatile AtomicInteger mReferenceCount =  new AtomicInteger(0);
+    private volatile AtomicInteger mReferenceCount = new AtomicInteger(0);
 
     private static HistoryConversation mInstance;
 
@@ -76,18 +87,16 @@ private volatile SQLiteDatabase database;
 
         }*/
 
-        public void close()
-        {
-            try{
-                if(database !=null && database.isOpen()){
-                    database.close();
-                }
+    public void close() {
+        try {
+            if (database != null && database.isOpen()) {
+                database.close();
             }
-            catch(Exception e){
+        } catch (Exception e) {
 
-            }
-            //DBUtil.safeCloseDataBase(database);
         }
+        //DBUtil.safeCloseDataBase(database);
+    }
 
     private HistoryConversation(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         // NOTE I prefix the full path of my files directory to 'name'
@@ -101,8 +110,10 @@ private volatile SQLiteDatabase database;
             e.printStackTrace();
         }*/
 
-        super(context, DATABASE_FILE_PATH + File.separator
-                + DATABASE_PARENT_FOLDER + File.pathSeparator + name, factory, version);
+        /*super(context, DATABASE_FILE_PATH + File.separator
+                + DATABASE_PARENT_FOLDER + File.pathSeparator + name, factory, version);*/
+
+        super(context, name, factory, version);
 
     }
 
@@ -112,6 +123,7 @@ private volatile SQLiteDatabase database;
     }*/
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d(Constants.LOG_TAG, "query: " + CONVERSATION_TABLE_CREATE);
         db.execSQL(CONVERSATION_TABLE_CREATE);
     }
 
@@ -144,7 +156,7 @@ private volatile SQLiteDatabase database;
     public synchronized SQLiteDatabase openDatabase() {
         Log.w(TAG, "Thread OPEN: " + Thread.currentThread().getName());
         mReferenceCount.incrementAndGet();
-        if(mReferenceCount.get() >= 1){
+        if (mReferenceCount.get() >= 1) {
             Log.w(TAG, "DatabaseHandler#openDatabase mReferenceCount = " + mReferenceCount);
             database = this.getWritableDatabase();
 
@@ -160,67 +172,76 @@ private volatile SQLiteDatabase database;
         Log.w(TAG, "Thread CLOSE: " + Thread.currentThread().getName());
         mReferenceCount.decrementAndGet();
         Log.w(TAG, "DatabaseHandler#closeDatabase mReferenceCount = " + mReferenceCount);
-        if(mReferenceCount.get() <= 0  && database != null){
+        if (mReferenceCount.get() <= 0 && database != null) {
             mReferenceCount.set(0);
             Log.w(TAG, "DatabaseHandler#closeDatabase mReferenceCount = " + mReferenceCount);
             database.close();
         }
     }
 
-    public List<Message> getMessageFromUserId(String userId, String friendId){
+    public List<Message> getMessageFromUserId(String userId, String friendId) {
         List<Message> list = new ArrayList<Message>();
-        try{
+        try {
             //getReadableDatabase();
-			Cursor cursor = openDatabase().query(CONVERSATION_TABLE,
-                    new String[]{SENDER_ID, TEXT_CONTENT},
-                    SENDER_ID + "=? OR " + SENDER_ID + "=?", new String[]{userId, friendId},
-                    null, null, null, null);
-		if (cursor != null) {
-			// move to first row
-			cursor.moveToFirst();
-			list = new ArrayList<Message>();
-			Message unread = null;
-			// iterate if remain
-			while (cursor.isAfterLast() == false) {
-				unread = new Message(String.valueOf(cursor.getInt(0)), cursor.getString(1));
-				list.add(unread);
-				unread = null;
-				cursor.moveToNext();
-			}
-			cursor.close();
-		}
-		close();
-        }
-        catch (Exception e){
+            Cursor cursor = openDatabase().query(CONVERSATION_TABLE,
+                    new String[]{MESSAGE_ID, SENDER_ID, FRIEND_ID, TEXT_CONTENT, SENT_TIME, OWNER_ID},
+                    SENDER_ID + "=? AND " + FRIEND_ID + "=?", new String[]{userId, friendId},
+                    null, null, SENT_TIME + " ASC ", null);
+            if (cursor != null) {
+                // move to first row
+                cursor.moveToFirst();
+                list = new ArrayList<Message>();
+                Message unread = null;
+                // iterate if remain
+                while (cursor.isAfterLast() == false) {
+                    String msgId = cursor.getString(0);
+                    String userIdDb = cursor.getString(1);
+                    String friendIdDb = cursor.getString(2);
+                    String content = cursor.getString(3);
+                    long sentTime = cursor.getLong(4);
+                    String ownerId = cursor.getString(5);
+
+                    unread = new Message(msgId, userIdDb, friendIdDb, content,sentTime,ownerId);
+                    list.add(list.size(), unread);
+                    unread = null;
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+            close();
+        } catch (Exception e) {
 
         }
         return list;
     }
 
 
-    public long addMessage(String userId, String content){
+    public long addMessage(Message message) {
         long result = 0;
-		// set values to insert
-		ContentValues values = new ContentValues();
-		values.put(SENDER_ID, userId);
-		values.put(TEXT_CONTENT, content);
-		// Inserting Row		
-		try {
-			Log.d(TAG, "Add message OPEN");
+        // set values to insert
+        ContentValues values = new ContentValues();
+        values.put(MESSAGE_ID, message.getMessageId());
+        values.put(SENDER_ID, message.getUserId());
+        values.put(FRIEND_ID, message.getFriendId());
+        values.put(TEXT_CONTENT, message.getContent());
+        values.put(SENT_TIME, message.getTime());
+        values.put(OWNER_ID, message.getOwnerId());
+        // Inserting Row
+        try {
+            Log.d(TAG, "Add message OPEN");
             //database = getWritableDatabase();
             //getWritableDatabase();
-			result = openDatabase().insert(CONVERSATION_TABLE, null, values);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Log.d(TAG, "Add failed: ");
-			// e.printStackTrace();
-		}
-		finally{			
-			close();
-		}
+            result = openDatabase().insert(CONVERSATION_TABLE, null, values);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.d(TAG, "Add failed: ");
+            // e.printStackTrace();
+        } finally {
+            closeDatabase();
+        }
 
-		// Log.d(Constant.FUNNY_CHAT, "Close add user: " + result);
-		return result;
-        
+        // Log.d(Constant.FUNNY_CHAT, "Close add user: " + result);
+        return result;
+
     }
 }

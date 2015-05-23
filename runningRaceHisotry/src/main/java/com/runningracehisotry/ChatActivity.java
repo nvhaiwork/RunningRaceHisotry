@@ -24,6 +24,7 @@ import com.runningracehisotry.models.Message;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.service.SinchService;
 import com.runningracehisotry.views.CustomFontTextView;
+import com.runningracehisotry.webservice.ServiceApi;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.messaging.MessageClient;
 import com.sinch.android.rtc.messaging.MessageClientListener;
@@ -51,7 +52,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     private static final String TAG = SinchService.class.getSimpleName();
-
+private String loggedUserId;
 
     public static final String  DATABASE_FILE_PATH      = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String  DATABASE_PARENT_FOLDER = "com.runningracehisotry";
@@ -64,6 +65,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
     @Override
     protected void initView() {
+        this.loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -98,6 +100,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
                     }
                 }
             });
+            Log.e(Constants.LOG_TAG, "IMAGE PROFILE FRIEND URL: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
         }
 
 
@@ -129,7 +132,10 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
             mChatItemAdaper.notifyDataSetChanged();
             lvMessages.setSelection(listMes.size()-1);
             for(Message m: listMes){
-                Log.d(TAG, "History message: " + m.getUserID() + "||" + m.getContent());
+                //Log.d(TAG, "History message: " + m.getMessageId() + "||" + m.getContent());
+                if(currentFriend.getId().equalsIgnoreCase(m.getOwnerId())){
+                    Log.e(Constants.LOG_TAG, "IMAGE PROFILE FRIEND: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
+                }
             }
         }
 
@@ -194,27 +200,58 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     @Override
     public void onIncomingMessage(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message) {
         Log.d(TAG, "onIncomingMessage: " + message.getTextBody());
-        Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
-        mChatItemAdaper.addMessage(messageObject);
-        lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+        String msgId = message.getMessageId();
+        List<String> list = message.getRecipientIds();
+        String userIdDb = loggedUserId;
+        /*if(list != null && list.size()>0){
+            for(String str : list){
+                if(str.equalsIgnoreCase(loggedUserId)){
+                    userIdDb = str;
+                    break;
+                }
+            }
+        }*/
+        String friendIdDb = currentFriend.getId();
+        String content = message.getTextBody();
+        long sentTime = message.getTimestamp().getTime();
+        String ownerId = currentFriend.getId();
+        Log.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
+                + msgId + "|"+ userIdDb + "|"+ friendIdDb + "|"+ content + "|"+ sentTime + "|"+ ownerId);
+        if(userIdDb != null) {
+            //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
+            Message messageObject = new Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
+            mChatItemAdaper.addMessage(messageObject);
+            lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+            //store DB when received
+            HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+            long result = dao.addMessage(messageObject);
+            Log.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
+        }
 
-        //store DB when received
-        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
-        long result = dao.addMessage(messageObject.getUserID(), message.getTextBody());
-        Log.d(TAG, "onIncomingMessage add DB: " + result);
+
+
     }
 
 
     @Override
     public void onMessageSent(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, String s) {
-        Log.d(TAG, "onMessageSent: " + message.getTextBody());
-        Message newMessage = new Message(RunningRaceApplication.getInstance().getCurrentUser().getId(), message.getTextBody());
-        mChatItemAdaper.addMessage(newMessage);
+        Log.d(TAG, "onMessageSent content: " + message.getTextBody());
+        String msgId = message.getMessageId();
+        String userIdDb = loggedUserId;
+        String friendIdDb = currentFriend.getId();
+        String content = message.getTextBody();
+        long sentTime = message.getTimestamp().getTime();
+        String ownerId = loggedUserId;
+        Log.d(TAG, "onMessageSent ID|SENder|friend|content|time|owner: "
+        + msgId + "|"+ userIdDb + "|"+ friendIdDb + "|"+ content + "|"+ sentTime + "|"+ ownerId);
+        //Message newMessage = new Message(loggedUserId, message.getTextBody());
+        Message messageObject = new Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
+        mChatItemAdaper.addMessage(messageObject);
         lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
-        //store DB
+        //store DB when received
         HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
-        long result = dao.addMessage(newMessage.getUserID(), message.getTextBody());
-        Log.d(TAG, "onMessageSent add DB: " + result);
+        long result = dao.addMessage(messageObject);
+        Log.d(TAG, "onMessageSent add DB result|| message ID: " + result +"||" + message.getMessageId());
     }
 
 

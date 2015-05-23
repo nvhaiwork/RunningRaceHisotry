@@ -2,6 +2,7 @@ package com.runningracehisotry.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.runningracehisotry.R;
 import com.runningracehisotry.RunningRaceApplication;
+import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Message;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.webservice.ServiceApi;
@@ -71,7 +73,9 @@ public class ChatItemAdapter extends BaseAdapter {
     }
 
     public void addMessage(Message message) {
-        mMessages.add(message);
+        if(mMessages != null) {
+            mMessages.add(mMessages.size(), message);
+        }
         notifyDataSetChanged();
     }
 
@@ -102,8 +106,11 @@ public class ChatItemAdapter extends BaseAdapter {
 
             holder = (ViewHolder) converView.getTag();
         }
-
-        if(message.getUserID().equals(RunningRaceApplication.getInstance().getCurrentUser().getId())) {
+        //Log.d(Constants.LOG_TAG, "IMAGE LOGIN: " + RunningRaceApplication.getInstance().getCurrentUser().getId());
+        //Log.d(Constants.LOG_TAG, "IMAGE cxhcek: " + message.getUserId().equalsIgnoreCase(RunningRaceApplication.getInstance().getCurrentUser().getId()));
+        //Log.d(Constants.LOG_TAG, "IMAGE cxhcek: " + (message.getOwnerId().equalsIgnoreCase(message.getUserId())));
+        if(message.getOwnerId().equalsIgnoreCase(message.getUserId())) {
+            //login user message
             holder.lnFriend.setVisibility(View.GONE);
             holder.imageFriend.setVisibility(View.GONE);
             holder.lnMe.setVisibility(View.VISIBLE);
@@ -111,6 +118,7 @@ public class ChatItemAdapter extends BaseAdapter {
             holder.text.setBackgroundColor(context.getResources().getColor(R.color.text_button_bg_5k));
             holder.text.setPadding(50, 0, 25, 0);
             mImageLoader.displayImage(ServiceApi.SERVICE_URL + RunningRaceApplication.getInstance().getCurrentUser().getProfile_image(), holder.imageME, mOptions);
+            //Log.d(Constants.LOG_TAG, "IMAGE MYSELF: " + ServiceApi.SERVICE_URL + RunningRaceApplication.getInstance().getCurrentUser().getProfile_image());
         } else {
             holder.lnMe.setVisibility(View.GONE);
             holder.imageME.setVisibility(View.GONE);
@@ -118,7 +126,8 @@ public class ChatItemAdapter extends BaseAdapter {
             holder.imageFriend.setVisibility(View.VISIBLE);
             holder.text.setBackgroundColor(context.getResources().getColor(R.color.white));
             holder.text.setPadding(25, 0, 50, 0);
-            mImageLoader.displayImage(ServiceApi.SERVICE_URL + currentFriend.getProfile_image(), holder.imageME, mOptions);
+            mImageLoader.displayImage(ServiceApi.SERVICE_URL + currentFriend.getProfile_image(), holder.imageFriend, mOptions);
+            //Log.d(Constants.LOG_TAG, "IMAGE FRIEND CHAT: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
         }
 
         holder.text.setText(message.getContent());
