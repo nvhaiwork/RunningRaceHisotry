@@ -17,11 +17,12 @@
     <ListView
         android:id="@+id/lv_message"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tv_des"
         android:divider="@android:color/transparent"
 
-        android:isScrollContainer="false"/>
+        android:isScrollContainer="false"
+        android:layout_marginBottom="50dp" />
 
     <RelativeLayout
         android:id="@+id/comment_layout"

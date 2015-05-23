@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.runningracehisotry.adapters.ChatItemAdapter;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.HistoryConversation;
 import com.runningracehisotry.models.Message;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.service.SinchService;
@@ -29,6 +31,7 @@ import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
 import com.sinch.android.rtc.messaging.MessageFailureInfo;
 
 
+import java.io.File;
 import java.util.List;
 
 
@@ -50,6 +53,9 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     private static final String TAG = SinchService.class.getSimpleName();
 
 
+    public static final String  DATABASE_FILE_PATH      = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String  DATABASE_PARENT_FOLDER = "com.runningracehisotry";
+    public static final String  DATABASE_NAME      = "Running";
     @Override
     protected int addContent() {
         return R.layout.activity_chat;
@@ -97,11 +103,37 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
         getApplicationContext().bindService(new Intent(this, SinchService.class), this,
                 BIND_AUTO_CREATE);
+
+        File myFilesDir = null;
+        try{
+            myFilesDir = new File(DATABASE_FILE_PATH + File.separator
+                    + DATABASE_PARENT_FOLDER);
+            myFilesDir.mkdirs();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        getHistoryChat();
+
     }
 
+    private void getHistoryChat() {
+        HistoryConversation dao = HistoryConversation.getInstance(this, DATABASE_NAME);
+        String meId = RunningRaceApplication.getInstance().getCurrentUser().getId();
+        List<Message> listMes = dao.getMessageFromUserId(meId, meId);;
+        if(currentFriend != null) {
+            listMes = dao.getMessageFromUserId(meId, currentFriend.getId());;
+        }
+        if(listMes != null && listMes.size()>0){
+            mChatItemAdaper.setMessages(listMes);
+            mChatItemAdaper.notifyDataSetChanged();
+            lvMessages.setSelection(listMes.size()-1);
+            for(Message m: listMes){
+                Log.d(TAG, "History message: " + m.getUserID() + "||" + m.getContent());
+            }
+        }
 
-
-
+    }
 
 
     @Override
@@ -165,6 +197,11 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
         Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
         mChatItemAdaper.addMessage(messageObject);
         lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+
+        //store DB when received
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        long result = dao.addMessage(messageObject.getUserID(), message.getTextBody());
+        Log.d(TAG, "onIncomingMessage add DB: " + result);
     }
 
 
@@ -174,6 +211,10 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
         Message newMessage = new Message(RunningRaceApplication.getInstance().getCurrentUser().getId(), message.getTextBody());
         mChatItemAdaper.addMessage(newMessage);
         lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+        //store DB
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        long result = dao.addMessage(newMessage.getUserID(), message.getTextBody());
+        Log.d(TAG, "onMessageSent add DB: " + result);
     }
 
 

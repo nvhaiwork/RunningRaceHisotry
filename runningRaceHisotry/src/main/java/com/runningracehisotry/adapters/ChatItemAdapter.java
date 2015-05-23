@@ -126,6 +126,14 @@ public class ChatItemAdapter extends BaseAdapter {
         return converView;
     }
 
+    public List<Message> getMessages() {
+        return mMessages;
+    }
+
+    public void setMessages(List<Message> mMessages) {
+        this.mMessages = mMessages;
+    }
+
     private class ViewHolder {
         LinearLayout lnMe, lnFriend;
         ImageView imageME;
