@@ -207,4 +207,6 @@
     <string name="detail_race_type_other">Other Races</string>
 
     <string name="dialog_add_race_invalid_mile">Invalid Miles</string>
+
+    <string name="dialog_add_new_group">Create new Group...</string>
 </resources>

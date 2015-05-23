@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/sub_new_people_you_may_know_color"
-        android:padding="7dp"
+        android:padding="7.5dp"
         android:text="@string/menu_runner_you_may_know"
         android:textColor="@color/white"
         android:textSize="@dimen/login_sign_in_with" />

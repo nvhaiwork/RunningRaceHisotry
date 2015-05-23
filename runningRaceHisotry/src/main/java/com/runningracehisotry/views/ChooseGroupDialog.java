@@ -41,7 +41,9 @@ public class ChooseGroupDialog extends Dialog {
 	/**
 	 * @param context
 	 */
-	public ChooseGroupDialog(Context context, List<Group> groups, View.OnClickListener mCancelClick, View.OnClickListener mDoneClick, AdapterView.OnItemClickListener onListViewItemClick, View.OnClickListener mAddGroupClick) {
+	public ChooseGroupDialog(Context context, List<Group> groups,
+                             View.OnClickListener mCancelClick, View.OnClickListener mDoneClick,
+                             AdapterView.OnItemClickListener onListViewItemClick, View.OnClickListener mAddGroupClick) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.isCancelable = false;

@@ -9,9 +9,11 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,7 +46,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     private ListView lvMessages;
     private CustomFontTextView tvDes;
     private EditText etMessage;
-    private Button btnSend;
+    private ImageView btnSend;
     private ChatItemAdapter mChatItemAdaper;
     private User currentFriend;
 
@@ -69,7 +71,7 @@ private String loggedUserId;
         this.loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 //        getWindow().setSoftInputMode(
 //                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
@@ -78,7 +80,7 @@ private String loggedUserId;
 
         if(currentFriend != null) {
             etMessage = (EditText) findViewById(R.id.et_message);
-            btnSend = (Button) findViewById(R.id.btn_send);
+            btnSend = (ImageView) findViewById(R.id.btn_send);
             tvDes = (CustomFontTextView) findViewById(R.id.tv_des);
             tvDes.setText("Chat with " + currentFriend.getFull_name());
             btnSend.setOnClickListener(this);
@@ -114,7 +116,7 @@ private String loggedUserId;
             e.printStackTrace();
         }
         getHistoryChat();
-
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);
     }
 
     private void getHistoryChat() {

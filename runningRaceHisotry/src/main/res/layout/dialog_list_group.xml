@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="0dp"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical" >
+<LinearLayout
+    android:orientation="horizontal"
+    android:background="@color/view_seperator_bg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/cancel_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_weight="1"
+        android:layout_gravity="left"
+        android:padding="15dp"
+        android:text="Cancel"
+        android:textColor="@color/dialog_button_text_color"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_weight="1"
+        android:id="@+id/done_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_gravity="right"
+        android:padding="15dp"
+        android:text="Done"
+        android:textColor="@color/dialog_button_text_color"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+</LinearLayout>
+    <NumberPicker
+        android:id="@+id/age_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:overScrollMode="always"
+        android:scrollbars="vertical" />
+
+</LinearLayout>

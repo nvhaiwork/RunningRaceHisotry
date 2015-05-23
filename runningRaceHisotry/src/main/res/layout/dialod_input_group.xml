@@ -35,7 +35,7 @@
             android:paddingLeft="9dp"
             android:paddingRight="9dp"
             android:paddingTop="9dp"
-            android:text="input group name"
+            android:text="Input group name"
             android:textColor="@color/black" />
 
         <EditText
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="cancel"
+                android:text="Cancel"
                 android:textColor="@color/dialog_button_text_color"
                 android:textSize="18sp"
                 android:textStyle="bold" >

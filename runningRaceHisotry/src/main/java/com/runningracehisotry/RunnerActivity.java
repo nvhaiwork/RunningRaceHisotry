@@ -23,6 +23,7 @@ import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Group;
 import com.runningracehisotry.models.Runner;
 import com.runningracehisotry.utilities.LogUtil;
+import com.runningracehisotry.utilities.PickerDialog;
 import com.runningracehisotry.utilities.Utilities;
 import com.runningracehisotry.views.ChooseGroupDialog;
 import com.runningracehisotry.views.CustomAlertDialog;
@@ -53,12 +54,12 @@ public class RunnerActivity extends BaseActivity {
     private List<Group> groups;
     private Group chosenGroup;
     private Dialog inputDialog;
-    private Dialog chosenDialog;
+    //private Dialog chosenDialog;
     private CustomAlertDialog successDialog;
     private String inputGroupName;
 
     private SearchView searchView;
-
+    private PickerDialog personalityPicker;
 
     private SearchView.OnQueryTextListener listenerSearch =  new SearchView.OnQueryTextListener()
     {
@@ -413,7 +414,7 @@ public class RunnerActivity extends BaseActivity {
                 RunnerActivity.this);
         successDialog.setCancelableFlag(false);
         successDialog.setTitle("Add user");
-        String message = String.format("Add user: %s to group: %s Successful!", new String[]{username, groupName});
+        String message = String.format("Add user: %s to group: %s Successfully!", new String[]{username, groupName});
         successDialog.setMessage(message);
         successDialog.setPositiveButton(getString(R.string.ok),
                 new OnPositiveButtonClick() {
@@ -429,7 +430,7 @@ public class RunnerActivity extends BaseActivity {
     }
 
     private void showChooseGroupDialog(final Runner user, final List<Group> groups) {
-        View.OnClickListener onDoneClick = new View.OnClickListener() {
+        /*View.OnClickListener onDoneClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(chosenGroup == null) {
@@ -444,23 +445,71 @@ public class RunnerActivity extends BaseActivity {
                     mLoadingDialog.show();
                 }
 
-                if(chosenDialog != null && chosenDialog.isShowing()) {
-                    chosenDialog.dismiss();
+                if(personalityPicker != null && personalityPicker.isShowing()) {
+                    personalityPicker.dismiss();
                 }
-            }
-        };
 
-        View.OnClickListener onCancelClick = new View.OnClickListener() {
+                *//*if(chosenDialog != null && chosenDialog.isShowing()) {
+                    chosenDialog.dismiss();
+                }*//*
+            }
+        };*/
+
+        String[] groupStringTemp = new String[]{};
+        int i, len = groups.size();
+        if(groups != null && groups.size()>0){
+            len = groups.size();
+        }
+        groupStringTemp = new String[len + 1];
+        for(i = 0; i<len; i++){
+            groupStringTemp[i] = groups.get(i).getGroupName();
+        }
+        groupStringTemp[len] = getResources().getString(R.string.dialog_add_new_group);//"Create new Group...";
+        final String[] groupString = groupStringTemp;
+        PickerDialog.OnDoneClickListener onDoneClickListener = new PickerDialog.OnDoneClickListener() {
             @Override
-            public void onClick(View v) {
-                if(chosenDialog != null && chosenDialog.isShowing()) {
-                    chosenDialog.dismiss();
+            public void OnDone(int position, String value) {
+
+                if(personalityPicker != null && personalityPicker.isShowing()) {
+                    personalityPicker.dismiss();
                 }
-                chosenGroup = null;
+
+                if((groups == null) || (groups != null && groups.size() == 0)) {
+                    LogUtil.d(Constants.LOG_TAG, "No GROUP, CREATE NEW GROUP");
+                    showInputGroupDialog();
+                }
+                else{
+                    if(position < (groupString.length - 1)){
+                        if(chosenGroup == null) {
+                            chosenGroup = groups.get(position);
+                        }
+                        LogUtil.d(Constants.LOG_TAG, "CHOOSE EXISTED GROUP");
+                        AddGroupMemberRequest request = new AddGroupMemberRequest(String.valueOf(chosenRunner.getId()), String.valueOf(chosenGroup.getGroupId()));
+                        request.setListener(callBackEvent);
+                        new Thread(request).start();
+                        if (!mLoadingDialog.isShowing()) {
+                            mLoadingDialog.show();
+                        }
+                    }
+                    else{
+                        LogUtil.d(Constants.LOG_TAG, "HAS GROUP, CREATE NEW GROUP");
+                        showInputGroupDialog();
+                    }
+                }
+
             }
         };
+       PickerDialog.OnCancelClickListener onCancelClickListener = new PickerDialog.OnCancelClickListener() {
+           @Override
+           public void OnCancel() {
+               if(personalityPicker != null && personalityPicker.isShowing()) {
+                   personalityPicker.dismiss();
+               }
+               chosenGroup = null;
+           }
+       };
 
-        View.OnClickListener onCreateClick = new View.OnClickListener() {
+       /* View.OnClickListener onCreateClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chosenGroup = null;
@@ -474,17 +523,26 @@ public class RunnerActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 chosenGroup = groups.get(position);
             }
-        };
-        if(chosenDialog != null && chosenDialog.isShowing()) {
-            chosenDialog.dismiss();
-        }
+        };*/
+
 
         if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
             mLoadingDialog.dismiss();
         }
-
+        /*if(chosenDialog != null && chosenDialog.isShowing()) {
+            chosenDialog.dismiss();
+        }
         chosenDialog = new ChooseGroupDialog(this, groups, onCancelClick, onDoneClick, itemClickListener, onCreateClick);
-        chosenDialog.show();
+        chosenDialog.show();*/
+        if(personalityPicker != null && personalityPicker.isShowing()) {
+            personalityPicker.dismiss();
+        }
+         personalityPicker = new PickerDialog(
+                this, groupString, 0,
+                groupString.length - 1);
+        personalityPicker.setOnDoneClickListener(onDoneClickListener);
+        personalityPicker.setOnCancelClickListener(onCancelClickListener);
+        personalityPicker.show();
     }
 
 
@@ -503,14 +561,13 @@ public class RunnerActivity extends BaseActivity {
     }
 
     private void showInputGroupDialog() {
-        if(chosenDialog != null && chosenDialog.isShowing()) {
+        /*if(chosenDialog != null && chosenDialog.isShowing()) {
             chosenDialog.dismiss();
-        }
+        }*/
 
         if(inputDialog != null && inputDialog.isShowing()) {
             inputDialog.dismiss();
         }
-
         inputDialog = new Dialog(this);
         inputDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         inputDialog.setContentView(R.layout.dialod_input_group);

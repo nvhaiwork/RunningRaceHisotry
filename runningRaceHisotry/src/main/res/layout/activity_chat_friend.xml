@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/chat_title_color"
-        android:padding="7dp"
+        android:padding="7.5dp"
         android:text="@string/menu_chat_your_community"
         android:textColor="@color/white"
         android:textSize="@dimen/login_sign_in_with" />
