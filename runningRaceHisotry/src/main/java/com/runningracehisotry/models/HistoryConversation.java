@@ -12,6 +12,7 @@ import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by QuyNguyen on 5/23/2015.
@@ -33,7 +34,10 @@ public static final String  SENDER_ID       = "sender_id";
 
 
 
-private SQLiteDatabase database;
+private volatile SQLiteDatabase database;
+    //private volatile SQLiteDatabase mDb = null;
+
+    private volatile AtomicInteger mReferenceCount =  new AtomicInteger(0);
 
     private static HistoryConversation mInstance;
 
@@ -66,11 +70,11 @@ private SQLiteDatabase database;
             }
         }*/
 
-        private void createTables()
+        /*private void createTables()
         {
             database.execSQL(CONVERSATION_TABLE_CREATE);
 
-        }
+        }*/
 
         public void close()
         {
@@ -98,7 +102,7 @@ private SQLiteDatabase database;
         }*/
 
         super(context, DATABASE_FILE_PATH + File.separator
-                + DATABASE_PARENT_FOLDER + File.pathSeparator + DATABASE_NAME, factory, version);
+                + DATABASE_PARENT_FOLDER + File.pathSeparator + name, factory, version);
 
     }
 
@@ -108,7 +112,7 @@ private SQLiteDatabase database;
     }*/
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createTables();
+        db.execSQL(CONVERSATION_TABLE_CREATE);
     }
 
     /*private HistoryConversation(Context context, String dbName) {
@@ -137,32 +141,40 @@ private SQLiteDatabase database;
 
     }
 
-    public SQLiteDatabase getReadableDatabase()
-        {
-            /*database = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator
-                            + DATABASE_PARENT_FOLDER + File.separator + DATABASE_NAME, null,
-                    SQLiteDatabase.OPEN_READONLY);*/
-            database = getReadableDatabase();
-            return database;
+    public synchronized SQLiteDatabase openDatabase() {
+        Log.w(TAG, "Thread OPEN: " + Thread.currentThread().getName());
+        mReferenceCount.incrementAndGet();
+        if(mReferenceCount.get() >= 1){
+            Log.w(TAG, "DatabaseHandler#openDatabase mReferenceCount = " + mReferenceCount);
+            database = this.getWritableDatabase();
+
         }
 
-        public SQLiteDatabase getWritableDatabase()
-        {
-            /*database = SQLiteDatabase.openDatabase(DATABASE_FILE_PATH + File.separator
-                            + DATABASE_PARENT_FOLDER + File.separator + DATABASE_NAME, null,
-                    SQLiteDatabase.OPEN_READWRITE);*/
-            database = getWritableDatabase();
-            return database;
-        }
+        return database;
+    }
 
-    public List<Message> getMessageFromUserId(int userId, int friendId){
+    /**
+     * safe to close database
+     */
+    public synchronized void closeDatabase() {
+        Log.w(TAG, "Thread CLOSE: " + Thread.currentThread().getName());
+        mReferenceCount.decrementAndGet();
+        Log.w(TAG, "DatabaseHandler#closeDatabase mReferenceCount = " + mReferenceCount);
+        if(mReferenceCount.get() <= 0  && database != null){
+            mReferenceCount.set(0);
+            Log.w(TAG, "DatabaseHandler#closeDatabase mReferenceCount = " + mReferenceCount);
+            database.close();
+        }
+    }
+
+    public List<Message> getMessageFromUserId(String userId, String friendId){
         List<Message> list = new ArrayList<Message>();
         try{
-            getReadableDatabase();
-			Cursor cursor = database.query(CONVERSATION_TABLE,
-				new String[] { SENDER_ID, TEXT_CONTENT },
-				SENDER_ID + "=? OR " + SENDER_ID + "=?", new String[] { String.valueOf(userId), String.valueOf(friendId) },
-				null, null, null, null);
+            //getReadableDatabase();
+			Cursor cursor = openDatabase().query(CONVERSATION_TABLE,
+                    new String[]{SENDER_ID, TEXT_CONTENT},
+                    SENDER_ID + "=? OR " + SENDER_ID + "=?", new String[]{userId, friendId},
+                    null, null, null, null);
 		if (cursor != null) {
 			// move to first row
 			cursor.moveToFirst();
@@ -196,8 +208,8 @@ private SQLiteDatabase database;
 		try {
 			Log.d(TAG, "Add message OPEN");
             //database = getWritableDatabase();
-            getWritableDatabase();
-			result = database.insert(CONVERSATION_TABLE, null, values);
+            //getWritableDatabase();
+			result = openDatabase().insert(CONVERSATION_TABLE, null, values);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Log.d(TAG, "Add failed: ");
