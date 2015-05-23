@@ -30,7 +30,7 @@
         <RadioGroup
             android:id="@+id/races_detail_sort_group"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="32dp"
             android:divider="@drawable/divide_sort_race"
             android:orientation="horizontal"
             android:padding="1dp" >

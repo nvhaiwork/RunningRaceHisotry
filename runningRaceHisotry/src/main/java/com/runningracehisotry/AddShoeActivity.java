@@ -125,6 +125,7 @@ public class AddShoeActivity extends BaseActivity {
 				Constants.INTENT_ADD_SHOE, -1);
         shoeIdUpdate = 0;
         if (selectedShoePosition >= 0) {
+            mAddMilesEdt.setHint("");
             String shoeJson = getIntent().getStringExtra(Constants.INTENT_UPDATE_SHOE);
             LogUtil.d(mCurrentClassName, "receive shoe update: " + shoeJson);
             if(shoeJson != null){
