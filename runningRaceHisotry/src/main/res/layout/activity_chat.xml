@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical" >
 
     <com.runningracehisotry.views.CustomFontTextView
@@ -21,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_des"
         android:divider="@android:color/transparent"
-
         android:isScrollContainer="false"
         android:layout_marginBottom="50dp" />
 
@@ -29,6 +29,7 @@
         android:id="@+id/comment_layout"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
+        android:layoutMode="clipBounds"
         android:layout_alignParentBottom="true"
         android:background="@color/com_facebook_picker_search_bar_background"
         android:padding="0dp"
@@ -46,7 +47,7 @@
             android:scaleType="center"
             android:textColor="@color/com_facebook_blue"
             android:textSize="20sp"
-            android:adjustViewBounds="true" />
+            />
 
         <EditText
             android:id="@+id/et_message"
@@ -54,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
+            android:inputType="textImeMultiLine|textMultiLine|textNoSuggestions"
             android:ems="10"
             android:layout_toLeftOf="@+id/btn_send"
             android:layout_toStartOf="@+id/btn_send">

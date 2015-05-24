@@ -2,15 +2,19 @@ package com.runningracehisotry;
 
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,7 +54,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     private ChatItemAdapter mChatItemAdaper;
     private User currentFriend;
 
-
+    private InputMethodManager imm;
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     private static final String TAG = SinchService.class.getSimpleName();
@@ -64,17 +68,54 @@ private String loggedUserId;
         return R.layout.activity_chat;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        //getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);
+        /*getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);*/
+
+    }
+
+    /**
+     * Internal class
+     * @author quynt3
+     */
+    private class MyFocusChangeListener implements View.OnFocusChangeListener {
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus) {
+                Log.d(Constants.LOG_TAG, "edittext has focus");
+                Log.d(Constants.LOG_TAG, "HIDE CATEGORY onFocusChange");
+                imm.showSoftInput(etMessage, 0);
+                if(mChatItemAdaper.getCount() > 0) {
+                    lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+                }
+
+            }
+            else {
+                Log.e(Constants.LOG_TAG, "edittext has not focus");
+
+                imm.hideSoftInputFromWindow(etMessage.getWindowToken(), 0);
+            }
+        }
+    }
 
     @Override
     protected void initView() {
         super.initView();
         this.loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-//        getWindow().setSoftInputMode(
-//                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);
+        imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         getExtraFriend();
 
@@ -91,15 +132,16 @@ private String loggedUserId;
             lvMessages.setAdapter(mChatItemAdaper);
 
 
-            etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /*etMessage.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if(hasFocus && mChatItemAdaper.getCount() > 0) {
                         lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
                     }
                 }
-            });
+            });*/
             Log.e(Constants.LOG_TAG, "IMAGE PROFILE FRIEND URL: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
+            etMessage.setOnFocusChangeListener(new MyFocusChangeListener());
         }
 
 
@@ -116,7 +158,8 @@ private String loggedUserId;
             e.printStackTrace();
         }
         getHistoryChat();
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     private void getHistoryChat() {
