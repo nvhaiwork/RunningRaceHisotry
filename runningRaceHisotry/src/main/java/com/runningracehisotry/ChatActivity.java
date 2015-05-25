@@ -262,7 +262,10 @@ private String loggedUserId;
         if(userIdDb != null) {
             //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
             Message messageObject = new Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
-            mChatItemAdaper.addMessage(messageObject);
+            if(message.getRecipientIds().contains(currentFriend.getName())) {
+                mChatItemAdaper.addMessage(messageObject);
+            }
+
             lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
             //store DB when received
             HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
@@ -288,8 +291,11 @@ private String loggedUserId;
         + msgId + "|"+ userIdDb + "|"+ friendIdDb + "|"+ content + "|"+ sentTime + "|"+ ownerId);
         //Message newMessage = new Message(loggedUserId, message.getTextBody());
         Message messageObject = new Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
-        mChatItemAdaper.addMessage(messageObject);
-        lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+        if(message.getSenderId().equals(RunningRaceApplication.getInstance().getCurrentUser().getName())) {
+            mChatItemAdaper.addMessage(messageObject);
+            lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
+        }
+
         //store DB when received
         HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
         long result = dao.addMessage(messageObject);
