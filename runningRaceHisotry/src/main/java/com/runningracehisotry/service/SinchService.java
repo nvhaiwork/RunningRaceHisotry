@@ -128,32 +128,32 @@ public class SinchService extends Service {
             mSinchClient.startListeningOnActiveConnection();
             mSinchClient.setSupportActiveConnectionInBackground(true);
             mSinchClient.checkManifest();
-            mSinchClient.getMessageClient().addMessageClientListener(new MessageClientListener() {
-                @Override
-                public void onIncomingMessage(MessageClient messageClient, Message message) {
-                    Log.d(TAG, "onIncomingMessage: " + message.getTextBody());
-                }
-
-                @Override
-                public void onMessageSent(MessageClient messageClient, Message message, String s) {
-                    Log.d(TAG, "onMessageSent: " + message.getTextBody());
-                }
-
-                @Override
-                public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
-
-                }
-
-                @Override
-                public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
-                    Log.d(TAG, "onMessageDelivered: " + messageDeliveryInfo.getMessageId());
-                }
-
-                @Override
-                public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
-
-                }
-            });
+//            mSinchClient.getMessageClient().addMessageClientListener(new MessageClientListener() {
+//                @Override
+//                public void onIncomingMessage(MessageClient messageClient, Message message) {
+//                    Log.d(TAG, "onIncomingMessage: " + message.getTextBody());
+//                }
+//
+//                @Override
+//                public void onMessageSent(MessageClient messageClient, Message message, String s) {
+//                    Log.d(TAG, "onMessageSent: " + message.getTextBody());
+//                }
+//
+//                @Override
+//                public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
+//
+//                }
+//
+//                @Override
+//                public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+//                    Log.d(TAG, "onMessageDelivered: " + messageDeliveryInfo.getMessageId());
+//                }
+//
+//                @Override
+//                public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
+//
+//                }
+//            });
             String regid = CustomSharedPreferences.getPreferences(Constants.PREF_GCM_DEVICE_ID, "");
             if(regid.length() > 0) {
                 mSinchClient.setSupportPushNotifications(true);

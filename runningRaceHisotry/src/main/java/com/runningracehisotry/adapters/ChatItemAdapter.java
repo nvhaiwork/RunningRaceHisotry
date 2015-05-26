@@ -116,7 +116,7 @@ public class ChatItemAdapter extends BaseAdapter {
             holder.lnMe.setVisibility(View.VISIBLE);
             holder.imageME.setVisibility(View.VISIBLE);
             holder.text.setBackgroundColor(context.getResources().getColor(R.color.text_button_bg_5k));
-            holder.text.setPadding(50, 0, 25, 0);
+            holder.text.setPadding(20, 20, 20, 20);
             mImageLoader.displayImage(ServiceApi.SERVICE_URL + RunningRaceApplication.getInstance().getCurrentUser().getProfile_image(), holder.imageME, mOptions);
             //Log.d(Constants.LOG_TAG, "IMAGE MYSELF: " + ServiceApi.SERVICE_URL + RunningRaceApplication.getInstance().getCurrentUser().getProfile_image());
         } else {
@@ -125,7 +125,7 @@ public class ChatItemAdapter extends BaseAdapter {
             holder.lnFriend.setVisibility(View.VISIBLE);
             holder.imageFriend.setVisibility(View.VISIBLE);
             holder.text.setBackgroundColor(context.getResources().getColor(R.color.white));
-            holder.text.setPadding(25, 0, 50, 0);
+            holder.text.setPadding(20, 20, 20, 20);
             mImageLoader.displayImage(ServiceApi.SERVICE_URL + currentFriend.getProfile_image(), holder.imageFriend, mOptions);
             //Log.d(Constants.LOG_TAG, "IMAGE FRIEND CHAT: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
         }

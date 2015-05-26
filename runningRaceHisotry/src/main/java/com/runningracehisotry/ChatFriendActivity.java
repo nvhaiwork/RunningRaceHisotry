@@ -15,6 +15,7 @@ import com.runningracehisotry.adapters.FriendChatAdapter;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
+import com.runningracehisotry.models.HistoryConversation;
 import com.runningracehisotry.models.Runner;
 import com.runningracehisotry.service.MessageService;
 import com.runningracehisotry.service.SinchService;
@@ -55,7 +56,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<Friend> lstFriend = new ArrayList<Friend>();
-    private Map<Integer, List<Friend>> friendMap;
+    private static Map<Integer, List<Friend>> friendMap;
     private Map<String, List<com.runningracehisotry.models.Message>> messageMap = new HashMap<String, List<com.runningracehisotry.models.Message>>();
 
     private CustomLoadingDialog mLoadingDialog;
@@ -448,32 +449,6 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             if (SinchService.class.getName().equals(componentName.getClassName())) {
                 mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
-                mSinchServiceInterface.addMessageClientListener(new MessageClientListener() {
-                    @Override
-                    public void onIncomingMessage(MessageClient messageClient, Message message) {
-                        Log.d(TAG, "onIncomingMessage: " + message.getTextBody());
-                    }
-
-                    @Override
-                    public void onMessageSent(MessageClient messageClient, Message message, String s) {
-                        Log.d(TAG, "onMessageSent: " + message.getTextBody());
-                    }
-
-                    @Override
-                    public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
-
-                    }
-
-                    @Override
-                    public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
-                        Log.d(TAG, "onMessageDelivered: " + messageDeliveryInfo.getMessageId());
-                    }
-
-                    @Override
-                    public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
-
-                    }
-                });
                 mSinchServiceInterface.setStartListener(ChatFriendActivity.this);
 //                mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
                 registerInBackground();
@@ -530,5 +505,16 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     protected void onResume() {
         super.onResume();
         isProcessing = false;
+    }
+
+    public static String getIDFromName(String name) {
+        for(Integer groupID : friendMap.keySet()) {
+            for(Friend fr : friendMap.get(groupID)) {
+                if(name.equals(fr.getFriend().getName())) {
+                    return fr.getFriend().getId();
+                }
+            }
+        }
+        return "";
     }
 }

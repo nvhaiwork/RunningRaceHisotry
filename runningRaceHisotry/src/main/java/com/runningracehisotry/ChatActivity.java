@@ -71,7 +71,7 @@ private String loggedUserId;
     @Override
     protected void onResume() {
         super.onResume();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -93,7 +93,7 @@ private String loggedUserId;
             if (hasFocus) {
                 Log.d(Constants.LOG_TAG, "edittext has focus");
                 Log.d(Constants.LOG_TAG, "HIDE CATEGORY onFocusChange");
-                imm.showSoftInput(etMessage, 0);
+//                imm.showSoftInput(etMessage, 0);
                 if(mChatItemAdaper.getCount() > 0) {
                     lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
                 }
@@ -102,7 +102,7 @@ private String loggedUserId;
             else {
                 Log.e(Constants.LOG_TAG, "edittext has not focus");
 
-                imm.hideSoftInputFromWindow(etMessage.getWindowToken(), 0);
+//                imm.hideSoftInputFromWindow(etMessage.getWindowToken(), 0);
             }
         }
     }
@@ -111,11 +111,11 @@ private String loggedUserId;
     protected void initView() {
         super.initView();
         this.loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_STATE);
-        imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         getExtraFriend();
 
@@ -241,7 +241,7 @@ private String loggedUserId;
 
     @Override
     public void onIncomingMessage(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message) {
-        Log.d(TAG, "onIncomingMessage: " + message.getTextBody());
+        Log.d(TAG, "onIncomingMessage: " + message.getTextBody() + "\nsender: " + message.getSenderId() + "\nreceiver: " + message.getRecipientIds().contains(currentFriend.getName()));
         String msgId = message.getMessageId();
         List<String> list = message.getRecipientIds();
         String userIdDb = loggedUserId;
@@ -253,7 +253,7 @@ private String loggedUserId;
                 }
             }
         }*/
-        String friendIdDb = currentFriend.getId();
+        String friendIdDb = ChatFriendActivity.getIDFromName(message.getSenderId());
         String content = message.getTextBody();
         long sentTime = message.getTimestamp().getTime();
         String ownerId = currentFriend.getId();
@@ -262,7 +262,7 @@ private String loggedUserId;
         if(userIdDb != null) {
             //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
             Message messageObject = new Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
-            if(message.getRecipientIds().contains(currentFriend.getName())) {
+            if(message.getSenderId().equals(currentFriend.getName())) {
                 mChatItemAdaper.addMessage(messageObject);
             }
 
@@ -280,10 +280,10 @@ private String loggedUserId;
 
     @Override
     public void onMessageSent(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, String s) {
-        Log.d(TAG, "onMessageSent content: " + message.getTextBody());
+        Log.d(TAG, "onMessageSent content: " + message.getTextBody()+ "\nsender: " + message.getSenderId() + "\nreceiver: " + message.getRecipientIds().contains(currentFriend.getName()));
         String msgId = message.getMessageId();
         String userIdDb = loggedUserId;
-        String friendIdDb = currentFriend.getId();
+        String friendIdDb = ChatFriendActivity.getIDFromName(message.getRecipientIds().get(0));
         String content = message.getTextBody();
         long sentTime = message.getTimestamp().getTime();
         String ownerId = loggedUserId;
@@ -291,7 +291,7 @@ private String loggedUserId;
         + msgId + "|"+ userIdDb + "|"+ friendIdDb + "|"+ content + "|"+ sentTime + "|"+ ownerId);
         //Message newMessage = new Message(loggedUserId, message.getTextBody());
         Message messageObject = new Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
-        if(message.getSenderId().equals(RunningRaceApplication.getInstance().getCurrentUser().getName())) {
+        if(message.getRecipientIds().contains(currentFriend.getName())) {
             mChatItemAdaper.addMessage(messageObject);
             lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
         }

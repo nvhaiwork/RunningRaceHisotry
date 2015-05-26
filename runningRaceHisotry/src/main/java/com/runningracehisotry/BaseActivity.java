@@ -127,12 +127,13 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 
         callbackManager = CallbackManager.Factory.create();
-
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		getWindow().setSoftInputMode(
-				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		getWindow().setSoftInputMode(
-				WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+		if (!(this instanceof ChatActivity)) {
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			getWindow().setSoftInputMode(
+					WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+			getWindow().setSoftInputMode(
+					WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+		}
 		int layoutId = addContent();
 		setContentView(layoutId);
 		CustomSharedPreferences.init(getApplicationContext());

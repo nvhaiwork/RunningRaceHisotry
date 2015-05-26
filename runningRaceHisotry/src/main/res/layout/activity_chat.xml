@@ -19,7 +19,7 @@
     <ListView
         android:id="@+id/lv_message"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/tv_des"
         android:divider="@android:color/transparent"
         android:isScrollContainer="false"
@@ -58,7 +58,8 @@
             android:inputType="textImeMultiLine|textMultiLine|textNoSuggestions"
             android:ems="10"
             android:layout_toLeftOf="@+id/btn_send"
-            android:layout_toStartOf="@+id/btn_send">
+            android:layout_toStartOf="@+id/btn_send"
+            android:imeOptions="flagNoExtractUi">
 
             <requestFocus />
         </EditText>
