@@ -135,10 +135,18 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
                 else {
                     LogUtil.d(logTag, "Login fail!!!");
                     // Show dialog notify login fail 
-                    Utilities.showAlertMessage(
-                            this,
-                            getString(R.string.dialog_login_email_fails),
-                            "");
+//                    Utilities.showAlertMessage(
+//                            this,
+//                            getString(R.string.dialog_login_email_fails),
+//                            "");
+                    CustomSharedPreferences.setPreferences(
+                            Constants.PREF_USERNAME, "");
+                    CustomSharedPreferences.setPreferences(
+                            Constants.PREF_PASSWORD, "");
+                    Intent loginIntent = new Intent(SplashScreenActivity.this,
+                            LoginChoiceScreen.class);
+                    startActivity(loginIntent);
+                    finish();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
