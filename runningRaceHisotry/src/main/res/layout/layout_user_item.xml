@@ -29,9 +29,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/user_item_img_layout"
         android:layout_toRightOf="@+id/user_item_img_layout"
         android:textColor="@color/black"
-        android:textSize="@dimen/user_item_text" />
+        android:layout_marginRight="5dp"
+        android:textSize="@dimen/user_item_text"
+        android:layout_toLeftOf="@+id/view_notify"
+        android:layout_toStartOf="@+id/view_notify" />
+    <View
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/red_circle"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:id="@+id/view_notify"
+        android:visibility="gone"/>
 
 </RelativeLayout>

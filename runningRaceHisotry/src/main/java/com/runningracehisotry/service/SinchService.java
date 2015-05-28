@@ -11,8 +11,10 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.runningracehisotry.ChatFriendActivity;
 import com.runningracehisotry.RunningRaceApplication;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.HistoryConversation;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.sinch.android.rtc.*;
 import com.sinch.android.rtc.messaging.Message;
@@ -216,6 +218,36 @@ public class SinchService extends Service {
         sendBroadcast(incommingIntent);
         //TODO add to db hear
 
+    }
+
+    private void addMessageToDB(Message message) {
+        String loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
+
+        String msgId = message.getMessageId();
+        List<String> list = message.getRecipientIds();
+        String userIdDb = loggedUserId;
+        /*if(list != null && list.size()>0){
+            for(String str : list){
+                if(str.equalsIgnoreCase(loggedUserId)){
+                    userIdDb = str;
+                    break;
+                }
+            }
+        }*/
+        String friendIdDb = ChatFriendActivity.getIDFromName(message.getSenderId());
+        String content = message.getTextBody();
+        long sentTime = message.getTimestamp().getTime();
+        String ownerId = message.getSenderId();
+        Log.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
+                + msgId + "|" + userIdDb + "|" + friendIdDb + "|" + content + "|" + sentTime + "|" + ownerId);
+        if (userIdDb != null) {
+            //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
+            com.runningracehisotry.models.Message messageObject = new com.runningracehisotry.models.Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
+            //store DB when received
+            HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+            long result = dao.addMessage(messageObject);
+            Log.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
+        }
     }
 
     private class MySinchClientListener implements SinchClientListener {
