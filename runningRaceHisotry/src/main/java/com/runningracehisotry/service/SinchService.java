@@ -104,9 +104,37 @@ public class SinchService extends Service {
         }
     }
 
-    public void addMessageClientListener(MessageClientListener listener) {
+    public void addMessageClientListener(final MessageClientListener listener) {
         if (mSinchClient != null) {
-            mSinchClient.getMessageClient().addMessageClientListener(listener);
+//            mSinchClient.getMessageClient().addMessageClientListener(listener);
+            mSinchClient.getMessageClient().addMessageClientListener(new MessageClientListener() {
+                @Override
+                public void onIncomingMessage(MessageClient messageClient, Message message) {
+                    listener.onIncomingMessage(messageClient, message);
+
+                    sendImcommingBroadcast(message.getSenderId());
+                }
+
+                @Override
+                public void onMessageSent(MessageClient messageClient, Message message, String s) {
+                    listener.onMessageSent(messageClient, message, s);
+                }
+
+                @Override
+                public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
+                    listener.onMessageFailed(messageClient, message, messageFailureInfo);
+                }
+
+                @Override
+                public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+                    listener.onMessageDelivered(messageClient, messageDeliveryInfo);
+                }
+
+                @Override
+                public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
+                    listener.onShouldSendPushData(messageClient, message, list);
+                }
+            });
         }
     }
 
@@ -181,6 +209,15 @@ public class SinchService extends Service {
         void onStarted();
     }
 
+    private void sendImcommingBroadcast(String senderID) {
+        Log.d(TAG, "sendBroadcast : " + senderID);
+        Intent incommingIntent = new Intent(Constants.INCOMMING_BROADCAST_ACTION);
+        incommingIntent.putExtra(Constants.INCOMMING_BROADCAST_FRIEND_NAME_EXTRA, senderID);
+        sendBroadcast(incommingIntent);
+        //TODO add to db hear
+
+    }
+
     private class MySinchClientListener implements SinchClientListener {
 
         @Override
@@ -198,6 +235,34 @@ public class SinchService extends Service {
             Log.d(TAG, "SinchClient started");
             if (mListener != null) {
                 mListener.onStarted();
+                mSinchClient.getMessageClient().addMessageClientListener(new MessageClientListener() {
+                    @Override
+                    public void onIncomingMessage(MessageClient messageClient, Message message) {
+
+                        sendImcommingBroadcast(message.getSenderId());
+                        //TODO add to db hear
+                    }
+
+                    @Override
+                    public void onMessageSent(MessageClient messageClient, Message message, String s) {
+
+                    }
+
+                    @Override
+                    public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
+
+                    }
+
+                    @Override
+                    public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+
+                    }
+
+                    @Override
+                    public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
+
+                    }
+                });
             }
         }
 

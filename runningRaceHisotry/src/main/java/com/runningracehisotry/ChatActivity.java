@@ -163,7 +163,7 @@ private String loggedUserId;
     }
 
     private void getHistoryChat() {
-        HistoryConversation dao = HistoryConversation.getInstance(this, DATABASE_NAME);
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
         String meId = RunningRaceApplication.getInstance().getCurrentUser().getId();
         List<Message> listMes = dao.getMessageFromUserId(meId, meId);;
         if(currentFriend != null) {
