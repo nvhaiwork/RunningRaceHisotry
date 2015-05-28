@@ -34,6 +34,9 @@ public class HistoryConversation extends SQLiteOpenHelper {
     public static final String SENT_TIME = "long_time";
     public static final String OWNER_ID = "owner_id";
 
+    public static final String NEW_NOTIFICATION_TABLE = "NewNotification";
+    public static final String NEW_FRIEND_ID = "FriendIdNew";
+
     public static final String CONVERSATION_TABLE_CREATE = "CREATE TABLE " + CONVERSATION_TABLE + " ( "
             + MESSAGE_ID + " TEXT PRIMARY KEY , "
             + SENDER_ID + " TEXT , "
@@ -41,6 +44,9 @@ public class HistoryConversation extends SQLiteOpenHelper {
             + TEXT_CONTENT + " TEXT , "
             + SENT_TIME + " INTEGER , "
             + OWNER_ID + " TEXT )";
+
+    public static final String NOTIFICATION_TABLE_CREATE = "CREATE TABLE " + NEW_NOTIFICATION_TABLE + " ( "
+            + NEW_FRIEND_ID + " TEXT PRIMARY KEY)";
 
     protected static final int DATABASE_VERSION = 1;
 
@@ -124,7 +130,9 @@ public class HistoryConversation extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(Constants.LOG_TAG, "query: " + CONVERSATION_TABLE_CREATE);
+        Log.d(Constants.LOG_TAG, "query: " + NOTIFICATION_TABLE_CREATE);
         db.execSQL(CONVERSATION_TABLE_CREATE);
+        db.execSQL(NOTIFICATION_TABLE_CREATE);
     }
 
     /*private HistoryConversation(Context context, String dbName) {
@@ -242,6 +250,83 @@ public class HistoryConversation extends SQLiteOpenHelper {
 
         // Log.d(Constant.FUNNY_CHAT, "Close add user: " + result);
         return result;
-
     }
+
+
+    public long addFriendNewMessage(String friend) {
+        long result = 0;
+        // set values to insert
+        ContentValues values = new ContentValues();
+        values.put(NEW_FRIEND_ID, friend);
+
+        // Inserting Row
+        try {
+            Log.d(TAG, "Add NEW OPEN");
+            //database = getWritableDatabase();
+            //getWritableDatabase();
+            result = openDatabase().insert(NEW_NOTIFICATION_TABLE, null, values);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.d(TAG, "Add failed: ");
+            // e.printStackTrace();
+        } finally {
+            closeDatabase();
+        }
+
+        // Log.d(Constant.FUNNY_CHAT, "Close add user: " + result);
+        return result;
+    }
+
+    public long deleteFriendNewMessage(String friend) {
+        long result = 0;
+        // set values to insert
+        ContentValues values = new ContentValues();
+        values.put(NEW_FRIEND_ID, friend);
+
+        // Inserting Row
+        try {
+            Log.d(TAG, "Add NEW OPEN");
+            //database = getWritableDatabase();
+            //getWritableDatabase();
+            result = openDatabase().delete(NEW_NOTIFICATION_TABLE, NEW_FRIEND_ID + " = ?", new String[]{friend});
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Log.d(TAG, "Add failed: ");
+            // e.printStackTrace();
+        } finally {
+            closeDatabase();
+        }
+
+        // Log.d(Constant.FUNNY_CHAT, "Close add user: " + result);
+        return result;
+    }
+
+    public List<String> getListNewMessage() {
+        List<String> list = new ArrayList<String>();
+        try {
+            //getReadableDatabase();
+            Cursor cursor = openDatabase().query(NEW_NOTIFICATION_TABLE,
+                    new String[]{NEW_FRIEND_ID},null, null,
+                    null, null, null, null);
+            if (cursor != null) {
+                // move to first row
+                cursor.moveToFirst();
+                list = new ArrayList<String>();
+                Message unread = null;
+                // iterate if remain
+                while (cursor.isAfterLast() == false) {
+                    String friend = cursor.getString(0);
+                    list.add(list.size(), friend);
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+            closeDatabase();
+        } catch (Exception e) {
+
+        }
+        return list;
+    }
+
+
 }
