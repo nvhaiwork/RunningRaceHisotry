@@ -110,7 +110,7 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.layout_user_item, null);
+            convertView = infalInflater.inflate(R.layout.layout_user_item_chat, null);
         }
 
         TextView tvName = (TextView) convertView
