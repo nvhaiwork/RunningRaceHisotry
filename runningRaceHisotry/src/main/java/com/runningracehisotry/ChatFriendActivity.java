@@ -102,6 +102,8 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
                 for(Integer id: friendMap.keySet()){
                     List<Friend> friends = friendMap.get(id);
                     for (Friend friend : friends) {
+                        LogUtil.d(Constants.LOG_TAG, "Has new chat, check and set initial: " + friend.getNewMessage());
+                        friend.setNewMessage(0);
                         if(lstFriendNew != null && lstFriendNew.size()>0){
                             LogUtil.d(Constants.LOG_TAG, "Has new chat, check and set");
                             //if(friend.getFriend().getName().equalsIgnoreCase("")) {
@@ -110,6 +112,9 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
                                     LogUtil.d(Constants.LOG_TAG, "Set new for Friend ID|Name:" + friend.getFriendId()
                                     + friendNew);
                                     friend.setNewMessage(1);
+                                }
+                                else{
+
                                 }
                             }
                         }
