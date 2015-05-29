@@ -17,6 +17,7 @@ import com.runningracehisotry.models.Friend;
 import com.runningracehisotry.models.Group;
 import com.runningracehisotry.models.HistoryConversation;
 import com.runningracehisotry.models.Runner;
+import com.runningracehisotry.models.User;
 import com.runningracehisotry.service.MessageService;
 import com.runningracehisotry.service.SinchService;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
@@ -80,7 +81,10 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB updatew GUI ");
         //update lstFriendNew and friendMap
         HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
-        long insertDb = dao.addFriendNewMessage(strFriend);
+        long insertDb = 0;
+        if(strFriend != null && !strFriend.isEmpty()){
+            insertDb = dao.addFriendNewMessage(strFriend);
+        }
         Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB updatew GUI INSERT NEW: " + insertDb);
         lstFriendNew = dao.getListNewMessage();
         List<Friend> tempFriend = new ArrayList<Friend>();
@@ -352,12 +356,15 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         String friend = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getName();
         long result = dao.deleteFriendNewMessage(friend);
         LogUtil.d(Constants.LOG_TAG, "Delete NEw chat for " + friend + " is OK(true)??" + (result >0));
+        User user = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend();
+        updateNotificationChat(null);
+        LogUtil.d(Constants.LOG_TAG, "User null??: " + (user == null));
         Intent selectRaceIntent = new Intent(ChatFriendActivity.this,
                 ChatActivity.class);
-
         selectRaceIntent.putExtra(
-                Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend()));
+                Constants.INTENT_SELECT_CHAT_FRIEND, serializeObject(user));
         startActivity(selectRaceIntent);
+
 
     }
 
