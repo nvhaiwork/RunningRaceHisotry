@@ -221,7 +221,7 @@ public class SinchService extends Service {
     }
 
     private void addMessageToDB(Message message) {
-        String loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
+        String loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getName();
 
         String msgId = message.getMessageId();
         List<String> list = message.getRecipientIds();
@@ -234,7 +234,7 @@ public class SinchService extends Service {
                 }
             }
         }*/
-        String friendIdDb = ChatFriendActivity.getIDFromName(message.getSenderId());
+        String friendIdDb = message.getSenderId();
         String content = message.getTextBody();
         long sentTime = message.getTimestamp().getTime();
         String ownerId = message.getSenderId();
@@ -244,7 +244,7 @@ public class SinchService extends Service {
             //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
             com.runningracehisotry.models.Message messageObject = new com.runningracehisotry.models.Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
             //store DB when received
-            HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+            HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
             long result = dao.addMessage(messageObject);
             Log.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
         }

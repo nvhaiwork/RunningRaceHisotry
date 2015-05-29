@@ -59,7 +59,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
     private List<String> lstFriendNew = new ArrayList<String>();
-    private static Map<Integer, List<Friend>> friendMap;
+    private Map<Integer, List<Friend>> friendMap;
     private Map<String, List<com.runningracehisotry.models.Message>> messageMap = new HashMap<String, List<com.runningracehisotry.models.Message>>();
 
     private CustomLoadingDialog mLoadingDialog;
@@ -79,7 +79,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     protected  void updateNotificationChat(){
         Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB updatew GUI ");
         //update lstFriendNew and friendMap
-        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
         lstFriendNew = dao.getListNewMessage();
         List<Friend> tempFriend = new ArrayList<Friend>();
         List<Group> groups = new ArrayList<Group>();
@@ -302,7 +302,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         });
 
         friendMap = new HashMap<Integer, List<Friend>>();
-        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
         lstFriendNew = dao.getListNewMessage();
         if(lstFriendNew != null && lstFriendNew.size()>0){
             LogUtil.d(Constants.LOG_TAG, "Has new chat");
@@ -340,7 +340,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
 
     private void goToChat() {
         //delete New for this friend
-        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
         String friend = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getName();
         long result = dao.deleteFriendNewMessage(friend);
         LogUtil.d(Constants.LOG_TAG, "Delete NEw chat for " + friend + " is OK(true)??" + (result >0));
@@ -630,16 +630,5 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     protected void onResume() {
         super.onResume();
         isProcessing = false;
-    }
-
-    public static String getIDFromName(String name) {
-        for(Integer groupID : friendMap.keySet()) {
-            for(Friend fr : friendMap.get(groupID)) {
-                if(name.equals(fr.getFriend().getName())) {
-                    return fr.getFriend().getId();
-                }
-            }
-        }
-        return "";
     }
 }

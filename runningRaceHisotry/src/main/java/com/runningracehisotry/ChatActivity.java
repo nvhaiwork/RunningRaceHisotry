@@ -58,7 +58,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     private static final String TAG = SinchService.class.getSimpleName();
-private String loggedUserId;
+    private String loggedUserId;
 
     public static final String  DATABASE_FILE_PATH      = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String  DATABASE_PARENT_FOLDER = "com.runningracehisotry";
@@ -110,7 +110,7 @@ private String loggedUserId;
     @Override
     protected void initView() {
         super.initView();
-        this.loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
+        this.loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getName();
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -163,11 +163,11 @@ private String loggedUserId;
     }
 
     private void getHistoryChat() {
-        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
-        String meId = RunningRaceApplication.getInstance().getCurrentUser().getId();
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
+        String meId = RunningRaceApplication.getInstance().getCurrentUser().getName();
         List<Message> listMes = dao.getMessageFromUserId(meId, meId);;
         if(currentFriend != null) {
-            listMes = dao.getMessageFromUserId(meId, currentFriend.getId());;
+            listMes = dao.getMessageFromUserId(meId, currentFriend.getName());;
         }
         if(listMes != null && listMes.size()>0){
             mChatItemAdaper.setMessages(listMes);
@@ -175,7 +175,7 @@ private String loggedUserId;
             lvMessages.setSelection(listMes.size()-1);
             for(Message m: listMes){
                 //Log.d(TAG, "History message: " + m.getMessageId() + "||" + m.getContent());
-                if(currentFriend.getId().equalsIgnoreCase(m.getOwnerId())){
+                if(currentFriend.getName().equalsIgnoreCase(m.getOwnerId())){
                     Log.e(Constants.LOG_TAG, "IMAGE PROFILE FRIEND: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
                 }
             }
@@ -244,7 +244,7 @@ private String loggedUserId;
         Log.d(TAG, "onIncomingMessage: " + message.getTextBody() + "\nsender: " + message.getSenderId() + "\nreceiver: " + message.getRecipientIds().contains(currentFriend.getName()));
         String msgId = message.getMessageId();
         List<String> list = message.getRecipientIds();
-        String userIdDb = loggedUserId;
+        String userIdDb = RunningRaceApplication.getInstance().getCurrentUser().getName();
         /*if(list != null && list.size()>0){
             for(String str : list){
                 if(str.equalsIgnoreCase(loggedUserId)){
@@ -253,10 +253,10 @@ private String loggedUserId;
                 }
             }
         }*/
-        String friendIdDb = ChatFriendActivity.getIDFromName(message.getSenderId());
+        String friendIdDb = message.getSenderId();
         String content = message.getTextBody();
         long sentTime = message.getTimestamp().getTime();
-        String ownerId = currentFriend.getId();
+        String ownerId = currentFriend.getName();
         Log.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
                 + msgId + "|" + userIdDb + "|" + friendIdDb + "|" + content + "|" + sentTime + "|"+ ownerId);
         if(userIdDb != null) {
@@ -268,7 +268,7 @@ private String loggedUserId;
 
             lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
             //store DB when received
-            HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+            HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
             long result = dao.addMessage(messageObject);
             Log.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
         }
@@ -283,7 +283,7 @@ private String loggedUserId;
         Log.d(TAG, "onMessageSent content: " + message.getTextBody()+ "\nsender: " + message.getSenderId() + "\nreceiver: " + message.getRecipientIds().contains(currentFriend.getName()));
         String msgId = message.getMessageId();
         String userIdDb = loggedUserId;
-        String friendIdDb = ChatFriendActivity.getIDFromName(message.getRecipientIds().get(0));
+        String friendIdDb = message.getRecipientIds().get(0);
         String content = message.getTextBody();
         long sentTime = message.getTimestamp().getTime();
         String ownerId = loggedUserId;
@@ -297,7 +297,7 @@ private String loggedUserId;
         }
 
         //store DB when received
-        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
         long result = dao.addMessage(messageObject);
         Log.d(TAG, "onMessageSent add DB result|| message ID: " + result +"||" + message.getMessageId());
     }
