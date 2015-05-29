@@ -34,6 +34,7 @@ import com.parse.ParseUser;
 
 import com.runningracehisotry.adapters.LeftMenuAdapter;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.HistoryConversation;
 import com.runningracehisotry.models.MenuModel;
 
 import com.runningracehisotry.utilities.CustomSharedPreferences;
@@ -54,10 +55,12 @@ import com.runningracehisotry.webservice.base.RegisterFacebookRequest;
 
 import android.app.ActionBar;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -94,8 +97,7 @@ import org.json.JSONObject;
  * @author nvhaiwork
  *
  */
-public class BaseActivity extends FragmentActivity implements OnClickListener,
-		OnItemClickListener {
+public class BaseActivity extends FragmentActivity implements OnClickListener, OnItemClickListener {
 
 	private SlidingMenu mMenu;
 	protected static ParseUser mUser;
@@ -158,6 +160,9 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         }
 
 		initView();
+        if(listenerChat != null) {
+            registerReceiver(listenerChat, new IntentFilter("com.runningracehisotry.chat.incomming"));
+        }
 	}
 
 	/**
@@ -202,6 +207,9 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+        if(listenerChat != null) {
+            unregisterReceiver(listenerChat);
+        }
 //		uiHelper.onDestroy();
 	}
 
@@ -348,8 +356,16 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
             new Thread(request).start();
 			break;
 		case R.id.ic_action_menu:
+            /*HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+            List<String> list = dao.getListNewMessage();
+            if(list != null && list.size()>0){  chat = true;    }*/
+            int newNotify = CustomSharedPreferences.getPreferences(Constants.PREF_NEW_NOTIFICATION_CHAT, 0);
+            boolean chat = (newNotify > 0);
+            if(chat){
+                refreshLeftMenu(chat);
+            }
+            mMenu.toggle();
 
-			mMenu.toggle();
 			break;
 		case R.id.ic_action_setting:
 
@@ -475,7 +491,9 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 				Utilities.contactUs(BaseActivity.this);
 			}  else if (menu.getDislayText().equals(
                     getString(R.string.menu_chat))) {
-
+                /*Intent filter = new Intent("com.runningracehisotry.chat.incomming.chat.activity");
+                sendBroadcast(filter);*/
+                CustomSharedPreferences.setPreferences(Constants.PREF_NEW_NOTIFICATION_CHAT, 0);
                 Intent chatIntent = new Intent(BaseActivity.this,
                         ChatFriendActivity.class);
                 chatIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -651,6 +669,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
         // Chat
         menu = new MenuModel();
         menu.setDislayText(getString(R.string.menu_chat));
+        //menu.setImage(R.drawable.x_button);
         menus.add(menu);
 
 		// Your history
@@ -915,5 +934,111 @@ public class BaseActivity extends FragmentActivity implements OnClickListener,
 
         dialog.show();
     }
+
+    public void refreshLeftMenu(boolean chat){
+        ListView menuListview = (ListView) mMenu
+                .findViewById(R.id.menu_listview);
+
+        // Setup menu item
+        List<MenuModel> menus = new ArrayList<MenuModel>();
+        MenuModel menu = null;
+
+        // Chat
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_chat));
+        if(chat){   menu.setImage(R.drawable.x_button);}
+        menus.add(menu);
+
+        // Your history
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_your_history));
+        menus.add(menu);
+
+        // Runner you may know
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_runner_you_may_know));
+        menus.add(menu);
+
+        // Your community
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_your_community));
+        menus.add(menu);
+
+        // Profile update
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_profile_update));
+        menus.add(menu);
+
+        // Blog
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_blog));
+        menus.add(menu);
+
+        // Contact Us
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_contact_us));
+        menus.add(menu);
+
+        // About
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_about));
+        menus.add(menu);
+
+        // Share on FB
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_share_fb));
+        menu.setImage(R.drawable.ic_fb);
+        menus.add(menu);
+
+        // Share on Twitter
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_share_twitter));
+        menu.setImage(R.drawable.ic_twitter);
+        menus.add(menu);
+
+        // Running Race History website
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_running_website));
+        menus.add(menu);
+
+        // Sign Out
+        menu = new MenuModel();
+        menu.setDislayText(getString(R.string.menu_sign_out));
+        menus.add(menu);
+
+        LeftMenuAdapter menuAdapter = new LeftMenuAdapter(BaseActivity.this,
+                menus);
+        menuListview.setAdapter(menuAdapter);
+        menuListview.setOnItemClickListener(this);
+    }
+
+    /*protected void updateNotification(){
+        Log.d(Constants.LOG_TAG,"New Chat Broadcast PARENT");
+        if(this instanceof ChatFriendActivity){
+            updateNotification();
+        }
+    }*/
+    private BroadcastReceiver listenerChat = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction() != null){
+                if(intent.getAction().equalsIgnoreCase("com.runningracehisotry.chat.incomming")){
+                    Log.d(Constants.LOG_TAG,"New Chat Broadcast");
+                    CustomSharedPreferences.setPreferences(Constants.PREF_NEW_NOTIFICATION_CHAT, 1);
+                    //super.onReceivedNewMessage();
+                    if(mMenu.isMenuShowing()){
+                        Log.d(Constants.LOG_TAG,"New Chat Broadcast when showing menu: refresh it and show again");
+                        refreshLeftMenu(true);
+                        mMenu.toggle();
+                    }
+                    //send broadcast to CHat activity
+                    Intent filter = new Intent(actionNewForChatActivity);
+                    sendBroadcast(filter);
+                }
+            }
+        }
+    };
+
+    public static String actionNewForChatActivity = "com.runningracehisotry.chat.incomming.chat.activity";
 
 }

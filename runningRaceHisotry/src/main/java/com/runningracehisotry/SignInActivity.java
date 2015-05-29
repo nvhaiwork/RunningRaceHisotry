@@ -278,6 +278,8 @@ public class SignInActivity extends BaseActivity {
                                     finishLoginOrSignup(usernameStr, passwordStr);
                                     CustomSharedPreferences.getPreferences(Constants.PREF_USERNAME, usernameStr);
                                     CustomSharedPreferences.getPreferences(Constants.PREF_PASSWORD, passwordStr);
+                                    //set to test New left menu
+                                    //CustomSharedPreferences.setPreferences(Constants.PREF_NEW_NOTIFICATION_CHAT, 1);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

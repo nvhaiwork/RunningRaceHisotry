@@ -26,12 +26,21 @@
 
     <com.runningracehisotry.views.CustomFontTextView
         android:id="@+id/user_item_text"
+        android:text="fdjasdkjhsajdhsajkdhsjahdkjsahgdjs dsajdsajdhsajkhdjsajhdsa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/user_item_img_layout"
         android:layout_toRightOf="@+id/user_item_img_layout"
+        android:layout_toLeftOf="@+id/user_item_new"
         android:textColor="@color/black"
         android:textSize="@dimen/user_item_text" />
+    <com.runningracehisotry.views.CircleImageView
+        android:id="@+id/user_item_new"
+        android:layout_width="@dimen/user_item_img"
+        android:layout_alignParentRight="true"
+        android:layout_height="@dimen/user_item_img"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/x_button" />
 
 </RelativeLayout>

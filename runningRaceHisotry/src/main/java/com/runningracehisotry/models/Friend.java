@@ -26,6 +26,8 @@ public class Friend {
     @SerializedName("user")
     private User friend;
 
+    private int newMessage;
+
     public String getGroup() {
         return group;
     }
@@ -72,5 +74,13 @@ public class Friend {
 
     public void setFriend(User friend) {
         this.friend = friend;
+    }
+
+    public int getNewMessage() {
+        return newMessage;
+    }
+
+    public void setNewMessage(int newMessage) {
+        this.newMessage = newMessage;
     }
 }

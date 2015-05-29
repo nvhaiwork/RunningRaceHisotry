@@ -34,8 +34,11 @@ import com.sinch.android.rtc.messaging.MessageClientListener;
 import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
 import com.sinch.android.rtc.messaging.MessageFailureInfo;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -55,7 +58,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     private FriendChatAdapter mFriendAdapter;
     private int totalFriends, returnedFriends;
     private List<Group> lstGroup = new ArrayList<Group>();
-    private List<Friend> lstFriend = new ArrayList<Friend>();
+    private List<String> lstFriendNew = new ArrayList<String>();
     private static Map<Integer, List<Friend>> friendMap;
     private Map<String, List<com.runningracehisotry.models.Message>> messageMap = new HashMap<String, List<com.runningracehisotry.models.Message>>();
 
@@ -71,6 +74,92 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     private SearchView searchView;
 
     private boolean isProcessing;
+
+
+    protected  void updateNotificationChat(){
+        Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB updatew GUI ");
+        //update lstFriendNew and friendMap
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        lstFriendNew = dao.getListNewMessage();
+        List<Friend> tempFriend = new ArrayList<Friend>();
+        List<Group> groups = new ArrayList<Group>();
+        Map<Integer, List<Friend>> tempMap = new HashMap<Integer, List<Friend>>();
+        if(friendMap != null && friendMap.size()>0) {
+            /*LogUtil.d(Constants.LOG_TAG, "listNew: " + !newText.trim().isEmpty());
+            if(newText != null && !newText.trim().isEmpty()) {*/
+                //LogUtil.d(Constants.LOG_TAG, "listNew siz");
+                for(Integer id: friendMap.keySet()){
+                    List<Friend> friends = friendMap.get(id);
+                    for (Friend friend : friends) {
+                        if(lstFriendNew != null && lstFriendNew.size()>0){
+                            LogUtil.d(Constants.LOG_TAG, "Has new chat, check and set");
+                            //if(friend.getFriend().getName().equalsIgnoreCase("")) {
+                            for(String friendNew : lstFriendNew){
+                                if(friendNew.equalsIgnoreCase(friend.getFriend().getName())){
+                                    LogUtil.d(Constants.LOG_TAG, "Set new for Friend ID|Name:" + friend.getFriendId()
+                                    + friendNew);
+                                    friend.setNewMessage(1);
+                                }
+                            }
+                        }
+
+                        tempFriend.add(friend);
+                        if (tempMap.containsKey(friend.getGroupId())) {
+                            tempMap.get(friend.getGroupId()).add(friend);
+                        } else {
+                            List<Friend> tempListFriend = new ArrayList<Friend>();
+                            tempListFriend.add(friend);
+                            tempMap.put(friend.getGroupId(), tempListFriend);
+                        }
+
+                    }
+
+                }
+
+                for (Integer groupid : tempMap.keySet()) {
+                    for (Group g : lstGroup) {
+                        if(g.getGroupId() == groupid) {
+                            groups.add(g);
+                        }
+                    }
+                }
+
+//                tempMap.put(Integer.valueOf(-1), tempFriend);
+                synchronized (tempMap) {
+                    mFriendAdapter.setData(groups, tempMap);
+                    expandAllGroup();
+                }
+            //}
+        }
+        String newText = searchView.getQuery().toString();
+        LogUtil.d(Constants.LOG_TAG, "Refresh List with query string: " + newText);
+        if(newText.length() > 0) {
+            LogUtil.d(Constants.LOG_TAG, "Refresh List with query string: " + newText);
+            filterRunner(newText);
+        } else {
+            LogUtil.d(Constants.LOG_TAG, "Refresh List with no query string");
+            mFriendAdapter.setData(lstGroup, friendMap);
+            expandAllGroup();
+        }
+    }
+    private BroadcastReceiver listenerChatSub = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction() != null){
+                if(intent.getAction().equalsIgnoreCase(BaseActivity.actionNewForChatActivity)){
+                    Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB received");
+                    CustomSharedPreferences.setPreferences(Constants.PREF_NEW_NOTIFICATION_CHAT, 1);
+                    updateNotificationChat();
+                    //super.onReceivedNewMessage();
+                    /*if(mMenu.isMenuShowing()){
+                        Log.d(Constants.LOG_TAG,"New Chat Broadcast when showing menu: refresh it and show again");
+                        refreshLeftMenu(true);
+                        mMenu.toggle();
+                    }*/
+                }
+            }
+        }
+    };
 
     private SearchView.OnQueryTextListener listenerSearch =  new SearchView.OnQueryTextListener()
     {
@@ -213,8 +302,21 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         });
 
         friendMap = new HashMap<Integer, List<Friend>>();
-
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        lstFriendNew = dao.getListNewMessage();
+        if(lstFriendNew != null && lstFriendNew.size()>0){
+            LogUtil.d(Constants.LOG_TAG, "Has new chat");
+        }
+        else{
+            LogUtil.d(Constants.LOG_TAG, "No new chat");
+            //add fake to test
+            lstFriendNew.add("manhdn2");
+        }
         getGroupOfUser();
+
+        if(listenerChatSub != null) {
+            registerReceiver(listenerChatSub, new IntentFilter("com.runningracehisotry.chat.incomming.chat.activity"));
+        }
     }
 
 
@@ -237,6 +339,11 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     }
 
     private void goToChat() {
+        //delete New for this friend
+        HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+        String friend = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend().getName();
+        long result = dao.deleteFriendNewMessage(friend);
+        LogUtil.d(Constants.LOG_TAG, "Delete NEw chat for " + friend + " is OK(true)??" + (result >0));
         Intent selectRaceIntent = new Intent(ChatFriendActivity.this,
                 ChatActivity.class);
 
@@ -313,9 +420,23 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
             LogUtil.d(Constants.LOG_TAG, "Friend return: " + fr.getFriend().getFull_name()
                     + "|" + fr.getFriend().getProfile_image());
             LogUtil.d(Constants.LOG_TAG, "return|total: " + returnedFriends +"|"+ totalFriends);
-
+            // add new icon for list when initial
             List<Friend> listFriend = gson.fromJson(json, listType);
-            mFriendAdapter.addItem(listFriend);
+            List<Friend> listFriendAdd = new ArrayList<Friend>(listFriend);
+            if(lstFriendNew != null && lstFriendNew.size()>0){
+                for(int i = 0; i< listFriend.size(); i++){
+                    for(String friendNew : lstFriendNew){
+                        if(friendNew.equalsIgnoreCase(listFriend.get(i).getFriend().getName())){
+                            listFriendAdd.get(i).setNewMessage(1);
+                        }
+                    }
+                }
+            }
+            else{
+                LogUtil.d(Constants.LOG_TAG, "NO Friend NEW");
+            }
+
+            mFriendAdapter.addItem(listFriendAdd);
             expandAllGroup();
 
             friendMap.put(listFriend.get(0).getGroupId(), listFriend);
@@ -498,7 +619,11 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     @Override
     protected void onDestroy() {
         unbindService(connection);
+        if(listenerChatSub != null) {
+            unregisterReceiver(listenerChatSub);
+        }
         super.onDestroy();
+
     }
 
     @Override

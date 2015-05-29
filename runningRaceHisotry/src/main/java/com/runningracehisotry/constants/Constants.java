@@ -84,7 +84,7 @@ public class Constants {
 	public static final String PREF_SNS_AVATAR = "com.runningracehisotry.sns.avatar";
 	public static final String PREF_SNS_FULL_NAME = "com.runningracehisotry.sns.fullname";
 	public static final String PREF_GCM_DEVICE_ID = "com.runningracehisotry.sns.gcm.deviceid";
-
+    public static final String PREF_NEW_NOTIFICATION_CHAT = "com.runningracehisotry.chat.new.incomming";
 	// Parse object keys
 	public static final String DATE = "Date";
 	public static final String SHOE = "Shoe";
