@@ -1032,7 +1032,9 @@ public class BaseActivity extends FragmentActivity implements OnClickListener, O
                         mMenu.toggle();
                     }
                     //send broadcast to CHat activity
+                    String friend = intent.getStringExtra(Constants.INCOMMING_BROADCAST_FRIEND_NAME_EXTRA);
                     Intent filter = new Intent(actionNewForChatActivity);
+                    filter.putExtra(Constants.INCOMMING_BROADCAST_FRIEND_NAME_EXTRA, friend);
                     sendBroadcast(filter);
                 }
             }
