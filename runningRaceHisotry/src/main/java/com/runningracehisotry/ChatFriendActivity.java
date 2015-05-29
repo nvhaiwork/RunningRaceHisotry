@@ -310,7 +310,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         else{
             LogUtil.d(Constants.LOG_TAG, "No new chat");
             //add fake to test
-            lstFriendNew.add("manhdn2");
+            //lstFriendNew.add("manhdn2");
         }
         getGroupOfUser();
 
