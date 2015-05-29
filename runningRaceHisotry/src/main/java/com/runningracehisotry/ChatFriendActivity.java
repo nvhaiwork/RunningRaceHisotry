@@ -645,5 +645,6 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     protected void onResume() {
         super.onResume();
         isProcessing = false;
+
     }
 }
