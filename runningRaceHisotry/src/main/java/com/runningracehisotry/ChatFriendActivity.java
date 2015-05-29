@@ -76,10 +76,12 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     private boolean isProcessing;
 
 
-    protected  void updateNotificationChat(){
+    protected  void updateNotificationChat(String strFriend){
         Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB updatew GUI ");
         //update lstFriendNew and friendMap
         HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
+        long insertDb = dao.addFriendNewMessage(strFriend);
+        Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB updatew GUI INSERT NEW: " + insertDb);
         lstFriendNew = dao.getListNewMessage();
         List<Friend> tempFriend = new ArrayList<Friend>();
         List<Group> groups = new ArrayList<Group>();
@@ -149,7 +151,13 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
                 if(intent.getAction().equalsIgnoreCase(BaseActivity.actionNewForChatActivity)){
                     Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB received");
                     CustomSharedPreferences.setPreferences(Constants.PREF_NEW_NOTIFICATION_CHAT, 1);
-                    updateNotificationChat();
+                    String friend = intent.getStringExtra(Constants.INCOMMING_BROADCAST_FRIEND_NAME_EXTRA);
+                    if(friend != null && !friend.isEmpty()){
+                        updateNotificationChat(friend);
+
+
+                    }
+
                     //super.onReceivedNewMessage();
                     /*if(mMenu.isMenuShowing()){
                         Log.d(Constants.LOG_TAG,"New Chat Broadcast when showing menu: refresh it and show again");

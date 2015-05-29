@@ -414,7 +414,8 @@ public class RunnerActivity extends BaseActivity {
                 RunnerActivity.this);
         successDialog.setCancelableFlag(false);
         successDialog.setTitle("Add user");
-        String message = String.format("Add user: %s to group: %s Successfully!", new String[]{username, groupName});
+        //String message = String.format("Add user: %s to group: %s Successfully!", new String[]{username, groupName});
+        String message = String.format("Add user: %s to group: %s Successfully!", username, groupName);
         successDialog.setMessage(message);
         successDialog.setPositiveButton(getString(R.string.ok),
                 new OnPositiveButtonClick() {
