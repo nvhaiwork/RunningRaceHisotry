@@ -37,9 +37,9 @@
         android:textSize="@dimen/user_item_text" />
     <com.runningracehisotry.views.CircleImageView
         android:id="@+id/user_item_new"
-        android:layout_width="@dimen/user_item_img"
+        android:layout_width="@dimen/chat_item_img"
         android:layout_alignParentRight="true"
-        android:layout_height="@dimen/user_item_img"
+        android:layout_height="@dimen/chat_item_img"
         android:layout_marginRight="5dp"
         android:src="@drawable/x_button" />
 
