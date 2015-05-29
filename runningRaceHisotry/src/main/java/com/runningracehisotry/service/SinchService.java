@@ -40,6 +40,7 @@ public class SinchService extends Service {
 
     private SinchClient mSinchClient = null;
     private StartFailedListener mListener;
+    private String userName;
 
     public class SinchServiceInterface extends Binder {
 
@@ -115,6 +116,7 @@ public class SinchService extends Service {
                     listener.onIncomingMessage(messageClient, message);
 
                     sendImcommingBroadcast(message.getSenderId());
+//                    addMessageToDB(message);
                 }
 
                 @Override
@@ -148,7 +150,7 @@ public class SinchService extends Service {
 
     private void start(String userName) {
         Log.d(TAG, "call start: ");
-        if (mSinchClient == null) {
+        if (mSinchClient == null || !userName.equalsIgnoreCase(this.userName)) {
             mSinchClient = Sinch.getSinchClientBuilder().context(getApplicationContext()).userId(userName)
                     .applicationKey(APP_KEY)
                     .applicationSecret(APP_SECRET)
@@ -216,7 +218,6 @@ public class SinchService extends Service {
         Intent incommingIntent = new Intent(Constants.INCOMMING_BROADCAST_ACTION);
         incommingIntent.putExtra(Constants.INCOMMING_BROADCAST_FRIEND_NAME_EXTRA, senderID);
         sendBroadcast(incommingIntent);
-        //TODO add to db hear
 
     }
 

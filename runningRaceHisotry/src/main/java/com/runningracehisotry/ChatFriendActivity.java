@@ -655,6 +655,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
             registerReceiver(listenerChatSub, new IntentFilter("com.runningracehisotry.chat.incomming.chat.activity"));
         }
         isProcessing = false;
+
         Log.d(Constants.LOG_TAG,"Refresh when back from chat by hard back key");
         if(friendMap != null && (friendMap.size() > 0) && lstGroup != null &&(lstGroup.size() > 0)) {
 
