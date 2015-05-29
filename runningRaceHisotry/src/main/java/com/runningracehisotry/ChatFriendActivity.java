@@ -87,6 +87,11 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         }
         Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB updatew GUI INSERT NEW: " + insertDb);
         lstFriendNew = dao.getListNewMessage();
+        if(lstFriendNew != null && lstFriendNew.size()>0) {
+            for(String str :lstFriendNew) {
+                LogUtil.d(Constants.LOG_TAG, "Has new chat, check and set " + str);
+            }
+        }
         List<Friend> tempFriend = new ArrayList<Friend>();
         List<Group> groups = new ArrayList<Group>();
         Map<Integer, List<Friend>> tempMap = new HashMap<Integer, List<Friend>>();
@@ -326,9 +331,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         }
         getGroupOfUser();
 
-        if(listenerChatSub != null) {
-            registerReceiver(listenerChatSub, new IntentFilter("com.runningracehisotry.chat.incomming.chat.activity"));
-        }
+
     }
 
 
@@ -635,9 +638,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     @Override
     protected void onDestroy() {
         unbindService(connection);
-        if(listenerChatSub != null) {
-            unregisterReceiver(listenerChatSub);
-        }
+
         super.onDestroy();
 
     }
@@ -645,13 +646,28 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     @Override
     protected void onResume() {
         super.onResume();
+        if(listenerChatSub != null) {
+            registerReceiver(listenerChatSub, new IntentFilter("com.runningracehisotry.chat.incomming.chat.activity"));
+        }
         isProcessing = false;
         Log.d(Constants.LOG_TAG,"Refresh when back from chat by hard back key");
-        if(friendMap != null && lstGroup != null) {
-            synchronized (friendMap) {
-                mFriendAdapter.setData(lstGroup, friendMap);
-                expandAllGroup();
-            }
+        if(friendMap != null && (friendMap.size() > 0) && lstGroup != null &&(lstGroup.size() > 0)) {
+
+                mFriendAdapter = new FriendChatAdapter(this, lstGroup, mImageLoader);
+                mFriendListview.setAdapter(mFriendAdapter);
+                mFriendAdapter.notifyDataSetChanged();
+                /*mFriendAdapter = setData(lstGroup, friendMap);*/
+                updateNotificationChat(null);
+                //expandAllGroup();
+
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(listenerChatSub != null) {
+            unregisterReceiver(listenerChatSub);
         }
     }
 }
