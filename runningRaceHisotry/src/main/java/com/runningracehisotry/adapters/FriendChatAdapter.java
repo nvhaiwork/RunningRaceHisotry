@@ -121,7 +121,7 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
         ImageView ivNew = (ImageView) convertView
                 .findViewById(com.runningracehisotry.R.id.user_item_new);
 
-        View viewNotify = convertView.findViewById(R.id.view_notify);
+        //View viewNotify = convertView.findViewById(R.id.view_notify);
 
         //TODO set visibility for red point
 //        viewNotify.setVisibility();
