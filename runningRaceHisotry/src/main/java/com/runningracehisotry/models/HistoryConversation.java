@@ -48,7 +48,7 @@ public class HistoryConversation extends SQLiteOpenHelper {
     public static final String NOTIFICATION_TABLE_CREATE = "CREATE TABLE " + NEW_NOTIFICATION_TABLE + " ( "
             + NEW_FRIEND_ID + " TEXT PRIMARY KEY)";
 
-    protected static final int DATABASE_VERSION = 1;
+    protected static final int DATABASE_VERSION = 2;
 
 
     private volatile SQLiteDatabase database;
@@ -158,10 +158,12 @@ public class HistoryConversation extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + CONVERSATION_TABLE_CREATE);
-        db.execSQL("DROP TABLE IF EXISTS " +NOTIFICATION_TABLE_CREATE);
+        if(newVersion > oldVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + CONVERSATION_TABLE_CREATE);
+            db.execSQL("DROP TABLE IF EXISTS " + NOTIFICATION_TABLE_CREATE);
 
-        onCreate(db);
+            onCreate(db);
+        }
     }
 
     public synchronized SQLiteDatabase openDatabase() {
