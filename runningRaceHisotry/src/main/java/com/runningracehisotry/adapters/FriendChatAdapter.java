@@ -121,6 +121,11 @@ public class FriendChatAdapter extends BaseExpandableListAdapter {
         ImageView ivNew = (ImageView) convertView
                 .findViewById(com.runningracehisotry.R.id.user_item_new);
 
+        View viewNotify = convertView.findViewById(R.id.view_notify);
+
+        //TODO set visibility for red point
+//        viewNotify.setVisibility();
+
         tvName.setText(childText);
         mImageLoader.displayImage(ServiceApi.SERVICE_URL + friend.getFriend().getProfile_image(), ivAvatar, mOptions);
         if(friend.getNewMessage() != 0){

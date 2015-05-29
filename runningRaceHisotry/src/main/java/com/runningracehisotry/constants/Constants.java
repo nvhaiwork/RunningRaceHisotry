@@ -85,6 +85,10 @@ public class Constants {
 	public static final String PREF_SNS_FULL_NAME = "com.runningracehisotry.sns.fullname";
 	public static final String PREF_GCM_DEVICE_ID = "com.runningracehisotry.sns.gcm.deviceid";
     public static final String PREF_NEW_NOTIFICATION_CHAT = "com.runningracehisotry.chat.new.incomming";
+
+	public static final String INCOMMING_BROADCAST_ACTION = "com.runningracehisotry.chat.incomming";
+	public static final String INCOMMING_BROADCAST_FRIEND_NAME_EXTRA = "INCOMMING_BROADCAST_FRIEND_NAME_EXTRA";
+
 	// Parse object keys
 	public static final String DATE = "Date";
 	public static final String SHOE = "Shoe";

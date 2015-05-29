@@ -1,5 +1,6 @@
 package com.runningracehisotry;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -29,6 +31,7 @@ import com.parse.ParseUser;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.service.MessageService;
+import com.runningracehisotry.service.SinchService;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
@@ -38,17 +41,21 @@ import com.runningracehisotry.webservice.ServiceConstants;
 import com.runningracehisotry.webservice.base.GetUserProfileRequest;
 import com.runningracehisotry.webservice.base.LoginRequest;
 import com.runningracehisotry.webservice.base.RegisterFacebookRequest;
+import com.sinch.android.rtc.SinchError;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -71,7 +78,7 @@ import twitter4j.conf.ConfigurationBuilder;
  * @author nvhaiwork
  *
  */
-public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents {
+public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents, SinchService.StartFailedListener {
 
     private Dialog mLoadingDialog;
     private ImageView mCreateBtn, mLoginFbBtn, mLoginTwitterBtn, mContactUsBtn;
@@ -100,6 +107,8 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
     private String consumerSecret = null;
     private String callbackUrl = null;
     private String oAuthVerifier = null;
+
+    private SinchService.SinchServiceInterface mSinchServiceInterface;
 
     public LoginChoiceScreen() {
     }
@@ -473,15 +482,82 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
             }
             CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, data.toString());
 
-            Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
-            selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
-
             mLoadingDialog.dismiss();
 
-            startActivity(selectRaceIntent);
-            finish();
+            callService();
+
         }
+    }
+
+    private void callService() {
+        bindService(new Intent(getApplicationContext(), SinchService.class), connection,
+                BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            if (SinchService.class.getName().equals(componentName.getClassName())) {
+                mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
+                mSinchServiceInterface.setStartListener(LoginChoiceScreen.this);
+//                mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
+                registerInBackground();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d("a", name.toShortString());
+        }
+    };
+
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                String regid = "";
+                regid = CustomSharedPreferences.getPreferences(Constants.PREF_GCM_DEVICE_ID, "");
+                if(regid.length() == 0) {
+                    try {
+                        String androidID = "984219596580";
+
+                        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(RunningRaceApplication.getInstance());
+                        regid = gcm.register(androidID);
+                        msg = "Device registered, registration ID=" + regid;
+
+
+                    } catch (IOException ex) {
+                        msg = "Error :" + ex.getMessage();
+                    }
+                }
+                return regid;
+            }
+
+            @Override
+            protected void onPostExecute(String regid) {
+                if(regid.length() > 0) {
+                    CustomSharedPreferences.setPreferences(Constants.PREF_GCM_DEVICE_ID, regid);
+                }
+
+                mSinchServiceInterface.startClient(RunningRaceApplication.getInstance().getCurrentUser().getName());
+            }
+        }.execute(null, null, null);
+    }
+
+    @Override
+    public void onStartFailed(SinchError error) {
+        Log.d(logTag, "onStartFailed : " + error.getMessage());
+    }
+
+    @Override
+    public void onStarted() {
+        Intent selectRaceIntent = new Intent(this, SelectRaceActivity.class);
+        selectRaceIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        selectRaceIntent.putExtra(Constants.INTENT_SELECT_RACE_FROM_FRIENDS, -1);
+
+        startActivity(selectRaceIntent);
+        finish();
     }
 
     private void handleResponseRegister(Object data) {
@@ -616,6 +692,16 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents 
                         LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            unbindService(connection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
     }
 
 }

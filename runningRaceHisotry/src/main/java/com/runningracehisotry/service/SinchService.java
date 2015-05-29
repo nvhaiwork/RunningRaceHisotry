@@ -11,8 +11,10 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.runningracehisotry.ChatFriendActivity;
 import com.runningracehisotry.RunningRaceApplication;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.models.HistoryConversation;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.sinch.android.rtc.*;
 import com.sinch.android.rtc.messaging.Message;
@@ -104,9 +106,37 @@ public class SinchService extends Service {
         }
     }
 
-    public void addMessageClientListener(MessageClientListener listener) {
+    public void addMessageClientListener(final MessageClientListener listener) {
         if (mSinchClient != null) {
-            mSinchClient.getMessageClient().addMessageClientListener(listener);
+//            mSinchClient.getMessageClient().addMessageClientListener(listener);
+            mSinchClient.getMessageClient().addMessageClientListener(new MessageClientListener() {
+                @Override
+                public void onIncomingMessage(MessageClient messageClient, Message message) {
+                    listener.onIncomingMessage(messageClient, message);
+
+                    sendImcommingBroadcast(message.getSenderId());
+                }
+
+                @Override
+                public void onMessageSent(MessageClient messageClient, Message message, String s) {
+                    listener.onMessageSent(messageClient, message, s);
+                }
+
+                @Override
+                public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
+                    listener.onMessageFailed(messageClient, message, messageFailureInfo);
+                }
+
+                @Override
+                public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+                    listener.onMessageDelivered(messageClient, messageDeliveryInfo);
+                }
+
+                @Override
+                public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
+                    listener.onShouldSendPushData(messageClient, message, list);
+                }
+            });
         }
     }
 
@@ -181,6 +211,45 @@ public class SinchService extends Service {
         void onStarted();
     }
 
+    private void sendImcommingBroadcast(String senderID) {
+        Log.d(TAG, "sendBroadcast : " + senderID);
+        Intent incommingIntent = new Intent(Constants.INCOMMING_BROADCAST_ACTION);
+        incommingIntent.putExtra(Constants.INCOMMING_BROADCAST_FRIEND_NAME_EXTRA, senderID);
+        sendBroadcast(incommingIntent);
+        //TODO add to db hear
+
+    }
+
+    private void addMessageToDB(Message message) {
+        String loggedUserId = RunningRaceApplication.getInstance().getCurrentUser().getId();
+
+        String msgId = message.getMessageId();
+        List<String> list = message.getRecipientIds();
+        String userIdDb = loggedUserId;
+        /*if(list != null && list.size()>0){
+            for(String str : list){
+                if(str.equalsIgnoreCase(loggedUserId)){
+                    userIdDb = str;
+                    break;
+                }
+            }
+        }*/
+        String friendIdDb = ChatFriendActivity.getIDFromName(message.getSenderId());
+        String content = message.getTextBody();
+        long sentTime = message.getTimestamp().getTime();
+        String ownerId = message.getSenderId();
+        Log.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
+                + msgId + "|" + userIdDb + "|" + friendIdDb + "|" + content + "|" + sentTime + "|" + ownerId);
+        if (userIdDb != null) {
+            //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
+            com.runningracehisotry.models.Message messageObject = new com.runningracehisotry.models.Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
+            //store DB when received
+            HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getId());
+            long result = dao.addMessage(messageObject);
+            Log.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
+        }
+    }
+
     private class MySinchClientListener implements SinchClientListener {
 
         @Override
@@ -198,6 +267,34 @@ public class SinchService extends Service {
             Log.d(TAG, "SinchClient started");
             if (mListener != null) {
                 mListener.onStarted();
+                mSinchClient.getMessageClient().addMessageClientListener(new MessageClientListener() {
+                    @Override
+                    public void onIncomingMessage(MessageClient messageClient, Message message) {
+
+                        sendImcommingBroadcast(message.getSenderId());
+                        //TODO add to db hear
+                    }
+
+                    @Override
+                    public void onMessageSent(MessageClient messageClient, Message message, String s) {
+
+                    }
+
+                    @Override
+                    public void onMessageFailed(MessageClient messageClient, Message message, MessageFailureInfo messageFailureInfo) {
+
+                    }
+
+                    @Override
+                    public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
+
+                    }
+
+                    @Override
+                    public void onShouldSendPushData(MessageClient messageClient, Message message, List<PushPair> list) {
+
+                    }
+                });
             }
         }
 
