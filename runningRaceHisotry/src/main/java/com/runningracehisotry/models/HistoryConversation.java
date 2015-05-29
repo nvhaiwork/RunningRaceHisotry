@@ -158,7 +158,10 @@ public class HistoryConversation extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + CONVERSATION_TABLE_CREATE);
+        db.execSQL("DROP TABLE IF EXISTS " +NOTIFICATION_TABLE_CREATE);
 
+        onCreate(db);
     }
 
     public synchronized SQLiteDatabase openDatabase() {
