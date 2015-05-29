@@ -357,6 +357,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         long result = dao.deleteFriendNewMessage(friend);
         LogUtil.d(Constants.LOG_TAG, "Delete NEw chat for " + friend + " is OK(true)??" + (result >0));
         User user = mFriendAdapter.getChild(selectedGroupPosition, selectedPosition).getFriend();
+
         updateNotificationChat(null);
         LogUtil.d(Constants.LOG_TAG, "User null??: " + (user == null));
         Intent selectRaceIntent = new Intent(ChatFriendActivity.this,
@@ -645,5 +646,12 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
     protected void onResume() {
         super.onResume();
         isProcessing = false;
+        Log.d(Constants.LOG_TAG,"Refresh when back from chat by hard back key");
+        if(friendMap != null && lstGroup != null) {
+            synchronized (friendMap) {
+                mFriendAdapter.setData(lstGroup, friendMap);
+                expandAllGroup();
+            }
+        }
     }
 }
