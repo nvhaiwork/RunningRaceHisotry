@@ -1,6 +1,7 @@
 /*© TOSHIBA CORPORATION 2015*/
 package com.runningracehisotry.webservice.base;
 
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 
 import android.net.http.AndroidHttpClient;
@@ -36,7 +37,7 @@ abstract class BaseRequest implements Runnable, Comparable<BaseRequest> {
 	 *            Response from server, in text format.
 	 */
 	protected void onCompleted(final String response) {
-		Log.d("BaseRequest", "API response: " + response);
+        LogUtil.d("BaseRequest", "API response: " + response);
 		
 		closeClient();
 		if (mListener != null) {
@@ -48,7 +49,7 @@ abstract class BaseRequest implements Runnable, Comparable<BaseRequest> {
                     }
                 });
 
-                Log.d("BaseRequest", "call complete");
+                LogUtil.d("BaseRequest", "call complete");
 			}
 		}
 	}

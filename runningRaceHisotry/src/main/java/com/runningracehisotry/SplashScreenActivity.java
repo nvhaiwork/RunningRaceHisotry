@@ -292,7 +292,7 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d("a", name.toShortString());
+            LogUtil.d("a", name.toShortString());
         }
     };
 
@@ -332,7 +332,7 @@ public class SplashScreenActivity extends BaseActivity implements IWsdl2CodeEven
 
     @Override
     public void onStartFailed(SinchError error) {
-        Log.d(logTag, "onStartFailed : " + error.getMessage());
+        LogUtil.d(logTag, "onStartFailed : " + error.getMessage());
     }
 
     @Override

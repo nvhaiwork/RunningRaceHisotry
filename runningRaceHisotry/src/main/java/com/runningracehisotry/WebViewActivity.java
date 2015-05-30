@@ -8,6 +8,8 @@ import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.runningracehisotry.utilities.LogUtil;
+
 public class WebViewActivity extends Activity {
 	
 	private WebView webView;
@@ -24,7 +26,7 @@ public class WebViewActivity extends Activity {
 
 		final String url = this.getIntent().getStringExtra(EXTRA_URL);
 		if (null == url) {
-			Log.e("Twitter", "URL cannot be null");
+            LogUtil.e("Twitter", "URL cannot be null");
 			finish();
 		}
 

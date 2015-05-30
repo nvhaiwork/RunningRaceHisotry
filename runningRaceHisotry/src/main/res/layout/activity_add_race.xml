@@ -58,6 +58,19 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_photo_of_medal" />
 
+            <com.runningracehisotry.views.SquareImageView
+                android:id="@+id/delete_medal_image"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/add_race_title_layout"
+                android:layout_margin="5dp"
+
+                android:contentDescription="@null"
+                android:padding="1dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/delete_button" />
             <com.runningracehisotry.views.CustomImageButton
                 android:id="@+id/add_race_photo_of_bib"
                 android:layout_width="@dimen/add_shoe_image"
@@ -71,6 +84,18 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_photo_of_bib" />
 
+            <com.runningracehisotry.views.SquareImageView
+                android:id="@+id/delete_bib_image"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/add_race_photo_of_medal"
+                android:layout_margin="5dp"
+                android:contentDescription="@null"
+                android:padding="1dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/delete_button" />
             <com.runningracehisotry.views.CustomImageButton
                 android:id="@+id/add_race_photo_of_person"
                 android:layout_width="@dimen/add_shoe_image"
@@ -84,6 +109,19 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_photo_of_person" />
 
+            <com.runningracehisotry.views.SquareImageView
+                android:id="@+id/delete_person_image"
+                android:layout_margin="5dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/add_race_photo_of_bib"
+
+                android:contentDescription="@null"
+                android:padding="1dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/delete_button" />
             <com.runningracehisotry.views.CustomFontTextView
                 android:id="@+id/add_race_name"
                 android:layout_width="match_parent"

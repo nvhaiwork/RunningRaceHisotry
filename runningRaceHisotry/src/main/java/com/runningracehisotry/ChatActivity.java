@@ -29,6 +29,7 @@ import com.runningracehisotry.models.HistoryConversation;
 import com.runningracehisotry.models.Message;
 import com.runningracehisotry.models.User;
 import com.runningracehisotry.service.SinchService;
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.views.CustomFontTextView;
 import com.runningracehisotry.webservice.ServiceApi;
 import com.sinch.android.rtc.PushPair;
@@ -91,8 +92,8 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
     private class MyFocusChangeListener implements View.OnFocusChangeListener {
         public void onFocusChange(View v, boolean hasFocus) {
             if (hasFocus) {
-                Log.d(Constants.LOG_TAG, "edittext has focus");
-                Log.d(Constants.LOG_TAG, "HIDE CATEGORY onFocusChange");
+                LogUtil.d(Constants.LOG_TAG, "edittext has focus");
+                LogUtil.d(Constants.LOG_TAG, "HIDE CATEGORY onFocusChange");
 //                imm.showSoftInput(etMessage, 0);
                 if(mChatItemAdaper.getCount() > 0) {
                     lvMessages.setSelection(mChatItemAdaper.getCount() - 1);
@@ -100,7 +101,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
             }
             else {
-                Log.e(Constants.LOG_TAG, "edittext has not focus");
+                LogUtil.e(Constants.LOG_TAG, "edittext has not focus");
 
 //                imm.hideSoftInputFromWindow(etMessage.getWindowToken(), 0);
             }
@@ -140,7 +141,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
                     }
                 }
             });*/
-            Log.e(Constants.LOG_TAG, "IMAGE PROFILE FRIEND URL: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
+            LogUtil.e(Constants.LOG_TAG, "IMAGE PROFILE FRIEND URL: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
             etMessage.setOnFocusChangeListener(new MyFocusChangeListener());
         }
 
@@ -176,7 +177,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
             for(Message m: listMes){
                 //Log.d(TAG, "History message: " + m.getMessageId() + "||" + m.getContent());
                 if(currentFriend.getName().equalsIgnoreCase(m.getOwnerId())){
-                    Log.e(Constants.LOG_TAG, "IMAGE PROFILE FRIEND: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
+                    LogUtil.e(Constants.LOG_TAG, "IMAGE PROFILE FRIEND: " + ServiceApi.SERVICE_URL + currentFriend.getProfile_image());
                 }
             }
         }
@@ -224,7 +225,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder iBinder) {
-        Log.d(TAG, "onServiceConnected");
+        LogUtil.d(TAG, "onServiceConnected");
         mSinchServiceInterface = (SinchService.SinchServiceInterface) iBinder;
         mSinchServiceInterface.addMessageClientListener(this);
     }
@@ -232,7 +233,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        Log.d(TAG, "onServiceDisconnected");
+        LogUtil.d(TAG, "onServiceDisconnected");
         mSinchServiceInterface.stopClient();
         mSinchServiceInterface = null;
 
@@ -241,7 +242,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
     @Override
     public void onIncomingMessage(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message) {
-        Log.d(TAG, "onIncomingMessage: " + message.getTextBody() + "\nsender: " + message.getSenderId() + "\nreceiver: " + message.getRecipientIds().contains(currentFriend.getName()));
+        LogUtil.d(TAG, "onIncomingMessage: " + message.getTextBody() + "\nsender: " + message.getSenderId() + "\nreceiver: " + message.getRecipientIds().contains(currentFriend.getName()));
         String msgId = message.getMessageId();
         List<String> list = message.getRecipientIds();
         String userIdDb = RunningRaceApplication.getInstance().getCurrentUser().getName();
@@ -257,7 +258,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
         String content = message.getTextBody();
         long sentTime = message.getTimestamp().getTime();
         String ownerId = currentFriend.getName();
-        Log.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
+        LogUtil.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
                 + msgId + "|" + userIdDb + "|" + friendIdDb + "|" + content + "|" + sentTime + "|"+ ownerId);
         if(userIdDb != null) {
             //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
@@ -270,7 +271,7 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
             //store DB when received
             HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
             long result = dao.addMessage(messageObject);
-            Log.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
+            LogUtil.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
         }
 
 
@@ -280,14 +281,14 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
 
     @Override
     public void onMessageSent(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, String s) {
-        Log.d(TAG, "onMessageSent content: " + message.getTextBody()+ "\nsender: " + message.getSenderId() + "\nreceiver: " + message.getRecipientIds().contains(currentFriend.getName()));
+        LogUtil.d(TAG, "onMessageSent content: " + message.getTextBody()+ "\nsender: " + message.getSenderId() + "\nreceiver: " + message.getRecipientIds().contains(currentFriend.getName()));
         String msgId = message.getMessageId();
         String userIdDb = loggedUserId;
         String friendIdDb = message.getRecipientIds().get(0);
         String content = message.getTextBody();
         long sentTime = message.getTimestamp().getTime();
         String ownerId = loggedUserId;
-        Log.d(TAG, "onMessageSent ID|SENder|friend|content|time|owner: "
+        LogUtil.d(TAG, "onMessageSent ID|SENder|friend|content|time|owner: "
         + msgId + "|"+ userIdDb + "|"+ friendIdDb + "|"+ content + "|"+ sentTime + "|"+ ownerId);
         //Message newMessage = new Message(loggedUserId, message.getTextBody());
         Message messageObject = new Message(msgId, userIdDb, friendIdDb, content, sentTime, ownerId);
@@ -299,26 +300,26 @@ public class ChatActivity extends BaseActivity implements ServiceConnection, Mes
         //store DB when received
         HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
         long result = dao.addMessage(messageObject);
-        Log.d(TAG, "onMessageSent add DB result|| message ID: " + result +"||" + message.getMessageId());
+        LogUtil.d(TAG, "onMessageSent add DB result|| message ID: " + result +"||" + message.getMessageId());
     }
 
 
     @Override
     public void onMessageFailed(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, MessageFailureInfo messageFailureInfo) {
-        Log.d(TAG, "onMessageFailed: " + message.getTextBody());
+        LogUtil.d(TAG, "onMessageFailed: " + message.getTextBody());
     }
 
 
     @Override
     public void onMessageDelivered(MessageClient messageClient, MessageDeliveryInfo messageDeliveryInfo) {
-        Log.d(TAG, "onMessageDelivered: " + messageDeliveryInfo.getMessageId());
+        LogUtil.d(TAG, "onMessageDelivered: " + messageDeliveryInfo.getMessageId());
 
     }
 
 
     @Override
     public void onShouldSendPushData(MessageClient messageClient, com.sinch.android.rtc.messaging.Message message, List<PushPair> pushPairs) {
-        Log.d(TAG, "onShouldSendPushData: " + message.getTextBody());
+        LogUtil.d(TAG, "onShouldSendPushData: " + message.getTextBody());
 
     }
 

@@ -145,15 +145,13 @@ public class Shoe{
             LogUtil.d("UTILITY", "error milesShoesHistoriesString: " + milesShoesHistoriesString);
             if (milesShoesHistoriesString instanceof JSONArray) {
                 LogUtil.d("UTILITY", "error Array: " + milesShoesHistoriesString);
-                listType = new TypeToken<List<History>>() {
-                }.getType();
+                listType = new TypeToken<List<History>>() {}.getType();
                 milesShoesHistories = gson.fromJson(((JSONArray)milesShoesHistoriesString).toString(), listType);
 
             }
             else if (milesShoesHistoriesString instanceof JSONObject) {
                 LogUtil.d("UTILITY", "error Object: " + milesShoesHistoriesString);
-                listType = new TypeToken<Map<Integer, Shoe>>() {
-                }.getType();
+                listType = new TypeToken<Map<Integer, History>>() {}.getType();
                 Map<Integer, History> map = gson.fromJson(((JSONObject)milesShoesHistoriesString).toString(), listType);
                 if (map != null && map.size() > 0) {
                     milesShoesHistories = new ArrayList<History>();

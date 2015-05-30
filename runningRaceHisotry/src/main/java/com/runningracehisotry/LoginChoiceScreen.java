@@ -299,7 +299,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents,
 
 
     private void performFacebookLogin() {
-        Log.d("FACEBOOK", "performFacebookLogin");
+        LogUtil.d("FACEBOOK", "performFacebookLogin");
 //            final Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, Arrays.asList("email"));
 //            Session openActiveSession = Session.openActiveSession(this, true, new Session.StatusCallback() {
 //
@@ -356,7 +356,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        Log.d(logTag, loginResult.toString());
+                        LogUtil.d(logTag, loginResult.toString());
                         fetchUserInfo();
                         mLoadingDialog = CustomLoadingDialog.show(LoginChoiceScreen.this,
                                 "", "", false, false);
@@ -372,7 +372,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents,
 
                     @Override
                     public void onError(FacebookException exception) {
-                        Log.d(logTag, exception.toString());
+                        LogUtil.d(logTag, exception.toString());
                         Utilities.showAlertMessage(LoginChoiceScreen.this,getString(R.string.login_disconnect),"");
                     }
 
@@ -507,7 +507,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents,
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d("a", name.toShortString());
+            LogUtil.d("a", name.toShortString());
         }
     };
 
@@ -547,7 +547,7 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents,
 
     @Override
     public void onStartFailed(SinchError error) {
-        Log.d(logTag, "onStartFailed : " + error.getMessage());
+        LogUtil.d(logTag, "onStartFailed : " + error.getMessage());
     }
 
     @Override

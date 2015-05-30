@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.runningracehisotry.RunningRaceApplication;
 import com.runningracehisotry.constants.Constants;
+import com.runningracehisotry.utilities.LogUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -129,8 +130,8 @@ public class HistoryConversation extends SQLiteOpenHelper {
     }*/
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d(Constants.LOG_TAG, "query: " + CONVERSATION_TABLE_CREATE);
-        Log.d(Constants.LOG_TAG, "query: " + NOTIFICATION_TABLE_CREATE);
+        LogUtil.d(Constants.LOG_TAG, "query: " + CONVERSATION_TABLE_CREATE);
+        LogUtil.d(Constants.LOG_TAG, "query: " + NOTIFICATION_TABLE_CREATE);
         db.execSQL(CONVERSATION_TABLE_CREATE);
         db.execSQL(NOTIFICATION_TABLE_CREATE);
     }
@@ -142,7 +143,7 @@ public class HistoryConversation extends SQLiteOpenHelper {
 
     public static synchronized HistoryConversation getInstance(Context context, String dbName) {
         if (mInstance == null) {
-            Log.e(TAG, "DB ADAPTER NULL, creat DB NAME and set value: " + dbName);
+            LogUtil.e(TAG, "DB ADAPTER NULL, creat DB NAME and set value: " + dbName);
             mInstance = new HistoryConversation(context, dbName, null, DATABASE_VERSION);
             //database = dbName;
         }
@@ -167,10 +168,10 @@ public class HistoryConversation extends SQLiteOpenHelper {
     }
 
     public synchronized SQLiteDatabase openDatabase() {
-        Log.w(TAG, "Thread OPEN: " + Thread.currentThread().getName());
+        LogUtil.w(TAG, "Thread OPEN: " + Thread.currentThread().getName());
         mReferenceCount.incrementAndGet();
         if (mReferenceCount.get() >= 1) {
-            Log.w(TAG, "DatabaseHandler#openDatabase mReferenceCount = " + mReferenceCount);
+            LogUtil.w(TAG, "DatabaseHandler#openDatabase mReferenceCount = " + mReferenceCount);
             database = this.getWritableDatabase();
 
         }
@@ -182,12 +183,12 @@ public class HistoryConversation extends SQLiteOpenHelper {
      * safe to close database
      */
     public synchronized void closeDatabase() {
-        Log.w(TAG, "Thread CLOSE: " + Thread.currentThread().getName());
+        LogUtil.w(TAG, "Thread CLOSE: " + Thread.currentThread().getName());
         mReferenceCount.decrementAndGet();
-        Log.w(TAG, "DatabaseHandler#closeDatabase mReferenceCount = " + mReferenceCount);
+        LogUtil.w(TAG, "DatabaseHandler#closeDatabase mReferenceCount = " + mReferenceCount);
         if (mReferenceCount.get() <= 0 && database != null) {
             mReferenceCount.set(0);
-            Log.w(TAG, "DatabaseHandler#closeDatabase mReferenceCount = " + mReferenceCount);
+            LogUtil.w(TAG, "DatabaseHandler#closeDatabase mReferenceCount = " + mReferenceCount);
             database.close();
         }
     }
@@ -241,13 +242,13 @@ public class HistoryConversation extends SQLiteOpenHelper {
         values.put(OWNER_ID, message.getOwnerId());
         // Inserting Row
         try {
-            Log.d(TAG, "Add message OPEN");
+            LogUtil.d(TAG, "Add message OPEN");
             //database = getWritableDatabase();
             //getWritableDatabase();
             result = openDatabase().insert(CONVERSATION_TABLE, null, values);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            Log.d(TAG, "Add failed: ");
+            LogUtil.d(TAG, "Add failed: ");
             // e.printStackTrace();
         } finally {
             closeDatabase();
@@ -266,13 +267,13 @@ public class HistoryConversation extends SQLiteOpenHelper {
 
         // Inserting Row
         try {
-            Log.d(TAG, "Add NEW OPEN");
+            LogUtil.d(TAG, "Add NEW OPEN");
             //database = getWritableDatabase();
             //getWritableDatabase();
             result = openDatabase().insert(NEW_NOTIFICATION_TABLE, null, values);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            Log.d(TAG, "Add failed: ");
+            LogUtil.d(TAG, "Add failed: ");
             // e.printStackTrace();
         } finally {
             closeDatabase();
@@ -290,13 +291,13 @@ public class HistoryConversation extends SQLiteOpenHelper {
 
         // Inserting Row
         try {
-            Log.d(TAG, "Add NEW OPEN");
+            LogUtil.d(TAG, "Add NEW OPEN");
             //database = getWritableDatabase();
             //getWritableDatabase();
             result = openDatabase().delete(NEW_NOTIFICATION_TABLE, NEW_FRIEND_ID + " = ?", new String[]{friend});
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            Log.d(TAG, "Add failed: ");
+            LogUtil.d(TAG, "Add failed: ");
             // e.printStackTrace();
         } finally {
             closeDatabase();

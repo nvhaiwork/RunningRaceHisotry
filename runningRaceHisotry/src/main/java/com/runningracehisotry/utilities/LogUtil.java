@@ -9,7 +9,7 @@ import android.util.Log;
  * Customize environment logger Turn log off when release app
  */
 public class LogUtil {
-	private static boolean DEBUG = true;
+	private static boolean DEBUG = false;
 
 	/**
 	 * @Function name: d

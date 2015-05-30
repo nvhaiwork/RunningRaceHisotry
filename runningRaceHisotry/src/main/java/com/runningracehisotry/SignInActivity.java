@@ -336,7 +336,7 @@ public class SignInActivity extends BaseActivity {
                 Gson gson = new Gson();
                 User user = gson.fromJson(Data.toString(), User.class);
                 if(user != null) {
-                    Log.d("QuyNT3", "get profile:" + Data.toString());
+                    LogUtil.d("QuyNT3", "get profile:" + Data.toString());
                     RunningRaceApplication.getInstance().setCurrentUser(user);
                     CustomSharedPreferences.setPreferences(Constants.PREF_USER_ID, user.getId());
                     CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, Data.toString());
@@ -385,13 +385,13 @@ public class SignInActivity extends BaseActivity {
             }
             else if (methodName.equals(ServiceConstants.METHOD_REGISTER)) {
                 try {
-                    try{
+                    /*try{
                         if (mLoadingDialog.isShowing()) {
                             mLoadingDialog.dismiss();
                         }
                     }
                     catch(Exception ex){
-                    }
+                    }*/
                     JSONObject jsonObjectReceive = new JSONObject(Data.toString());
                     boolean result = jsonObjectReceive.getBoolean("result");
                     if (result) {

@@ -16,6 +16,7 @@ import com.runningracehisotry.R;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.Friend;
 
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.webservice.ServiceApi;
 
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ public class FriendAdapter  extends BaseAdapter {
 
         holder.text.setText(friendGroup.getFriend().getFull_name());
         mImageLoader.displayImage(ServiceApi.SERVICE_URL + friendGroup.getFriend().getProfile_image(), holder.image, mOptions);
-        Log.d(Constants.LOG_TAG, "IMAGE FRIEND: " + ServiceApi.SERVICE_URL + friendGroup.getFriend().getProfile_image());
+        LogUtil.d(Constants.LOG_TAG, "IMAGE FRIEND: " + ServiceApi.SERVICE_URL + friendGroup.getFriend().getProfile_image());
         // Image
         /*if (user.containsKey(Constants.PICTURE)) {
 

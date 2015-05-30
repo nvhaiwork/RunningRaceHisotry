@@ -209,4 +209,10 @@
     <string name="dialog_add_race_invalid_mile">Invalid Miles</string>
 
     <string name="dialog_add_new_group">Create new Group...</string>
+
+
+    <string name="dialog_delete_shoe_image">Are you sure to delete Shoe\'s image?</string>
+    <string name="dialog_delete_medal_image">Are you sure to delete Medal\'s image?</string>
+    <string name="dialog_delete_bib_image">Are you sure to delete Bib\'s image?</string>
+    <string name="dialog_delete_person_image">Are you sure to delete Person\'s image?</string>
 </resources>

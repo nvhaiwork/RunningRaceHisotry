@@ -163,7 +163,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction() != null){
                 if(intent.getAction().equalsIgnoreCase(BaseActivity.actionNewForChatActivity)){
-                    Log.d(Constants.LOG_TAG,"New Chat Broadcast SUB received");
+                    LogUtil.d(Constants.LOG_TAG,"New Chat Broadcast SUB received");
                     CustomSharedPreferences.setPreferences(Constants.PREF_NEW_NOTIFICATION_CHAT, 1);
                     String friend = intent.getStringExtra(Constants.INCOMMING_BROADCAST_FRIEND_NAME_EXTRA);
                     if(friend != null && !friend.isEmpty()){
@@ -556,7 +556,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
 
     @Override
     public void onStartFailed(SinchError error) {
-        Log.d("a", error.toString());
+        LogUtil.d("a", error.toString());
     }
 
     @Override
@@ -602,7 +602,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d("a", name.toShortString());
+            LogUtil.d("a", name.toShortString());
         }
     };
 
@@ -656,7 +656,7 @@ public class ChatFriendActivity extends BaseActivity implements SinchService.Sta
         }
         isProcessing = false;
 
-        Log.d(Constants.LOG_TAG,"Refresh when back from chat by hard back key");
+        LogUtil.d(Constants.LOG_TAG,"Refresh when back from chat by hard back key");
         if(friendMap != null && (friendMap.size() > 0) && lstGroup != null &&(lstGroup.size() > 0)) {
 
                 mFriendAdapter = new FriendChatAdapter(this, lstGroup, mImageLoader);

@@ -13,6 +13,7 @@ import android.util.Log;
 import com.runningracehisotry.RunningRaceApplication;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
+import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.webservice.ServiceApi;
 
 /**
@@ -81,7 +82,7 @@ public abstract class BaseGetRequest extends BaseRequest{
 			onCompleted(response);
 		} catch (Exception ex) {
 			onFailed(ex);
-			Log.e(logTag, ex.getMessage());
+			LogUtil.e(logTag, ex.getMessage());
 		} finally {
             onEnded();
         }

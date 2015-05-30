@@ -15,6 +15,7 @@ import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
+import com.runningracehisotry.views.CustomAlertDialog;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.webservice.IWsdl2CodeEvents;
 import com.runningracehisotry.webservice.ServiceApi;
@@ -37,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +46,7 @@ import org.json.JSONObject;
 
 public class AddShoeActivity extends BaseActivity {
 	//private ParseObject mShoe;
-	private ImageView mShoeImage;
+	private ImageView mShoeImage, mShoeDelete;
 	private ListView mShoeDistanceListview;
 	private TextView mAddMilesBtn, mMilesTxt;
 	private EditText mShoeBrandEdt, mShoeModelEdt, mAddMilesEdt;
@@ -73,6 +75,7 @@ public class AddShoeActivity extends BaseActivity {
 				Utilities.startCropImage(AddShoeActivity.this,
 						Constants.REQUETS_CODE_ADD_SHOE_IMAGE_CROP, imageUri);
                 mUriImageUpload = imageUri;
+                //mShoeDelete.setVisibility(View.VISIBLE);
                 LogUtil.d(mCurrentClassName, "Take image: " + mUriImageUpload);
 			} else if (requestCode == Constants.REQUETS_CODE_ADD_SHOE_CHO0SE_IMAGE) {
 
@@ -80,6 +83,7 @@ public class AddShoeActivity extends BaseActivity {
 				Utilities.startCropImage(AddShoeActivity.this,
 						Constants.REQUETS_CODE_ADD_SHOE_IMAGE_CROP, imageUri);
                 mUriImageUpload = imageUri;
+                //mShoeDelete.setVisibility(View.VISIBLE);
                 LogUtil.d(mCurrentClassName, "Choose image: " + mUriImageUpload);
 			} else if (requestCode == Constants.REQUETS_CODE_ADD_SHOE_IMAGE_CROP) {
 
@@ -91,6 +95,7 @@ public class AddShoeActivity extends BaseActivity {
 								R.dimen.image_round_conner)));
 				mShoeImage.setTag(imgBmp);
                 mUriImageUpload = getImageUri(this, imgBmp);
+                mShoeDelete.setVisibility(View.VISIBLE);
                 LogUtil.d(mCurrentClassName, "Crop image: " + mUriImageUpload);
 				return;
 			}
@@ -112,7 +117,7 @@ public class AddShoeActivity extends BaseActivity {
 		mBotRightBtnTxt.setVisibility(View.VISIBLE);
 		mBottomBtnLayout.setBackgroundColor(getResources().getColor(
 				R.color.text_button_bg_my_shoes));
-
+        mShoeDelete = (ImageView) findViewById(R.id.delete_shoe_image);
 		mShoeImage = (ImageView) findViewById(R.id.add_shoe_image);
 		mShoeModelEdt = (EditText) findViewById(R.id.add_shoe_model_edt);
 		mShoeBrandEdt = (EditText) findViewById(R.id.add_shoe_brand_edt);
@@ -124,6 +129,7 @@ public class AddShoeActivity extends BaseActivity {
 		int selectedShoePosition = getIntent().getIntExtra(
 				Constants.INTENT_ADD_SHOE, -1);
         shoeIdUpdate = 0;
+        mShoeDelete.setVisibility(View.GONE);
         if (selectedShoePosition >= 0) {
             mAddMilesEdt.setHint("");
             String shoeJson = getIntent().getStringExtra(Constants.INTENT_UPDATE_SHOE);
@@ -140,7 +146,7 @@ public class AddShoeActivity extends BaseActivity {
                     mMilesTxt.setText(String.format(Locale.US, "%.2f", shoe.getMilesOnShoes()));
                     mShoeBrandEdt.setText(shoe.getBrand());
                     mShoeModelEdt.setText(shoe.getModel());
-                    List<History> history = shoe.getMilesShoesHistories();
+                    List<History> history = null;//shoe.getMilesShoesHistories();
                     JSONArray arrShoe = null;
                     JSONObject objShoe = null;
                     JSONObject obj = null;
@@ -155,12 +161,16 @@ public class AddShoeActivity extends BaseActivity {
                         catch(Exception exx){}
                     }
                     if(arrShoe != null){
+                        LogUtil.d(mCurrentClassName, "History string array: " + arrShoe.toString());
                         shoe.setMilesShoesHistoriesString(arrShoe);
                     }
                     else if(objShoe != null){
+                        LogUtil.d(mCurrentClassName, "History string object: "  + objShoe.toString());
                         shoe.setMilesShoesHistoriesString(objShoe);
                     }
+                    //LogUtil.d(mCurrentClassName, "History string array: " + arrShoe.toString());
                     history = shoe.getMilesShoesHistories();
+                    //LogUtil.d(mCurrentClassName, "History string: " + history.toString());
                     if(history != null && history.size()>0){
                         for(History his : history){
                             LogUtil.d(mCurrentClassName, "Shoe update infor: " + his.getCreatedAt()
@@ -191,6 +201,7 @@ public class AddShoeActivity extends BaseActivity {
                                         try{
                                             Bitmap bmp = Utilities.getRoundedCornerBitmap(loadedImage, 14);
                                             mShoeImage.setImageBitmap(bmp);
+                                            mShoeDelete.setVisibility(View.VISIBLE);
                                         }
                                         catch (Exception ex){
                                         }
@@ -215,6 +226,7 @@ public class AddShoeActivity extends BaseActivity {
 		}
 
 		mShoeImage.setOnClickListener(this);
+        mShoeDelete.setOnClickListener(this);
 		mAddMilesBtn.setOnClickListener(this);
 	}
 
@@ -223,90 +235,150 @@ public class AddShoeActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onClick(v);
 		switch (v.getId()) {
-		case R.id.add_show_add_miles_btn:
+            case R.id.add_show_add_miles_btn:
 
-			String addMilesStr = mAddMilesEdt.getText().toString();
-			try {
+                String addMilesStr = mAddMilesEdt.getText().toString();
+                try {
 
-				float newMile = Float.valueOf(addMilesStr);
-				String orgMileStr = mMilesTxt.getText().toString();
-				float orgMile = 0;
-				if (!orgMileStr.equals("")) {
+                    float newMile = Float.valueOf(addMilesStr);
+                    String orgMileStr = mMilesTxt.getText().toString();
+                    float orgMile = 0;
+                    if (!orgMileStr.equals("")) {
 
-					orgMile = Float.valueOf(orgMileStr);
-				}
-
-				orgMile += newMile;
-				mMilesTxt.setText(String.format(Locale.US, "%.2f", orgMile));
-			} catch (Exception ex) {
-
-				LogUtil.e("add_show_add_miles_btn", "error when parse");
-			}
-
-			mAddMilesEdt.setText("");
-			break;
-		case R.id.bottom_button_right_text:
-
-			if (mShoeModelEdt.getText().toString().equals("")
-					|| mShoeBrandEdt.getText().toString().equals("")) {
-
-				Utilities.showAlertMessage(AddShoeActivity.this,
-						getString(R.string.dialog_add_shoe_fill_all_fields),
-						getString(R.string.dialog_add_shoe_tile));
-			} else {
-                float newMile = 0;
-                if(!mMilesTxt.getText().toString().isEmpty()) {
-                    newMile = Float.parseFloat(mMilesTxt.getText().toString());
-                }
-                float addMile =  newMile - lastMileOfShoe;
-                if(shoeIdUpdate > 0){
-                    //call update
-                    if(addMile >= 0){//has new info to update
-                        //String param = String.format("%.2f", addMile);
-                        if(mUriImageUpload != null){
-                            callUploadShoeImage();
-                        }
-                        else{
-                            callUpdateShoe();
-                        }
+                        orgMile = Float.valueOf(orgMileStr);
                     }
 
+                    orgMile += newMile;
+                    mMilesTxt.setText(String.format(Locale.US, "%.2f", orgMile));
+                } catch (Exception ex) {
+
+                    LogUtil.e("add_show_add_miles_btn", "error when parse");
                 }
-                else{
-                    if(mMilesTxt.getText().toString().isEmpty() || (mMilesTxt.getText().toString().equalsIgnoreCase("0.00"))){
-                        Utilities.showAlertMessage(AddShoeActivity.this,
-                                getString(R.string.dialog_add_shoe_fill_all_fields),
-                                getString(R.string.dialog_add_shoe_tile));
+
+                mAddMilesEdt.setText("");
+                break;
+            case R.id.bottom_button_right_text:
+
+                if (mShoeModelEdt.getText().toString().equals("")
+                        || mShoeBrandEdt.getText().toString().equals("")) {
+
+                    Utilities.showAlertMessage(AddShoeActivity.this,
+                            getString(R.string.dialog_add_shoe_fill_all_fields),
+                            getString(R.string.dialog_add_shoe_tile));
+                } else {
+                    float newMile = 0;
+                    if (!mMilesTxt.getText().toString().isEmpty()) {
+                        newMile = Float.parseFloat(mMilesTxt.getText().toString());
                     }
-                    else {
+                    float addMile = newMile - lastMileOfShoe;
+                    if (shoeIdUpdate > 0) {
+                        //call update
+                        if (addMile >= 0) {//has new info to update
+                            //String param = String.format("%.2f", addMile);
+                            if (mUriImageUpload != null) {
+                                callUploadShoeImage();
+                            } else {
+                                callUpdateShoe();
+                            }
+                        }
 
-
-                        //process Add Shoe
-                        //if(addMile > 0){
-                        //not check when add
-                        //String param = String.format("%.2f", addMile);
-                        //callAddShoe(param);
-                        if (mUriImageUpload != null) {
-                            callUploadShoeImage();
+                    } else {
+                        if (mMilesTxt.getText().toString().isEmpty() || (mMilesTxt.getText().toString().equalsIgnoreCase("0.00"))) {
+                            Utilities.showAlertMessage(AddShoeActivity.this,
+                                    getString(R.string.dialog_add_shoe_fill_all_fields),
+                                    getString(R.string.dialog_add_shoe_tile));
                         } else {
-                            callAddShoe();
-                        }
-                        //callUploadShoeImage();
-                        //}
-                    }
-                }
-                //process add or update
-				//new SaveShoeAsync().execute();
-			}
-			break;
-		case R.id.add_shoe_image:
 
-			Utilities.showPickerImageDialog(AddShoeActivity.this,
-					Constants.REQUETS_CODE_ADD_SHOE_TAKE_IMAGE,
-					Constants.REQUETS_CODE_ADD_SHOE_CHO0SE_IMAGE);
-			break;
-		}
+
+                            //process Add Shoe
+                            //if(addMile > 0){
+                            //not check when add
+                            //String param = String.format("%.2f", addMile);
+                            //callAddShoe(param);
+                            if (mUriImageUpload != null) {
+                                callUploadShoeImage();
+                            } else {
+                                callAddShoe();
+                            }
+                            //callUploadShoeImage();
+                            //}
+                        }
+                    }
+                    //process add or update
+                    //new SaveShoeAsync().execute();
+                }
+                break;
+            case R.id.delete_shoe_image:
+                LogUtil.e(mCurrentClassName, "delete_shoe_image");
+                showDialogDelete();
+
+                break;
+            case R.id.add_shoe_image:
+
+                Utilities.showPickerImageDialog(AddShoeActivity.this,
+                        Constants.REQUETS_CODE_ADD_SHOE_TAKE_IMAGE,
+                        Constants.REQUETS_CODE_ADD_SHOE_CHO0SE_IMAGE);
+                break;
+
+
+
+        }
 	}
+
+    private void processDeleteImage(){
+        if (mUriImageUpload != null) {
+            //has upload
+            //if add
+            //clear uri
+            mUriImageUpload = null;
+            //set no image
+            mShoeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_of_shoe));
+            //if edit TODO
+            mShoeImgPath = "";
+        }
+        else{
+            //no upload
+            //if add: do nothing
+            //if edit has image TODO
+            mShoeImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_of_shoe));
+            if(shoeIdUpdate > 0) {
+                mShoeImgPath = "";
+            }
+        }
+        mShoeDelete.setVisibility(View.GONE);
+    }
+    private void showDialogDelete() {
+        final CustomAlertDialog dialog = new CustomAlertDialog(AddShoeActivity.this);
+        dialog.setCancelableFlag(false);
+        dialog.setTitle(getString(R.string.dialog_add_shoe_tile));
+        dialog.setMessage(getString(R.string.dialog_delete_shoe_image));
+        dialog.setNegativeButton(getString(R.string.no),
+                new CustomAlertDialog.OnNegativeButtonClick() {
+
+                    @Override
+                    public void onButtonClick(final View view) {
+                        // TODO Auto-generated method stub
+
+                        dialog.dismiss();
+                    }
+                });
+        dialog.setPositiveButton(getString(R.string.yes),
+                new CustomAlertDialog.OnPositiveButtonClick() {
+
+                    @Override
+                    public void onButtonClick(View view) {
+                        // TODO Auto-generated method stub
+
+                        //saveUserData();
+                        Toast.makeText(AddShoeActivity.this, "Choose URL IMAGE SHOE empty", Toast.LENGTH_SHORT);
+                        LogUtil.e(mCurrentClassName, "delete_shoe_image CHOOSE");
+                        processDeleteImage();
+                        dialog.dismiss();
+                    }
+                });
+
+        dialog.show();
+    }
 
     private IWsdl2CodeEvents callBackEvent = new IWsdl2CodeEvents() {
         @Override
@@ -438,7 +510,9 @@ public class AddShoeActivity extends BaseActivity {
                 //String imageUrl = "picture/shoe.png";
         //String param = "1";
         //String param = String.format("%.0f", addMile);
-
+        if ((mLoadingDialog == null) || (!mLoadingDialog.isShowing())) {
+            mLoadingDialog = CustomLoadingDialog.show(AddShoeActivity.this, "", "", false, false);
+        }
         LogUtil.d(mCurrentClassName, "Request Add Shoe: " + brand+"|"+imageUrl +"|"+miles+"|"+model);
         AddShoeRequest request = new AddShoeRequest(brand, imageUrl, miles, model);
         request.setListener(callBackEvent);
@@ -491,6 +565,9 @@ public class AddShoeActivity extends BaseActivity {
         LogUtil.d(mCurrentClassName, "Request UPdate Shoe: " + brand+"|"+shoeIdUpdate+"|"+imageUrl +"|"
                 +miles+"|"+mileOnShoe+"|"+model+"|"+userId);
 
+        if ((mLoadingDialog == null) || (!mLoadingDialog.isShowing())) {
+            mLoadingDialog = CustomLoadingDialog.show(AddShoeActivity.this, "", "", false, false);
+        }
 
             //update without image
             UpdateShoeRequest request = new UpdateShoeRequest(brand, String.valueOf(shoeIdUpdate),

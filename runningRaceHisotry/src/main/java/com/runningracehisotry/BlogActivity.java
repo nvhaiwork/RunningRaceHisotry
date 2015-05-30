@@ -56,7 +56,7 @@ public class BlogActivity extends BaseActivity {
                     JSONObject jsonObjectReceive = new JSONObject(data.toString());
                     String mHtmlBlog = jsonObjectReceive.getString("main_content");
                     String mHtmlName = jsonObjectReceive.getString("name");
-                    Log.d(Constants.LOG_TAG, " Content blog: " + mHtmlBlog + "|" + mHtmlName);
+                    LogUtil.d(Constants.LOG_TAG, " Content blog: " + mHtmlBlog + "|" + mHtmlName);
                     final String mimeType = "text/html";
                     final String encoding = "UTF-8";
                     mBlog.loadDataWithBaseURL("",mHtmlName + mHtmlBlog, mimeType, encoding, "");

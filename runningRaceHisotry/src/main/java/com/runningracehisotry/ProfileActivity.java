@@ -69,7 +69,7 @@ public class ProfileActivity extends BaseActivity {
         String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
-        Log.d("QuyNT3", "Stored profile initial:" + userStr +"|" + (ServiceApi.SERVICE_URL + user.getProfile_image()));
+        LogUtil.d("QuyNT3", "Stored profile initial:" + userStr +"|" + (ServiceApi.SERVICE_URL + user.getProfile_image()));
         mNameEdt.setText(user.getFull_name());
         if(user.getProfile_image() != null && !user.getProfile_image().isEmpty()){
             mImageLoader.displayImage(ServiceApi.SERVICE_URL + user.getProfile_image(), mProfileImg, mOptions);
@@ -179,7 +179,7 @@ public class ProfileActivity extends BaseActivity {
 
                     // Save process
                     //new UpdateProfileAsyncTask().execute();
-                    Log.d("QuyNT3", "udpate profile API 28: ");
+                LogUtil.d("QuyNT3", "udpate profile API 28: ");
                 if(mLoadingDialog == null) {
                     mLoadingDialog = CustomLoadingDialog.show(ProfileActivity.this, "", "", false, false);
                 }
@@ -200,7 +200,7 @@ public class ProfileActivity extends BaseActivity {
         String userStr = CustomSharedPreferences.getPreferences(Constants.PREF_USER_LOGGED_OBJECT, "");
         Gson gson = new Gson();
         User user = gson.fromJson(userStr, User.class);
-        Log.d("QuyNT3", "Stored profile:" + userStr +"|" + (user != null));
+        LogUtil.d("QuyNT3", "Stored profile:" + userStr +"|" + (user != null));
         //mNameEdt.setText(user.getName());
         String id = user.getId();
         String oldPassword = mOldPassEdt.getText().toString();

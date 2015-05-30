@@ -16,6 +16,7 @@ import com.runningracehisotry.RunningRaceApplication;
 import com.runningracehisotry.constants.Constants;
 import com.runningracehisotry.models.HistoryConversation;
 import com.runningracehisotry.utilities.CustomSharedPreferences;
+import com.runningracehisotry.utilities.LogUtil;
 import com.sinch.android.rtc.*;
 import com.sinch.android.rtc.messaging.Message;
 import com.sinch.android.rtc.messaging.MessageClient;
@@ -99,11 +100,11 @@ public class SinchService extends Service {
     }
 
     public void sendMessage(String recipientUserId, String textBody) {
-        Log.d(TAG, "call sendMessage: " + textBody);
+        LogUtil.d(TAG, "call sendMessage: " + textBody);
         if (isStarted()) {
             WritableMessage message = new WritableMessage(recipientUserId, textBody);
             mSinchClient.getMessageClient().send(message);
-            Log.d(TAG, "sendMessage: " + textBody);
+            LogUtil.d(TAG, "sendMessage: " + textBody);
         }
     }
 
@@ -149,7 +150,7 @@ public class SinchService extends Service {
     }
 
     private void start(String userName) {
-        Log.d(TAG, "call start: ");
+        LogUtil.d(TAG, "call start: ");
         if (mSinchClient == null || !userName.equalsIgnoreCase(this.userName)) {
             mSinchClient = Sinch.getSinchClientBuilder().context(getApplicationContext()).userId(userName)
                     .applicationKey(APP_KEY)
@@ -194,7 +195,7 @@ public class SinchService extends Service {
 
             mSinchClient.addSinchClientListener(new MySinchClientListener());
             mSinchClient.start();
-            Log.d(TAG, "call start: ");
+            LogUtil.d(TAG, "call start: ");
         }
     }
 
@@ -214,7 +215,7 @@ public class SinchService extends Service {
     }
 
     private void sendImcommingBroadcast(String senderID) {
-        Log.d(TAG, "sendBroadcast : " + senderID);
+        LogUtil.d(TAG, "sendBroadcast : " + senderID);
         Intent incommingIntent = new Intent(Constants.INCOMMING_BROADCAST_ACTION);
         incommingIntent.putExtra(Constants.INCOMMING_BROADCAST_FRIEND_NAME_EXTRA, senderID);
         sendBroadcast(incommingIntent);
@@ -239,7 +240,7 @@ public class SinchService extends Service {
         String content = message.getTextBody();
         long sentTime = message.getTimestamp().getTime();
         String ownerId = message.getSenderId();
-        Log.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
+        LogUtil.d(TAG, "onIncomingMessage ID|SENder|friend(ME)|content|time|owner: "
                 + msgId + "|" + userIdDb + "|" + friendIdDb + "|" + content + "|" + sentTime + "|" + ownerId);
         if (userIdDb != null) {
             //Message messageObject = new Message(currentFriend.getId(), message.getTextBody());
@@ -247,7 +248,7 @@ public class SinchService extends Service {
             //store DB when received
             HistoryConversation dao = HistoryConversation.getInstance(this, RunningRaceApplication.getInstance().getCurrentUser().getName());
             long result = dao.addMessage(messageObject);
-            Log.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
+            LogUtil.d(TAG, "onIncomingMessage add DB result|| message ID: " + result + "||" + message.getMessageId());
         }
     }
 
@@ -255,7 +256,7 @@ public class SinchService extends Service {
 
         @Override
         public void onClientFailed(SinchClient client, SinchError error) {
-            Log.d(TAG, "SinchClient fail:" + error.getMessage());
+            LogUtil.d(TAG, "SinchClient fail:" + error.getMessage());
             if (mListener != null) {
                 mListener.onStartFailed(error);
             }
@@ -265,7 +266,7 @@ public class SinchService extends Service {
 
         @Override
         public void onClientStarted(SinchClient client) {
-            Log.d(TAG, "SinchClient started");
+            LogUtil.d(TAG, "SinchClient started");
             if (mListener != null) {
                 mListener.onStarted();
                 mSinchClient.getMessageClient().addMessageClientListener(new MessageClientListener() {
@@ -301,7 +302,7 @@ public class SinchService extends Service {
 
         @Override
         public void onClientStopped(SinchClient client) {
-            Log.d(TAG, "SinchClient stopped");
+            LogUtil.d(TAG, "SinchClient stopped");
         }
 
         @Override

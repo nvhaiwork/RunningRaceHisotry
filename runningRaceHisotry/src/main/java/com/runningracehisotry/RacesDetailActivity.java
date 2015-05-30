@@ -1831,13 +1831,13 @@ public class RacesDetailActivity extends BaseActivity implements
                     StatusUpdate statusUpdate = new StatusUpdate(status);
 
                     twitter4j.Status response = twitter.updateStatus(statusUpdate);
-                    Log.d("Status", response.getText());
+                    LogUtil.d("Status", response.getText());
                 } else {
 
                 }
 
             } catch (TwitterException e) {
-                Log.d("Failed to post!", e.getMessage());
+                LogUtil.d("Failed to post!", e.getMessage());
             }
             return null;
         }

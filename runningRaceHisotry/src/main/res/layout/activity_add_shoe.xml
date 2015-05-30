@@ -42,6 +42,22 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_photo_of_shoe" />
 
+        <com.runningracehisotry.views.SquareImageView
+            android:id="@+id/delete_shoe_image"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/add_shoe_brand"
+            android:contentDescription="@null"
+            android:padding="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/delete_button" />
+
+
         <com.runningracehisotry.views.CustomFontTextView
             android:id="@+id/add_shoe_brand"
             android:layout_width="match_parent"

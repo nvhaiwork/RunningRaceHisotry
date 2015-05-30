@@ -454,7 +454,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener, O
                         new FacebookCallback<Sharer.Result>() {
                             @Override
                             public void onSuccess(Sharer.Result result) {
-                                Log.d("BaseActivity", result.toString());
+                                LogUtil.d("BaseActivity", result.toString());
                             }
 
                             @Override
@@ -831,7 +831,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener, O
                 try {
                     JSONObject jsonObjectReceive = new JSONObject(data.toString());
                     String mHtmlAbout = jsonObjectReceive.getString("main_content");
-                    Log.d(Constants.LOG_TAG," Content about us: " + mHtmlAbout);
+                    LogUtil.d(Constants.LOG_TAG," Content about us: " + mHtmlAbout);
                     final String mimeType = "text/html";
                     final String encoding = "UTF-8";
                     //mAboutUsContent.loadDataWithBaseURL("", mHtmlAbout, mimeType, encoding, "");
@@ -1023,11 +1023,11 @@ public class BaseActivity extends FragmentActivity implements OnClickListener, O
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction() != null){
                 if(intent.getAction().equalsIgnoreCase("com.runningracehisotry.chat.incomming")){
-                    Log.d(Constants.LOG_TAG,"New Chat Broadcast");
+                    LogUtil.d(Constants.LOG_TAG,"New Chat Broadcast");
                     CustomSharedPreferences.setPreferences(Constants.PREF_NEW_NOTIFICATION_CHAT, 1);
                     //super.onReceivedNewMessage();
                     if(mMenu.isMenuShowing()){
-                        Log.d(Constants.LOG_TAG,"New Chat Broadcast when showing menu: refresh it and show again");
+                        LogUtil.d(Constants.LOG_TAG,"New Chat Broadcast when showing menu: refresh it and show again");
                         refreshLeftMenu(true);
                         mMenu.toggle();
                     }

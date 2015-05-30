@@ -19,6 +19,7 @@ import com.runningracehisotry.models.Shoe;
 import com.runningracehisotry.utilities.ImageLoaderMedal;
 import com.runningracehisotry.utilities.LogUtil;
 import com.runningracehisotry.utilities.Utilities;
+import com.runningracehisotry.views.CustomAlertDialog;
 import com.runningracehisotry.views.CustomLoadingDialog;
 import com.runningracehisotry.views.MyTimePickerDialog;
 import com.runningracehisotry.views.MyTimePickerDialog.OnTimeSetListener;
@@ -54,6 +55,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 //import android.widget.Toast;
 
 import org.json.JSONException;
@@ -69,9 +71,11 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
             mRaceStateEdt;
     private TextView mShoeTxt, mRaceDateTxt, mRaceTypeTxt, mRaceFinishTimeTxt;
     private ImageView mBidImg, mPersonImg, mMedalImg;
-
+    private ImageView mDeleteBidImg, mDeletePersonImg, mDeleteMedalImg;
+    //upload race
     private String mRaceMedalPath, mRaceBibPath, mRacePersonPath;
     private Uri mRaceMedalUpload, mRaceBibUpload, mRacePersonUpload;
+
     private CustomLoadingDialog mLoadingDialog;
     private int uploadedRaceImage;
 
@@ -113,6 +117,12 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
         mMedalImg = (ImageView) findViewById(R.id.add_race_photo_of_medal);
         mPersonImg = (ImageView) findViewById(R.id.add_race_photo_of_person);
 
+        mDeleteBidImg = (ImageView) findViewById(R.id.delete_bib_image);
+        mDeleteMedalImg = (ImageView) findViewById(R.id.delete_medal_image);
+        mDeletePersonImg = (ImageView) findViewById(R.id.delete_person_image);
+        mDeleteBidImg.setVisibility(View.GONE);
+        mDeleteMedalImg.setVisibility(View.GONE);
+        mDeletePersonImg.setVisibility(View.GONE);
         /*lnGroup = (LinearLayout) findViewById(R.id.races_add_other_layout);
         rdGroup = (RadioGroup) findViewById(R.id.races_radio_group_other);
         edtRaceMile = (EditText) findViewById(R.id.add_race_other_add_miles_edt);
@@ -187,6 +197,9 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
         mBidImg.setOnClickListener(this);
         mMedalImg.setOnClickListener(this);
         mPersonImg.setOnClickListener(this);
+        mDeleteBidImg.setOnClickListener(this);
+        mDeleteMedalImg.setOnClickListener(this);
+        mDeletePersonImg.setOnClickListener(this);
         mRaceTypeTxt.setOnClickListener(this);
         mRaceDateTxt.setOnClickListener(this);
         mRaceFinishTimeTxt.setOnClickListener(this);
@@ -287,6 +300,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                                     if(bmp != null) {
                                         LogUtil.d(Constants.LOG_TAG, "Loaded bitmap Medal url|bitmap: " + imageUri + "|" + bmp.toString());
                                         mMedalImg.setImageBitmap(bmp);
+                                        mDeleteMedalImg.setVisibility(View.VISIBLE);
                                     }
                                     else{
                                         LogUtil.d(Constants.LOG_TAG, "Load bitmap Medal NULL url|bitmap: " + imageUri);
@@ -324,6 +338,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                                 try{
                                     Bitmap bmp = Utilities.getRoundedCornerBitmap(loadedImage, 14);
                                     mBidImg.setImageBitmap(bmp);
+                                    mDeleteBidImg.setVisibility(View.VISIBLE);
                                 }
                                 catch (Exception ex){
                                 }
@@ -354,6 +369,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                                 try{
                                     Bitmap bmp = Utilities.getRoundedCornerBitmap(loadedImage, 14);
                                     mPersonImg.setImageBitmap(bmp);
+                                    mDeletePersonImg.setVisibility(View.VISIBLE);
                                 }
                                 catch (Exception ex){
                                 }
@@ -446,6 +462,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                                 R.dimen.image_round_conner)));
                 mBidImg.setTag(imgBmp);
                 mRaceBibUpload = getImageUri(this, imgBmp);
+                mDeleteBidImg.setVisibility(View.VISIBLE);
                 LogUtil.d(mCurrentClassName, "Crop image: " + mRaceBibUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_MEDAL) {
 
@@ -457,6 +474,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                                 R.dimen.image_round_conner)));
                 mMedalImg.setTag(imgBmp);
                 mRaceMedalUpload = getImageUri(this, imgBmp);
+                mDeleteMedalImg.setVisibility(View.VISIBLE);
                 LogUtil.d(mCurrentClassName, "Crop image: " + mRaceMedalUpload);
             } else if (requestCode == Constants.REQUETS_CODE_ADD_RACE_IMAGE_CROP_PERSON) {
 
@@ -468,6 +486,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                                 R.dimen.image_round_conner)));
                 mPersonImg.setTag(imgBmp);
                 mRacePersonUpload = getImageUri(this, imgBmp);
+                mDeletePersonImg.setVisibility(View.VISIBLE);
                 LogUtil.d(mCurrentClassName, "Crop image: " + mRacePersonUpload);
             }
         }
@@ -637,7 +656,7 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                         }
                         if(raceMiles.equalsIgnoreCase("0.00") || (miles == 0)){
                             if (mRaceUpdate == null) {//add race
-                                LogUtil.e("MEDAL", "Add RAce, not check mile =0");
+                                LogUtil.d("MEDAL", "Add RAce, not check mile =0");
                                 Utilities.showAlertMessage(AddRaceActivity.this,
                                         getString(R.string.dialog_add_race_invalid_mile),
                                         getString(R.string.dialog_add_race_tile));
@@ -657,31 +676,156 @@ public class AddRaceActivity extends BaseActivity implements OnTimeSetListener {
                     uploadedRaceImage = 0;
                     if(mRaceMedalUpload != null){
                         uploadedRaceImage = 1;
-                        LogUtil.e("MEDAL", " upload medal");
+                        LogUtil.d("MEDAL", " upload medal");
                         uploadMedalImage();
                     }
                     else if(mRaceBibUpload != null){
                         uploadedRaceImage = 2;
-                        LogUtil.e("MEDAL", " upload BIB");
+                        LogUtil.d("MEDAL", " upload BIB");
                         uploadBibImage();
                     }
                     else if(mRacePersonUpload != null){
                         uploadedRaceImage = 3;
-                        LogUtil.e("MEDAL", " upload PERSON");
+                        LogUtil.d("MEDAL", " upload PERSON");
                         uploadPersonImage();
                     }
                     else{
-                        LogUtil.e("MEDAL", " CALL ADD/UDPATE DRACE");
+                        LogUtil.d("MEDAL", " CALL ADD/UDPATE DRACE");
                         callAddUpdateRace();
                     }
 
                     //callAddUpdateRace();
                 }
                 break;
+            case R.id.delete_medal_image:
+                LogUtil.d(mCurrentClassName, "delete_medal_image");
+                showDialogDelete(1);
+                break;
+            case R.id.delete_bib_image:
+                LogUtil.d(mCurrentClassName, "delete_bib_image");
+                showDialogDelete(2);
+                break;
+            case R.id.delete_person_image:
+                LogUtil.d(mCurrentClassName, "delete_person_image");
+                showDialogDelete(3);
+                break;
             /*case R.id.add_race_event_type_txt:
                 showInputRaceMileDialog();
                 break;*/
         }
+    }
+
+    private void processDeleteImage(int position){
+        switch(position){
+            case 1:
+                if (mRaceMedalUpload != null) {
+                    //has upload
+                    //if add
+                    //clear uri
+                    mRaceMedalUpload = null;
+                    //set no image
+                    mMedalImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_of_medal));
+                    //if edit
+                    mRaceMedalPath = "";
+                }
+                else{
+                    //no upload
+                    //if add: do nothing
+                    //if edit has image
+                    mMedalImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_of_medal));
+                    if(mRaceUpdate != null) {
+                        mRaceMedalPath = "";
+                    }
+                }
+                mDeleteMedalImg.setVisibility(View.GONE);
+                break;
+            case 2:
+                if (mRaceBibUpload != null) {
+                    //has upload
+                    //if add
+                    //clear uri
+                    mRaceBibUpload = null;
+                    //set no image
+                    mBidImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_of_medal));
+                    //if edit
+                    mRaceBibPath = "";
+                }
+                else{
+                    //no upload
+                    //if add: do nothing
+                    //if edit has image
+                    mBidImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_of_medal));
+                    if(mRaceUpdate != null) {
+                        mRaceBibPath = "";
+                    }
+                }
+                mDeleteBidImg.setVisibility(View.GONE);
+                break;
+            case 3:
+                if (mRacePersonUpload != null) {
+                    //has upload
+                    //if add
+                    //clear uri
+                    mRacePersonUpload = null;
+                    //set no image
+                    mPersonImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_of_medal));
+                    //if edit
+                    mRacePersonPath = "";
+                }
+                else{
+                    //no upload
+                    //if add: do nothing
+                    //if edit has image
+                    mPersonImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_photo_of_medal));
+                    if(mRaceUpdate != null) {
+                        mRacePersonPath = "";
+                    }
+                }
+                mDeletePersonImg.setVisibility(View.GONE);
+                break;
+
+        }
+
+    }
+
+    private void showDialogDelete(final int position) {
+        final CustomAlertDialog dialog = new CustomAlertDialog(AddRaceActivity.this);
+        dialog.setCancelableFlag(false);
+        dialog.setTitle(getString(R.string.dialog_add_race_tile));
+        String msg = getString(R.string.dialog_delete_medal_image);
+        if(position == 2){
+            msg = getString(R.string.dialog_delete_bib_image);
+        }
+        else if(position == 3){
+            msg = getString(R.string.dialog_delete_person_image);
+            //msg = "Are you sure to delete Person image?";
+        }
+
+        dialog.setMessage(msg);
+        dialog.setNegativeButton(getString(R.string.no),
+                new CustomAlertDialog.OnNegativeButtonClick() {
+
+                    @Override
+                    public void onButtonClick(final View view) {
+                        // TODO Auto-generated method stub
+
+                        dialog.dismiss();
+                    }
+                });
+        dialog.setPositiveButton(getString(R.string.yes),
+                new CustomAlertDialog.OnPositiveButtonClick() {
+
+                    @Override
+                    public void onButtonClick(View view) {
+                        // TODO Auto-generated method stub
+
+                        processDeleteImage(position);
+                        Toast.makeText(AddRaceActivity.this, "Choose URL IMAGE RACE empty", Toast.LENGTH_SHORT);
+                        dialog.dismiss();
+                    }
+                });
+
+        dialog.show();
     }
 
 
