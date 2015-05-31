@@ -611,7 +611,10 @@ public class BaseActivity extends FragmentActivity implements OnClickListener, O
                 "");
         CustomSharedPreferences.setPreferences(Constants.PREF_PASSWORD,
                 "");
-
+            LogUtil.d("LOGOUT", "clear SNS account");
+		CustomSharedPreferences.setPreferences(Constants.PREF_SNS_ID, "");
+        CustomSharedPreferences.setPreferences(Constants.PREF_SNS_FULL_NAME, "");
+        CustomSharedPreferences.setPreferences(Constants.PREF_SNS_AVATAR, "");
         // Setting
         /*CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_SOUND, false);
         CustomSharedPreferences.setPreferences(Constants.PREF_SETTING_LINK_FACEBOOK, false);
