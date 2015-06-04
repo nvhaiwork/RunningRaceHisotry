@@ -17,6 +17,7 @@
     <string name="contact_body">Please report any bugs or inconvenience here</string>
     <string name="app_name">Personal Running Race Hisotry</string>
     <string name="share_app_menu">I love this APP, You must try it!!!\nPersonal Running Race History app. https://play.google.com/store/apps/details?id=com.runningracehisotry</string>
+    <string name="share_tw_app_menu">http://runningracehistory.com/</string>
 
     <!-- Time picker dialog -->
     <string name="time_set">Set time</string>

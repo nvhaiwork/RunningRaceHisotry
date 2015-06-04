@@ -1399,11 +1399,12 @@ public class RacesDetailActivity extends BaseActivity implements
 
             @Override
             public void onClick(View arg0) {
-                // TODO Auto-generated method stub
+                String shareText = "http://runningracehistory.com/home/shareRace/" + race.getId();
+                Utilities.doShareSocial(RacesDetailActivity.this, "com.twitter.android", shareText, null);
 
-                ShareImagesAsync share = new ShareImagesAsync();
-                share.setShareType(R.id.dialog_share_twitter);
-                share.execute(race);
+//                ShareImagesAsync share = new ShareImagesAsync();
+//                share.setShareType(R.id.dialog_share_twitter);
+//                share.execute(race);
                 dialog.dismiss();
             }
         });
