@@ -482,7 +482,12 @@ public class LoginChoiceScreen extends BaseActivity implements IWsdl2CodeEvents,
             }
             CustomSharedPreferences.setPreferences(Constants.PREF_USER_LOGGED_OBJECT, data.toString());
 
-            mLoadingDialog.dismiss();
+            if(mLoadingDialog != null && mLoadingDialog.isShowing()) {
+                try {
+                    mLoadingDialog.dismiss();
+                } catch (Exception e) {
+                }
+            }
 
             callService();
 
