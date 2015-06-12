@@ -20,13 +20,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 /**
  * @author nvhaiwork
  *
  */
 public class SelectRaceActivity extends BaseActivity {
-
+    private AdView mAdView;
 	private int mFriendRace;
 	private TextView mWelcomeTxt, mTitleTxt;
 	private LinearLayout mAddRaceSuccessLayout;
@@ -83,7 +84,19 @@ public class SelectRaceActivity extends BaseActivity {
 
 			mFriends = new ArrayList<ParseUser>();
 		}
+// Add Google Ads
+        mAdView = (AdView) findViewById(R.id.ad_view);
+        // Create an ad request. Check logcat output for the hashed device ID to
+        // get test ads on a physical device. e.g.
+        AdRequest adRequest = new AdRequest.Builder()
+                //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                //.addTestDevice("808EAFC9D04E7E6308B3F9952BCF8E33")
+                //.addTestDevice("7E25601C2E54E4962C01879988BD8502")
+                //.addTestDevice("5A474433BD6F28441C94BBAF0B79056F")
+                .build();
 
+        // Start loading the ad in the background.
+        mAdView.loadAd(adRequest);
 		// Display user welcome
 		if (mFriendRace != -1) {
 

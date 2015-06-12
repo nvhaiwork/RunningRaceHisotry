@@ -216,4 +216,5 @@
     <string name="dialog_delete_medal_image">Are you sure to delete Medal\'s image?</string>
     <string name="dialog_delete_bib_image">Are you sure to delete Bib\'s image?</string>
     <string name="dialog_delete_person_image">Are you sure to delete Person\'s image?</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9487457784196142/2692962915</string>
 </resources>
