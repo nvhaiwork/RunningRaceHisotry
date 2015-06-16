@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -7,13 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         layout="@layout/layout_activity_background" />
-
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id" />
     <com.runningracehisotry.views.CustomFontTextView
         android:id="@+id/selecet_race_welcome_back"
+        android:layout_below="@+id/ad_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="7dp"
+        android:padding="2dp"
         android:textColor="@color/black"
         android:textSize="@dimen/login_sign_in_with" />
 
