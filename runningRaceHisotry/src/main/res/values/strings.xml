@@ -153,12 +153,7 @@
     <string name="setting_sounds">Sounds</string>
     <string name="setting_link_fb">Link Facebook</string>
     <string name="setting_about_title">ABOUT</string>
-    <string name="setting_about_content">American developers, The Wenger’s, live in the Northern suburbs of Chicago, 
-        with their two daughters, Ashley and Jamie. Joshua graduated from Boston University, with a Bachelor of Science in Hospitality, 
-        and has over 19 years of management working in the food service industry. He is currently employed by Aramark as the Director of Food services in a school district, 
-        on the North Shore of Chicago. Robyn works in the Compliance Department for CVS/Caremark and has recently gone back to college, where she is studying Communications. 
-        \n\nJoshua and Robyn have been athletic all their lives and have instilled this into their two girls. They both love running; 
-        between half marathons and full marathons they can\'t get enough! Their love for running inspired them to create this app that will help people keep all their race history in once central location.</string>
+    <string name="setting_about_content">American developers, Robyn &#38; Joshua Wenger, live in the Northern suburbs of Chicago, with their two daughter’s. Joshua graduated from Boston University, with a Bachelor of Science in Hospitality, and has over 19 years of management working in the food service industry. He is currently employed by Aramark as the Director of Food services in a school district, on the North Shore of Chicago. Robyn works in the Compliance Department for CVS/Caremark and has recently gone back to college, where she is studying Communications. Joshua and Robyn have been athletic all their lives and have instilled this into their two girls. They both love running; between half marathons and full marathons they can’t get enough! Their love for running inspired them to create this app that will help people keep all their race history in one central location. They feel passionate about their app and believe in the positive impact it will have in any market that it is promoted.</string>
 
     <!-- Add Shoe screen -->
     <string name="upload_image_failed">Upload image failed!</string>
