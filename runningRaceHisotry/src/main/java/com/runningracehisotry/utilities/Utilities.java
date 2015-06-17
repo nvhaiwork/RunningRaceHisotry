@@ -531,25 +531,25 @@ public class Utilities {
 
                     context.startActivity(chooserIntent);
                 } else {
-                    try {
-                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + nameApp)));
-                    } catch (android.content.ActivityNotFoundException anfe) {
-                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + nameApp)));
+                    if(nameApp.equals("com.twitter.android")) {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://twitter.com/")));
+                    } else {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://facebook.com/")));
                     }
                 }
             } else {
-                try {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + nameApp)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + nameApp)));
+                if(nameApp.equals("com.twitter.android")) {
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://twitter.com/")));
+                } else {
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://facebook.com/")));
                 }
 
             }
         } catch (Exception e) {
-            try {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + nameApp)));
-            } catch (android.content.ActivityNotFoundException anfe) {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + nameApp)));
+            if(nameApp.equals("com.twitter.android")) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://twitter.com/")));
+            } else {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://facebook.com/")));
             }
         }
     }

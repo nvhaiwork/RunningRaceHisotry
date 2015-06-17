@@ -475,7 +475,7 @@ public class BaseActivity extends FragmentActivity implements OnClickListener, O
 					getString(R.string.menu_share_twitter))) {
 
 				Utilities.doShareSocial(BaseActivity.this, "com.twitter.android",
-						getString(R.string.share_tw_app_menu), null);
+						getString(R.string.share_app_menu), null);
 			} else if (menu.getDislayText().equals(
 					getString(R.string.menu_sign_out))) {
 

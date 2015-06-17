@@ -1399,12 +1399,12 @@ public class RacesDetailActivity extends BaseActivity implements
 
             @Override
             public void onClick(View arg0) {
-                String shareText = "http://runningracehistory.com/home/shareRace/" + race.getId();
-                Utilities.doShareSocial(RacesDetailActivity.this, "com.twitter.android", shareText, null);
+//                String shareText = "http://runningracehistory.com/home/shareRace/" + race.getId();
+//                Utilities.doShareSocial(RacesDetailActivity.this, "com.twitter.android", shareText, null);
 
-//                ShareImagesAsync share = new ShareImagesAsync();
-//                share.setShareType(R.id.dialog_share_twitter);
-//                share.execute(race);
+                ShareImagesAsync share = new ShareImagesAsync();
+                share.setShareType(R.id.dialog_share_twitter);
+                share.execute(race);
                 dialog.dismiss();
             }
         });
@@ -1600,40 +1600,42 @@ public class RacesDetailActivity extends BaseActivity implements
 			int hour = total / 3600;
 			int min = (total % 3600) / 60;
 			int sec = (total % 60);*/
-            if (hour > 0) {
-
-                if (!shoeName.equals("")) {
-
-                    shareText = String
-                            .format("%s Ran a %s race in %d hour %d minutes and %d seconds. Race Name is the %s, the race date is %s. The shoes he ran it in is %s",
-                                    userName, distance, hour, min, sec,
-                                    raceInfo.getName(),raceDate, shoeName);
-                } else {
-
-                    shareText = String
-                            .format("%s Ran a %s race in %d hour %d minutes and %d seconds. Race Name is the %s, the race date is %s.",
-                                    userName, distance, hour, min, sec,
-                                    raceInfo.getName(),raceDate);
-                }
-
-            } else {
-
-                if (!shoeName.equals("")) {
-
-                    shareText = String
-                            .format("%s Ran a %s race in %d minutes and %d seconds. Race Name is the %s, the race date is %s. The shoes he ran it in is %s",
-                                    userName, distance, min, sec,
-                                    raceInfo.getName(),
-                                    raceDate, shoeName);
-                } else {
-
-                    shareText = String
-                            .format("%s Ran a %s race in %d minutes and %d seconds. Race Name is the %s, the race date is %s.",
-                                    userName, distance, min, sec,
-                                    raceInfo.getName(),
-                                    raceDate);
-                }
-            }
+//            String textFormat = "%s Ran a %s race in %d hour %d minutes and %d seconds. Race Name is the %s, the race date is %s. The shoes he ran it in is %s";
+            String textFormat = "%s ran %s in %d:%d:%d on %s";
+            shareText = String
+                    .format(textFormat,userName, raceInfo.getName(), hour, min, sec, Utilities.getDateTimeEachRace(raceInfo.getRaceDate().substring(0, 10)));
+//            if (hour > 0) {
+//
+//                if (!shoeName.equals("")) {
+//
+//                    shareText = String
+//                            .format(textFormat,userName,raceInfo.getName(), hour, min, sec, raceDate);
+//                } else {
+//
+//                    shareText = String
+//                            .format("%s Ran a %s race in %d hour %d minutes and %d seconds. Race Name is the %s, the race date is %s.",
+//                                    userName, distance, hour, min, sec,
+//                                    raceInfo.getName(),raceDate);
+//                }
+//
+//            } else {
+//
+//                if (!shoeName.equals("")) {
+//
+//                    shareText = String
+//                            .format("%s Ran a %s race in %d minutes and %d seconds. Race Name is the %s, the race date is %s. The shoes he ran it in is %s",
+//                                    userName, distance, min, sec,
+//                                    raceInfo.getName(),
+//                                    raceDate, shoeName);
+//                } else {
+//
+//                    shareText = String
+//                            .format("%s Ran a %s race in %d minutes and %d seconds. Race Name is the %s, the race date is %s.",
+//                                    userName, distance, min, sec,
+//                                    raceInfo.getName(),
+//                                    raceDate);
+//                }
+//            }
 
 			/*if (raceInfo.containsKey(Constants.PERSON)) {
 
@@ -1780,7 +1782,7 @@ public class RacesDetailActivity extends BaseActivity implements
 
             } else {
                 try{
-                    Utilities.doShareSocial(RacesDetailActivity.this, "com.twitter.android", result, imageUris);
+                    Utilities.doShareSocial(RacesDetailActivity.this, "com.twitter.android", result + " @racehistory", imageUris);
                 }
                 catch(Exception ex){
                     Utilities.showAlertMessage(
